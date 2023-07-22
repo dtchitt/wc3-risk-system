@@ -19,6 +19,30 @@ export class TrackedData {
 	private _units: Map<unit, unit>;
 	private _turnDied: number;
 
+	constructor(player: player) {
+		this._income = {
+			income: 0,
+			max: 0,
+			end: 0,
+		};
+		this._gold = {
+			earned: 0,
+			max: 0,
+			end: 0,
+		};
+		this._bounty = new Bounty();
+		this._bonus = new FightBonus(player);
+		this._cities = {
+			cities: [],
+			max: 0,
+			end: 0,
+		};
+		this._countries = new Map<Country, number>();
+		this._killsDeaths = new Map<string | player, KillsDeaths>();
+		this._units = new Map<unit, unit>();
+		this._turnDied = -1;
+	}
+
 	public reset() {
 		this.income.income = 0;
 		this.income.max = 0;
