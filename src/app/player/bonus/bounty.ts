@@ -4,25 +4,25 @@ export class Bounty implements Bonus {
 	public static readonly factor: number = 0.25;
 	public static readonly interval: number = 1;
 
-	private _delta: number;
+	private delta: number;
 	private _earned: number;
 
 	constructor() {
-		this._delta = 0;
+		this.delta = 0;
 		this._earned = 0;
 	}
 
 	public reset(): void {
-		this._delta = 0;
+		this.delta = 0;
 	}
 
 	public add(val: number): number {
 		let bonusAmount: number = 0;
 
 		try {
-			this._delta += val * Bounty.factor;
+			this.delta += val * Bounty.factor;
 
-			if (this._delta >= Bounty.interval) {
+			if (this.delta >= Bounty.interval) {
 				bonusAmount = this.processBonus();
 			}
 		} catch (error) {
@@ -37,9 +37,9 @@ export class Bounty implements Bonus {
 	}
 
 	private processBonus(): number {
-		let bonusAmount: number = Math.floor(this._delta);
+		let bonusAmount: number = Math.floor(this.delta);
 
-		this._delta -= bonusAmount;
+		this.delta -= bonusAmount;
 		this._earned += bonusAmount;
 
 		return bonusAmount;
