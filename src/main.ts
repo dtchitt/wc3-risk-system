@@ -9,9 +9,8 @@ import { NameManager } from './app/managers/names/name-manager';
 import CameraManager from './app/managers/camera-manager';
 import { ChatManager } from './app/managers/chat-manager';
 import { TransportManager } from './app/managers/transport-manager';
-import { TreeManager } from './app/managers/tree-manager';
-import { FogStateManager } from './app/managers/fog-state-manager';
 import { SetConsoleUI } from './app/ui/console';
+import { GameManager } from './app/game/game-manager';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -75,10 +74,8 @@ function tsMain() {
 
 			CameraManager.getInstance();
 			ChatManager.getInstance();
-			FogStateManager.getInstance();
-			TreeManager.getInstance();
 			TransportManager.getInstance();
-			// RoundManager.getInstance().start();
+			GameManager.getInstance();
 
 			PauseTimer(onLoadTimer);
 			DestroyTimer(onLoadTimer);

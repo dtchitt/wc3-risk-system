@@ -1,5 +1,4 @@
 import { ABILITY_ID } from 'src/configs/ability-id';
-import { FogStateManager } from '../managers/fog-state-manager';
 import { ActivePlayer } from './types/active-player';
 import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
@@ -21,7 +20,7 @@ export class PlayerManager {
 		this._observerFromHandle = new Map<player, HumanPlayer>();
 		this._slavesFromHandle = new Map<player, SlavePlayer>();
 
-		const fogManager: FogStateManager = FogStateManager.getInstance();
+		//const fogManager: FogService = FogService.getInstance();
 
 		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
@@ -47,10 +46,10 @@ export class PlayerManager {
 				UnitRemoveAbility(tools, ABILITY_ID.FORFEIT);
 			}
 
-			fogManager.add(player);
+			//fogManager.add(player);
 		}
 
-		fogManager.off();
+		//fogManager.off();
 	}
 
 	public static getInstance(): PlayerManager {

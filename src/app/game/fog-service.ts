@@ -1,20 +1,11 @@
-export class FogStateManager {
-	private static _instance: FogStateManager;
+export class FogService {
 	private _fog: Map<player, fogmodifier>;
 
-	private constructor() {
+	public constructor() {
 		this._fog = new Map<player, fogmodifier>();
 		FogMaskEnable(false);
 		FogEnable(false);
 		FogEnable(true);
-	}
-
-	public static getInstance(): FogStateManager {
-		if (this._instance == null) {
-			this._instance = new FogStateManager();
-		}
-
-		return this._instance;
 	}
 
 	/**
