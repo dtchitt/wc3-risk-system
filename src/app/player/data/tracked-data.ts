@@ -1,0 +1,114 @@
+import { Country } from 'src/app/country/country';
+import { Cities } from './cities';
+import { Gold } from './gold';
+import { Income } from './income';
+import { Bounty } from '../bonus/bounty';
+import { FightBonus } from '../bonus/fight-bonus';
+import { KillsDeaths } from './kills-death';
+import { TRACKED_UNITS } from 'src/app/utils/tracked-units';
+import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
+
+export class TrackedData {
+	private _income: Income;
+	private _gold: Gold;
+	private _bounty: Bounty;
+	private _bonus: FightBonus;
+	private _cities: Cities;
+	private _countries: Map<Country, number>;
+	private _killsDeaths: Map<string | player, KillsDeaths>;
+	private _units: Map<unit, unit>;
+	private _turnDied: number;
+
+	public reset() {
+		this.income.income = 0;
+		this.income.max = 0;
+		this.income.end = 0;
+		this.gold.earned = 0;
+		this.gold.max = 0;
+		this.gold.end = 0;
+		this.bounty.reset();
+		this.bonus.reset();
+		this.cities.cities = [];
+		this.cities.max = 0;
+		this.cities.end = 0;
+		this.countries.clear();
+		this.killsDeaths.clear();
+		this.units.clear();
+		this.turnDied = 0;
+	}
+
+	public setKDMaps() {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+			const player: player = Player(i);
+
+			if (IsPlayerObserver(player)) continue;
+			if (!IsPlayerSlotState(player, PLAYER_SLOT_STATE_PLAYING)) continue;
+			if (IsPlayerSlotState(player, PLAYER_SLOT_STATE_LEFT)) continue;
+
+			this.killsDeaths.set(player, {
+				killValue: 0,
+				deathValue: 0,
+				kills: 0,
+				deaths: 0,
+			});
+		}
+
+		this.killsDeaths.set(NEUTRAL_HOSTILE, {
+			killValue: 0,
+			deathValue: 0,
+			kills: 0,
+			deaths: 0,
+		});
+
+		for (const key in TRACKED_UNITS) {
+			const val = TRACKED_UNITS[key];
+
+			this.killsDeaths.set(`${val}`, {
+				killValue: 0,
+				deathValue: 0,
+				kills: 0,
+				deaths: 0,
+			});
+		}
+	}
+
+	public get income(): Income {
+		return this._income;
+	}
+
+	public get gold(): Gold {
+		return this._gold;
+	}
+
+	public get bounty(): Bounty {
+		return this._bounty;
+	}
+
+	public get bonus(): FightBonus {
+		return this._bonus;
+	}
+
+	public get cities(): Cities {
+		return this._cities;
+	}
+
+	public get countries(): Map<Country, number> {
+		return this._countries;
+	}
+
+	public get killsDeaths(): Map<string | player, KillsDeaths> {
+		return this._killsDeaths;
+	}
+
+	public get units(): Map<unit, unit> {
+		return this._units;
+	}
+
+	public get turnDied(): number {
+		return this._turnDied;
+	}
+
+	public set turnDied(value: number) {
+		this._turnDied = value;
+	}
+}
