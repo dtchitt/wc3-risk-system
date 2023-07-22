@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": false,
     "allowJs": false,
     "outDir": ".",
     "baseUrl": "./",
@@ -18,9 +19,9 @@
     "plugins": [
       {
         "transform": "war3-transformer",
-        "mapDir": "C:/Users/Me/Documents/GitHub/wc3-ts-template/maps/map.w3x",
-        "entryFile": "C:/Users/Me/Documents/GitHub/wc3-ts-template/src/main.ts",
-        "outputDir": "C:/Users/Me/Documents/GitHub/wc3-ts-template/dist/map.w3x"
+        "mapDir": "D:/Programming/wc3-risk-system/maps/risk_europe.w3x",
+        "entryFile": "D:/Programming/wc3-risk-system/src/main.ts",
+        "outputDir": "D:/Programming/wc3-risk-system/dist/risk_europe.w3x"
       }
     ],
     "types": [
