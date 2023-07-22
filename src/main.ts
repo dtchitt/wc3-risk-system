@@ -6,6 +6,12 @@ import { CountrySettings } from './app/country/countries';
 import { ConcreteSpawnerBuilder } from './app/spawner/concrete-spawn-builder';
 import { SetCountries } from './configs/city-country-setup';
 import { NameManager } from './app/managers/names/name-manager';
+import CameraManager from './app/managers/camera-manager';
+import { ChatManager } from './app/managers/chat-manager';
+import { TransportManager } from './app/managers/transport-manager';
+import { TreeManager } from './app/managers/tree-manager';
+import { FogStateManager } from './app/managers/fog-state-manager';
+import { SetConsoleUI } from './app/ui/console';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -65,13 +71,13 @@ function tsMain() {
 		const onLoadTimer: timer = CreateTimer();
 
 		TimerStart(onLoadTimer, 0.0, false, () => {
-			// SetConsoleUI();
+			SetConsoleUI();
 
-			// CameraManager.getInstance();
-			// ChatManager.getInstance();
-			// FogStateManager.getInstance();
-			// TreeManager.getInstance();
-			// TransportManager.getInstance();
+			CameraManager.getInstance();
+			ChatManager.getInstance();
+			FogStateManager.getInstance();
+			TreeManager.getInstance();
+			TransportManager.getInstance();
 			// RoundManager.getInstance().start();
 
 			PauseTimer(onLoadTimer);
