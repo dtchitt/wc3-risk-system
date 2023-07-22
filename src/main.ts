@@ -1,40 +1,88 @@
-import { Timer, Unit } from "w3ts";
-import { Players } from "w3ts/globals";
-import { W3TS_HOOK, addScriptHook } from "w3ts/hooks";
-import { Units } from "@objectdata/units";
+import { W3TS_HOOK, addScriptHook } from 'w3ts/hooks';
+import { MAP_NAME } from './app/utils/map-info';
+import { ConcreteCityBuilder } from './app/city/concrete-city-builder';
+import { ConcreteCountryBuilder } from './app/country/concrete-country-builder';
+import { CountrySettings } from './app/country/countries';
+import { ConcreteSpawnerBuilder } from './app/spawner/concrete-spawn-builder';
+import { SetCountries } from './configs/city-country-setup';
+import { NameManager } from './app/managers/names/name-manager';
 
-const BUILD_DATE = compiletime(() => new Date().toUTCString());
-const TS_VERSION = compiletime(() => require("typescript").version);
-const TSTL_VERSION = compiletime(() => require("typescript-to-lua").version);
-
-compiletime(( { objectData, constants }) => {
-  const unit = objectData.units.get(constants.units.Footman);
-
-  if (!unit) {
-    return;
-  }
-
-  unit.modelFile = "units\\human\\TheCaptain\\TheCaptain.mdl";
-
-  objectData.save();
-});
+//const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
 function tsMain() {
-  try {
-    print(`Build: ${BUILD_DATE}`);
-    print(`Typescript: v${TS_VERSION}`);
-    print(`Transpiler: v${TSTL_VERSION}`);
-    print(" ");
-    print("Welcome to TypeScript!");
+	try {
+		DoNotSaveReplay();
 
-    const unit = new Unit(Players[0], FourCC(Units.Footman), 0, 0, 270);
+		if (!BlzLoadTOCFile('war3mapimported\\Risk.toc')) {
+			print('Failed to load TOC file!');
+			return;
+		}
 
-    new Timer().start(1.0, true, () => {
-      unit.color = Players[math.random(0, bj_MAX_PLAYERS)].color;
-    });
-  } catch (e) {
-    print(e);
-  }
+		if (!BlzChangeMinimapTerrainTex('minimap.blp')) {
+			print('Failed to load minimap file!');
+			return;
+		}
+
+		SetGameSpeed(MAP_SPEED_FASTEST);
+		SetMapFlag(MAP_LOCK_SPEED, true);
+		SetMapFlag(MAP_USE_HANDICAPS, false);
+		SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, false);
+		SetTimeOfDay(12.0);
+		SetTimeOfDayScale(0.0);
+		SetAllyColorFilterState(0);
+
+		//Handle names to prevent namebug
+		NameManager.getInstance();
+
+		//Set up countries
+		SetCountries();
+		//Build countries, spawners, and cities
+		const countryBuilder = new ConcreteCountryBuilder();
+		const cityBuilder = new ConcreteCityBuilder();
+		const spawnerBuilder = new ConcreteSpawnerBuilder();
+
+		for (const country of CountrySettings) {
+			countryBuilder.setName(country.name);
+			country.cities.forEach((city) => {
+				countryBuilder.addCity(city, cityBuilder, country.guardType);
+			});
+
+			countryBuilder.setSpawn(country.spawnerData, spawnerBuilder);
+			countryBuilder.build();
+		}
+
+		//Set up triggers
+		// onEnter();
+		// onLeave();
+		// onDeath();
+		// unitTrained();
+		// onOwnerChange();
+		// onPlayerLeave();
+		// onSpellEffect();
+		// antiSpam();
+
+		//Set up actions on game load
+		const onLoadTimer: timer = CreateTimer();
+
+		TimerStart(onLoadTimer, 0.0, false, () => {
+			// SetConsoleUI();
+
+			// CameraManager.getInstance();
+			// ChatManager.getInstance();
+			// FogStateManager.getInstance();
+			// TreeManager.getInstance();
+			// TransportManager.getInstance();
+			// RoundManager.getInstance().start();
+
+			PauseTimer(onLoadTimer);
+			DestroyTimer(onLoadTimer);
+		});
+	} catch (e) {
+		print(e);
+	}
 }
 
 addScriptHook(W3TS_HOOK.MAIN_AFTER, tsMain);
+addScriptHook(W3TS_HOOK.CONFIG_AFTER, () => {
+	SetMapName(MAP_NAME);
+});
