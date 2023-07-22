@@ -1,4 +1,4 @@
-import { MAP_NAME, MAP_VERSION } from '../utils/map-info';
+import { MAP_VERSION } from '../utils/map-info';
 
 export function SetConsoleUI() {
 	// Disable Resource Tooltips
