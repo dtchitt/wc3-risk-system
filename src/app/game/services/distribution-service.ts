@@ -13,9 +13,7 @@ export class DistributionService {
 	constructor() {
 		this.cityMax = 20;
 	}
-	//TODO
-	//remove single city countries
-	//fix max due to too many players
+
 	public standardDistro() {
 		const cities: City[] = [...RegionToCity.values()];
 		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
@@ -62,7 +60,11 @@ export class DistributionService {
 
 	private getRandomCity(cities: City[]): City {
 		const randomIndex = Math.floor(Math.random() * cities.length);
-		const city: City = cities.splice(randomIndex, 1)[0];
+		let city: City = cities.splice(randomIndex, 1)[0];
+
+		if (CityToCountry.get(city).getCities().length == 1) {
+			city = this.getRandomCity(cities);
+		}
 
 		return city;
 	}
