@@ -105,3 +105,10 @@ export function GetRandomElements(arr: any[], numElements: number): any[] {
 
 	return selectedElements;
 }
+
+export function isNonEmptySubstring(substring: string, string: string): boolean {
+	substring = substring.toLowerCase().trim();
+	string = string.toLowerCase().trim();
+
+	return substring !== '' && string.includes(substring);
+}

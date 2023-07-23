@@ -1,5 +1,6 @@
 import { PLAYER_COLOR_CODES_MAP, PLAYER_COLOR_MAP } from 'src/app/utils/player-colors';
 import { PlayerNames } from './player-names';
+import { isNonEmptySubstring } from 'src/app/utils/utils';
 
 type Names = 'btag' | 'acct' | 'color';
 
@@ -25,6 +26,20 @@ export class NameManager {
 		}
 
 		return this.instance;
+	}
+
+	public getPlayerByName(string: string, players: player[]): player[] {
+		const foundPlayers: player[] = [];
+
+		players.forEach((player) => {
+			if (isNonEmptySubstring(string, this.getBtag(player))) {
+				foundPlayers.push(player);
+			} else if (isNonEmptySubstring(string, this.getColor(player))) {
+				foundPlayers.push(player);
+			}
+		});
+
+		return foundPlayers;
 	}
 
 	public setName(p: player, name: Names) {

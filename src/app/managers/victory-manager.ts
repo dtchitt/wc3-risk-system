@@ -32,6 +32,8 @@ export class VictoryManager {
 		const index: number = this.players.indexOf(player);
 
 		if (index > -1) this.players.splice(index, 1);
+
+		this.checkKnockOutVictory();
 	}
 
 	public setLeader(player: ActivePlayer) {

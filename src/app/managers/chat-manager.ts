@@ -1,5 +1,3 @@
-import CameraManager from './camera-manager';
-
 export class ChatManager {
 	private static _instance: ChatManager;
 	private _chatActions: Map<string, Function> = new Map<string, Function>();
@@ -28,8 +26,6 @@ export class ChatManager {
 				return true;
 			})
 		);
-
-		this.setCmds();
 	}
 
 	/**
@@ -39,7 +35,9 @@ export class ChatManager {
 	 */
 	public addCmd(cmds: string[], action: Function) {
 		cmds.forEach((cmd) => {
-			this._chatActions.set(cmd.toLowerCase(), action);
+			if (!this._chatActions.has(cmd)) {
+				this._chatActions.set(cmd.toLowerCase(), action);
+			}
 		});
 	}
 
@@ -53,14 +51,8 @@ export class ChatManager {
 			this._chatActions.delete(cmd.toLowerCase());
 		});
 	}
-
-	private setCmds() {
-		this.addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
-	}
 }
 
-// 			case "-forfeit":
-// 			case "-ff":
 // 			case "-restart":
 // 			case "-ng":
 // 			case "-names":
