@@ -29,22 +29,28 @@ export class MetaGame implements GameState {
 
 		try {
 			SettingsContext.getInstance().applyStrategy('Fog');
-			EnableSelect(true, true);
-			EnableDragSelect(true, true);
-			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));
-			const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
-			Scoreboards.push(new MiniBoard([...PlayerManager.getInstance().players.values()]));
-			Scoreboards[0].setVisibility(true);
 
-			PlayerManager.getInstance().players.forEach((player) => {
-				player.status.set(PLAYER_STATUS.ALIVE);
-				player.trackedData.bonus.showForPlayer(player.getPlayer());
-				player.trackedData.bonus.repositon(mbFrame);
-				VictoryManager.getInstance().addPlayer(player);
+			const startDelayTimer: timer = CreateTimer();
+
+			//TODO do a countdown so players know
+			TimerStart(startDelayTimer, 3, false, () => {
+				EnableSelect(true, true);
+				EnableDragSelect(true, true);
+				Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));
+				const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
+				Scoreboards.push(new MiniBoard([...PlayerManager.getInstance().players.values()]));
+				Scoreboards[0].setVisibility(true);
+
+				PlayerManager.getInstance().players.forEach((player) => {
+					player.status.set(PLAYER_STATUS.ALIVE);
+					player.trackedData.bonus.showForPlayer(player.getPlayer());
+					player.trackedData.bonus.repositon(mbFrame);
+					VictoryManager.getInstance().addPlayer(player);
+				});
+
+				this.timer.start();
+				PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
 			});
-
-			this.timer.start();
-			PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
 		} catch (error) {
 			print(error);
 		}
