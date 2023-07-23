@@ -17,7 +17,7 @@ export class MetaGame implements GameState {
 
 	public constructor(nextState: GameState) {
 		this.nextState = nextState;
-		this.timer = new TimerService();
+		this.timer = new TimerService(this);
 	}
 
 	public setObserver(observer: GameManager) {
@@ -50,5 +50,7 @@ export class MetaGame implements GameState {
 		}
 	}
 
-	public end(): void {}
+	public end(): void {
+		this.manager.updateState(this.nextState);
+	}
 }

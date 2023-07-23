@@ -12,7 +12,7 @@ export class PostGame implements GameState {
 	}
 
 	public start(): void {
-		throw new Error('Method not implemented.');
+		print('post game');
 	}
 
 	public end(): void {}

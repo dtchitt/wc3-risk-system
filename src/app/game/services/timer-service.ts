@@ -6,17 +6,21 @@ import { PlayerManager } from 'src/app/player/player-manager';
 import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { PlayGlobalSound } from 'src/app/utils/utils';
+import { GameState } from '../state/game-state';
 
 export class TimerService implements Resetable {
-	private _timer: timer = CreateTimer();
+	private _timer: timer;
 	private _duration: number;
 	private _tick: number;
 	private _turn: number;
+	private gameState: GameState;
 
-	public constructor() {
+	public constructor(gameState: GameState) {
+		this._timer = CreateTimer();
 		this._duration = 60;
 		this._tick = this._duration;
 		this._turn = 1;
+		this.gameState = gameState;
 		VictoryManager.getInstance().setTimer(this);
 	}
 
@@ -70,6 +74,7 @@ export class TimerService implements Resetable {
 
 		PauseTimer(this._timer);
 		DestroyTimer(this._timer);
+		this.gameState.end();
 	}
 
 	public reset(): void {
