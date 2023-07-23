@@ -4,6 +4,7 @@ import { UNIT_ID } from '../../configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { FilterOwnedUnits, FilterAlliedUnits } from '../utils/guard-filters';
 import { CityRegionSize } from 'src/configs/city-settings';
+import { CompareUnitByValue } from '../utils/unit-comparisons';
 
 export const LeaveRegionEvent: trigger = CreateTrigger();
 
@@ -28,7 +29,7 @@ export function onLeave() {
 				guardChoice = CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
 			} else {
 				ForGroup(g, () => {
-					//guardChoice = CompareUnitByValue(GetEnumUnit(), guardChoice); // TODO
+					guardChoice = CompareUnitByValue(GetEnumUnit(), guardChoice);
 				});
 			}
 
