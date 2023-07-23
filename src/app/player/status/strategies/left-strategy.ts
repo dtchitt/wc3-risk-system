@@ -3,6 +3,7 @@ import { PlayerMsg } from 'src/app/utils/utils';
 import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
+import { VictoryManager } from 'src/app/managers/victory-manager';
 
 export class LeftStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
@@ -17,6 +18,6 @@ export class LeftStrategy implements StatusStrategy {
 
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		PlayerMsg(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has left the game!`);
-		// VictoryManager.getInstance().removePlayer(gamePlayer); //TODO
+		VictoryManager.getInstance().removePlayer(gamePlayer);
 	}
 }

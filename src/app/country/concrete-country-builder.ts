@@ -49,7 +49,7 @@ export class ConcreteCountryBuilder implements CountryBuilder {
 		}
 
 		if (!spawn.spawnsPerStep) {
-			builder.setSpawnsPerStep(Math.floor((this.cities.length + 1) >>> 1));
+			builder.setSpawnsPerStep(Math.floor((this.cities.length + 1) / 2));
 		} else {
 			builder.setSpawnsPerStep(spawn.spawnsPerStep);
 		}

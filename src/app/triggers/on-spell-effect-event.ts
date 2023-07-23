@@ -68,6 +68,7 @@ export function onSpellEffect() {
 					break;
 				case ABILITY_ID.SPWN_3000:
 				case ABILITY_ID.SPWN_6000:
+					//TODO fix this, sets to middle of map
 					const radius: number = ABILITY_ID.SPWN_3000 ? 3000 : 6000;
 					player.trackedData.countries.forEach((val, country) => {
 						const spawner: unit = country.getSpawn().unit;
@@ -77,6 +78,7 @@ export function onSpellEffect() {
 					});
 					break;
 				case ABILITY_ID.SPWN_ALL:
+					//TODO fix this, sets to middle of map
 					player.trackedData.countries.forEach((val, country) => {
 						const spawner: unit = country.getSpawn().unit;
 						IssuePointOrder(spawner, 'setrally', GetSpellTargetX(), GetSpellTargetY());

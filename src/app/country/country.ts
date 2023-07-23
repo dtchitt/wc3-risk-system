@@ -1,6 +1,7 @@
 import { City } from '../city/city';
 import { Spawner } from '../spawner/spawner';
 import { HexColors } from '../utils/hex-colors';
+import { NEUTRAL_HOSTILE, PlayLocalSound } from '../utils/utils';
 
 export class Country {
 	private readonly name: string;
@@ -43,7 +44,6 @@ export class Country {
 
 	public setOwner(player: player): void {
 		if (this.owner != null) {
-			//this._owner.getRoundData().data.income.income -= this._cities.length;
 			this.owner == null;
 			this.spawn.setOwner(null);
 		}
@@ -52,8 +52,23 @@ export class Country {
 
 		this.owner = player;
 		this.spawn.setOwner(player);
-		//player.getRoundData().data.income.income += this._cities.length;
+		this.onOwnerChange();
 	}
 
-	private onOwnerChange() {}
+	private onOwnerChange() {
+		if (this.owner == NEUTRAL_HOSTILE) return;
+
+		this.cities.forEach((city) => {
+			const effect = AddSpecialEffect(
+				'Abilities\\Spells\\Human\\Resurrect\\ResurrectCaster.mdl',
+				city.barrack.defaultX,
+				city.barrack.defaultY
+			);
+			BlzSetSpecialEffectScale(effect, 1.1);
+			DestroyEffect(effect);
+		});
+
+		PlayLocalSound('Sound\\Interface\\Rescue.flac', this.owner);
+		//DisplayTimedTextToPlayer(this.owner, 0.82, 0.81, 3.0, `${HexColors.TANGERINE}${this.name}|r has been conquered!`); //TODO
+	}
 }

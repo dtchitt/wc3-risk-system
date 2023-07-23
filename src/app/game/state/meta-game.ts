@@ -8,13 +8,16 @@ import { PlayGlobalSound } from 'src/app/utils/utils';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsContext } from 'src/app/settings/settings-context';
+import { TimerService } from '../services/timer-service';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
 	private nextState: GameState;
+	private timer: TimerService;
 
 	public constructor(nextState: GameState) {
 		this.nextState = nextState;
+		this.timer = new TimerService();
 	}
 
 	public setObserver(observer: GameManager) {
@@ -40,7 +43,7 @@ export class MetaGame implements GameState {
 				VictoryManager.getInstance().addPlayer(player);
 			});
 
-			//GameTimer.getInstance().start();
+			this.timer.start();
 			PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
 		} catch (error) {
 			print(error);
