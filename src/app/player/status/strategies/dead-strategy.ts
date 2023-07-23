@@ -4,10 +4,14 @@ import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
 import { VictoryManager } from 'src/app/managers/victory-manager';
-import { GameManager } from 'src/app/game/game-manager';
+import { PLAYER_STATUS } from '../status-enum';
 
 export class DeadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
+		if (gamePlayer.status.isForfeit()) return;
+
+		gamePlayer.status.status = PLAYER_STATUS.DEAD;
+
 		const data: TrackedData = gamePlayer.trackedData;
 
 		data.income.income = 0;

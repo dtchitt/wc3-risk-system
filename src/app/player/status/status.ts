@@ -28,14 +28,15 @@ export class Status {
 	}
 
 	public set(status: string) {
-		this._status = status;
-
 		const strategy = Status.STRATEGY_MAP.get(status);
+
 		if (strategy) {
 			strategy.run(this.player);
 		} else {
 			print('Unknown player status:', status);
 		}
+
+		//this._status = status;
 	}
 
 	public isAlive(): boolean {
@@ -64,6 +65,10 @@ export class Status {
 
 	public get status(): string {
 		return this._status;
+	}
+
+	public set status(value: string) {
+		this._status = value;
 	}
 
 	public get statusDuration(): number {

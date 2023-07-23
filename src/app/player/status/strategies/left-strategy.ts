@@ -4,9 +4,12 @@ import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
 import { VictoryManager } from 'src/app/managers/victory-manager';
+import { PLAYER_STATUS } from '../status-enum';
 
 export class LeftStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
+		gamePlayer.status.status = PLAYER_STATUS.LEFT;
+
 		const data: TrackedData = gamePlayer.trackedData;
 
 		if (data.income.income == 0 || data.income.income == 1) return; //Player already died or forfeit

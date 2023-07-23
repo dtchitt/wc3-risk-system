@@ -3,12 +3,10 @@ import { GamePlayer } from './game-player';
 
 export class HumanPlayer extends ActivePlayer {
 	private slaves: GamePlayer[];
-	private _admin: boolean;
 
 	constructor(player: player) {
 		super(player);
 		this.slaves = [];
-		this._admin = false;
 	}
 
 	onKill(victom: player, unit: unit): void {
@@ -55,13 +53,5 @@ export class HumanPlayer extends ActivePlayer {
 		kdData.get(killer).deaths++;
 		kdData.get(victom).deaths++;
 		kdData.get(`${GetUnitTypeId(unit)}`).deaths++;
-	}
-
-	public set admin(value: boolean) {
-		this._admin = value;
-	}
-
-	public isAdmin(): boolean {
-		return this._admin;
 	}
 }

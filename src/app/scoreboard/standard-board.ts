@@ -26,7 +26,7 @@ export class StandardBoard extends Scoreboard {
 			this.setItemWidth(2.5, i, this.CITIES_COL);
 			this.setItemWidth(4.0, i, this.KILLS_COL);
 			this.setItemWidth(4.0, i, this.DEATHS_COL);
-			this.setItemWidth(4.4, i, this.STATUS_COL);
+			this.setItemWidth(4.5, i, this.STATUS_COL);
 		}
 
 		this.setItemValue(`${HexColors.TANGERINE}Player|r`, 1, this.PLAYER_COL);
