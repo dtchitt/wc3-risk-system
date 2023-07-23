@@ -33,10 +33,6 @@ export class GameManager {
 		return this._state instanceof MetaGame;
 	}
 
-	public get state(): GameState {
-		return this._state;
-	}
-
 	public get round(): number {
 		return this._round;
 	}

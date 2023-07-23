@@ -89,12 +89,4 @@ export class TimerService implements Resetable {
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${this._turn}`);
 	}
-
-	public get tick(): number {
-		return this._tick;
-	}
-
-	public get turn(): number {
-		return this._turn;
-	}
 }
