@@ -1,38 +1,41 @@
-// export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
-// 	if (compareUnit == initialUnit) return initialUnit;
+import { Options } from '../player/options';
+import { PlayerManager } from '../player/player-manager';
 
-// 	const initialUnitValue: number = GetUnitPointValue(initialUnit);
-// 	const compareUnitValue: number = GetUnitPointValue(compareUnit);
-// 	const playerSettings: PlayerSettings = PlayerManager.getInstance().players.get(GetOwningPlayer(compareUnit)).getSettings();
+export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
+	if (compareUnit == initialUnit) return initialUnit;
 
-// 	if (!playerSettings.value && compareUnitValue < initialUnitValue) {
-// 		return compareUnit;
-// 	}
+	const initialUnitValue: number = GetUnitPointValue(initialUnit);
+	const compareUnitValue: number = GetUnitPointValue(compareUnit);
+	const playerSettings: Options = PlayerManager.getInstance().players.get(GetOwningPlayer(compareUnit)).settings;
 
-// 	if (playerSettings.value && compareUnitValue > initialUnitValue) {
-// 		return compareUnit;
-// 	}
+	if (!playerSettings.value && compareUnitValue < initialUnitValue) {
+		return compareUnit;
+	}
 
-// 	if (compareUnitValue == initialUnitValue) {
-// 		return CompareUnitByHealth(compareUnit, initialUnit, playerSettings);
-// 	}
+	if (playerSettings.value && compareUnitValue > initialUnitValue) {
+		return compareUnit;
+	}
 
-// 	return initialUnit;
-// }
+	if (compareUnitValue == initialUnitValue) {
+		return CompareUnitByHealth(compareUnit, initialUnit, playerSettings);
+	}
 
-// export function CompareUnitByHealth(compareUnit: unit, initialUnit: unit, playerSettings: PlayerSettings): unit {
-// 	if (compareUnit == initialUnit) return initialUnit;
+	return initialUnit;
+}
 
-// 	const initialUnitValue: number = GetUnitState(initialUnit, UNIT_STATE_LIFE);
-// 	const compareUnitValue: number = GetUnitState(compareUnit, UNIT_STATE_LIFE);
+export function CompareUnitByHealth(compareUnit: unit, initialUnit: unit, playerSettings: Options): unit {
+	if (compareUnit == initialUnit) return initialUnit;
 
-// 	if (!playerSettings.health && compareUnitValue < initialUnitValue) {
-// 		return compareUnit;
-// 	}
+	const initialUnitValue: number = GetUnitState(initialUnit, UNIT_STATE_LIFE);
+	const compareUnitValue: number = GetUnitState(compareUnit, UNIT_STATE_LIFE);
 
-// 	if (playerSettings.health && compareUnitValue > initialUnitValue) {
-// 		return compareUnit;
-// 	}
+	if (!playerSettings.health && compareUnitValue < initialUnitValue) {
+		return compareUnit;
+	}
 
-// 	return initialUnit;
-// }
+	if (playerSettings.health && compareUnitValue > initialUnitValue) {
+		return compareUnit;
+	}
+
+	return initialUnit;
+}
