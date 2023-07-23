@@ -14,6 +14,9 @@ export function onSpellEffect() {
 		t,
 		Condition(() => {
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
+			const x: number = GetSpellTargetX();
+			const y: number = GetSpellTargetY();
+
 			switch (GetSpellAbilityId()) {
 				case ABILITY_ID.SWAP:
 					UnitToCity.get(GetTriggerUnit()).onCast();
@@ -43,45 +46,44 @@ export function onSpellEffect() {
 					player.settings.ping = false;
 					break;
 				case ABILITY_ID.PING:
-					//TODO Pings
-					// let pingX: number = GetSpellTargetX();
-					// let pingY: number = GetSpellTargetY();
 					// let pingIndex: number = player.settings.names.colorIndex;
 					// let pingForce: force = CreateForce();
+
 					// GamePlayer.fromPlayer.forEach((gPlayer) => {
 					// 	if (!player.settings.isLeft() && player.settings.ping) {
 					// 		ForceAddPlayer(pingForce, player.settings.player);
 					// 	}
 					// });
+
 					// PingMinimapForForceEx(
 					// 	pingForce,
-					// 	pingX,
-					// 	pingY,
+					// 	x,
+					// 	y,
 					// 	4.0,
 					// 	bj_MINIMAPPINGSTYLE_FLASHY,
 					// 	pingRedPercent[pingIndex],
 					// 	pingGreenPercent[pingIndex],
 					// 	pingBluePercent[pingIndex]
 					// );
+
 					// DestroyForce(pingForce);
 					// pingForce = null;
 					break;
 				case ABILITY_ID.SPWN_3000:
 				case ABILITY_ID.SPWN_6000:
-					//TODO fix this, sets to middle of map
 					const radius: number = ABILITY_ID.SPWN_3000 ? 3000 : 6000;
+
 					player.trackedData.countries.forEach((val, country) => {
 						const spawner: unit = country.getSpawn().unit;
 						if (IsUnitInRangeXY(spawner, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), radius)) {
-							IssuePointOrder(spawner, 'setrally', GetSpellTargetX(), GetSpellTargetY());
+							IssuePointOrder(spawner, 'setrally', x, y);
 						}
 					});
 					break;
 				case ABILITY_ID.SPWN_ALL:
-					//TODO fix this, sets to middle of map
 					player.trackedData.countries.forEach((val, country) => {
 						const spawner: unit = country.getSpawn().unit;
-						IssuePointOrder(spawner, 'setrally', GetSpellTargetX(), GetSpellTargetY());
+						IssuePointOrder(spawner, 'setrally', x, y);
 					});
 					break;
 				case ABILITY_ID.SPWN_RESET:
