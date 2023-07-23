@@ -12,15 +12,14 @@ export class GameManager {
 
 	private constructor() {
 		this._round = 1;
-		this._state = new ModeSelection(new PreGame(new MetaGame(new PostGame())));
-		this.state.setObserver(this);
-		this.state.start();
+		this.updateState(new ModeSelection(new PreGame(new MetaGame(new PostGame()))));
 	}
 
 	public static getInstance() {
 		if (this.instance == null) {
 			this.instance = new GameManager();
 		}
+
 		return this.instance;
 	}
 

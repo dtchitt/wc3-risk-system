@@ -27,7 +27,29 @@ export function ErrorMsg(player: player, msg: string, duration: number = 2) {
 	});
 }
 
-export function PlayerMsg(msg: string, duration: number = 4) {
+export function GlobalMessage(msg: string, duration: number = 4) {
+	const frame: framehandle = BlzGetFrameByName('PlayerMessageFrame', 0);
+	let str: string = '';
+
+	if (BlzFrameGetText(frame) != '') {
+		str = BlzFrameGetText(frame);
+		str = `${str}\n${msg}`;
+	}
+
+	BlzFrameSetText(frame, msg);
+	PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
+
+	const playerMsgTimer: timer = CreateTimer();
+
+	TimerStart(playerMsgTimer, duration, false, () => {
+		BlzFrameSetText(frame, '');
+
+		PauseTimer(playerMsgTimer);
+		DestroyTimer(playerMsgTimer);
+	});
+}
+
+export function LocalMessage(msg: string, duration: number = 4) {
 	const frame: framehandle = BlzGetFrameByName('PlayerMessageFrame', 0);
 	let str: string = '';
 

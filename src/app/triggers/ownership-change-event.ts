@@ -72,12 +72,13 @@ export function onOwnerChange() {
 					}
 
 					if (GameManager.getInstance().isStateMetaGame()) {
-						VictoryManager.getInstance().setLeader(owner);
+						const victoryManager: VictoryManager = VictoryManager.getInstance();
+						victoryManager.setLeader(owner);
 
 						Scoreboards.forEach((board) => {
 							board.setTitle(
-								`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
-									VictoryManager.getInstance().leader.trackedData.cities.cities.length
+								`${NameManager.getInstance().getDisplayName(victoryManager.leader.getPlayer())} ${
+									victoryManager.leader.trackedData.cities.cities.length
 								}/${CITIES_TO_WIN} `
 							);
 						});

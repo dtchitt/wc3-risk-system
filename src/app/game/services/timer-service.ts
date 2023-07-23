@@ -17,6 +17,7 @@ export class TimerService implements Resetable {
 		this._duration = 60;
 		this._tick = this._duration;
 		this._turn = 1;
+		VictoryManager.getInstance().setTimer(this);
 	}
 
 	public start(): void {
@@ -24,24 +25,17 @@ export class TimerService implements Resetable {
 			try {
 				if (this._tick == this._duration) {
 					PlayerManager.getInstance().players.forEach((player) => {
-						//This is dumb but w/e. cant set turn died in status strats so this is the way
-						if (player.status.isDead() || (player.status.isForfeit() && player.trackedData.turnDied == 0)) {
-							player.trackedData.turnDied == this._turn - 1;
-						}
-
 						player.giveGold();
 					});
 
-					if (VictoryManager.getInstance().checkCityVictory() != null) {
-						this.stop();
-
-						return;
-					}
+					VictoryManager.getInstance().checkCityVictory();
 
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
 					});
 				}
+
+				VictoryManager.getInstance().checkKnockOutVictory();
 
 				Scoreboards.forEach((board, index) => {
 					if (this._tick == this._duration) {
@@ -52,10 +46,6 @@ export class TimerService implements Resetable {
 				});
 
 				this.updateUI();
-
-				if (VictoryManager.getInstance().checkKnockOutVictory() != null) {
-					this.stop();
-				}
 
 				//TODO Player is close to Victory Message
 

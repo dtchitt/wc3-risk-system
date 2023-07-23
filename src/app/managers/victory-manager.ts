@@ -1,10 +1,12 @@
 import { CITIES_TO_WIN } from 'src/configs/game-settings';
 import { ActivePlayer } from '../player/types/active-player';
+import { TimerService } from '../game/services/timer-service';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
+	private gameTimer: TimerService;
 
 	private constructor() {
 		this.players = [];
@@ -61,8 +63,13 @@ export class VictoryManager {
 	// public capitalsVictory(): ActivePlayer | null {}
 	// public checkPointVictory(): ActivePlayer | null {}
 
+	public setTimer(timer: TimerService) {
+		this.gameTimer = timer;
+	}
+
 	private endGame() {
 		BlzEnableSelections(false, false);
+		this.gameTimer.stop();
 		//Display Victory Message
 		//Show Victory Scoareboard
 
