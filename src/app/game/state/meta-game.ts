@@ -7,9 +7,10 @@ import { StandardBoard } from 'src/app/scoreboard/standard-board';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
+import { SettingsContext } from 'src/app/settings/settings-context';
 
 export class MetaGame implements GameState {
-	private observer: GameManager;
+	private manager: GameManager;
 	private nextState: GameState;
 
 	public constructor(nextState: GameState) {
@@ -17,13 +18,14 @@ export class MetaGame implements GameState {
 	}
 
 	public setObserver(observer: GameManager) {
-		this.observer = observer;
+		this.manager = observer;
 	}
 
 	public start(): void {
 		print('Starting MetaGame phase');
 
 		try {
+			SettingsContext.getInstance().applyStrategy('Diplomacy');
 			EnableSelect(true, true);
 			EnableDragSelect(true, true);
 			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));

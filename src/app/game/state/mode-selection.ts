@@ -1,8 +1,9 @@
+import { SettingsContext } from 'src/app/settings/settings-context';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 
 export class ModeSelection implements GameState {
-	private observer: GameManager;
+	private manager: GameManager;
 	private nextState: GameState;
 
 	public constructor(nextState: GameState) {
@@ -10,7 +11,7 @@ export class ModeSelection implements GameState {
 	}
 
 	public setObserver(observer: GameManager) {
-		this.observer = observer;
+		this.manager = observer;
 	}
 
 	public start(): void {
@@ -34,14 +35,17 @@ export class ModeSelection implements GameState {
 
 	public end(): void {
 		print('end mode selection');
-		//SettingsContext.getInstance().applySettings();
+		const settings: SettingsContext = SettingsContext.getInstance();
+		settings.initStrategies();
+		settings.applyStrategy('Diplomacy');
+		settings.applyStrategy('Promode');
 
 		const modeEndTimer: timer = CreateTimer();
 
 		TimerStart(modeEndTimer, 1, false, () => {
 			PauseTimer(modeEndTimer);
 			DestroyTimer(modeEndTimer);
-			this.observer.updateState(this.nextState);
+			this.manager.updateState(this.nextState);
 		});
 	}
 }

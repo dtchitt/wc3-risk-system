@@ -8,7 +8,7 @@ import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { DistributionService } from '../services/distribution-service';
 
 export class PreGame implements GameState {
-	private observer: GameManager;
+	private manager: GameManager;
 	private nextState: GameState;
 	private treeService: TreeService;
 	private distributionService: DistributionService;
@@ -18,7 +18,7 @@ export class PreGame implements GameState {
 	}
 
 	public setObserver(observer: GameManager) {
-		this.observer = observer;
+		this.manager = observer;
 	}
 
 	public start(): void {
@@ -68,6 +68,6 @@ export class PreGame implements GameState {
 			}
 		});
 
-		this.observer.updateState(this.nextState);
+		this.manager.updateState(this.nextState);
 	}
 }
