@@ -35,6 +35,7 @@ export function onDeath() {
 			TransportManager.getInstance().onDeath(killingUnit, dyingUnit);
 
 			if (!dUnitOwner) return false;
+
 			if (SPANWER_UNITS.has(dyingUnit)) SPANWER_UNITS.get(dyingUnit).onDeath(dUnitOwner.getPlayer(), dyingUnit);
 
 			return false;

@@ -16,7 +16,7 @@ export class TrackedData {
 	private _cities: Cities;
 	private _countries: Map<Country, number>;
 	private _killsDeaths: Map<string | player, KillsDeaths>;
-	private _units: Map<unit, unit>;
+	private _units: Set<unit>;
 	private _turnDied: number;
 
 	constructor(player: player) {
@@ -39,7 +39,7 @@ export class TrackedData {
 		};
 		this._countries = new Map<Country, number>();
 		this._killsDeaths = new Map<string | player, KillsDeaths>();
-		this._units = new Map<unit, unit>();
+		this._units = new Set<unit>();
 		this._turnDied = -1;
 	}
 
@@ -124,7 +124,7 @@ export class TrackedData {
 		return this._killsDeaths;
 	}
 
-	public get units(): Map<unit, unit> {
+	public get units(): Set<unit> {
 		return this._units;
 	}
 

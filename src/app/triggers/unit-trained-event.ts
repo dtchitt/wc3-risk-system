@@ -11,7 +11,7 @@ export function unitTrained() {
 			const trainerUnit = GetTrainedUnit();
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetOwningPlayer(trainerUnit));
 
-			player.trackedData.units.set(trainerUnit, trainerUnit);
+			player.trackedData.units.add(trainerUnit);
 			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainerUnit);
 
 			return false;

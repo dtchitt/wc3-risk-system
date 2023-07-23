@@ -60,7 +60,7 @@ export class PreGame implements GameState {
 			IssueImmediateOrder(city.guard.unit, 'stop');
 
 			if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-				PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.set(city.guard.unit, city.guard.unit);
+				PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 			}
 		});
 
