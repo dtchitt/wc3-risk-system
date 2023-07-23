@@ -12,6 +12,13 @@ import { TransportManager } from './app/managers/transport-manager';
 import { SetConsoleUI } from './app/ui/console';
 import { GameManager } from './app/game/game-manager';
 import { onOwnerChange } from './app/triggers/ownership-change-event';
+import { antiSpam } from './app/triggers/anti-spam';
+import { onEnter } from './app/triggers/on-enter-event';
+import { onLeave } from './app/triggers/on-leave-event';
+import { onSpellEffect } from './app/triggers/on-spell-effect-event';
+import { onPlayerLeave } from './app/triggers/player-leave-event';
+import { onDeath } from './app/triggers/unit-killed-event';
+import { unitTrained } from './app/triggers/unit-trained-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -58,14 +65,14 @@ function tsMain() {
 		}
 
 		//Set up triggers
-		// onEnter();
-		// onLeave();
-		// onDeath();
-		// unitTrained();
+		onEnter();
+		onLeave();
+		onDeath();
+		unitTrained();
 		onOwnerChange();
-		// onPlayerLeave();
-		// onSpellEffect();
-		// antiSpam();
+		onPlayerLeave();
+		onSpellEffect();
+		antiSpam();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
