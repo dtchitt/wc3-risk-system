@@ -25,7 +25,7 @@ export class MetaGame implements GameState {
 		print('Starting MetaGame phase');
 
 		try {
-			SettingsContext.getInstance().applyStrategy('Diplomacy');
+			SettingsContext.getInstance().applyStrategy('Fog');
 			EnableSelect(true, true);
 			EnableDragSelect(true, true);
 			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));

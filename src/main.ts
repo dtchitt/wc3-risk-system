@@ -78,8 +78,9 @@ function tsMain() {
 		const onLoadTimer: timer = CreateTimer();
 
 		TimerStart(onLoadTimer, 0.0, false, () => {
+			FogEnable(false);
+			FogMaskEnable(false);
 			SetConsoleUI();
-
 			CameraManager.getInstance();
 			ChatManager.getInstance();
 			TransportManager.getInstance();

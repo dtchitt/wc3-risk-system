@@ -42,12 +42,8 @@ export class PreGame implements GameState {
 			}
 		});
 
-		//Remove player control
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);
-		//Flash fog to show cities
-		FogEnable(false);
-		FogMaskEnable(false);
 		FogEnable(true);
 
 		//TODO capital selection

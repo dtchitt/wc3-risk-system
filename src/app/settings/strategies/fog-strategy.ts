@@ -8,7 +8,7 @@ export const FogOptions: Record<number, string> = {
 };
 
 export class FogStrategy implements SettingsStrategy {
-	private readonly fogService: FogService;
+	private static fogService: FogService;
 	private readonly fog: number;
 	private readonly strategyMap: Map<number, () => void> = new Map([
 		[0, this.handleOff],
@@ -18,10 +18,10 @@ export class FogStrategy implements SettingsStrategy {
 
 	constructor(fog: number) {
 		this.fog = fog;
-		this.fogService = new FogService();
+		FogStrategy.fogService = new FogService();
 
 		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
-			this.fogService.add(Player(i));
+			FogStrategy.fogService.add(Player(i));
 		}
 	}
 
@@ -33,11 +33,11 @@ export class FogStrategy implements SettingsStrategy {
 	}
 
 	private handleOff(): void {
-		this.fogService.off();
+		FogStrategy.fogService.off();
 	}
 
 	private handleOn(): void {
-		this.fogService.on();
+		FogStrategy.fogService.on();
 	}
 
 	private handleNight(): void {
