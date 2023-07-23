@@ -14,8 +14,34 @@ export class ModeSelection implements GameState {
 	}
 
 	public start(): void {
-		throw new Error('Method not implemented.');
+		print('start mode selection');
+		const modeTimer: timer = CreateTimer();
+		const tick: number = 1;
+		let time: number = 1; //TODO set back to 15ish
+
+		TimerStart(modeTimer, tick, true, () => {
+			if (time <= 0) {
+				PauseTimer(modeTimer);
+				DestroyTimer(modeTimer);
+				//ui.hide();
+				this.end();
+			}
+
+			//ui.timerText.setFrameText(`${Math.ceil(time)}`);
+			time -= tick;
+		});
 	}
 
-	public end(): void {}
+	public end(): void {
+		print('end mode selection');
+		//SettingsContext.getInstance().applySettings();
+
+		const modeEndTimer: timer = CreateTimer();
+
+		TimerStart(modeEndTimer, 1, false, () => {
+			PauseTimer(modeEndTimer);
+			DestroyTimer(modeEndTimer);
+			this.observer.updateState(this.nextState);
+		});
+	}
 }

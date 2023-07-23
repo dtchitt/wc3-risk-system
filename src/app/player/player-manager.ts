@@ -4,7 +4,6 @@ import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 
-//TODO Move FogStateManager to round manager or phases
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
 	public static readonly OBSERVING: string = '|cFFFFFFFFObserving|r';
@@ -19,8 +18,6 @@ export class PlayerManager {
 		this._playerFromHandle = new Map<player, ActivePlayer>();
 		this._observerFromHandle = new Map<player, HumanPlayer>();
 		this._slavesFromHandle = new Map<player, SlavePlayer>();
-
-		//const fogManager: FogService = FogService.getInstance();
 
 		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
@@ -45,11 +42,7 @@ export class PlayerManager {
 				UnitRemoveAbility(tools, ABILITY_ID.ALLOW_PINGS);
 				UnitRemoveAbility(tools, ABILITY_ID.FORFEIT);
 			}
-
-			//fogManager.add(player);
 		}
-
-		//fogManager.off();
 	}
 
 	public static getInstance(): PlayerManager {

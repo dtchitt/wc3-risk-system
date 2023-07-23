@@ -11,6 +11,7 @@ import { ChatManager } from './app/managers/chat-manager';
 import { TransportManager } from './app/managers/transport-manager';
 import { SetConsoleUI } from './app/ui/console';
 import { GameManager } from './app/game/game-manager';
+import { onOwnerChange } from './app/triggers/ownership-change-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -61,7 +62,7 @@ function tsMain() {
 		// onLeave();
 		// onDeath();
 		// unitTrained();
-		// onOwnerChange();
+		onOwnerChange();
 		// onPlayerLeave();
 		// onSpellEffect();
 		// antiSpam();

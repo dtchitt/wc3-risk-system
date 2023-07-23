@@ -3,9 +3,6 @@ export class FogService {
 
 	public constructor() {
 		this._fog = new Map<player, fogmodifier>();
-		FogMaskEnable(false);
-		FogEnable(false);
-		FogEnable(true);
 	}
 
 	/**

@@ -35,7 +35,7 @@ Frame "SIMPLESTATUSBAR" "MyBarEx" {
 		SetAllPoints, //copy "MyBarEx"
 		Layer "ARTWORK" {
 			Texture "MyBarExBorder" {
-				File "SimpleXpBarBorder", //Default Texture for "MyBarExBorder"
+				File "SimpleXpBarBorder", //Default Texture for "MyBarExBorder" // switch to in order to get rid of black sqaures ReplayTimelineBorder
 			}
 			String "MyBarExText" INHERITS "MyBarTextTemplate" {
 				Text "MyBarEx", //Default Text for "MyBarExText" which takes over Data from "MyBarTextTemplate"
