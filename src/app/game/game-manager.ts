@@ -72,7 +72,7 @@ export class GameManager {
 			} else if (PlayerManager.getInstance().players.get(player).isAdmin()) {
 				ErrorMsg(player, "You can't mute that player! :P");
 			} else {
-				PlayerManager.getInstance().players.get(player).status.set(PLAYER_STATUS.STFU);
+				PlayerManager.getInstance().players.get(players[0]).status.set(PLAYER_STATUS.STFU);
 			}
 		});
 	}
