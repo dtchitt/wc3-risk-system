@@ -9,6 +9,7 @@ import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { TimerService } from '../services/timer-service';
+import { NameManager } from 'src/app/managers/names/name-manager';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
@@ -61,6 +62,7 @@ export class MetaGame implements GameState {
 
 		PlayerManager.getInstance().players.forEach((player) => {
 			player.trackedData.bonus.hideUI();
+			NameManager.getInstance().setName(player.getPlayer(), 'btag');
 		});
 
 		this.manager.updateState(this.nextState);

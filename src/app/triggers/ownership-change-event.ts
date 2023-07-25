@@ -40,7 +40,10 @@ export function onOwnerChange() {
 
 					if (country.getOwner() == prevOwner.getPlayer()) {
 						country.setOwner(null);
-						prevOwner.trackedData.income.income -= country.getCities().length;
+
+						if (prevOwner.status.isAlive()) {
+							prevOwner.trackedData.income.income -= country.getCities().length;
+						}
 					}
 
 					if (prevOwnerData.cities.cities.length == 0) {
@@ -62,7 +65,10 @@ export function onOwnerChange() {
 
 					if (ownerData.countries.get(country) == country.getCities().length) {
 						country.setOwner(owner.getPlayer());
-						ownerData.income.income += country.getCities().length;
+
+						if (owner.status.isAlive()) {
+							ownerData.income.income += country.getCities().length;
+						}
 
 						Scoreboards.forEach((board) => {
 							board.setAlert(
@@ -72,16 +78,7 @@ export function onOwnerChange() {
 					}
 
 					if (GameManager.getInstance().isStateMetaGame()) {
-						const victoryManager: VictoryManager = VictoryManager.getInstance();
-						victoryManager.setLeader(owner);
-
-						Scoreboards.forEach((board) => {
-							board.setTitle(
-								`${NameManager.getInstance().getDisplayName(victoryManager.leader.getPlayer())} ${
-									victoryManager.leader.trackedData.cities.cities.length
-								}/${CITIES_TO_WIN} `
-							);
-						});
+						VictoryManager.getInstance().setLeader(owner);
 					}
 				}
 			} catch (error) {

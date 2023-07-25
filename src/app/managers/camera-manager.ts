@@ -45,7 +45,7 @@ export default class CameraManager {
 				let contents: string;
 
 				if (player == GetLocalPlayer()) {
-					contents = File.read(this.getFilePath(player));
+					contents = File.read(this.getFilePath());
 				}
 
 				if (contents) {
@@ -54,10 +54,7 @@ export default class CameraManager {
 					sRot = S2R(contents.split(' ')[2]);
 				} else {
 					if (player == GetLocalPlayer()) {
-						File.write(
-							this.getFilePath(player),
-							`${CamSettings.DEFAULT_DISTANCE} ${CamSettings.DEFAULT_ANGLE} ${CamSettings.DEFAULT_ROTATION}`
-						);
+						File.write(this.getFilePath(), `${CamSettings.DEFAULT_DISTANCE} ${CamSettings.DEFAULT_ANGLE} ${CamSettings.DEFAULT_ROTATION}`);
 					}
 				}
 
@@ -84,7 +81,7 @@ export default class CameraManager {
 		this.checkCamData(this._camData.get(player), [distance, angle, rotation]);
 
 		if (player == GetLocalPlayer()) {
-			File.write(this.getFilePath(player), `${distance} ${angle} ${rotation}`);
+			File.write(this.getFilePath(), `${distance} ${angle} ${rotation}`);
 		}
 	}
 
@@ -139,7 +136,7 @@ export default class CameraManager {
 		return !Number.isNaN(Number(str));
 	}
 
-	private getFilePath(player: player): string {
-		return `${this._pathFolderName}/${GetPlayerName(player)}/${this._fileName}`;
+	private getFilePath(): string {
+		return `${this._pathFolderName}/${this._fileName}`;
 	}
 }

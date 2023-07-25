@@ -6,7 +6,7 @@ export function keyEvents() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
-		BlzTriggerRegisterPlayerKeyEvent(t, Player(i), OSKEY_ESCAPE, 0, false);
+		BlzTriggerRegisterPlayerKeyEvent(t, Player(i), OSKEY_F5, 0, false);
 	}
 
 	TriggerAddCondition(

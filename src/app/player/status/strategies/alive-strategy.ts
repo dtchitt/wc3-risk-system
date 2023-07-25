@@ -5,6 +5,6 @@ import { StatusStrategy } from './status-strategy';
 export class AliveStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		gamePlayer.status.status = PLAYER_STATUS.ALIVE;
-		gamePlayer.trackedData.income.income = 4;
+		gamePlayer.trackedData.income.income = 5000;
 	}
 }

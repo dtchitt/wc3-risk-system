@@ -1,6 +1,8 @@
 import { CITIES_TO_WIN } from 'src/configs/game-settings';
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
+import { Scoreboards } from '../scoreboard/scoreboard-array';
+import { NameManager } from './names/name-manager';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
@@ -37,8 +39,16 @@ export class VictoryManager {
 	}
 
 	public setLeader(player: ActivePlayer) {
-		if (this.leader.trackedData.cities.cities.length > player.trackedData.cities.cities.length) {
+		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
 			this._leader = player;
+
+			Scoreboards.forEach((board) => {
+				board.setTitle(
+					`${NameManager.getInstance().getDisplayName(this.leader.getPlayer())} ${
+						this.leader.trackedData.cities.cities.length
+					}/${CITIES_TO_WIN} `
+				);
+			});
 		}
 	}
 

@@ -4,12 +4,12 @@ import { StatusStrategy } from './status-strategy';
 
 export class NomadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
-		gamePlayer.status.status = PLAYER_STATUS.NOMAD;
-		gamePlayer.trackedData.income.income = 2;
-
-		if (gamePlayer.trackedData.units.size == 0) {
+		if (gamePlayer.trackedData.units.size <= 0) {
 			gamePlayer.status.set(PLAYER_STATUS.DEAD);
 			return;
+		} else {
+			gamePlayer.status.status = PLAYER_STATUS.NOMAD;
+			gamePlayer.trackedData.income.income = 2;
 		}
 
 		const tick: number = 1;
@@ -17,7 +17,8 @@ export class NomadStrategy implements StatusStrategy {
 		gamePlayer.status.statusDuration = 60;
 
 		TimerStart(nomadTimer, tick, true, () => {
-			if (!gamePlayer.status.isNomad()) {
+			if (!gamePlayer.status.isNomad() || gamePlayer.trackedData.cities.cities.length >= 1) {
+				gamePlayer.status.set(PLAYER_STATUS.ALIVE);
 				PauseTimer(nomadTimer);
 				DestroyTimer(nomadTimer);
 			}
