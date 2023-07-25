@@ -19,12 +19,13 @@ import { onSpellEffect } from './app/triggers/on-spell-effect-event';
 import { onPlayerLeave } from './app/triggers/player-leave-event';
 import { onDeath } from './app/triggers/unit-killed-event';
 import { unitTrained } from './app/triggers/unit-trained-event';
+import { keyEvents } from './app/triggers/key-events';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
 function tsMain() {
 	try {
-		DoNotSaveReplay();
+		//DoNotSaveReplay();
 
 		if (!BlzLoadTOCFile('war3mapimported\\Risk.toc')) {
 			print('Failed to load TOC file!');
@@ -73,6 +74,7 @@ function tsMain() {
 		onPlayerLeave();
 		onSpellEffect();
 		antiSpam();
+		keyEvents();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
