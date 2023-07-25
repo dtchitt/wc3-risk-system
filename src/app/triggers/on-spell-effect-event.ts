@@ -22,28 +22,28 @@ export function onSpellEffect() {
 					UnitToCity.get(GetTriggerUnit()).onCast();
 					break;
 				case ABILITY_ID.LOW_HEALTH_DEFENDER:
-					player.settings.health = false;
+					player.options.health = false;
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_HEALTH_DEFENDER, ABILITY_ID.HIGH_HEALTH_DEFENDER);
 					break;
 				case ABILITY_ID.HIGH_HEALTH_DEFENDER:
-					player.settings.health = true;
+					player.options.health = true;
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_HEALTH_DEFENDER, ABILITY_ID.LOW_HEALTH_DEFENDER);
 					break;
 				case ABILITY_ID.LOW_VALUE_DEFENDER:
-					player.settings.value = false;
+					player.options.value = false;
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_VALUE_DEFENDER, ABILITY_ID.HIGH_VALUE_DEFENDER);
 					break;
 				case ABILITY_ID.HIGH_VALUE_DEFENDER:
-					player.settings.value = true;
+					player.options.value = true;
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_VALUE_DEFENDER, ABILITY_ID.LOW_VALUE_DEFENDER);
 					break;
 				case ABILITY_ID.ALLOW_PINGS:
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.ALLOW_PINGS, ABILITY_ID.BLOCK_PINGS);
-					player.settings.ping = true;
+					player.options.ping = true;
 					break;
 				case ABILITY_ID.BLOCK_PINGS:
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.BLOCK_PINGS, ABILITY_ID.ALLOW_PINGS);
-					player.settings.ping = false;
+					player.options.ping = false;
 					break;
 				case ABILITY_ID.PING:
 					// let pingIndex: number = player.settings.names.colorIndex;

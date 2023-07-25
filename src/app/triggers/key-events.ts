@@ -14,15 +14,15 @@ export function keyEvents() {
 		Condition(() => {
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
 
-			if (player.settings.board == 0) {
-				player.settings.board = 1;
+			if (player.options.board == 0) {
+				player.options.board = 1;
 
 				if (player.getPlayer() == GetLocalPlayer()) {
 					Scoreboards[0].setVisibility(false);
 					Scoreboards[1].setVisibility(true);
 				}
-			} else if (player.settings.board == 1) {
-				player.settings.board = 0;
+			} else if (player.options.board == 1) {
+				player.options.board = 0;
 
 				if (player.getPlayer() == GetLocalPlayer()) {
 					Scoreboards[1].setVisibility(false);

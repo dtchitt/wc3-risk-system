@@ -1,4 +1,3 @@
-import { CITIES_TO_WIN } from 'src/configs/game-settings';
 import { City } from '../city/city';
 import { UnitToCity } from '../city/city-map';
 import { Country } from '../country/country';

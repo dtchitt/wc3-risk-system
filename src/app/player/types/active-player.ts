@@ -8,14 +8,14 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 	private _player: player;
 	private _trackedData: TrackedData;
 	private _status: Status;
-	private _settings: Options;
+	private _options: Options;
 	private _admin: boolean;
 
 	constructor(player: player) {
 		this._player = player;
 		this._trackedData = new TrackedData(player);
 		this._status = new Status(this);
-		this._settings = {
+		this._options = {
 			health: false,
 			value: false,
 			ping: false,
@@ -57,8 +57,8 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 		return this._status;
 	}
 
-	public get settings(): Options {
-		return this._settings;
+	public get options(): Options {
+		return this._options;
 	}
 
 	public set admin(value: boolean) {

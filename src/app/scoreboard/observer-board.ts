@@ -1,4 +1,3 @@
-import { NameManager } from '../managers/names/name-manager';
 import { TrackedData } from '../player/data/tracked-data';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
