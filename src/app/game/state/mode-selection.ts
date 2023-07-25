@@ -15,7 +15,6 @@ export class ModeSelection implements GameState {
 	}
 
 	public start(): void {
-		print('start mode selection');
 		const modeTimer: timer = CreateTimer();
 		const tick: number = 1;
 		let time: number = 1; //TODO set back to 15ish
@@ -34,7 +33,6 @@ export class ModeSelection implements GameState {
 	}
 
 	public end(): void {
-		print('end mode selection');
 		const settings: SettingsContext = SettingsContext.getInstance();
 		settings.initStrategies();
 		settings.applyStrategy('Diplomacy');

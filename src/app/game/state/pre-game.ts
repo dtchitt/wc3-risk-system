@@ -22,8 +22,6 @@ export class PreGame implements GameState {
 	}
 
 	public start(): void {
-		print('Starting PreGame phase');
-
 		if (!this.treeService) {
 			this.treeService = new TreeService();
 		} else {
@@ -51,7 +49,6 @@ export class PreGame implements GameState {
 	}
 
 	public end(): void {
-		print('End Pregame');
 		this.distributionService = new DistributionService();
 		this.distributionService.standardDistro();
 
