@@ -47,7 +47,7 @@ export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 		return this;
 	}
 
-	setSpawnType(spawnTypeID: number): SpawnerBuilder {
+	public setSpawnType(spawnTypeID: number): SpawnerBuilder {
 		this.spawnTypeID = spawnTypeID;
 
 		return this;

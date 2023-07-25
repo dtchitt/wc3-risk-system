@@ -21,6 +21,8 @@ export function onOwnerChange() {
 		TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_CHANGE_OWNER, null);
 	}
 
+	//TODO figure out issue with owner not being set correctly once a player loses a country
+	//Probabally really an issue with country.setOwner()
 	TriggerAddCondition(
 		t,
 		Condition(() => {
@@ -41,6 +43,7 @@ export function onOwnerChange() {
 					if (country.getOwner() == prevOwner.getPlayer()) {
 						country.setOwner(null);
 						prevOwner.trackedData.income.income -= country.getCities().length;
+						print(`remove ${country.getCities().length} income from ${GetPlayerName(prevOwner.getPlayer())} from ${country.getName()}`);
 					}
 
 					if (prevOwnerData.cities.cities.length == 0) {
@@ -63,6 +66,7 @@ export function onOwnerChange() {
 					if (ownerData.countries.get(country) == country.getCities().length) {
 						country.setOwner(owner.getPlayer());
 						ownerData.income.income += country.getCities().length;
+						print(`add ${country.getCities().length} income to ${GetPlayerName(country.getOwner())} from ${country.getName()}`);
 
 						Scoreboards.forEach((board) => {
 							board.setAlert(
