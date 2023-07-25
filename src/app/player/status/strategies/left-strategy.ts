@@ -10,9 +10,9 @@ export class LeftStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		gamePlayer.status.status = PLAYER_STATUS.LEFT;
 
-		const data: TrackedData = gamePlayer.trackedData;
+		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit()) return; //Player already died or forfeit
 
-		if (data.income.income == 0 || data.income.income == 1) return; //Player already died or forfeit
+		const data: TrackedData = gamePlayer.trackedData;
 
 		data.income.income = 0;
 		data.income.end = 0;

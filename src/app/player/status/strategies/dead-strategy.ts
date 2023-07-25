@@ -8,7 +8,7 @@ import { PLAYER_STATUS } from '../status-enum';
 
 export class DeadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
-		if (gamePlayer.status.isForfeit()) return;
+		if (gamePlayer.status.isForfeit() || gamePlayer.status.isLeft()) return;
 
 		gamePlayer.status.status = PLAYER_STATUS.DEAD;
 
