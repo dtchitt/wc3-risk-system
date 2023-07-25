@@ -21,8 +21,6 @@ export function onOwnerChange() {
 		TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_CHANGE_OWNER, null);
 	}
 
-	//TODO figure out issue with owner not being set correctly once a player loses a country
-	//Probabally really an issue with country.setOwner()
 	TriggerAddCondition(
 		t,
 		Condition(() => {

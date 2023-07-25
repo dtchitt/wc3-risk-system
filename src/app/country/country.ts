@@ -43,12 +43,7 @@ export class Country {
 	}
 
 	public setOwner(player: player): void {
-		if (this.owner != null) {
-			this.owner == null;
-			this.spawn.setOwner(null);
-		}
-
-		if (player == null) return;
+		if (player == null) player = NEUTRAL_HOSTILE;
 
 		this.owner = player;
 		this.spawn.setOwner(player);
