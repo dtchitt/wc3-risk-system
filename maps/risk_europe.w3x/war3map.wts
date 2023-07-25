@@ -1115,7 +1115,7 @@ Adrenaline
 }
 
 STRING 7376
-// Abilities: a032 (Set Spawner Rally Point - Radius 6000), Hotkey (Hotkey - Normal)
+// Abilities: a031 (Set Spawner Rally Point - Radius 3000), Hotkey (Hotkey - Normal)
 {
 Q
 }
@@ -1357,18 +1357,6 @@ STRING 7420
 |cffff8000Movespeed:|r 270
 }
 
-STRING 7423
-// Abilities: a033 (Set Spawner Rally Point - All), Hotkey (Hotkey - Normal)
-{
-Q
-}
-
-STRING 7427
-// Abilities: a031 (Set Spawner Rally Point - Radius 3000), Hotkey (Hotkey - Normal)
-{
-Q
-}
-
 STRING 7429
 // Abilities: a034 (Reset All Spawner Rally Points), Name (Name)
 {
@@ -1439,5 +1427,17 @@ STRING 7441
 // Abilities: a031 (Set Spawner Rally Point - Radius 3000), Ubertip (Tooltip - Normal - Extended)
 {
 This will allow you to set the rally point of all owned spawners in a radius of 3000 from the origin of the casting spawner.
+}
+
+STRING 7442
+// Abilities: a032 (Set Spawner Rally Point - Radius 6000), Hotkey (Hotkey - Normal)
+{
+W
+}
+
+STRING 7443
+// Abilities: a033 (Set Spawner Rally Point - All), Hotkey (Hotkey - Normal)
+{
+E
 }
 
