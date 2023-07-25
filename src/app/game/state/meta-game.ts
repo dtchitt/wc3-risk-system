@@ -25,8 +25,6 @@ export class MetaGame implements GameState {
 	}
 
 	public start(): void {
-		print('Starting MetaGame phase');
-
 		try {
 			SettingsContext.getInstance().applyStrategy('Fog');
 
@@ -57,6 +55,14 @@ export class MetaGame implements GameState {
 	}
 
 	public end(): void {
+		Scoreboards.forEach((board) => {
+			board.setVisibility(false);
+		});
+
+		PlayerManager.getInstance().players.forEach((player) => {
+			player.trackedData.bonus.hideUI();
+		});
+
 		this.manager.updateState(this.nextState);
 	}
 }
