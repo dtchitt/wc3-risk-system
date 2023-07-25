@@ -33,6 +33,10 @@ export class FightBonus implements Bonus {
 		}
 	}
 
+	public hideUI() {
+		BlzFrameSetVisible(this.ui, false);
+	}
+
 	public reset(): void {
 		this.delta = 0;
 		this.totalBonusVal = 0;

@@ -19,6 +19,7 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 			health: false,
 			value: false,
 			ping: false,
+			board: 0,
 		};
 		this._admin = false;
 	}
