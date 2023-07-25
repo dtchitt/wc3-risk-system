@@ -73,7 +73,11 @@ export class MiniBoard extends Scoreboard {
 			//TODO update player income color based on status
 			// let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
 
-			// this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.INCOME_COL);
+			// if (player.status.isAlive() || player.status.isNomad()) {
+			// 	this.setItemValue(`${textColor}${data.income.income}`, row, this.INCOME_COL);
+			// } else {
+			// 	this.setItemValue(`${textColor}-`, row, 2);
+			// }
 
 			row++;
 		});

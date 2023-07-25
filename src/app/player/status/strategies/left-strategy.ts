@@ -8,9 +8,12 @@ import { PLAYER_STATUS } from '../status-enum';
 
 export class LeftStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
-		gamePlayer.status.status = PLAYER_STATUS.LEFT;
+		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit()) {
+			gamePlayer.status.status = PLAYER_STATUS.LEFT;
+			return;
+		}
 
-		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit()) return; //Player already died or forfeit
+		gamePlayer.status.status = PLAYER_STATUS.LEFT;
 
 		const data: TrackedData = gamePlayer.trackedData;
 

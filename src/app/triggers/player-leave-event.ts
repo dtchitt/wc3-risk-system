@@ -17,8 +17,6 @@ export function onPlayerLeave() {
 
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
 
-			if (!player.status.isAlive()) return;
-
 			player.status.set(PLAYER_STATUS.LEFT);
 		})
 	);

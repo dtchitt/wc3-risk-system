@@ -41,7 +41,6 @@ export function onOwnerChange() {
 					if (country.getOwner() == prevOwner.getPlayer()) {
 						country.setOwner(null);
 						prevOwner.trackedData.income.income -= country.getCities().length;
-						print(`remove ${country.getCities().length} income from ${GetPlayerName(prevOwner.getPlayer())} from ${country.getName()}`);
 					}
 
 					if (prevOwnerData.cities.cities.length == 0) {
@@ -64,7 +63,6 @@ export function onOwnerChange() {
 					if (ownerData.countries.get(country) == country.getCities().length) {
 						country.setOwner(owner.getPlayer());
 						ownerData.income.income += country.getCities().length;
-						print(`add ${country.getCities().length} income to ${GetPlayerName(country.getOwner())} from ${country.getName()}`);
 
 						Scoreboards.forEach((board) => {
 							board.setAlert(
