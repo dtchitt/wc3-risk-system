@@ -12,6 +12,13 @@ Frame "TEXT" "PlayerMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	LayerStyle "IGNORETRACKEVENTS",
 }
 
+Frame "TEXT" "CountdownFrame" INHERITS "EscMenuButtonTextTemplate" {
+	Text "",
+    SetPoint CENTER, "ConsoleUI", CENTER, 0, .07,
+	LayerStyle "IGNORETRACKEVENTS",
+	FrameFont "MasterFont", 0.030, "",
+}
+
 String "MyBarTextTemplate" { 
 	//FontColor 0.99 0.427 0.0705 1.0, //Red Green Blue Alpha 0.0 to 1.0
 	FontColor 1.0 1.0 1.0 1.0,
