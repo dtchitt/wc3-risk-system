@@ -1,5 +1,5 @@
 import { NameManager } from 'src/app/managers/names/name-manager';
-import { GlobalMessage, PlayGlobalSound } from 'src/app/utils/utils';
+import { GlobalMessage, PlayLocalSound } from 'src/app/utils/utils';
 import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
@@ -22,7 +22,7 @@ export class ForfeitStrategy implements StatusStrategy {
 
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		VictoryManager.getInstance().removePlayer(gamePlayer);
-		PlayGlobalSound('Sounds\\UR_DONE.mp3');
+		PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
 		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has forfeit the game!`);
 	}
 }

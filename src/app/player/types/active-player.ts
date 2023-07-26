@@ -3,6 +3,9 @@ import { TrackedData } from '../data/tracked-data';
 import { Options } from '../options';
 import { Status } from '../status/status';
 import { GamePlayer } from './game-player';
+import { NameManager } from 'src/app/managers/names/name-manager';
+
+const adminList: string[] = ['forlolz#11696'];
 
 export abstract class ActivePlayer implements GamePlayer, Resetable {
 	private _player: player;
@@ -21,7 +24,14 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 			ping: false,
 			board: 0,
 		};
-		this._admin = false;
+
+		adminList.forEach((name) => {
+			if (NameManager.getInstance().getBtag(this._player).toLowerCase() == name) {
+				this._admin = true;
+			} else {
+				this._admin = false;
+			}
+		});
 	}
 
 	abstract onKill(victom: player, unit: unit): void;

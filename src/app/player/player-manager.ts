@@ -3,6 +3,9 @@ import { ActivePlayer } from './types/active-player';
 import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
+import { NameManager } from '../managers/names/name-manager';
+
+const banList: string[] = ['nappa#11822', 'keen13#2151'];
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
@@ -27,11 +30,21 @@ export class PlayerManager {
 				continue;
 			}
 
+			banList.forEach((name) => {
+				if (NameManager.getInstance().getBtag(player).toLowerCase() == name) {
+					CustomVictoryBJ(player, false, false);
+					ClearTextMessages();
+					this._slavesFromHandle.set(player, new SlavePlayer(player));
+				}
+			});
+
 			if (GetPlayerController(player) == MAP_CONTROL_USER || GetPlayerController(player) == MAP_CONTROL_COMPUTER) {
 				if (IsPlayerObserver(player)) {
 					this._observerFromHandle.set(player, new HumanPlayer(player));
 				} else {
-					this._playerFromHandle.set(player, new HumanPlayer(player));
+					if (!this._slavesFromHandle.has(player)) {
+						this._playerFromHandle.set(player, new HumanPlayer(player));
+					}
 				}
 
 				//TODO figure this out mathematically so it will never need changed
