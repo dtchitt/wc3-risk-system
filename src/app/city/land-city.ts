@@ -42,6 +42,8 @@ export class LandCity extends City {
 			this.guard.replace(targUnit);
 
 			SetUnitPosition(oldGuard, x, y);
+
+			this.guard.reposition();
 		} catch (error) {
 			print(error);
 		}

@@ -49,6 +49,11 @@ export function GlobalMessage(msg: string, duration: number = 4) {
 	});
 }
 
+export function CentralMessage(msg: string) {
+	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
+	BlzFrameSetText(frame, msg);
+}
+
 export function LocalMessage(msg: string, duration: number = 4) {
 	const frame: framehandle = BlzGetFrameByName('PlayerMessageFrame', 0);
 	let str: string = '';

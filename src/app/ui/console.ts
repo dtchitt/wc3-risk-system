@@ -65,6 +65,7 @@ export function SetConsoleUI() {
 
 	BlzCreateFrame('PlayerMessageFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	BlzCreateFrame('ErrorMessageFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
+	BlzCreateFrame('CountdownFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	// hideUI(true);
 }
 
