@@ -2,9 +2,9 @@ import { City } from '../city/city';
 import { RegionToCity } from '../city/city-map';
 import { UNIT_ID } from '../../configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
-import { FilterOwnedUnits, FilterAlliedUnits } from '../utils/guard-filters';
 import { CityRegionSize } from 'src/configs/city-settings';
 import { CompareUnitByValue } from '../utils/unit-comparisons';
+import { GetUnitsInRangeByAllegiance } from '../utils/guard-filters';
 
 export const LeaveRegionEvent: trigger = CreateTrigger();
 
@@ -19,10 +19,10 @@ export function onLeave() {
 			let guardChoice: unit = city.guard.unit;
 
 			//Filter for owned guards
-			FilterOwnedUnits(g, city, CityRegionSize);
+			GetUnitsInRangeByAllegiance(g, city, CityRegionSize, IsUnitOwnedByPlayer);
 
 			//No valid owned guards found, check for allies
-			if (BlzGroupGetSize(g) == 0) FilterAlliedUnits(g, city, CityRegionSize);
+			if (BlzGroupGetSize(g) == 0) GetUnitsInRangeByAllegiance(g, city, CityRegionSize, IsUnitAlly);
 
 			//No valid owned or allied guards found, create a dummy for city owner.
 			if (BlzGroupGetSize(g) == 0 && !city.isValidGuard(guardChoice)) {
