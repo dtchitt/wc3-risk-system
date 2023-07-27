@@ -7,6 +7,8 @@ import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { GameState } from '../state/game-state';
+import { NameManager } from 'src/app/managers/names/name-manager';
+import { CITIES_TO_WIN } from 'src/configs/game-settings';
 
 export class TimerService implements Resetable {
 	private _timer: timer;
@@ -46,6 +48,12 @@ export class TimerService implements Resetable {
 						board.updateFull();
 					} else {
 						board.updatePartial();
+
+						board.setTitle(
+							`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+								VictoryManager.getInstance().leader.trackedData.cities.cities.length
+							}/${CITIES_TO_WIN} `
+						);
 					}
 				});
 
