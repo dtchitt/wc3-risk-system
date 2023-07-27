@@ -8,7 +8,7 @@ import { PLAYER_STATUS } from '../status-enum';
 
 export class ForfeitStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
-		if (gamePlayer.status.isDead()) return;
+		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit()) return;
 
 		gamePlayer.status.status = PLAYER_STATUS.FORFEIT;
 
@@ -20,9 +20,15 @@ export class ForfeitStrategy implements StatusStrategy {
 		data.cities.end = data.cities.cities.length;
 		data.turnDied = S2I(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0)));
 
+		if (gamePlayer.getPlayer() == GetLocalPlayer()) {
+			EnableSelect(false, false);
+			EnableDragSelect(false, false);
+		}
+
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		VictoryManager.getInstance().removePlayer(gamePlayer);
-		PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
+		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
 		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has forfeit the game!`);
+		PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
 	}
 }

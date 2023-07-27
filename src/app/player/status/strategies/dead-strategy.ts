@@ -20,15 +20,14 @@ export class DeadStrategy implements StatusStrategy {
 		data.cities.end = data.cities.cities.length;
 		data.turnDied = S2I(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0)));
 
-		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
-		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-
 		if (gamePlayer.getPlayer() == GetLocalPlayer()) {
 			EnableSelect(false, false);
 			EnableDragSelect(false, false);
 		}
 
-		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`);
+		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		VictoryManager.getInstance().removePlayer(gamePlayer);
+		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
+		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`);
 	}
 }
