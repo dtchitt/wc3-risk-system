@@ -35,7 +35,7 @@ export class TimerService implements Resetable {
 					});
 
 					VictoryManager.getInstance().checkCityVictory();
-
+					//TODO Player is close to Victory Message
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
 					});
@@ -48,18 +48,10 @@ export class TimerService implements Resetable {
 						board.updateFull();
 					} else {
 						board.updatePartial();
-
-						board.setTitle(
-							`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
-								VictoryManager.getInstance().leader.trackedData.cities.cities.length
-							}/${CITIES_TO_WIN} `
-						);
 					}
 				});
 
 				this.updateUI();
-
-				//TODO Player is close to Victory Message
 
 				this._tick--;
 
@@ -68,7 +60,7 @@ export class TimerService implements Resetable {
 					this._turn++;
 				}
 			} catch (error) {
-				print(error);
+				print('Error in Timer' + error);
 			}
 		});
 	}
