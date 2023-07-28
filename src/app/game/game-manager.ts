@@ -67,7 +67,7 @@ export class GameManager {
 				ErrorMsg(player, 'Multiple players found, be more specific!');
 				return;
 			} else if (players.length <= 0) {
-				ErrorMsg(player, 'Player not found!');
+				ErrorMsg(player, 'Player not found!', 2);
 				return;
 			} else if (PlayerManager.getInstance().players.get(players[0]).isAdmin()) {
 				ErrorMsg(player, "You can't mute that player! :P");

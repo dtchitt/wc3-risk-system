@@ -2,7 +2,7 @@ export const NEUTRAL_HOSTILE: player = Player(PLAYER_NEUTRAL_AGGRESSIVE);
 
 const errorMap: Map<player, timer> = new Map<player, timer>();
 
-export function ErrorMsg(player: player, msg: string, duration: number = 2) {
+export function ErrorMsg(player: player, msg: string, duration: number = 3) {
 	if (errorMap.has(player)) {
 		PauseTimer(errorMap.get(player));
 		DestroyTimer(errorMap.get(player));
@@ -116,4 +116,8 @@ export function isNonEmptySubstring(substring: string, string: string): boolean 
 	string = string.toLowerCase().trim();
 
 	return substring !== '' && string.includes(substring);
+}
+
+export function DistanceBetweenCoords(x1: number, y1: number, x2: number, y2: number) {
+	return SquareRoot(Pow(x2 - x1, 2) + Pow(y2 - y1, 2));
 }
