@@ -55,7 +55,7 @@ export class MetaGame implements GameState {
 					EnableSelect(true, true);
 					EnableDragSelect(true, true);
 					this.timer.start();
-					PlayGlobalSound('Sound\\Interface\\ItemReceived.flac');
+					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 				}
 
 				duration--;

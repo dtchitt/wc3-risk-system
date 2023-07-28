@@ -5,8 +5,9 @@ import { TrackedData } from 'src/app/player/data/tracked-data';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
-import { PlayGlobalSound } from 'src/app/utils/utils';
+import { GlobalMessage, PlayGlobalSound } from 'src/app/utils/utils';
 import { GameState } from '../state/game-state';
+import { NameManager } from 'src/app/managers/names/name-manager';
 
 export class TimerService implements Resetable {
 	private _timer: timer;
@@ -39,11 +40,23 @@ export class TimerService implements Resetable {
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
 					});
+
+					if (this.victoryManager.leader.trackedData.cities.cities.length >= Math.floor(VictoryManager.CITIES_TO_WIN * 0.7)) {
+						GlobalMessage(
+							`${NameManager.getInstance().getDisplayName(this.victoryManager.leader.getPlayer())} owns ${HexColors.RED}${
+								this.victoryManager.leader.trackedData.cities.cities.length
+							}|r cities and needs ${HexColors.RED}${
+								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
+							}|r more to win!`,
+							'Sound\\Interface\\ItemReceived.flac',
+							4
+						);
+					}
 				}
 
 				this.victoryManager.checkKnockOutVictory();
 
-				Scoreboards.forEach((board, index) => {
+				Scoreboards.forEach((board) => {
 					if (this._tick == this._duration) {
 						board.updateFull();
 					} else {
