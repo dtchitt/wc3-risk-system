@@ -21,16 +21,16 @@ export enum CamSettings {
 }
 
 export default class CameraManager {
-	private static _instance: CameraManager;
-	private _pathFolderName: string = 'risk';
-	private _fileName: string = 'camera.pld';
-	private _camData: Map<player, CamData> = new Map<player, CamData>();
+	private static instance: CameraManager;
+	private pathFolderName: string = 'risk';
+	private fileName: string = 'camera.pld';
+	private camData: Map<player, CamData> = new Map<player, CamData>();
 
 	public static getInstance() {
-		if (this._instance == null) {
-			this._instance = new CameraManager();
+		if (this.instance == null) {
+			this.instance = new CameraManager();
 		}
-		return this._instance;
+		return this.instance;
 	}
 
 	private constructor() {
@@ -41,7 +41,7 @@ export default class CameraManager {
 			let sAngle: number;
 			let sRot: number;
 
-			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetPlayerController(player) == MAP_CONTROL_USER) {
+			if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_EMPTY && GetPlayerController(player) == MAP_CONTROL_USER) {
 				let contents: string;
 
 				if (player == GetLocalPlayer()) {
@@ -58,7 +58,7 @@ export default class CameraManager {
 					}
 				}
 
-				this._camData.set(player, {
+				this.camData.set(player, {
 					distance: !sDist ? CamSettings.DEFAULT_DISTANCE : sDist,
 					angle: !sAngle ? CamSettings.DEFAULT_ANGLE : sAngle,
 					rotation: !sRot ? CamSettings.DEFAULT_ROTATION : sRot,
@@ -78,7 +78,7 @@ export default class CameraManager {
 		angle = this.isNumber(angle) ? angle : `${CamSettings.DEFAULT_ANGLE}`;
 		rotation = this.isNumber(rotation) ? rotation : `${CamSettings.DEFAULT_ROTATION}`;
 
-		this.checkCamData(this._camData.get(player), [distance, angle, rotation]);
+		this.checkCamData(this.camData.get(player), [distance, angle, rotation]);
 
 		if (player == GetLocalPlayer()) {
 			File.write(this.getFilePath(), `${distance} ${angle} ${rotation}`);
@@ -90,7 +90,7 @@ export default class CameraManager {
 
 		TimerStart(camTimer, 0.5, true, () => {
 			for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {
-				if (this._camData.has(Player(i))) this.setCameraFields(Player(i), this._camData.get(Player(i)));
+				if (this.camData.has(Player(i))) this.setCameraFields(Player(i), this.camData.get(Player(i)));
 			}
 		});
 	}
@@ -137,6 +137,6 @@ export default class CameraManager {
 	}
 
 	private getFilePath(): string {
-		return `${this._pathFolderName}/${this._fileName}`;
+		return `${this.pathFolderName}/${this.fileName}`;
 	}
 }

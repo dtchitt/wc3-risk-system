@@ -31,7 +31,6 @@ export class AllianceManager {
 		}
 
 		if (this._alliances.size <= 1) {
-			print(`${this._alliances.size} teams found. Removing all alliances.`);
 			this.clearAlliances();
 		}
 

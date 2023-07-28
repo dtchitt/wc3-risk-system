@@ -61,7 +61,7 @@ export class MetaGame implements GameState {
 				duration--;
 			});
 		} catch (error) {
-			print(error);
+			print('Error in Metagame' + error);
 		}
 	}
 

@@ -19,14 +19,10 @@ export class Bounty implements Bonus {
 	public add(val: number): number {
 		let bonusAmount: number = 0;
 
-		try {
-			this.delta += val * Bounty.factor;
+		this.delta += val * Bounty.factor;
 
-			if (this.delta >= Bounty.interval) {
-				bonusAmount = this.processBonus();
-			}
-		} catch (error) {
-			print(error);
+		if (this.delta >= Bounty.interval) {
+			bonusAmount = this.processBonus();
 		}
 
 		return bonusAmount;
