@@ -1,17 +1,19 @@
-import { CITIES_TO_WIN } from 'src/configs/game-settings';
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
-import { Scoreboards } from '../scoreboard/scoreboard-array';
-import { NameManager } from './names/name-manager';
+import { RegionToCity } from '../city/city-map';
+import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
+	public static CITIES_TO_WIN: number;
+
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
 	private gameTimer: TimerService;
 
 	private constructor() {
 		this.players = [];
+		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
 	public static getInstance(): VictoryManager {
@@ -41,14 +43,6 @@ export class VictoryManager {
 	public setLeader(player: ActivePlayer) {
 		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
 			this._leader = player;
-
-			Scoreboards.forEach((board) => {
-				board.setTitle(
-					`${NameManager.getInstance().getDisplayName(this.leader.getPlayer())} ${
-						this.leader.trackedData.cities.cities.length
-					}/${CITIES_TO_WIN} `
-				);
-			});
 		}
 	}
 
@@ -58,7 +52,7 @@ export class VictoryManager {
 
 	public checkCityVictory() {
 		this.players.forEach((player) => {
-			if (player.trackedData.cities.cities.length >= CITIES_TO_WIN) {
+			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
 				this._leader = player;
 				this.endGame();
 			}

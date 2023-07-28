@@ -7,8 +7,6 @@ import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { GameState } from '../state/game-state';
-import { NameManager } from 'src/app/managers/names/name-manager';
-import { CITIES_TO_WIN } from 'src/configs/game-settings';
 
 export class TimerService implements Resetable {
 	private _timer: timer;
@@ -16,6 +14,7 @@ export class TimerService implements Resetable {
 	private _tick: number;
 	private _turn: number;
 	private gameState: GameState;
+	private victoryManager: VictoryManager;
 
 	public constructor(gameState: GameState) {
 		this._timer = CreateTimer();
@@ -23,7 +22,8 @@ export class TimerService implements Resetable {
 		this._tick = this._duration;
 		this._turn = 1;
 		this.gameState = gameState;
-		VictoryManager.getInstance().setTimer(this);
+		this.victoryManager = VictoryManager.getInstance();
+		this.victoryManager.setTimer(this);
 	}
 
 	public start(): void {
@@ -34,14 +34,14 @@ export class TimerService implements Resetable {
 						player.giveGold();
 					});
 
-					VictoryManager.getInstance().checkCityVictory();
-					//TODO Player is close to Victory Message
+					this.victoryManager.checkCityVictory();
+
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
 					});
 				}
 
-				VictoryManager.getInstance().checkKnockOutVictory();
+				this.victoryManager.checkKnockOutVictory();
 
 				Scoreboards.forEach((board, index) => {
 					if (this._tick == this._duration) {
