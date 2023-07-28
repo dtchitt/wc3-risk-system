@@ -6,7 +6,7 @@ Frame "TEXT" "ErrorMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	LayerStyle "IGNORETRACKEVENTS",
 }
 
-Frame "TEXT" "PlayerMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
+Frame "TEXT" "GlobalMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
     SetPoint CENTER, "ConsoleUI", CENTER, 0, .2,
 	LayerStyle "IGNORETRACKEVENTS",
@@ -16,7 +16,10 @@ Frame "TEXT" "CountdownFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
     SetPoint CENTER, "ConsoleUI", CENTER, 0, .07,
 	LayerStyle "IGNORETRACKEVENTS",
-	FrameFont "MasterFont", 0.030, "",
+	FrameFont "MasterFont", 0.025, "",
+	FontColor 1.0 1.0 1.0 1.0,
+	FontShadowColor 0.0 0.4 0.7 0.5,
+	FontShadowOffset 0.001 -0.001,
 }
 
 String "MyBarTextTemplate" { 
