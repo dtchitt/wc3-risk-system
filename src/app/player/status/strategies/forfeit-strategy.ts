@@ -28,7 +28,10 @@ export class ForfeitStrategy implements StatusStrategy {
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		VictoryManager.getInstance().removePlayer(gamePlayer);
 		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has forfeit the game!`);
+		GlobalMessage(
+			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has forfeit the game!`,
+			'Sound\\Interface\\SecretFound.flac'
+		);
 		PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
 	}
 }

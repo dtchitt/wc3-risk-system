@@ -28,6 +28,9 @@ export class DeadStrategy implements StatusStrategy {
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
 		VictoryManager.getInstance().removePlayer(gamePlayer);
 		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`);
+		GlobalMessage(
+			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`,
+			'Sound\\Interface\\SecretFound.flac'
+		);
 	}
 }

@@ -24,7 +24,10 @@ export class LeftStrategy implements StatusStrategy {
 		data.turnDied = S2I(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0)));
 
 		NameManager.getInstance().setName(gamePlayer.getPlayer(), 'btag');
-		GlobalMessage(`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has left the game!`);
+		GlobalMessage(
+			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has left the game!`,
+			'Sound\\Interface\\SecretFound.flac'
+		);
 		VictoryManager.getInstance().removePlayer(gamePlayer);
 	}
 }
