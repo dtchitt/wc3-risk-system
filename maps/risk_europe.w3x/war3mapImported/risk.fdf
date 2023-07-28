@@ -12,6 +12,18 @@ Frame "TEXT" "GlobalMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	LayerStyle "IGNORETRACKEVENTS",
 }
 
+Frame "TEXT" "LocalMessageFrameOne" INHERITS "EscMenuButtonTextTemplate" {
+	Text "",
+    SetPoint CENTER, "ConsoleUI", CENTER, 0, .15,
+	LayerStyle "IGNORETRACKEVENTS",
+}
+
+Frame "TEXT" "LocalMessageFrameTwo" INHERITS "EscMenuButtonTextTemplate" {
+	Text "",
+    SetPoint CENTER, "ConsoleUI", CENTER, 0, .1,
+	LayerStyle "IGNORETRACKEVENTS",
+}
+
 Frame "TEXT" "CountdownFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
     SetPoint CENTER, "ConsoleUI", CENTER, 0, .07,
