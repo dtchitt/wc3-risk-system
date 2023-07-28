@@ -27,8 +27,8 @@ export function ErrorMsg(player: player, msg: string, duration: number = 3) {
 	});
 }
 
-export function GlobalMessage(msg: string, duration: number = 4) {
-	const frame: framehandle = BlzGetFrameByName('PlayerMessageFrame', 0);
+export function GlobalMessage(msg: string, soundPath: string, duration: number = 3) {
+	const frame: framehandle = BlzGetFrameByName('GlobalMessageFrame', 0);
 	let str: string = '';
 
 	if (BlzFrameGetText(frame) != '') {
@@ -37,7 +37,7 @@ export function GlobalMessage(msg: string, duration: number = 4) {
 	}
 
 	BlzFrameSetText(frame, msg);
-	PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
+	PlayGlobalSound(soundPath);
 
 	const playerMsgTimer: timer = CreateTimer();
 
@@ -52,28 +52,6 @@ export function GlobalMessage(msg: string, duration: number = 4) {
 export function CountdownMessage(msg: string) {
 	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
 	BlzFrameSetText(frame, msg);
-}
-
-export function LocalMessage(msg: string, duration: number = 4) {
-	const frame: framehandle = BlzGetFrameByName('PlayerMessageFrame', 0);
-	let str: string = '';
-
-	if (BlzFrameGetText(frame) != '') {
-		str = BlzFrameGetText(frame);
-		str = `${str}\n${msg}`;
-	}
-
-	BlzFrameSetText(frame, msg);
-	PlayGlobalSound('Sound\\Interface\\SecretFound.flac');
-
-	const playerMsgTimer: timer = CreateTimer();
-
-	TimerStart(playerMsgTimer, duration, false, () => {
-		BlzFrameSetText(frame, '');
-
-		PauseTimer(playerMsgTimer);
-		DestroyTimer(playerMsgTimer);
-	});
 }
 
 export function PlayLocalSound(soundPath: string, player: player) {
