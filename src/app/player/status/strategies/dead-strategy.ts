@@ -1,10 +1,10 @@
 import { NameManager } from 'src/app/managers/names/name-manager';
-import { GlobalMessage } from 'src/app/utils/utils';
 import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PLAYER_STATUS } from '../status-enum';
+import { GlobalMessage } from 'src/app/utils/messages';
 
 export class DeadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {

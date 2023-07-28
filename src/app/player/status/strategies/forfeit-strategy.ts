@@ -1,10 +1,11 @@
 import { NameManager } from 'src/app/managers/names/name-manager';
-import { GlobalMessage, PlayLocalSound } from 'src/app/utils/utils';
 import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { TrackedData } from '../../data/tracked-data';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PLAYER_STATUS } from '../status-enum';
+import { GlobalMessage } from 'src/app/utils/messages';
+import { PlayLocalSound } from 'src/app/utils/utils';
 
 export class ForfeitStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {

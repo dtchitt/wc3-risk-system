@@ -5,9 +5,10 @@ import { TrackedData } from 'src/app/player/data/tracked-data';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
-import { GlobalMessage, PlayGlobalSound } from 'src/app/utils/utils';
 import { GameState } from '../state/game-state';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { GlobalMessage } from 'src/app/utils/messages';
+import { PlayGlobalSound } from 'src/app/utils/utils';
 
 export class TimerService implements Resetable {
 	private _timer: timer;

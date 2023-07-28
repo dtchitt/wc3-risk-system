@@ -2,7 +2,7 @@ import { ChatManager } from '../managers/chat-manager';
 import { NameManager } from '../managers/names/name-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
-import { ErrorMsg } from '../utils/utils';
+import { ErrorMsg } from '../utils/messages';
 import { GameState } from './state/game-state';
 import { MetaGame } from './state/meta-game';
 import { ModeSelection } from './state/mode-selection';

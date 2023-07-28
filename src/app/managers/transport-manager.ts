@@ -10,7 +10,7 @@
  */
 
 import { ABILITY_ID } from '../../configs/ability-id';
-import { ErrorMsg } from '../utils/utils';
+import { ErrorMsg } from '../utils/messages';
 
 type Transport = {
 	unit: unit;

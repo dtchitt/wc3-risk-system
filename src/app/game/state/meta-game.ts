@@ -4,12 +4,13 @@ import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { MiniBoard } from 'src/app/scoreboard/miniboard';
 import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { StandardBoard } from 'src/app/scoreboard/standard-board';
-import { CountdownMessage, PlayGlobalSound } from 'src/app/utils/utils';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { TimerService } from '../services/timer-service';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { CountdownMessage } from 'src/app/utils/messages';
+import { PlayGlobalSound } from 'src/app/utils/utils';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
