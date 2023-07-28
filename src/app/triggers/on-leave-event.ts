@@ -1,5 +1,5 @@
 import { City } from '../city/city';
-import { RegionToCity } from '../city/city-map';
+import { RegionToCity, UnitToCity } from '../city/city-map';
 import { UNIT_ID } from '../../configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { CityRegionSize } from 'src/configs/city-settings';
@@ -33,8 +33,9 @@ export function onLeave() {
 				});
 			}
 
+			UnitToCity.delete(city.guard.unit);
 			city.guard.replace(guardChoice);
-
+			UnitToCity.set(guardChoice, city);
 			DestroyGroup(g);
 			g = null;
 			guardChoice = null;

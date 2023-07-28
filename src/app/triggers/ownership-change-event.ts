@@ -12,6 +12,7 @@ import { HexColors } from '../utils/hex-colors';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
 import { GameManager } from '../game/game-manager';
+import { CITIES_TO_WIN } from 'src/configs/game-settings';
 
 export function onOwnerChange() {
 	const t: trigger = CreateTrigger();
@@ -25,63 +26,67 @@ export function onOwnerChange() {
 		Condition(() => {
 			if (!IsUnitType(GetChangingUnit(), UNIT_TYPE.CITY)) return false;
 
-			try {
-				const city: City = UnitToCity.get(GetChangingUnit());
-				const country: Country = CityToCountry.get(city);
-				const prevOwner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(GetChangingUnitPrevOwner());
-				const owner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(city.getOwner());
+			const city: City = UnitToCity.get(GetChangingUnit());
+			const country: Country = CityToCountry.get(city);
+			const prevOwner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(GetChangingUnitPrevOwner());
+			const owner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(city.getOwner());
 
-				if (prevOwner) {
-					const prevOwnerData: TrackedData = prevOwner.trackedData;
+			if (prevOwner) {
+				const prevOwnerData: TrackedData = prevOwner.trackedData;
 
-					prevOwnerData.cities.cities.splice(prevOwnerData.cities.cities.indexOf(city), 1);
-					prevOwnerData.countries.set(country, prevOwnerData.countries.get(country) - 1);
+				prevOwnerData.cities.cities.splice(prevOwnerData.cities.cities.indexOf(city), 1);
+				prevOwnerData.countries.set(country, prevOwnerData.countries.get(country) - 1);
 
-					if (country.getOwner() == prevOwner.getPlayer()) {
-						country.setOwner(null);
+				if (country.getOwner() == prevOwner.getPlayer()) {
+					country.setOwner(null);
 
-						if (prevOwner.status.isAlive()) {
-							prevOwner.trackedData.income.income -= country.getCities().length;
-						}
-					}
-
-					if (prevOwnerData.cities.cities.length == 0) {
-						prevOwner.status.set(PLAYER_STATUS.NOMAD);
+					if (prevOwner.status.isAlive()) {
+						prevOwner.trackedData.income.income -= country.getCities().length;
 					}
 				}
 
-				if (owner) {
-					const ownerData: TrackedData = owner.trackedData;
+				if (prevOwnerData.cities.cities.length == 0) {
+					prevOwner.status.set(PLAYER_STATUS.NOMAD);
+				}
+			}
 
-					ownerData.cities.cities.push(city);
-					ownerData.cities.max = Math.max(ownerData.cities.max, ownerData.cities.cities.length);
+			if (owner) {
+				const ownerData: TrackedData = owner.trackedData;
 
-					if (ownerData.countries.has(country)) {
-						ownerData.countries.set(country, ownerData.countries.get(country) + 1);
-					} else {
-						ownerData.countries.set(country, 1);
+				ownerData.cities.cities.push(city);
+				ownerData.cities.max = Math.max(ownerData.cities.max, ownerData.cities.cities.length);
+
+				if (ownerData.countries.has(country)) {
+					ownerData.countries.set(country, ownerData.countries.get(country) + 1);
+				} else {
+					ownerData.countries.set(country, 1);
+				}
+
+				if (ownerData.countries.get(country) == country.getCities().length) {
+					country.setOwner(owner.getPlayer());
+
+					if (owner.status.isAlive()) {
+						ownerData.income.income += country.getCities().length;
 					}
 
-					if (ownerData.countries.get(country) == country.getCities().length) {
-						country.setOwner(owner.getPlayer());
+					Scoreboards.forEach((board) => {
+						board.setAlert(
+							`${NameManager.getInstance().getDisplayName(owner.getPlayer())} claimed ${HexColors.TANGERINE}${country.getName()}|r`
+						);
 
-						if (owner.status.isAlive()) {
-							ownerData.income.income += country.getCities().length;
-						}
-
-						Scoreboards.forEach((board) => {
-							board.setAlert(
-								`${NameManager.getInstance().getDisplayName(owner.getPlayer())} claimed ${HexColors.TANGERINE}${country.getName()}|r`
+						if (owner.trackedData.cities.cities.length > VictoryManager.getInstance().leader.trackedData.cities.cities.length) {
+							board.setTitle(
+								`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+									VictoryManager.getInstance().leader.trackedData.cities.cities.length
+								}/${CITIES_TO_WIN} `
 							);
-						});
-					}
-
-					if (GameManager.getInstance().isStateMetaGame()) {
-						VictoryManager.getInstance().setLeader(owner);
-					}
+						}
+					});
 				}
-			} catch (error) {
-				print(error);
+
+				if (GameManager.getInstance().isStateMetaGame()) {
+					VictoryManager.getInstance().setLeader(owner);
+				}
 			}
 
 			return false;

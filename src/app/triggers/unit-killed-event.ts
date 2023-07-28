@@ -13,7 +13,7 @@ import { CompareUnitByValue } from '../utils/unit-comparisons';
 import { City } from '../city/city';
 
 const smallRadius: number = 235;
-const largeRadius: number = 600;
+const largeRadius: number = 550;
 
 export function onDeath() {
 	const t: trigger = CreateTrigger();
@@ -53,46 +53,77 @@ function guardDeath(dyingUnit: unit, killingUnit: unit) {
 	if (!city) return;
 
 	const g: group = CreateGroup();
-	const radius = IsUnitAlly(killingUnit, city.getOwner()) || GetOwningPlayer(killingUnit) == city.getOwner() ? largeRadius : smallRadius;
-	const allegianceChecks = [IsUnitOwnedByPlayer, IsUnitAlly, IsUnitEnemy];
+	let guardChoice: unit = null;
 
-	for (let func of allegianceChecks) {
-		if (radius == smallRadius) {
-			GetUnitsInRangeByAllegiance(g, city, radius, func);
+	if (IsUnitEnemy(killingUnit, city.getOwner())) {
+		GetUnitsInRangeByAllegiance(g, city, smallRadius, IsUnitOwnedByPlayer);
+
+		if (BlzGroupGetSize(g) >= 1) {
+			guardChoice = GroupPickRandomUnit(g);
 		} else {
-			GetUnitsInRangeByAllegiance(g, city, radius, func, dyingUnit);
+			GetUnitsInRangeByAllegiance(g, city, smallRadius, IsUnitAlly);
+
+			if (BlzGroupGetSize(g) >= 1) {
+				guardChoice = GroupPickRandomUnit(g);
+			} else {
+				GetUnitsInRangeByAllegiance(g, city, largeRadius, IsUnitEnemy, dyingUnit);
+
+				if (BlzGroupGetSize(g) >= 1) {
+					guardChoice = GroupPickRandomUnit(g);
+				}
+			}
 		}
+	} else {
+		GetUnitsInRangeByAllegiance(g, city, largeRadius, IsUnitOwnedByPlayer, dyingUnit);
 
 		if (BlzGroupGetSize(g) >= 1) {
-			UnitToCity.delete(dyingUnit);
-			foundValidUnits(g, city);
-			return;
+			guardChoice = GroupPickRandomUnit(g);
+		} else {
+			GetUnitsInRangeByAllegiance(g, city, largeRadius, IsUnitAlly, dyingUnit);
+
+			if (BlzGroupGetSize(g) >= 1) {
+				guardChoice = GroupPickRandomUnit(g);
+			}
 		}
 	}
 
-	if (UnitAlive(killingUnit)) {
-		GetUnitsInRangeByAllegiance(g, city, smallRadius, IsUnitEnemy, killingUnit);
+	if (guardChoice == null) {
+		GroupEnumUnitsInRange(
+			g,
+			GetUnitX(killingUnit),
+			GetUnitY(killingUnit),
+			smallRadius,
+			Filter(() => city.isValidGuard(GetFilterUnit()) && IsUnitOwnedByPlayer(GetFilterUnit(), GetOwningPlayer(killingUnit)))
+		);
+
 		if (BlzGroupGetSize(g) >= 1) {
-			UnitToCity.delete(dyingUnit);
-			foundValidUnits(g, city);
-			return;
+			guardChoice = GroupPickRandomUnit(g);
+			foundValidUnits(g, city, guardChoice);
+		} else {
+			if (IsUnitType(killingUnit, UNIT_TYPE.SHIP) && GetUnitTypeId(city.barrack.unit) != UNIT_ID.PORT) {
+				guardChoice = CreateUnit(GetOwningPlayer(dyingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+			} else {
+				if (IsUnitType(killingUnit, UNIT_TYPE.CITY)) {
+					guardChoice = CreateUnit(GetOwningPlayer(dyingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+				} else {
+					guardChoice = CreateUnit(GetOwningPlayer(killingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+				}
+			}
+
+			foundValidUnits(g, city, guardChoice);
 		}
+	} else {
+		foundValidUnits(g, city, guardChoice);
 	}
 
-	let guard: unit = CreateUnit(GetOwningPlayer(killingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
-
-	if (IsUnitEnemy(guard, city.getOwner())) {
-		city.changeOwner(GetOwningPlayer(guard));
-	}
-
-	city.guard.replace(guard);
 	UnitToCity.delete(dyingUnit);
-	UnitToCity.set(guard, city);
 	DestroyGroup(g);
 }
 
-function foundValidUnits(group: group, city: City) {
-	let guardChoice: unit = GroupPickRandomUnit(group);
+function foundValidUnits(group: group, city: City, guardChoice: unit) {
+	if (BlzGroupGetSize(group) <= 0) {
+		GroupAddUnit(group, guardChoice);
+	}
 
 	ForGroup(group, () => {
 		guardChoice = CompareUnitByValue(GetEnumUnit(), guardChoice);
@@ -103,7 +134,5 @@ function foundValidUnits(group: group, city: City) {
 	}
 
 	city.guard.replace(guardChoice);
-
 	UnitToCity.set(guardChoice, city);
-	DestroyGroup(group);
 }
