@@ -64,9 +64,47 @@ export function SetConsoleUI() {
 	}
 
 	BlzCreateFrame('GlobalMessageFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
-	BlzCreateFrame('ErrorMessageFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	BlzCreateFrame('CountdownFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	// hideUI(true);
+
+	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		const player = Player(i);
+
+		if (GetPlayerController(player) == MAP_CONTROL_USER) {
+			const errorFrame: framehandle = BlzCreateFrame(
+				'ErrorMessageFrame',
+				BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
+				0,
+				GetPlayerId(player)
+			);
+
+			BlzFrameSetVisible(errorFrame, false);
+
+			const localFrameOne: framehandle = BlzCreateFrame(
+				'LocalMessageFrameOne',
+				BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
+				0,
+				GetPlayerId(player)
+			);
+
+			BlzFrameSetVisible(localFrameOne, false);
+
+			const localFrameTwo: framehandle = BlzCreateFrame(
+				'LocalMessageFrameTwo',
+				BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
+				0,
+				GetPlayerId(player)
+			);
+
+			BlzFrameSetVisible(localFrameTwo, false);
+
+			if (player == GetLocalPlayer()) {
+				BlzFrameSetVisible(errorFrame, true);
+				BlzFrameSetVisible(localFrameOne, true);
+				BlzFrameSetVisible(localFrameTwo, true);
+			}
+		}
+	}
 }
 
 export function hideUI(hidden: boolean) {
