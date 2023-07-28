@@ -9,14 +9,14 @@ export function unitTrained() {
 	TriggerAddCondition(
 		UnitTrainedEvent,
 		Condition(() => {
-			const trainerUnit = GetTrainedUnit();
+			const trainedUnit = GetTrainedUnit();
 
-			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainerUnit);
+			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainedUnit);
 
-			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetOwningPlayer(trainerUnit));
+			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetOwningPlayer(trainedUnit));
 
-			if (!IsUnitType(trainerUnit, UNIT_TYPE.TRANSPORT)) {
-				player.trackedData.units.add(trainerUnit);
+			if (!IsUnitType(trainedUnit, UNIT_TYPE.TRANSPORT)) {
+				player.trackedData.units.add(trainedUnit);
 			}
 
 			return false;

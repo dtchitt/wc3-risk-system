@@ -1,9 +1,11 @@
+import { UNIT_ID } from 'src/configs/unit-id';
 import { TransportManager } from '../managers/transport-manager';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { City } from './city';
 import { UnitToCity } from './city-map';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
+import { IsUnitMelee } from '../utils/utils';
 
 export class SeaCity extends City {
 	public constructor(rax: Barracks, guard: Guard, cop: unit) {
@@ -21,8 +23,11 @@ export class SeaCity extends City {
 			TransportManager.getInstance().add(unit);
 		}
 
-		if (IsUnitType(this.guard.unit, UNIT_TYPE.SHIP) && !IsUnitType(unit, UNIT_TYPE.SHIP)) {
-			SetUnitPosition(this.guard.unit, GetUnitX(GetTrainedUnit()), GetUnitY(GetTrainedUnit()));
+		if (
+			(IsUnitType(this.guard.unit, UNIT_TYPE.SHIP) && !IsUnitType(unit, UNIT_TYPE.SHIP)) ||
+			(IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.MARINE)
+		) {
+			SetUnitPosition(this.guard.unit, GetUnitX(unit), GetUnitY(unit));
 			UnitToCity.delete(this.guard.unit);
 			this.guard.replace(unit);
 			UnitToCity.set(this.guard.unit, this);

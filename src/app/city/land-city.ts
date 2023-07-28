@@ -1,7 +1,10 @@
+import { UNIT_ID } from 'src/configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { City } from './city';
+import { UnitToCity } from './city-map';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
+import { IsUnitMelee } from '../utils/utils';
 
 export class LandCity extends City {
 	public constructor(rax: Barracks, guard: Guard, cop: unit) {
@@ -16,10 +19,13 @@ export class LandCity extends City {
 	}
 
 	public onUnitTrain(unit: unit): void {
-		// TODO
-		// Replace melee units with a ranged unit automatically.
-		// Base it on unit value
-		// Thus we need to rework compares so health is not always looked at.
+		if (IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.RIFLEMEN) {
+			SetUnitPosition(this.guard.unit, GetUnitX(unit), GetUnitY(unit));
+			UnitToCity.delete(this.guard.unit);
+			this.guard.replace(unit);
+			UnitToCity.set(this.guard.unit, this);
+			this.guard.reposition();
+		}
 	}
 
 	public onCast(): void {

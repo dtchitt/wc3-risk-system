@@ -4,7 +4,7 @@ import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { MiniBoard } from 'src/app/scoreboard/miniboard';
 import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { StandardBoard } from 'src/app/scoreboard/standard-board';
-import { CentralMessage, PlayGlobalSound } from 'src/app/utils/utils';
+import { CountdownMessage, PlayGlobalSound } from 'src/app/utils/utils';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsContext } from 'src/app/settings/settings-context';
@@ -29,7 +29,7 @@ export class MetaGame implements GameState {
 		try {
 			SettingsContext.getInstance().applyStrategy('Fog');
 			BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
-			CentralMessage(`The Game will start in:\n3`);
+			CountdownMessage(`The Game will start in:\n3`);
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));
 			const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
@@ -46,7 +46,7 @@ export class MetaGame implements GameState {
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = 3;
 			TimerStart(startDelayTimer, 1, true, () => {
-				CentralMessage(`The Game will start in:\n${duration}`);
+				CountdownMessage(`The Game will start in:\n${duration}`);
 
 				if (duration <= 0) {
 					PauseTimer(startDelayTimer);

@@ -49,7 +49,7 @@ export function GlobalMessage(msg: string, duration: number = 4) {
 	});
 }
 
-export function CentralMessage(msg: string) {
+export function CountdownMessage(msg: string) {
 	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
 	BlzFrameSetText(frame, msg);
 }
@@ -120,4 +120,9 @@ export function isNonEmptySubstring(substring: string, string: string): boolean 
 
 export function DistanceBetweenCoords(x1: number, y1: number, x2: number, y2: number) {
 	return SquareRoot(Pow(x2 - x1, 2) + Pow(y2 - y1, 2));
+}
+
+//TODO figure out a better way to do this
+export function IsUnitMelee(unit: unit): boolean {
+	return IsUnitType(unit, UNIT_TYPE_MELEE_ATTACKER);
 }
