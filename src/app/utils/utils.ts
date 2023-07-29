@@ -46,7 +46,6 @@ export function DistanceBetweenCoords(x1: number, y1: number, x2: number, y2: nu
 	return SquareRoot(Pow(x2 - x1, 2) + Pow(y2 - y1, 2));
 }
 
-//TODO figure out a better way to do this
 export function IsUnitMelee(unit: unit): boolean {
 	return IsUnitType(unit, UNIT_TYPE_MELEE_ATTACKER);
 }

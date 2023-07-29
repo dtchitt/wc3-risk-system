@@ -2,6 +2,7 @@ import { NameManager } from '../managers/names/name-manager';
 import { TrackedData } from '../player/data/tracked-data';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
+import { PLAYER_COLOR_CODES_MAP } from '../utils/player-colors';
 import { Scoreboard } from './scoreboard';
 
 export class MiniBoard extends Scoreboard {
@@ -81,5 +82,9 @@ export class MiniBoard extends Scoreboard {
 
 			row++;
 		});
+	}
+
+	public setAlert(player: player, countryName: string): void {
+		this.setItemValue(`${PLAYER_COLOR_CODES_MAP.get(GetPlayerColor(player))}${countryName}|r`, this.size, 1);
 	}
 }

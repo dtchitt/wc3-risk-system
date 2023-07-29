@@ -47,8 +47,8 @@ export class PlayerManager {
 					}
 				}
 
-				//TODO figure this out mathematically so it will never need changed
 				const tools: unit = CreateUnit(player, UNIT_ID.PLAYER_TOOLS, 18750.0, -16200.0, 270);
+
 				SetUnitPathing(tools, false);
 				UnitRemoveAbility(tools, ABILITY_ID.LOW_HEALTH_DEFENDER);
 				UnitRemoveAbility(tools, ABILITY_ID.LOW_VALUE_DEFENDER);

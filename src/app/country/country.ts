@@ -1,7 +1,8 @@
 import { City } from '../city/city';
 import { Spawner } from '../spawner/spawner';
 import { HexColors } from '../utils/hex-colors';
-import { NEUTRAL_HOSTILE, PlayLocalSound } from '../utils/utils';
+import { LocalMessage } from '../utils/messages';
+import { NEUTRAL_HOSTILE } from '../utils/utils';
 
 export class Country {
 	private readonly name: string;
@@ -63,8 +64,6 @@ export class Country {
 			DestroyEffect(effect);
 		});
 
-		//TODO
-		PlayLocalSound('Sound\\Interface\\Rescue.flac', this.owner);
-		//DisplayTimedTextToPlayer(this.owner, 0.82, 0.81, 3.0, `${HexColors.TANGERINE}${this.name}|r has been conquered!`); //TODO
+		LocalMessage(this.owner, `${HexColors.TANGERINE}${this.name}|r has been conquered!`, 'Sound\\Interface\\Rescue.flac');
 	}
 }

@@ -94,6 +94,10 @@ export class StandardBoard extends Scoreboard {
 		});
 	}
 
+	public setAlert(player: player, countryName: string): void {
+		this.setItemValue(`${NameManager.getInstance().getDisplayName(player)} claimed ${HexColors.TANGERINE}${countryName}|r`, this.size, 1);
+	}
+
 	private setColumns(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
 		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);

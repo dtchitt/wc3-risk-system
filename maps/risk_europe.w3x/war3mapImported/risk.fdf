@@ -8,19 +8,13 @@ Frame "TEXT" "ErrorMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 
 Frame "TEXT" "GlobalMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
-    SetPoint CENTER, "ConsoleUI", CENTER, 0, .2,
-	LayerStyle "IGNORETRACKEVENTS",
-}
-
-Frame "TEXT" "LocalMessageFrameOne" INHERITS "EscMenuButtonTextTemplate" {
-	Text "",
     SetPoint CENTER, "ConsoleUI", CENTER, 0, .15,
 	LayerStyle "IGNORETRACKEVENTS",
 }
 
-Frame "TEXT" "LocalMessageFrameTwo" INHERITS "EscMenuButtonTextTemplate" {
+Frame "TEXT" "LocalMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
-    SetPoint CENTER, "ConsoleUI", CENTER, 0, .1,
+    SetPoint CENTER, "ConsoleUI", CENTER, 0, .17,
 	LayerStyle "IGNORETRACKEVENTS",
 }
 

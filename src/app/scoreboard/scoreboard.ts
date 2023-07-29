@@ -13,6 +13,7 @@ export abstract class Scoreboard {
 
 	abstract updateFull(): void;
 	abstract updatePartial(): void;
+	abstract setAlert(player: player, countryName: string): void;
 
 	public build(aPlayers: ActivePlayer[]) {
 		this.board = CreateMultiboard();
@@ -29,10 +30,6 @@ export abstract class Scoreboard {
 
 	public setTitle(str: string) {
 		MultiboardSetTitleText(this.board, str);
-	}
-
-	public setAlert(message: string): void {
-		this.setItemValue(message, this.size, 1);
 	}
 
 	public setVisibility(bool: boolean) {

@@ -1,30 +1,8 @@
 import { PlayGlobalSound, PlayLocalSound } from './utils';
 
-const errorMap: Map<player, timer> = new Map<player, timer>();
-
-export function ErrorMsg(player: player, msg: string, duration: number = 3) {
-	if (errorMap.has(player)) {
-		PauseTimer(errorMap.get(player));
-		DestroyTimer(errorMap.get(player));
-	}
-
-	if (player == GetLocalPlayer()) {
-		BlzFrameSetText(BlzGetFrameByName('ErrorMessageFrame', 0), msg);
-	}
-
-	PlayLocalSound('Sound\\Interface\\Error.flac', player);
-
-	const errorTimer: timer = CreateTimer();
-	errorMap.set(player, errorTimer);
-
-	TimerStart(errorTimer, duration, false, () => {
-		if (player == GetLocalPlayer()) {
-			BlzFrameSetText(BlzGetFrameByName('ErrorMessageFrame', 0), '');
-		}
-
-		PauseTimer(errorTimer);
-		DestroyTimer(errorTimer);
-	});
+export function CountdownMessage(msg: string) {
+	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
+	BlzFrameSetText(frame, msg);
 }
 
 export function GlobalMessage(msg: string, soundPath: string, duration: number = 3) {
@@ -49,36 +27,47 @@ export function GlobalMessage(msg: string, soundPath: string, duration: number =
 	});
 }
 
-type localMessages = {
-	timer: timer;
-	msg: string;
-};
+const errorMap: Map<player, timer> = new Map<player, timer>();
 
-const localMsgMap: Map<player, localMessages> = new Map<player, localMessages>();
-
-export function LocalMessage(player: player, msg: string, soundPath: string, duration: number = 3) {
-	const frame: framehandle = BlzGetFrameByName('LocalMessageFrameOne', 0);
-	let str: string = '';
-
-	if (BlzFrameGetText(frame) != '') {
-		str = BlzFrameGetText(frame);
-		str = `${str}\n${msg}`;
+export function ErrorMsg(player: player, msg: string, duration: number = 3) {
+	if (errorMap.has(player)) {
+		PauseTimer(errorMap.get(player));
+		DestroyTimer(errorMap.get(player));
 	}
 
-	BlzFrameSetText(frame, msg);
-	PlayLocalSound(soundPath, player);
+	BlzFrameSetText(BlzGetFrameByName('ErrorMessageFrame', GetPlayerId(player)), msg);
+	PlayLocalSound('Sound\\Interface\\Error.flac', player);
 
-	const playerMsgTimer: timer = CreateTimer();
+	const errorTimer: timer = CreateTimer();
+	errorMap.set(player, errorTimer);
 
-	TimerStart(playerMsgTimer, duration, false, () => {
-		BlzFrameSetText(frame, '');
-
-		PauseTimer(playerMsgTimer);
-		DestroyTimer(playerMsgTimer);
+	TimerStart(errorTimer, duration, false, () => {
+		BlzFrameSetText(BlzGetFrameByName('ErrorMessageFrame', GetPlayerId(player)), '');
+		PauseTimer(errorTimer);
+		DestroyTimer(errorTimer);
+		errorMap.delete(player);
 	});
 }
 
-export function CountdownMessage(msg: string) {
-	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
-	BlzFrameSetText(frame, msg);
+const localMsgMap: Map<player, timer> = new Map<player, timer>();
+//TODO add support for multi message display, each message should have its own duration
+export function LocalMessage(player: player, msg: string, soundPath: string, duration: number = 3) {
+	if (localMsgMap.has(player)) {
+		PauseTimer(localMsgMap.get(player));
+		DestroyTimer(localMsgMap.get(player));
+		BlzFrameSetText(BlzGetFrameByName('LocalMessageFrame', GetPlayerId(player)), '');
+	}
+
+	BlzFrameSetText(BlzGetFrameByName('LocalMessageFrame', GetPlayerId(player)), msg);
+	PlayLocalSound(soundPath, player);
+
+	const localTimer: timer = CreateTimer();
+	localMsgMap.set(player, localTimer);
+
+	TimerStart(localTimer, duration, false, () => {
+		BlzFrameSetText(BlzGetFrameByName('LocalMessageFrame', GetPlayerId(player)), '');
+		PauseTimer(localTimer);
+		DestroyTimer(localTimer);
+		localMsgMap.delete(player);
+	});
 }

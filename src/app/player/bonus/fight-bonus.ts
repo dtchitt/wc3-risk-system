@@ -1,4 +1,6 @@
+import { LocalMessage } from 'src/app/utils/messages';
 import { Bonus } from './bonus';
+import { HexColors } from 'src/app/utils/hex-colors';
 
 export class FightBonus implements Bonus {
 	private static readonly BASE: number = 10;
@@ -79,6 +81,12 @@ export class FightBonus implements Bonus {
 		bonusAmount += FightBonus.BASE;
 		bonusAmount = Math.min(bonusAmount, FightBonus.CAP);
 		this.goldEarned += bonusAmount;
+
+		LocalMessage(
+			this.player,
+			`Received ${HexColors.TANGERINE}${bonusAmount}|r gold from ${HexColors.RED}Fight Bonus|r!`,
+			'Sound\\Interface\\Rescue.flac'
+		);
 
 		return bonusAmount;
 	}

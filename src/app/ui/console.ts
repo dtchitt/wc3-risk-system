@@ -80,28 +80,17 @@ export function SetConsoleUI() {
 
 			BlzFrameSetVisible(errorFrame, false);
 
-			const localFrameOne: framehandle = BlzCreateFrame(
-				'LocalMessageFrameOne',
+			const localMsgFrame: framehandle = BlzCreateFrame(
+				'LocalMessageFrame',
 				BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
 				0,
 				GetPlayerId(player)
 			);
 
-			BlzFrameSetVisible(localFrameOne, false);
-
-			const localFrameTwo: framehandle = BlzCreateFrame(
-				'LocalMessageFrameTwo',
-				BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0),
-				0,
-				GetPlayerId(player)
-			);
-
-			BlzFrameSetVisible(localFrameTwo, false);
-
+			BlzFrameSetVisible(localMsgFrame, false);
 			if (player == GetLocalPlayer()) {
 				BlzFrameSetVisible(errorFrame, true);
-				BlzFrameSetVisible(localFrameOne, true);
-				BlzFrameSetVisible(localFrameTwo, true);
+				BlzFrameSetVisible(localMsgFrame, true);
 			}
 		}
 	}

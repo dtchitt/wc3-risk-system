@@ -8,7 +8,6 @@ import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
 import { Scoreboards } from '../scoreboard/scoreboard-array';
-import { HexColors } from '../utils/hex-colors';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
 import { GameManager } from '../game/game-manager';
@@ -61,29 +60,29 @@ export function onOwnerChange() {
 					ownerData.countries.set(country, 1);
 				}
 
+				if (GameManager.getInstance().isStateMetaGame()) {
+					VictoryManager.getInstance().setLeader(owner);
+				}
+
 				if (ownerData.countries.get(country) == country.getCities().length) {
 					country.setOwner(owner.getPlayer());
 
 					if (owner.status.isAlive()) {
 						ownerData.income.income += country.getCities().length;
 					}
-				}
-
-				if (GameManager.getInstance().isStateMetaGame()) {
-					VictoryManager.getInstance().setLeader(owner);
 
 					Scoreboards.forEach((board) => {
-						board.setAlert(
-							`${NameManager.getInstance().getDisplayName(owner.getPlayer())} claimed ${HexColors.TANGERINE}${country.getName()}|r`
-						);
-
-						board.setTitle(
-							`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
-								VictoryManager.getInstance().leader.trackedData.cities.cities.length
-							}/${VictoryManager.CITIES_TO_WIN} `
-						);
+						board.setAlert(owner.getPlayer(), country.getName());
 					});
 				}
+
+				Scoreboards.forEach((board) => {
+					board.setTitle(
+						`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+							VictoryManager.getInstance().leader.trackedData.cities.cities.length
+						}/${VictoryManager.CITIES_TO_WIN} `
+					);
+				});
 			}
 
 			return false;

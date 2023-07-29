@@ -78,7 +78,5 @@ export class VictoryManager {
 		this.gameTimer.stop();
 		//Display Victory Message
 		//Show Victory Scoareboard
-
-		//TODO gametimer can observe victory manager, alert gametimer when this is ran
 	}
 }

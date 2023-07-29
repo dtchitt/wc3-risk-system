@@ -6,6 +6,7 @@ import { TreeService } from '../services/tree-service';
 import { RegionToCity } from 'src/app/city/city-map';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { DistributionService } from '../services/distribution-service';
+import { SlavePlayer } from 'src/app/player/types/slave-player';
 
 export class PreGame implements GameState {
 	private manager: GameManager;
@@ -35,8 +36,9 @@ export class PreGame implements GameState {
 				val.status.set(PLAYER_STATUS.ALIVE);
 			} else {
 				val.status.set(PLAYER_STATUS.LEFT);
+
+				PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
 				PlayerManager.getInstance().players.delete(val.getPlayer());
-				//TODO add to slave players
 			}
 		});
 

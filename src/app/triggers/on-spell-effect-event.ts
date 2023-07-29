@@ -46,6 +46,9 @@ export function onSpellEffect() {
 					player.options.ping = false;
 					break;
 				case ABILITY_ID.PING:
+					for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+						const player: player = Player(i);
+					}
 					// let pingIndex: number = player.settings.names.colorIndex;
 					// let pingForce: force = CreateForce();
 
@@ -71,7 +74,7 @@ export function onSpellEffect() {
 					break;
 				case ABILITY_ID.SPWN_3000:
 				case ABILITY_ID.SPWN_6000:
-					const radius: number = ABILITY_ID.SPWN_3000 ? 3000 : 6000;
+					const radius: number = GetSpellAbilityId() == ABILITY_ID.SPWN_3000 ? 3000 : 6000;
 
 					player.trackedData.countries.forEach((val, country) => {
 						const spawner: unit = country.getSpawn().unit;
