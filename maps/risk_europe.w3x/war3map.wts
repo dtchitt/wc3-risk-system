@@ -1442,3 +1442,33 @@ STRING 7443
 E
 }
 
+STRING 7445
+// Abilities: a006 (Autoload), Name (Name)
+{
+Autoload
+}
+
+STRING 7446
+// Abilities: a006 (Autoload), Tip (Tooltip - Normal)
+{
+Autoload Units
+}
+
+STRING 7447
+// Abilities: a006 (Autoload), Ubertip (Tooltip - Normal - Extended)
+{
+Automatically loads units into this transport when they come within range
+}
+
+STRING 7448
+// Abilities: a007 (Autoload Ensnare), Name (Name)
+{
+Autoload Ensnare
+}
+
+STRING 7449
+// Units: u052 (Dummy Caster), Name (Name)
+{
+Dummy Caster
+}
+

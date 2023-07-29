@@ -26,5 +26,6 @@ export const UNIT_ID = {
 	DUMMY_GUARD: FourCC('u050'),
 	//Special Units
 	CAMERA_LOCK_UNIT: FourCC('u051'),
+	DUMMY_CASTER: FourCC('u052'),
 	PLAYER_TOOLS: FourCC('H000'),
 };
