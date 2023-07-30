@@ -1,5 +1,6 @@
 import { AllianceManager } from 'src/app/managers/alliances/alliance-manager';
 import { SettingsStrategy } from './settings-strategy';
+import { AllyMenuFFASetup } from 'src/app/ui/console';
 
 export interface DiplomacyOptions {
 	option: number;
@@ -36,6 +37,7 @@ export class DiplomacyStrategy implements SettingsStrategy {
 
 	private handleFFA(): void {
 		AllianceManager.getInstance().clearAlliances();
+		AllyMenuFFASetup();
 	}
 
 	private handleLobbyTeams(): void {

@@ -87,6 +87,7 @@ export class AllianceManager {
 		});
 
 		this._alliances.clear();
+		ClearTextMessages();
 	}
 
 	/**

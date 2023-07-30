@@ -5,7 +5,8 @@ import { Status } from '../status/status';
 import { GamePlayer } from './game-player';
 import { NameManager } from 'src/app/managers/names/name-manager';
 
-const adminList: string[] = ['forlolz#11696'];
+//Use lowercase for simplicity here
+const adminList: string[] = ['forlolz#11696', 'poomonky#1939', 'theredbeard#11245', 'easterbunny#2707'];
 
 export abstract class ActivePlayer implements GamePlayer, Resetable {
 	private _player: player;
@@ -24,12 +25,11 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 			ping: false,
 			board: 0,
 		};
+		this._admin = false;
 
 		adminList.forEach((name) => {
 			if (NameManager.getInstance().getBtag(this._player).toLowerCase() == name) {
 				this._admin = true;
-			} else {
-				this._admin = false;
 			}
 		});
 	}
@@ -69,10 +69,6 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 
 	public get options(): Options {
 		return this._options;
-	}
-
-	public set admin(value: boolean) {
-		this._admin = value;
 	}
 
 	public isAdmin(): boolean {

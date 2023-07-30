@@ -1305,11 +1305,6 @@ STRING 7399
 Causes this unit to attack 60% faster.
 }
 
-STRING 7400
-{
-Force 1
-}
-
 STRING 7404
 // Abilities: uDex (Detect Leave), Name (Name)
 {
@@ -1470,5 +1465,10 @@ STRING 7449
 // Units: u052 (Dummy Caster), Name (Name)
 {
 Dummy Caster
+}
+
+STRING 7453
+{
+Force 1
 }
 

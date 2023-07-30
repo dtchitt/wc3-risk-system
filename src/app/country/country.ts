@@ -64,6 +64,6 @@ export class Country {
 			DestroyEffect(effect);
 		});
 
-		LocalMessage(this.owner, `${HexColors.TANGERINE}${this.name}|r has been conquered!`, 'Sound\\Interface\\Rescue.flac');
+		LocalMessage(this.owner, `${this.name} ${HexColors.WHITE}has been conquered!|r`, 'Sound\\Interface\\Rescue.flac');
 	}
 }

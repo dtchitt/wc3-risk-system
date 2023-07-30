@@ -96,7 +96,7 @@ export function SetConsoleUI() {
 	}
 }
 
-export function hideUI(hidden: boolean) {
+export function HideUI(hidden: boolean) {
 	BlzHideOriginFrames(hidden);
 	BlzFrameSetVisible(BlzGetFrameByName('ConsoleUIBackdrop', 0), !hidden);
 	BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
@@ -105,7 +105,7 @@ export function hideUI(hidden: boolean) {
 	BlzEnableSelections(!hidden, !hidden);
 }
 
-export function ffaSetup() {
+export function AllyMenuFFASetup() {
 	let AllyMenuTitle: framehandle = BlzGetFrameByName('AllianceTitle', 0);
 	let tempText: string = 'discord.me/risk';
 	tempText += '|n|n|cffffcc00Commands:|r';
