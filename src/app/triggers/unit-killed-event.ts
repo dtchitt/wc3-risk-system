@@ -70,6 +70,8 @@ function guardDeath(dyingUnit: unit, killingUnit: unit) {
 
 				if (BlzGroupGetSize(g) >= 1) {
 					guardChoice = GroupPickRandomUnit(g);
+				} else if (IsUnitType(killingUnit, UNIT_TYPE.CITY)) {
+					guardChoice = CreateUnit(GetOwningPlayer(dyingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
 				}
 			}
 		}
