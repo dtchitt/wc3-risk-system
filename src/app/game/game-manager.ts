@@ -3,6 +3,7 @@ import { NameManager } from '../managers/names/name-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ErrorMsg } from '../utils/messages';
+import { ShuffleArray } from '../utils/utils';
 import { GameState } from './state/game-state';
 import { MetaGame } from './state/meta-game';
 import { ModeSelection } from './state/mode-selection';
@@ -39,6 +40,18 @@ export class GameManager {
 		return this._state instanceof MetaGame;
 	}
 
+	public isStatePostGame() {
+		return this._state instanceof PostGame;
+	}
+
+	public fastRestart() {
+		this.updateState(new PreGame(new MetaGame(new PostGame())));
+	}
+
+	public fullRestart() {
+		this.updateState(new ModeSelection(new PreGame(new MetaGame(new PostGame()))));
+	}
+
 	public get state(): GameState {
 		return this._state;
 	}
@@ -48,18 +61,20 @@ export class GameManager {
 	}
 
 	private setCommands() {
-		ChatManager.getInstance().addCmd(['-ff', '-forfeit'], () => {
+		const chatManager: ChatManager = ChatManager.getInstance();
+		const playerManager: PlayerManager = PlayerManager.getInstance();
+		const nameManager: NameManager = NameManager.getInstance();
+
+		chatManager.addCmd(['-ff', '-forfeit'], () => {
 			if (!this.isStateMetaGame()) return;
 
-			PlayerManager.getInstance().players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.FORFEIT);
+			playerManager.players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.FORFEIT);
 		});
 
-		ChatManager.getInstance().addCmd(['-stfu', '-mute'], () => {
+		chatManager.addCmd(['-stfu', '-mute'], () => {
 			if (!this.isStateMetaGame()) return;
 
-			const players: player[] = NameManager.getInstance().getPlayerByName(GetEventPlayerChatString().split(' ')[1], [
-				...PlayerManager.getInstance().players.keys(),
-			]);
+			const players: player[] = nameManager.getPlayerByName(GetEventPlayerChatString().split(' ')[1], [...playerManager.players.keys()]);
 
 			const player: player = GetTriggerPlayer();
 
@@ -69,11 +84,39 @@ export class GameManager {
 			} else if (players.length <= 0) {
 				ErrorMsg(player, 'Player not found!', 2);
 				return;
-			} else if (PlayerManager.getInstance().players.get(players[0]).isAdmin()) {
+			} else if (playerManager.players.get(players[0]).isAdmin()) {
 				ErrorMsg(player, "You can't mute that player! :P");
 			} else {
-				PlayerManager.getInstance().players.get(players[0]).status.set(PLAYER_STATUS.STFU);
+				playerManager.players.get(players[0]).status.set(PLAYER_STATUS.STFU);
 			}
+		});
+
+		//chatManager.addCmd(['-ng'], () => {});
+
+		chatManager.addCmd(['-names', '-players'], () => {
+			if (!this.isStateMetaGame()) return;
+
+			const player: player = GetTriggerPlayer();
+			const nameList: player[] = [];
+
+			playerManager.players.forEach((player) => {
+				if (player.status.isAlive() || player.status.isNomad()) {
+					nameList.push(player.getPlayer());
+				}
+			});
+
+			ShuffleArray(nameList);
+
+			const namesTimer: timer = CreateTimer();
+
+			TimerStart(namesTimer, 0.75, true, () => {
+				if (nameList.length > 0) {
+					DisplayTimedTextToPlayer(player, 0, 0, 5, `${nameManager.getBtag(nameList.pop())}`);
+				} else {
+					PauseTimer(namesTimer);
+					DestroyTimer(namesTimer);
+				}
+			});
 		});
 	}
 }
