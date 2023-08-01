@@ -101,4 +101,3 @@ addScriptHook(W3TS_HOOK.MAIN_AFTER, tsMain);
 addScriptHook(W3TS_HOOK.CONFIG_AFTER, () => {
 	SetMapName(MAP_NAME);
 });
-//Force push test

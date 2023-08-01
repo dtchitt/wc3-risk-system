@@ -91,7 +91,9 @@ export class GameManager {
 			}
 		});
 
-		//chatManager.addCmd(['-ng'], () => {});
+		chatManager.addCmd(['-ng'], () => {
+			if (!this.isStatePostGame()) return;
+		});
 
 		chatManager.addCmd(['-names', '-players'], () => {
 			if (!this.isStateMetaGame()) return;

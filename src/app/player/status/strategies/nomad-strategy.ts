@@ -8,7 +8,7 @@ export class NomadStrategy implements StatusStrategy {
 		if (gamePlayer.trackedData.units.size <= 0) return gamePlayer.status.set(PLAYER_STATUS.DEAD);
 
 		gamePlayer.status.status = PLAYER_STATUS.NOMAD;
-		gamePlayer.trackedData.income.income = 2;
+		gamePlayer.trackedData.income.income = 4;
 
 		const tick: number = 1;
 		const nomadTimer: timer = CreateTimer();

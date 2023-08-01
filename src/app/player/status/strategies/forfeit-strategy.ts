@@ -16,7 +16,7 @@ export class ForfeitStrategy implements StatusStrategy {
 
 		const data: TrackedData = gamePlayer.trackedData;
 
-		data.income.income = 1;
+		data.income.income = 2;
 		data.income.end = 0;
 		data.gold.end = GetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_RESOURCE_GOLD);
 		data.cities.end = data.cities.cities.length;
