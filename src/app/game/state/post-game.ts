@@ -1,4 +1,3 @@
-import { StatisticsBoard } from 'src/app/ui/statistics/statistics-board';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 
@@ -17,7 +16,16 @@ export class PostGame implements GameState {
 
 		//hideUI(true);
 		//const statsBoard = StatisticsBoard.create();
+		//After board is showing, clean the game
+		//Delete all Units
+		//Replace guards
+		//Change city owners
+		//Scoreboard stuff?
+		//Reset timer?
 	}
 
-	public end(): void {}
+	public end(): void {
+		//Clean Game
+		//
+	}
 }

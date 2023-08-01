@@ -1,6 +1,7 @@
 IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
 IncludeFile "UI\FrameDef\UI\UpperButtonBar.fdf",
 
+//UI Message Frames
 Frame "TEXT" "ErrorMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
 	Text "",
     SetPoint CENTER, "ConsoleUI", CENTER, -0.2, -0.11,
@@ -29,6 +30,7 @@ Frame "TEXT" "CountdownFrame" INHERITS "EscMenuButtonTextTemplate" {
 	FontShadowOffset 0.001 -0.001,
 }
 
+//Fight Bonus Bar Frames
 String "MyBarTextTemplate" { 
 	//FontColor 0.99 0.427 0.0705 1.0, //Red Green Blue Alpha 0.0 to 1.0
 	FontColor 1.0 1.0 1.0 1.0,
@@ -61,9 +63,19 @@ Frame "SIMPLESTATUSBAR" "MyBarEx" {
 	}
 }
 
+//Obs Button
 Frame "SIMPLEBUTTON" "ObserverControlButton" INHERITS "UpperButtonBarButtonTemplate" {
 	SetPoint TOPLEFT,"UpperButtonBarFrame",TOPLEFT,0.002,0,
 	NormalText "UpperButtonBarButtonTextTemplate" "Obs Control",
 	DisabledText "UpperButtonBarButtonDisabledTextTemplate" "Obs Control",
 	HighlightText "UpperButtonBarButtonHighlightTextTemplate" "Obs Control",
+}
+
+//Statistics Info Text
+Frame "TEXT" "StatisticsText" {
+    DecorateFileNames,
+    FrameFont "MasterFont", 0.0095,"",
+    LayerStyle "IGNORETRACKEVENTS", 
+    FontJustificationH JUSTIFYLEFT,
+    FontJustificationV JUSTIFYMIDDLE,
 }

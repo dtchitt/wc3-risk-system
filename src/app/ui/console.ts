@@ -99,8 +99,8 @@ export function SetConsoleUI() {
 export function HideUI(hidden: boolean) {
 	BlzHideOriginFrames(hidden);
 	BlzFrameSetVisible(BlzGetFrameByName('ConsoleUIBackdrop', 0), !hidden);
-	BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
-	BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
+	//BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
+	//BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
 
 	BlzEnableSelections(!hidden, !hidden);
 }
@@ -110,8 +110,9 @@ export function AllyMenuFFASetup() {
 	let tempText: string = 'discord.me/risk';
 	tempText += '|n|n|cffffcc00Commands:|r';
 	tempText += '|n|cffffffff-cam OR -zoom #### (1000 min, 8500 max)';
-	tempText += '|n|cffffffff-forfeit OR -ff (forfeits the game without leaving it)';
+	tempText += '|n|cffffffff-ff OR -forfeit (forfeits the game without leaving it)';
 	//	tempText += '|n|cffffffff-restart OR -ng (restarts the game if its over)';
+	tempText += '|n|cffffffff-names OR -players displays a list of alive/nomad players in game';
 	tempText += '|n|cffffffff-stfu <player name/color> (mutes a player for 300 seconds)';
 	tempText += '|n|n|cffffcc00Hotkeys:|r';
 	tempText += '|n|cffffffff F1 (selects player tools)';
