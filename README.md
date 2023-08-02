@@ -17,7 +17,7 @@ The system is designed to be easily used by others who are wanting to create the
 
 Welcome to the Wc3 Risk System, my passion project and a labor of love for the Warcraft 3 gaming community. Inspired by the classic board game "Risk: Global Domination," I set out to create an immersive custom game experience within the Warcraft 3 universe, offering players an engaging and thrilling multiplayer real-time strategy (RTS) adventure.
 
-**Inspiration and Background**
+**Inspiration and Background**<br>
 The idea for the Wc3 Risk System was born out of my deep affection for both Warcraft 3 and the strategic gameplay of "Risk." Combining the best of both worlds, my goal is to deliver an accessible yet intricate gaming experience that appeals to both casual players and seasoned strategists.
 
 **Key Highlights**
@@ -25,7 +25,7 @@ The idea for the Wc3 Risk System was born out of my deep affection for both Warc
 - Experience different game modes, including the intense 1v1 mode and inventive variations like "Capitals."
 - Enjoy a user-friendly system that facilitates easy customization, allowing aspiring developers and modders to create their own Risk-inspired games within Warcraft 3.
 
-**Target Audience**
+**Target Audience**<br>
 My risk system is designed for fellow Warcraft 3 enthusiasts who crave a unique and challenging multiplayer experience. Whether you're seeking strategic thrills or are eager to dive into the world of custom game creation, I warmly welcome you to explore the Wc3 Risk System.
 
 ## Features
