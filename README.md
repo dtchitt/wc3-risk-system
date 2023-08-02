@@ -28,11 +28,6 @@ The idea for the Wc3 Risk System was born out of my deep affection for both Warc
 **Target Audience**
 My risk system is designed for fellow Warcraft 3 enthusiasts who crave a unique and challenging multiplayer experience. Whether you're seeking strategic thrills or are eager to dive into the world of custom game creation, I warmly welcome you to explore the Wc3 Risk System.
 
-**Future Plans**
-I am committed to continually enhancing the system and expanding its features based on user feedback and my own creative ideas. I can't wait to unveil upcoming updates that will further elevate your gaming experience!
-
-Join me in this journey through the territories of risk and conquest within the Warcraft 3 universe. Let's build alliances, make tactical decisions, and lead our armies to victory! Together, we'll embrace the battle for domination!
-
 ## Features
 
 - Typescript based project that requires no code changes outside of configs to be fully useable
