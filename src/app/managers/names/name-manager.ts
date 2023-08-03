@@ -28,7 +28,7 @@ export class NameManager {
 		return this.instance;
 	}
 
-	public getPlayerByName(string: string, players: player[]): player[] {
+	public getPlayerByNameFromArray(string: string, players: player[]): player[] {
 		const foundPlayers: player[] = [];
 
 		players.forEach((player) => {
@@ -40,6 +40,20 @@ export class NameManager {
 		});
 
 		return foundPlayers;
+	}
+
+	public getPlayerFromBtag(string: string): player | null {
+		let result: player = null;
+
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+			const player = Player(i);
+
+			if (isNonEmptySubstring(string, this.getBtag(player))) {
+				result = player;
+			}
+		}
+
+		return result;
 	}
 
 	public setName(p: player, name: Names) {

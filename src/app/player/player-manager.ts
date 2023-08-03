@@ -41,10 +41,8 @@ export class PlayerManager {
 			if (GetPlayerController(player) == MAP_CONTROL_USER || GetPlayerController(player) == MAP_CONTROL_COMPUTER) {
 				if (IsPlayerObserver(player)) {
 					this._observerFromHandle.set(player, new HumanPlayer(player));
-				} else {
-					if (!this._slavesFromHandle.has(player)) {
-						this._playerFromHandle.set(player, new HumanPlayer(player));
-					}
+				} else if (!this._slavesFromHandle.has(player)) {
+					this._playerFromHandle.set(player, new HumanPlayer(player));
 				}
 
 				const tools: unit = CreateUnit(player, UNIT_ID.PLAYER_TOOLS, 18750.0, -16200.0, 270);

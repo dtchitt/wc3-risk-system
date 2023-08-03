@@ -74,7 +74,9 @@ export class GameManager {
 		chatManager.addCmd(['-stfu', '-mute'], () => {
 			if (!this.isStateMetaGame()) return;
 
-			const players: player[] = nameManager.getPlayerByName(GetEventPlayerChatString().split(' ')[1], [...playerManager.players.keys()]);
+			const players: player[] = nameManager.getPlayerByNameFromArray(GetEventPlayerChatString().split(' ')[1], [
+				...playerManager.players.keys(),
+			]);
 
 			const player: player = GetTriggerPlayer();
 
