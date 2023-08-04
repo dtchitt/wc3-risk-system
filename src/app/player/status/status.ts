@@ -35,8 +35,6 @@ export class Status {
 		} else {
 			print('Unknown player status:', status);
 		}
-
-		//this._status = status;
 	}
 
 	public isAlive(): boolean {
