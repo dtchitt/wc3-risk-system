@@ -534,7 +534,7 @@ S
 }
 
 STRING 7185
-// Units: u005 (|cffff8000Army General|r), Hotkey (Hotkey)
+// Units: u005 (|cffff8000General|r), Hotkey (Hotkey)
 {
 D
 }
@@ -558,7 +558,7 @@ Q
 }
 
 STRING 7202
-// Units: u009 (|cffff8000Marine Major|r), Hotkey (Hotkey)
+// Units: u009 (|cffff8000Major|r), Hotkey (Hotkey)
 {
 W
 }
@@ -600,7 +600,7 @@ Build |cffff8000Artillery|r
 }
 
 STRING 7212
-// Units: u010 (|cffff8000Marine General|r), Hotkey (Hotkey)
+// Units: u010 (|cffff8000Admiral|r), Hotkey (Hotkey)
 {
 E
 }
@@ -615,18 +615,6 @@ STRING 7214
 // Units: u004 (|cffff8000Knight|r), Tip (Tooltip - Basic)
 {
 Recruit |cffff8000Knight|r
-}
-
-STRING 7215
-// Units: u005 (|cffff8000Army General|r), Name (Name)
-{
-|cffff8000Army General|r
-}
-
-STRING 7216
-// Units: u005 (|cffff8000Army General|r), Tip (Tooltip - Basic)
-{
-Recruit |cffff8000Army General|r
 }
 
 STRING 7217
@@ -651,30 +639,6 @@ STRING 7220
 // Units: u008 (|cffff8000Marine|r), Tip (Tooltip - Basic)
 {
 Recruit |cffff8000Marine|r
-}
-
-STRING 7221
-// Units: u009 (|cffff8000Marine Major|r), Name (Name)
-{
-|cffff8000Marine Major|r
-}
-
-STRING 7222
-// Units: u009 (|cffff8000Marine Major|r), Tip (Tooltip - Basic)
-{
-Recruit |cffff8000Marine Major|r
-}
-
-STRING 7223
-// Units: u010 (|cffff8000Marine General|r), Name (Name)
-{
-|cffff8000Marine General|r
-}
-
-STRING 7224
-// Units: u010 (|cffff8000Marine General|r), Tip (Tooltip - Basic)
-{
-Recruit |cffff8000Marine General|r
 }
 
 STRING 7225
@@ -1274,7 +1238,7 @@ STRING 7394
 }
 
 STRING 7397
-// Units: u009 (|cffff8000Marine Major|r), Ubertip (Tooltip - Extended)
+// Units: u009 (|cffff8000Major|r), Ubertip (Tooltip - Extended)
 {
 |cffff8000DPS:|r 28.67 |cffff8000Type:|r Normal
 |cffff8000Range:|r Melee
@@ -1287,7 +1251,7 @@ STRING 7397
 }
 
 STRING 7398
-// Units: u010 (|cffff8000Marine General|r), Ubertip (Tooltip - Extended)
+// Units: u010 (|cffff8000Admiral|r), Ubertip (Tooltip - Extended)
 {
 |cffff8000DPS:|r 48.28 |cffff8000Type:|r Normal
 |cffff8000Range:|r Melee
@@ -1318,7 +1282,7 @@ Camera Lock Unit
 }
 
 STRING 7407
-// Units: u005 (|cffff8000Army General|r), Ubertip (Tooltip - Extended)
+// Units: u005 (|cffff8000General|r), Ubertip (Tooltip - Extended)
 {
 |cFFFF8000DPS:|r|cFFFFFFFF 42.07 |r|cFFFF8000Type:|r|cFFFFFFFF Normal|n|r|cFFFF8000Range:|r|cFFFFFFFF Melee|n|n|r|cFFFF8000Hitpoints:|r|cFFFFFFFF 800 |r|cFFFF8000Hp Regen:|r|cFFFFFFFF 1.0|n|r|cFFFF8000Armor:|r|cFFFFFFFF 10 |r|cFFFF8000Type:|r|cFFFFFFFF Large|n|r|cFFFF8000Movespeed:|r|cFFFFFFFF 350|n|n|r|cFF3BA0CBAbilties:|r|cFFFFFFFF Roar, Frenzy|r
 }
@@ -1470,5 +1434,41 @@ Dummy Caster
 STRING 7453
 {
 Force 1
+}
+
+STRING 7454
+// Units: u005 (|cffff8000General|r), Name (Name)
+{
+|cffff8000General|r
+}
+
+STRING 7455
+// Units: u005 (|cffff8000General|r), Tip (Tooltip - Basic)
+{
+Recruit |cffff8000General|r
+}
+
+STRING 7456
+// Units: u009 (|cffff8000Major|r), Name (Name)
+{
+|cffff8000Major|r
+}
+
+STRING 7457
+// Units: u009 (|cffff8000Major|r), Tip (Tooltip - Basic)
+{
+Recruit |cffff8000Major|r
+}
+
+STRING 7458
+// Units: u010 (|cffff8000Admiral|r), Name (Name)
+{
+|cffff8000Admiral|r
+}
+
+STRING 7459
+// Units: u010 (|cffff8000Admiral|r), Tip (Tooltip - Basic)
+{
+Recruit |cffff8000Admiral|r
 }
 

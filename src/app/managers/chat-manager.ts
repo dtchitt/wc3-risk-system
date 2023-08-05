@@ -1,3 +1,5 @@
+import { PLAYER_SLOTS } from '../utils/utils';
+
 export class ChatManager {
 	private static _instance: ChatManager;
 	private _chatActions: Map<string, Function> = new Map<string, Function>();
@@ -12,7 +14,7 @@ export class ChatManager {
 	private constructor() {
 		const t: trigger = CreateTrigger();
 
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			TriggerRegisterPlayerChatEvent(t, Player(i), '-', false);
 		}
 

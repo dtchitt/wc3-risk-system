@@ -11,6 +11,7 @@
 
 import { ABILITY_ID } from '../../configs/ability-id';
 import { ErrorMsg } from '../utils/messages';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 type Transport = {
 	unit: unit;
@@ -73,7 +74,7 @@ export class TransportManager {
 	private onLoad() {
 		const t: trigger = CreateTrigger();
 
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_LOADED, null);
 		}
 

@@ -1,5 +1,6 @@
 import { FogService } from 'src/app/libs/fog-service';
 import { SettingsStrategy } from './settings-strategy';
+import { PLAYER_SLOTS } from 'src/app/utils/utils';
 
 export const FogOptions: Record<number, string> = {
 	0: 'off',
@@ -20,7 +21,7 @@ export class FogStrategy implements SettingsStrategy {
 		this.fog = fog;
 		FogStrategy.fogService = new FogService();
 
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			FogStrategy.fogService.add(Player(i));
 		}
 	}

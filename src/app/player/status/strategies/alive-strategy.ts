@@ -6,5 +6,9 @@ export class AliveStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		gamePlayer.status.status = PLAYER_STATUS.ALIVE;
 		gamePlayer.trackedData.income.income = 4;
+
+		if (gamePlayer.trackedData.income.max == 0) {
+			gamePlayer.trackedData.income.max = 4;
+		}
 	}
 }

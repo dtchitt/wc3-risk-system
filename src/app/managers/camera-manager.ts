@@ -1,4 +1,5 @@
 import { File } from 'w3ts';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 type CamData = {
 	distance: number;
@@ -34,7 +35,7 @@ export default class CameraManager {
 	}
 
 	private constructor() {
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const player: player = Player(i);
 
 			let sDist: number;

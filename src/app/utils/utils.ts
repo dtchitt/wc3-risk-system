@@ -1,4 +1,5 @@
 export const NEUTRAL_HOSTILE: player = Player(PLAYER_NEUTRAL_AGGRESSIVE);
+export const PLAYER_SLOTS: number = bj_MAX_PLAYERS - 1;
 
 export function PlayLocalSound(soundPath: string, player: player) {
 	let sound = CreateSound(soundPath, false, false, true, 10, 10, '');

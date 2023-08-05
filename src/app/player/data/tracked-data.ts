@@ -6,7 +6,7 @@ import { Bounty } from '../bonus/bounty';
 import { FightBonus } from '../bonus/fight-bonus';
 import { KillsDeaths } from './kills-death';
 import { TRACKED_UNITS } from 'src/app/utils/tracked-units';
-import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
+import { NEUTRAL_HOSTILE, PLAYER_SLOTS } from 'src/app/utils/utils';
 
 export class TrackedData {
 	private _income: Income;
@@ -18,6 +18,7 @@ export class TrackedData {
 	private _killsDeaths: Map<string | player, KillsDeaths>;
 	private _units: Set<unit>;
 	private _turnDied: number;
+	private _trainedUnits: Map<number, number>;
 
 	constructor(player: player) {
 		this._income = {
@@ -40,6 +41,7 @@ export class TrackedData {
 		this._countries = new Map<Country, number>();
 		this._killsDeaths = new Map<string | player, KillsDeaths>();
 		this._units = new Set<unit>();
+		this._trainedUnits = new Map<number, number>();
 		this._turnDied = -1;
 	}
 
@@ -58,11 +60,12 @@ export class TrackedData {
 		this.countries.clear();
 		this.killsDeaths.clear();
 		this.units.clear();
+		this._trainedUnits.clear();
 		this.turnDied = 0;
 	}
 
 	public setKDMaps() {
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const player: player = Player(i);
 
 			if (IsPlayerObserver(player)) continue;
@@ -93,6 +96,8 @@ export class TrackedData {
 				kills: 0,
 				deaths: 0,
 			});
+
+			this._trainedUnits.set(val, 0);
 		}
 	}
 
@@ -134,5 +139,9 @@ export class TrackedData {
 
 	public set turnDied(value: number) {
 		this._turnDied = value;
+	}
+
+	public get trainedUnits(): Map<number, number> {
+		return this._trainedUnits;
 	}
 }

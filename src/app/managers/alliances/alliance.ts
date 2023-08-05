@@ -1,3 +1,5 @@
+import { PLAYER_SLOTS } from 'src/app/utils/utils';
+
 export class Alliance {
 	private readonly _number: number;
 	private readonly _players: player[];
@@ -57,7 +59,7 @@ export class Alliance {
 
 			SetPlayerTeam(playerA, GetPlayerId(playerA));
 
-			for (let j = 0; j < bj_MAX_PLAYERS; j++) {
+			for (let j = 0; j < PLAYER_SLOTS; j++) {
 				this.setAllianceState(playerA, Player(j), false);
 			}
 		}

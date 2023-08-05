@@ -2,6 +2,7 @@ import { GameManager } from '../game/game-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 type AntiSpamData = {
 	timer: timer;
@@ -14,7 +15,7 @@ export const antiSpam = () => {
 	const threshold: number = 2;
 	const t: trigger = CreateTrigger();
 
-	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+	for (let i = 0; i < PLAYER_SLOTS; i++) {
 		TriggerRegisterPlayerChatEvent(t, Player(i), '', false);
 	}
 
