@@ -1,40 +1,36 @@
-import { UnitData } from '../libs/unit-data';
+import { UnitData } from '../interfaces/unit-data';
 import { CityType } from './city-type';
 
 /**
- * Data pattern for City creation settings. These settings are set in CountrySetttings.ts.
+ * Interface for the data structure representing a city entity.
  */
 export interface CityData {
 	/**
-	 * Set the name of the barracks.
-	 * Optional, defaults to: Unit name set in World Editor.
+	 * The name of the city.
+	 * Optional, defaults to name set in world editors.
 	 */
 	name?: string;
 
 	/**
-	 * Sets the barrack for the city.
-	 * This can be a preplaced unit or a generated unit.
+	 * The barracks for the city, represented by a unit or `UnitData` object.
 	 */
 	barrack: unit | UnitData;
 
 	/**
-	 * Sets the guard for the city.
-	 * The guards default position in the CoP is automatic and cannot be changed.
-	 * Optional, defaults to: Default guard typed provided via country settings.
+	 * The unique identifier for the city's guard.
+	 * Optional, defualts to guard type in settings.
 	 */
 	guard?: number;
 
 	/**
-	 * Sets the cop for the city.
-	 * This can be a preplaced unit or a generated unit.
-	 * Optional, defaults to: automatically placed cop based on barracks & guard position
+	 * The Circle of Power (COP) for the city, represented by a unit.
+	 * Optional, defualts to cop generated in country builder.
 	 */
 	cop?: unit;
 
 	/**
-	 * Sets the city type for the city.
-	 * This is a pre-defined CityType
-	 * Optional, defaults to: "land"
+	 * The `CityType` for the city.
+	 * Optional, defaults to "land" type
 	 */
 	cityType?: CityType;
 }

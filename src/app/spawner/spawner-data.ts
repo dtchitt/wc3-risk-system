@@ -1,4 +1,4 @@
-import { Coordinates } from '../libs/coordinates';
+import { Coordinates } from '../interfaces/coordinates';
 
 export interface SpawnerData {
 	unitData: unit | Coordinates;

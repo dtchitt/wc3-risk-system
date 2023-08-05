@@ -1,5 +1,5 @@
 import { StringToCountry } from 'src/app/country/country-map';
-import { Resetable } from 'src/app/libs/resetable';
+import { Resetable } from 'src/app/interfaces/resetable';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { TrackedData } from 'src/app/player/data/tracked-data';
 import { PlayerManager } from 'src/app/player/player-manager';

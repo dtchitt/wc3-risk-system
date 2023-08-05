@@ -1,6 +1,6 @@
 import { UNIT_ID } from '../../configs/unit-id';
-import { Ownable } from '../libs/ownable';
-import { Resetable } from '../libs/resetable';
+import { Ownable } from '../interfaces/ownable';
+import { Resetable } from '../interfaces/resetable';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { NEUTRAL_HOSTILE } from '../utils/utils';
 

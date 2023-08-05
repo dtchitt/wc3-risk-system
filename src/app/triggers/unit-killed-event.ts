@@ -1,7 +1,7 @@
 import { UNIT_ID } from 'src/configs/unit-id';
 import { UnitToCity } from '../city/city-map';
 import { LandCity } from '../city/land-city';
-import { SeaCity } from '../city/sea-city';
+import { PortCity } from '../city/port-city';
 import { GameManager } from '../game/game-manager';
 import { TransportManager } from '../managers/transport-manager';
 import { PlayerManager } from '../player/player-manager';
@@ -48,7 +48,7 @@ export function onDeath() {
 }
 
 function guardDeath(dyingUnit: unit, killingUnit: unit) {
-	const city: LandCity | SeaCity = UnitToCity.get(dyingUnit);
+	const city: LandCity | PortCity = UnitToCity.get(dyingUnit);
 
 	if (!city) return;
 

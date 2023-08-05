@@ -1,5 +1,5 @@
-import { Coordinates } from '../libs/coordinates';
-import { Resetable } from '../libs/resetable';
+import { Coordinates } from '../interfaces/coordinates';
+import { Resetable } from '../interfaces/resetable';
 import { Spawner } from './spawner';
 
 export interface SpawnerBuilder extends Resetable {

@@ -8,20 +8,31 @@ import { UnitToCity, RegionToCity } from './city-map';
 import { CityType, CityTypes } from './city-type';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
-import { UnitData } from '../libs/unit-data';
+import { UnitData } from '../interfaces/unit-data';
 import { EnterRegionEvent } from '../triggers/on-enter-event';
 import { LeaveRegionEvent } from '../triggers/on-leave-event';
 import { UnitTrainedEvent } from '../triggers/unit-trained-event';
+import { Resetable } from '../interfaces/resetable';
 
+// Calculate the X offset for a barrack unit
 const GetRaxXOffSet = (rax: unit) => GetUnitX(rax) - CityGuardXOffSet;
+
+// Calculate the Y offset for a barrack unit
 const GetRaxYOffSet = (rax: unit) => GetUnitY(rax) - CityGuardYOffSet;
 
-export class ConcreteCityBuilder implements CityBuilder {
+/**
+ * Class implementing the CityBuilder interface, providing methods to build a City.
+ */
+export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	private _barracks: Barracks;
 	private _guard: Guard;
 	private _cop: unit;
 	private _cityType: CityType;
 
+	/**
+	 * @param building Unit or unit data to set as barracks
+	 * @returns The instance of ConcreteCityBuilder for method chaining
+	 */
 	public setBarracks(building: unit | UnitData): CityBuilder {
 		if (typeof building === 'object') {
 			const rax: UnitData = building as UnitData;
@@ -38,6 +49,10 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return this;
 	}
 
+	/**
+	 * @param name Optional name to set for the city's barracks
+	 * @returns The instance of ConcreteCityBuilder for method chaining
+	 */
 	public setName(name?: string): CityBuilder {
 		if (name) {
 			BlzSetUnitName(this._barracks.unit, name);
@@ -46,6 +61,10 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return this;
 	}
 
+	/**
+	 * @param guard Guard number to set for the city
+	 * @returns The instance of ConcreteCityBuilder for method chaining
+	 */
 	public setGuard(guard: number): CityBuilder {
 		const x: number = GetRaxXOffSet(this._barracks.unit);
 		const y: number = GetRaxYOffSet(this._barracks.unit);
@@ -59,6 +78,10 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return this;
 	}
 
+	/**
+	 * @param cop Optional unit to set as the city's Circle of Power
+	 * @returns The instance of ConcreteCityBuilder for method chaining
+	 */
 	public setCOP(cop?: unit): CityBuilder {
 		if (cop) {
 			this._cop = cop;
@@ -72,6 +95,10 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return this;
 	}
 
+	/**
+	 * @param cityType Optional type to set for the city
+	 * @returns The instance of ConcreteCityBuilder for method chaining
+	 */
 	public setCityType(cityType?: CityType): CityBuilder {
 		if (cityType) {
 			this._cityType = cityType;
@@ -82,6 +109,11 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return this;
 	}
 
+	/**
+	 * Builds the city object using the set properties.
+	 * If required properties are missing, appropriate errors will be logged.
+	 * @returns The created City
+	 */
 	public build(): City {
 		if (!this._barracks || !this._guard || !this._cop || !this._cityType) {
 			print('City builder is missing required components.');
@@ -106,6 +138,9 @@ export class ConcreteCityBuilder implements CityBuilder {
 		return city;
 	}
 
+	/**
+	 * Resets the builder, clearing all set properties.
+	 */
 	public reset(): void {
 		this._barracks = null;
 		this._guard = null;
@@ -113,6 +148,9 @@ export class ConcreteCityBuilder implements CityBuilder {
 		this._cityType = null;
 	}
 
+	/**
+	 * @param city The city to set the region for
+	 */
 	private setRegion(city: City): void {
 		const rect = Rect(
 			city.guard.defaultX - CityRegionSize / 2,
