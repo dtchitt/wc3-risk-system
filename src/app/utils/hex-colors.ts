@@ -1,3 +1,8 @@
+/**
+ * Enum representing Hex color codes. Includes colors for players and text.
+ * Each color is preceded by '|cff' for correct recognition by the game.
+ * @enum {string}
+ */
 export enum HexColors {
 	//Player colors
 	RED = '|cffff0303',

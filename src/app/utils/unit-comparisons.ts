@@ -1,6 +1,13 @@
 import { Options } from '../player/options';
 import { PlayerManager } from '../player/player-manager';
 
+/**
+ * Compares two units based on their point value.
+ *
+ * @param compareUnit The unit to compare.
+ * @param initialUnit The unit to compare against.
+ * @returns The unit that fits the player's settings. If the units have the same value, it then compares based on their health.
+ */
 export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
 	if (compareUnit == initialUnit) return initialUnit;
 
@@ -23,6 +30,14 @@ export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
 	return initialUnit;
 }
 
+/**
+ * Compares two units based on their health state.
+ *
+ * @param compareUnit The unit to compare.
+ * @param initialUnit The unit to compare against.
+ * @param playerSettings The settings of the player who owns the unit.
+ * @returns The unit that fits the player's settings.
+ */
 export function CompareUnitByHealth(compareUnit: unit, initialUnit: unit, playerSettings: Options): unit {
 	if (compareUnit == initialUnit) return initialUnit;
 

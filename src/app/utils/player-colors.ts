@@ -1,7 +1,7 @@
 /**
- * Some colors have been rearranged from their default Wc3 positions.
- * This is done to prevent using similar colors when not needed (small games)
- * Snow 22, Turquoise 15, Mint 19, Navy 14, Emerald 23, Coal 20
+ * A list of player colors. Some colors have been rearranged from their default Wc3 positions.
+ * This is done to prevent using similar colors in small games.
+ * The following colors have been swapped: Snow 22, Turquoise 15, Mint 19, Navy 14, Emerald 23, Coal 20
  */
 export const PLAYER_COLORS = [
 	PLAYER_COLOR_RED,
@@ -31,6 +31,10 @@ export const PLAYER_COLORS = [
 	//PLAYER_COLOR_SNOW,
 ];
 
+/**
+ * A mapping from player color enumeration to their name strings.
+ * Useful for displaying color names in user interfaces.
+ */
 export const PLAYER_COLOR_MAP: Map<playercolor, string> = new Map<playercolor, string>([
 	[PLAYER_COLOR_RED, 'Red'],
 	[PLAYER_COLOR_BLUE, 'Blue'],
@@ -58,6 +62,10 @@ export const PLAYER_COLOR_MAP: Map<playercolor, string> = new Map<playercolor, s
 	//[PLAYER_COLOR_SNOW, "Snow"],
 ]);
 
+/**
+ * A mapping from player color enumeration to their corresponding hex color code strings.
+ * Useful for applying color themes to user interfaces.
+ */
 export const PLAYER_COLOR_CODES_MAP: Map<playercolor, string> = new Map<playercolor, string>([
 	[PLAYER_COLOR_RED, '|cffff0303'],
 	[PLAYER_COLOR_BLUE, '|cff0042ff'],
@@ -85,16 +93,28 @@ export const PLAYER_COLOR_CODES_MAP: Map<playercolor, string> = new Map<playerco
 	//[PLAYER_COLOR_SNOW, "|cffecf0ff"],
 ]);
 
+/**
+ * Percentage value representing the red component in the ping color for each player.
+ * The percentage is used to blend the color component of the ping signal.
+ */
 export const pingRedPercent = [
 	100.0, 0.0, 10.98, 32.94, 100.0, 99.61, 12.55, 89.8, 58.43, 49.41, 6.27, 29.02, 60.78, 0.0, 0.0, 74.51, 92.16, 97.25, 74.9, 86.27, 15.69,
 	92.16, 0.0, 64.31,
 ];
 
+/**
+ * Percentage value representing the green component in the ping color for each player.
+ * The percentage is used to blend the color component of the ping signal.
+ */
 export const pingGreenPercent = [
 	1.18, 25.88, 90.2, 0.0, 98.82, 54.12, 75.29, 35.69, 58.82, 74.9, 38.43, 16.47, 0.0, 0.0, 91.76, 0.0, 80.39, 64.31, 100.0, 72.55, 15.69,
 	94.12, 47.06, 43.53,
 ];
 
+/**
+ * Percentage value representing the blue component in the ping color for each player.
+ * The percentage is used to blend the color component of the ping signal.
+ */
 export const pingBluePercent = [
 	1.18, 100.0, 72.55, 50.59, 0.0, 5.49, 0.0, 69.02, 59.22, 94.51, 27.45, 1.57, 0.0, 76.47, 100.0, 99.61, 52.94, 54.51, 50.2, 92.16, 15.69,
 	100.0, 11.76, 20.0,

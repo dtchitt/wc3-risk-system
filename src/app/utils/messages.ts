@@ -1,10 +1,21 @@
 import { PlayGlobalSound, PlayLocalSound } from './utils';
 
+/**
+ * Display a countdown message on the screen.
+ * @param msg - The message to display.
+ */
 export function CountdownMessage(msg: string) {
 	const frame: framehandle = BlzGetFrameByName('CountdownFrame', 0);
 	BlzFrameSetText(frame, msg);
 }
 
+/**
+ * Display a global message on the screen for a specified duration.
+ * Optionally plays a sound.
+ * @param msg - The message to display.
+ * @param soundPath - The path of the sound file to play.
+ * @param duration - The duration to display the message (default is 3 seconds).
+ */
 export function GlobalMessage(msg: string, soundPath: string, duration: number = 3) {
 	const frame: framehandle = BlzGetFrameByName('GlobalMessageFrame', 0);
 	let str: string = '';
@@ -28,8 +39,18 @@ export function GlobalMessage(msg: string, soundPath: string, duration: number =
 	});
 }
 
+/** Map to keep track of timers for error messages per player. */
 const errorMap: Map<player, timer> = new Map<player, timer>();
 
+/**
+ * Display an error message to a specific player for a specified duration.
+ * Plays an error sound.
+ * @param player - The player to display the error message to.
+ * @param msg - The message to display.
+ * @param duration - The duration to display the message (default is 3 seconds).
+ */
+
+//TODO refactor this to check if there is a timer already, if there is delete it before setting new timer
 export function ErrorMsg(player: player, msg: string, duration: number = 3) {
 	if (errorMap.has(player)) {
 		PauseTimer(errorMap.get(player));

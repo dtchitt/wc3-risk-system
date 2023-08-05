@@ -47,6 +47,7 @@ export function onDeath() {
 	);
 }
 
+//TODO refactor this mess
 function guardDeath(dyingUnit: unit, killingUnit: unit) {
 	const city: LandCity | PortCity = UnitToCity.get(dyingUnit);
 
