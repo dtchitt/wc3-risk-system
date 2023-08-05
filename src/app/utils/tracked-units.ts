@@ -1,5 +1,9 @@
 import { UNIT_ID } from 'src/configs/unit-id';
 
+/**
+ * A record mapping of unit names to their corresponding IDs.
+ * These units are tracked within the game for statistics purposes.
+ */
 export const TRACKED_UNITS: Record<string, number> = {
 	RIFLEMEN: UNIT_ID.RIFLEMEN,
 	MEDIC: UNIT_ID.MEDIC,

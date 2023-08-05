@@ -1,3 +1,6 @@
+/**
+ * Service for managing fog state for players in a game.
+ */
 export class FogService {
 	private _fog: Map<player, fogmodifier>;
 
@@ -6,16 +9,16 @@ export class FogService {
 	}
 
 	/**
-	 * Adds a player to have their fogstate tracked and controlled
-	 * @param who the player to be managed
+	 * Includes a player for fog state tracking and control.
+	 * @param who - The player to manage.
 	 */
 	public add(who: player) {
 		this._fog.set(who, CreateFogModifierRect(who, FOG_OF_WAR_VISIBLE, GetPlayableMapRect(), true, false));
 	}
 
 	/**
-	 * Remove a player from the manager.
-	 * @param who the player to be removed
+	 * Stops managing the fog state for a specific player.
+	 * @param who - The player to remove from management.
 	 */
 	public remove(who: player) {
 		DestroyFogModifier(this._fog.get(who));
@@ -23,11 +26,10 @@ export class FogService {
 	}
 
 	/**
-	 * Turns on fog for player(s).
-	 * If no player is provided then it will turn on for all players
-	 * If a player is provided then it will turn it on for that player only
-	 * Fog can not be turned on for observers
-	 * @param who optional arugment that can be passed to only target fog state for specific player.
+	 * Activates the fog for all or a specific player.
+	 * If a player is provided, fog will be activated for that player only.
+	 * Does not affect observers.
+	 * @param who - Optional: specific player to activate fog for.
 	 */
 	public on(who?: player) {
 		if (who && !IsPlayerObserver(who)) return FogModifierStop(this._fog.get(who));
@@ -42,10 +44,9 @@ export class FogService {
 	}
 
 	/**
-	 * Turns off fog for player(s).
-	 * If no player is provided then it will turn off for all players
-	 * If a player is provided then it will turn it off for that player only
-	 * @param who optional arugment that can be passed to only target fog state for specific player.
+	 * Deactivates the fog for all or a specific player.
+	 * If a player is provided, fog will be deactivated for that player only.
+	 * @param who - Optional: specific player to deactivate fog for.
 	 */
 	public off(who?: player) {
 		if (who) return FogModifierStart(this._fog.get(who));

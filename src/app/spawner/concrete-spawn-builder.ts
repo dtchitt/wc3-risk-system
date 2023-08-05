@@ -5,6 +5,10 @@ import { SpawnerBuilder } from './spawner-builder';
 import { UNIT_ID } from '../../configs/unit-id';
 import { Coordinates } from '../interfaces/coordinates';
 
+/**
+ * Implementation of the SpawnerBuilder interface.
+ * This class represents a concrete Spawner builder.
+ */
 export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 	private unit: unit;
 	private country: string;
@@ -12,6 +16,11 @@ export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 	private maxSpawnsPerPlayer: number;
 	private spawnTypeID: number;
 
+	/**
+	 * Sets the unit or coordinates for the Spawner.
+	 * @param {unit | Coordinates} unitData - The unit data or coordinates.
+	 * @returns The instance of SpawnerBuilder.
+	 */
 	public setUnit(unitData: unit | Coordinates): SpawnerBuilder {
 		if (typeof unitData === 'object') {
 			const data: Coordinates = unitData as Coordinates;
@@ -25,18 +34,33 @@ export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 		return this;
 	}
 
+	/**
+	 * Sets the country name for the Spawner.
+	 * @param {string} countryName - The name of the country.
+	 * @returns The instance of SpawnerBuilder.
+	 */
 	public setCountry(countryName: string): SpawnerBuilder {
 		this.country = countryName;
 
 		return this;
 	}
 
+	/**
+	 * Sets the spawns per step for the Spawner.
+	 * @param {number} spawnsPerStep - The number of spawns per step.
+	 * @returns The instance of SpawnerBuilder.
+	 */
 	public setSpawnsPerStep(spawnsPerStep: number): SpawnerBuilder {
 		this.spawnsPerStep = spawnsPerStep;
 
 		return this;
 	}
 
+	/**
+	 * Sets the maximum number of spawns per player for the Spawner.
+	 * @param {number} spawnsPerPlayer - The maximum number of spawns per player. Optional parameter.
+	 * @returns The instance of SpawnerBuilder.
+	 */
 	public setMaxSpawnPerPlayer(spawnsPerPlayer?: number): SpawnerBuilder {
 		if (!spawnsPerPlayer) {
 			this.maxSpawnsPerPlayer = this.spawnsPerStep * SpawnTurnLimit;
@@ -47,12 +71,22 @@ export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 		return this;
 	}
 
+	/**
+	 * Sets the spawn type ID for the Spawner.
+	 * @param {number} spawnTypeID - The type ID of the spawn.
+	 * @returns The instance of SpawnerBuilder.
+	 */
 	public setSpawnType(spawnTypeID: number): SpawnerBuilder {
 		this.spawnTypeID = spawnTypeID;
 
 		return this;
 	}
 
+	/**
+	 * Builds the Spawner with the set parameters.
+	 * @returns The Spawner instance.
+	 * @throws If required components are missing.
+	 */
 	public build(): Spawner {
 		if (!this.unit || !this.country || !this.spawnsPerStep || !this.maxSpawnsPerPlayer || !this.spawnTypeID) {
 			print('Spawner builder is missing required components.');
@@ -65,6 +99,9 @@ export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 		return spawner;
 	}
 
+	/**
+	 * Resets the builder's properties to initial state.
+	 */
 	public reset(): void {
 		this.unit = null;
 		this.country = null;
