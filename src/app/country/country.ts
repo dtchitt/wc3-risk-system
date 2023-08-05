@@ -1,10 +1,11 @@
 import { City } from '../city/city';
+import { Resetable } from '../interfaces/resetable';
 import { Spawner } from '../spawner/spawner';
 import { HexColors } from '../utils/hex-colors';
 import { LocalMessage } from '../utils/messages';
 import { NEUTRAL_HOSTILE } from '../utils/utils';
 
-export class Country {
+export class Country implements Resetable {
 	private readonly name: string;
 	private readonly cities: City[];
 	private readonly spawn: Spawner;
@@ -25,6 +26,15 @@ export class Country {
 		SetTextTagPos(this.text, offsetX - lengthCheck, offsetY, 16.0);
 		SetTextTagVisibility(this.text, true);
 		SetTextTagPermanent(this.text, true);
+	}
+
+	public reset(): void {
+		this.cities.forEach((city) => {
+			city.reset();
+		});
+
+		this.spawn.reset();
+		this.owner = NEUTRAL_HOSTILE;
 	}
 
 	public getName(): string {

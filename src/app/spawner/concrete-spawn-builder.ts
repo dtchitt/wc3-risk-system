@@ -3,7 +3,7 @@ import { NEUTRAL_HOSTILE } from '../utils/utils';
 import { Spawner } from './spawner';
 import { SpawnerBuilder } from './spawner-builder';
 import { UNIT_ID } from '../../configs/unit-id';
-import { Coordinates } from '../libs/coordinates';
+import { Coordinates } from '../interfaces/coordinates';
 
 export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 	private unit: unit;

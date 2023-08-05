@@ -1,4 +1,4 @@
-import { Resetable } from 'src/app/libs/resetable';
+import { Resetable } from 'src/app/interfaces/resetable';
 import { TrackedData } from '../data/tracked-data';
 import { Options } from '../options';
 import { Status } from '../status/status';
