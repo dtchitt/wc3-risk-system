@@ -72,9 +72,25 @@ Frame "SIMPLEBUTTON" "ObserverControlButton" INHERITS "UpperButtonBarButtonTempl
 }
 
 //Statistics Info Text
-Frame "TEXT" "StatisticsText" {
+Frame "TEXT" "StatisticsHeader" {
     DecorateFileNames,
-    FrameFont "MasterFont", 0.0095,"",
+    FrameFont "MasterFont", 0.0115,"",
+    LayerStyle "IGNORETRACKEVENTS", 
+    FontJustificationH JUSTIFYLEFT,
+    FontJustificationV JUSTIFYMIDDLE,
+}
+
+Frame "TEXT" "StatisticsDataHeaders" {
+    DecorateFileNames,
+    FrameFont "MasterFont", 0.011,"",
+    LayerStyle "IGNORETRACKEVENTS", 
+    FontJustificationH JUSTIFYLEFT,
+    FontJustificationV JUSTIFYMIDDLE,
+}
+
+Frame "TEXT" "StatisticsDataHeadersSmall" {
+    DecorateFileNames,
+    FrameFont "MasterFont", 0.0085,"",
     LayerStyle "IGNORETRACKEVENTS", 
     FontJustificationH JUSTIFYLEFT,
     FontJustificationV JUSTIFYMIDDLE,

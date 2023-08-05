@@ -59,6 +59,23 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 		}
 	}
 
+	public setEndData() {
+		const handle: player = this.getPlayer();
+
+		this.trackedData.income.end = this.trackedData.income.income;
+		this.trackedData.cities.end = this.trackedData.cities.cities.length;
+		this.trackedData.turnDied = S2I(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0)));
+		this.trackedData.gold.end = GetPlayerState(handle, PLAYER_STATE_RESOURCE_GOLD);
+		SetPlayerState(handle, PLAYER_STATE_RESOURCE_GOLD, 0);
+
+		if (handle == GetLocalPlayer()) {
+			EnableSelect(false, false);
+			EnableDragSelect(false, false);
+		}
+
+		NameManager.getInstance().setName(handle, 'btag');
+	}
+
 	public get trackedData(): TrackedData {
 		return this._trackedData;
 	}

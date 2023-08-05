@@ -25,7 +25,7 @@ import { keyEvents } from './app/triggers/key-events';
 
 function tsMain() {
 	try {
-		//DoNotSaveReplay();
+		DoNotSaveReplay();
 
 		if (!BlzLoadTOCFile('war3mapimported\\Risk.toc')) {
 			print('Failed to load TOC file!');
@@ -83,6 +83,8 @@ function tsMain() {
 			FogEnable(false);
 			FogMaskEnable(false);
 			SetConsoleUI();
+
+			//AntiCheat.checkMultiAccounts(() => {
 			CameraManager.getInstance();
 			ChatManager.getInstance();
 			TransportManager.getInstance();
@@ -91,6 +93,7 @@ function tsMain() {
 
 			PauseTimer(onLoadTimer);
 			DestroyTimer(onLoadTimer);
+			//});
 		});
 	} catch (e) {
 		print(e);

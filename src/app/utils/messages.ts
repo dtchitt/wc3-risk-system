@@ -15,7 +15,8 @@ export function GlobalMessage(msg: string, soundPath: string, duration: number =
 	}
 
 	BlzFrameSetText(frame, msg);
-	PlayGlobalSound(soundPath);
+
+	if (soundPath) PlayGlobalSound(soundPath);
 
 	const playerMsgTimer: timer = CreateTimer();
 

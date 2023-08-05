@@ -1,4 +1,5 @@
 import { MAP_VERSION } from '../utils/map-info';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 export function SetConsoleUI() {
 	// Disable Resource Tooltips
@@ -67,7 +68,7 @@ export function SetConsoleUI() {
 	BlzCreateFrame('CountdownFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	// hideUI(true);
 
-	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+	for (let i = 0; i < PLAYER_SLOTS; i++) {
 		const player = Player(i);
 
 		if (GetPlayerController(player) == MAP_CONTROL_USER) {
@@ -99,10 +100,10 @@ export function SetConsoleUI() {
 export function HideUI(hidden: boolean) {
 	BlzHideOriginFrames(hidden);
 	BlzFrameSetVisible(BlzGetFrameByName('ConsoleUIBackdrop', 0), !hidden);
-	//BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
-	//BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
+	BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
+	BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
 
-	BlzEnableSelections(!hidden, !hidden);
+	//BlzEnableSelections(!hidden, !hidden);
 }
 
 export function AllyMenuFFASetup() {

@@ -1,6 +1,6 @@
 import { PLAYER_COLOR_CODES_MAP, PLAYER_COLOR_MAP } from 'src/app/utils/player-colors';
 import { PlayerNames } from './player-names';
-import { isNonEmptySubstring } from 'src/app/utils/utils';
+import { PLAYER_SLOTS, isNonEmptySubstring } from 'src/app/utils/utils';
 
 type Names = 'btag' | 'acct' | 'color';
 
@@ -12,7 +12,7 @@ export class NameManager {
 	private constructor() {
 		this.names = new Map<player, PlayerNames>();
 
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const p: player = Player(i);
 
 			this.names.set(p, new PlayerNames(GetPlayerName(p)));
@@ -28,18 +28,32 @@ export class NameManager {
 		return this.instance;
 	}
 
-	public getPlayerByName(string: string, players: player[]): player[] {
+	public getPlayerByAnyName(string: string): player[] {
 		const foundPlayers: player[] = [];
 
-		players.forEach((player) => {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player = Player(i);
+
 			if (isNonEmptySubstring(string, this.getBtag(player))) {
 				foundPlayers.push(player);
-			} else if (isNonEmptySubstring(string, this.getColor(player))) {
-				foundPlayers.push(player);
-			}
-		});
+			} else if (isNonEmptySubstring(string, this.getColor(player))) foundPlayers.push(player);
+		}
 
 		return foundPlayers;
+	}
+
+	public getPlayerFromBtag(string: string): player | null {
+		let result: player = null;
+
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player = Player(i);
+
+			if (isNonEmptySubstring(string, this.getBtag(player))) {
+				result = player;
+			}
+		}
+
+		return result;
 	}
 
 	public setName(p: player, name: Names) {

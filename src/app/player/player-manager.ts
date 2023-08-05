@@ -4,6 +4,7 @@ import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 const banList: string[] = ['nappa#11822', 'keen13#2151'];
 
@@ -22,7 +23,7 @@ export class PlayerManager {
 		this._observerFromHandle = new Map<player, HumanPlayer>();
 		this._slavesFromHandle = new Map<player, SlavePlayer>();
 
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const player = Player(i);
 
 			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_EMPTY) {
@@ -41,10 +42,8 @@ export class PlayerManager {
 			if (GetPlayerController(player) == MAP_CONTROL_USER || GetPlayerController(player) == MAP_CONTROL_COMPUTER) {
 				if (IsPlayerObserver(player)) {
 					this._observerFromHandle.set(player, new HumanPlayer(player));
-				} else {
-					if (!this._slavesFromHandle.has(player)) {
-						this._playerFromHandle.set(player, new HumanPlayer(player));
-					}
+				} else if (!this._slavesFromHandle.has(player)) {
+					this._playerFromHandle.set(player, new HumanPlayer(player));
 				}
 
 				const tools: unit = CreateUnit(player, UNIT_ID.PLAYER_TOOLS, 18750.0, -16200.0, 270);

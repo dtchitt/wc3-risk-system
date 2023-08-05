@@ -2,11 +2,12 @@ import { ABILITY_ID } from 'src/configs/ability-id';
 import { UnitToCity } from '../city/city-map';
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
+import { PLAYER_SLOTS } from '../utils/utils';
 
 export function onSpellEffect() {
 	const t: trigger = CreateTrigger();
 
-	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+	for (let i = 0; i < PLAYER_SLOTS; i++) {
 		TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_SPELL_EFFECT, null);
 	}
 
@@ -46,7 +47,7 @@ export function onSpellEffect() {
 					player.options.ping = false;
 					break;
 				case ABILITY_ID.PING:
-					for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+					for (let i = 0; i < PLAYER_SLOTS; i++) {
 						const player: player = Player(i);
 					}
 					// let pingIndex: number = player.settings.names.colorIndex;
