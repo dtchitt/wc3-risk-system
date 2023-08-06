@@ -17,6 +17,13 @@ export class NomadStrategy implements StatusStrategy {
 		TimerStart(nomadTimer, tick, true, () => {
 			if (!gamePlayer.status.isNomad() || gamePlayer.trackedData.cities.cities.length >= 1) {
 				gamePlayer.status.set(PLAYER_STATUS.ALIVE);
+
+				gamePlayer.trackedData.countries.forEach((val, country) => {
+					if (country.getOwner() == gamePlayer.getPlayer()) {
+						gamePlayer.trackedData.income.income += country.getCities().length;
+					}
+				});
+
 				PauseTimer(nomadTimer);
 				DestroyTimer(nomadTimer);
 			}

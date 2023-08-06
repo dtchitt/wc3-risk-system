@@ -20,6 +20,7 @@ import { PlayerLeaveEvent } from './app/triggers/player-leave-event';
 import { UnitDeathEvent } from './app/triggers/unit-death-event';
 import { UnitTrainedEvent } from './app/triggers/unit-trained-event';
 import { KeyEvents } from './app/triggers/key-events';
+import { AntiCheat } from './app/libs/anti-cheat';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -84,16 +85,16 @@ function tsMain() {
 			FogMaskEnable(false);
 			SetConsoleUI();
 
-			//AntiCheat.checkMultiAccounts(() => {
-			CameraManager.getInstance();
-			ChatManager.getInstance();
-			TransportManager.getInstance();
-			GameManager.getInstance();
-			ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
+			AntiCheat.checkMultiAccounts(() => {
+				CameraManager.getInstance();
+				ChatManager.getInstance();
+				TransportManager.getInstance();
+				GameManager.getInstance();
+				ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
 
-			PauseTimer(onLoadTimer);
-			DestroyTimer(onLoadTimer);
-			//});
+				PauseTimer(onLoadTimer);
+				DestroyTimer(onLoadTimer);
+			});
 		});
 	} catch (e) {
 		print(e);

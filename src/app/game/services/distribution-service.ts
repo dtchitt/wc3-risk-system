@@ -72,8 +72,10 @@ export class DistributionService {
 	private changeCityOwner(city: City, player: ActivePlayer, countryData: MultiMap<Country, ActivePlayer, number>) {
 		const country: Country = CityToCountry.get(city);
 
-		city.setOwner(player.getPlayer());
-		SetUnitOwner(city.guard.unit, player.getPlayer(), true);
-		countryData.set(country, player, countryData.get(country, player) + 1);
+		if (countryData.get(country, player) < Math.floor(country.getCities().length / 2)) {
+			city.setOwner(player.getPlayer());
+			SetUnitOwner(city.guard.unit, player.getPlayer(), true);
+			countryData.set(country, player, countryData.get(country, player) + 1);
+		}
 	}
 }

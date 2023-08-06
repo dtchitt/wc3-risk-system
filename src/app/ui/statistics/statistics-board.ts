@@ -86,7 +86,7 @@ export class StatisticsBoard {
 		const cities: framehandle = StatisticsBoard.buildRowHeader(ssKD, 'Cities Max/End');
 		const riflemen: framehandle = StatisticsBoard.buildRowHeader(cities, 'Riflemen Trained Value', 'StatisticsDataHeadersSmall', -0.006);
 		const priest: framehandle = StatisticsBoard.buildRowHeader(riflemen, 'Priest Trained Value', 'StatisticsDataHeadersSmall', -0.006);
-		const mortor: framehandle = StatisticsBoard.buildRowHeader(priest, 'Mortor Trained Value', 'StatisticsDataHeadersSmall', -0.006);
+		const mortor: framehandle = StatisticsBoard.buildRowHeader(priest, 'Mortar Trained Value', 'StatisticsDataHeadersSmall', -0.006);
 		const roarer: framehandle = StatisticsBoard.buildRowHeader(mortor, 'Roarer Trained Value', 'StatisticsDataHeadersSmall', -0.006);
 		const knight: framehandle = StatisticsBoard.buildRowHeader(roarer, 'Knight Trained Value', 'StatisticsDataHeadersSmall', -0.006);
 		const general: framehandle = StatisticsBoard.buildRowHeader(knight, 'General Trained Value', 'StatisticsDataHeadersSmall', -0.006);

@@ -1,87 +1,83 @@
-//This mostly works, but I am putting it on hold. There is issues with removing the players from the game.
+import { File } from 'w3ts';
+import { NameManager } from '../managers/names/name-manager';
+import { PLAYER_SLOTS } from '../utils/utils';
 
-// import { File } from 'w3ts';
-// import { NameManager } from '../managers/names/name-manager';
-// import { GlobalMessage } from '../utils/messages';
+type Multis = {
+	player: player;
+	name: string;
+	multiName: string;
+};
 
-// type Multis = {
-// 	player: player;
-// 	name: string;
-// 	multiName: string;
-// };
+export class AntiCheat {
+	private static multis: Multis[] = [];
 
-// export class AntiCheat {
-// 	private static multis: Multis[] = [];
+	public static checkMultiAccounts(onComplete: () => void) {
+		const path: string = 'check.pld';
+		const nameManager: NameManager = NameManager.getInstance();
 
-// 	public static checkMultiAccounts(onComplete: () => void) {
-// 		GlobalMessage(`Processing Players, please wait.`, null);
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player: player = Player(i);
 
-// 		try {
-// 			const path: string = 'check.pld';
-// 			const nameManager: NameManager = NameManager.getInstance();
+			if (GetPlayerController(player) == MAP_CONTROL_USER && GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING) {
+				const name: string = nameManager.getBtag(player);
 
-// 			for (let i = 0; i < bj_MAX_PLAYERS; i++) {
-// 				const player: player = Player(i);
+				if (GetLocalPlayer() == player) {
+					File.write(path, name);
+				}
+			}
+		}
 
-// 				if (GetPlayerController(player) == MAP_CONTROL_USER && GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING) {
-// 					const name: string = nameManager.getBtag(player);
+		const waitTimer: timer = CreateTimer();
 
-// 					if (player == GetLocalPlayer()) {
-// 						File.write(path, name);
-// 					}
-// 				}
-// 			}
+		TimerStart(waitTimer, 1, false, () => {
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player: player = Player(i);
 
-// 			const waitTimer: timer = CreateTimer();
+				if (GetPlayerController(player) == MAP_CONTROL_USER && GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING) {
+					const name: string = nameManager.getBtag(player);
+					let contents: string = '';
 
-// 			TimerStart(waitTimer, 1, false, () => {
-// 				for (let i = 0; i < bj_MAX_PLAYERS; i++) {
-// 					const player: player = Player(i);
+					if (GetLocalPlayer() == player) {
+						contents = File.read(path);
+					}
 
-// 					if (GetPlayerController(player) == MAP_CONTROL_USER && GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING) {
-// 						const name: string = nameManager.getBtag(player);
-// 						let contents: string = '';
+					if (contents != name) {
+						AntiCheat.multis.push({
+							player: player,
+							name: name,
+							multiName: contents,
+						});
+					}
+				}
+			}
 
-// 						if (player == GetLocalPlayer()) {
-// 							contents = File.read(path);
-// 						}
+			AntiCheat.processMultis();
+			PauseTimer(waitTimer);
+			DestroyTimer(waitTimer);
+			onComplete();
+		});
+	}
 
-// 						if (contents != name) {
-// 							AntiCheat.multis.push({
-// 								player: player,
-// 								name: name,
-// 								multiName: contents,
-// 							});
-// 						}
-// 					}
-// 				}
+	private static processMultis() {
+		AntiCheat.multis.forEach((player) => {
+			try {
+				const multiAcct: player = NameManager.getInstance().getPlayerFromBtag(player.multiName);
 
-// 				AntiCheat.processMultis();
-// 				PauseTimer(waitTimer);
-// 				DestroyTimer(waitTimer);
-// 				onComplete();
-// 			});
-// 		} catch (error) {
-// 			print(error);
-// 		}
-// 	}
+				if (multiAcct) {
+					//AntiCheat.removePlayer(player.player);
+					//AntiCheat.removePlayer(multiAcct);
+				}
+			} catch (error) {
+				print(error);
+			}
+		});
+	}
 
-// 	private static processMultis() {
-// 		AntiCheat.multis.forEach((player) => {
-// 			print('loop');
-// 			try {
-// 				const multiAcct: player = NameManager.getInstance().getPlayerFromBtag(player.multiName);
+	private static removePlayer(player: player) {
+		RemovePlayer(player, PLAYER_GAME_RESULT_DEFEAT);
 
-// 				if (multiAcct) {
-// 					print(`ma ${multiAcct} ${NameManager.getInstance().getBtag(multiAcct)}`);
-// 					RemovePlayer(multiAcct, PLAYER_GAME_RESULT_DEFEAT);
-
-// 					print(`main ${NameManager.getInstance().getBtag(player.player)} name ${player.name}`);
-// 					RemovePlayer(player.player, PLAYER_GAME_RESULT_DEFEAT);
-// 				}
-// 			} catch (error) {
-// 				print(error);
-// 			}
-// 		});
-// 	}
-// }
+		if (GetLocalPlayer() == player) {
+			EndGame(false);
+		}
+	}
+}

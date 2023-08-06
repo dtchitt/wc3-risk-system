@@ -4,6 +4,8 @@ import { StatusStrategy } from './status-strategy';
 
 export class AliveStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
+		if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) return;
+
 		gamePlayer.status.status = PLAYER_STATUS.ALIVE;
 		gamePlayer.trackedData.income.income = 4;
 
