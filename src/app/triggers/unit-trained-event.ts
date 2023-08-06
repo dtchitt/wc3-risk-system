@@ -3,11 +3,11 @@ import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { UNIT_TYPE } from '../utils/unit-types';
 
-export const UnitTrainedEvent: trigger = CreateTrigger();
+export const UnitTrainedTrigger: trigger = CreateTrigger();
 
-export function unitTrained() {
+export function UnitTrainedEvent() {
 	TriggerAddCondition(
-		UnitTrainedEvent,
+		UnitTrainedTrigger,
 		Condition(() => {
 			const trainedUnit = GetTrainedUnit();
 

@@ -10,9 +10,9 @@ type AntiSpamData = {
 	count: number;
 };
 
-export const antiSpam = () => {
+export const AntiSpam = () => {
 	const spamMap: Map<player, AntiSpamData> = new Map<player, AntiSpamData>();
-	const threshold: number = 2;
+	const threshold: number = 3;
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < PLAYER_SLOTS; i++) {

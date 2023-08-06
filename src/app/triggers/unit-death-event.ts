@@ -15,7 +15,7 @@ import { City } from '../city/city';
 const smallRadius: number = 235;
 const largeRadius: number = 550;
 
-export function onDeath() {
+export function UnitDeathEvent() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {

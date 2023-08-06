@@ -50,6 +50,9 @@ export class StandardBoard extends Scoreboard {
 		this.setVisibility(false);
 	}
 
+	/**
+	 * Updates every column on the scoreboard.
+	 */
 	public updateFull(): void {
 		this.players.sort((pA, pB) => {
 			const playerAIncome: number = pA.trackedData.income.income;
@@ -80,6 +83,9 @@ export class StandardBoard extends Scoreboard {
 		});
 	}
 
+	/**
+	 * Updates all columns except income on the scoreboard.
+	 */
 	public updatePartial(): void {
 		let row: number = 2;
 
@@ -94,10 +100,22 @@ export class StandardBoard extends Scoreboard {
 		});
 	}
 
+	/**
+	 * Sets an alert for a country on the scoreboard.
+	 * @param {player} player - The player who claimed the country.
+	 * @param {string} countryName - The name of the country.
+	 */
 	public setAlert(player: player, countryName: string): void {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player)} claimed ${HexColors.TANGERINE}${countryName}|r`, this.size, 1);
 	}
 
+	/**
+	 * Sets the columns of the scoreboard for a specific player's row.
+	 * @param {ActivePlayer} player - The player object.
+	 * @param {number} row - The row index.
+	 * @param {string} textColor - The text color code.
+	 * @param {TrackedData} data - The tracked data for the player.
+	 */
 	private setColumns(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
 		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);

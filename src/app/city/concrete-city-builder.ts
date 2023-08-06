@@ -9,9 +9,9 @@ import { CityType, CityTypes } from './city-type';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
 import { UnitData } from '../interfaces/unit-data';
-import { EnterRegionEvent } from '../triggers/on-enter-event';
-import { LeaveRegionEvent } from '../triggers/on-leave-event';
-import { UnitTrainedEvent } from '../triggers/unit-trained-event';
+import { EnterRegionTrigger } from '../triggers/enter-region-event';
+import { LeaveRegionTrigger } from '../triggers/leave-region-event';
+import { UnitTrainedTrigger } from '../triggers/unit-trained-event';
 import { Resetable } from '../interfaces/resetable';
 
 // Calculate the X offset for a barrack unit
@@ -128,7 +128,7 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 		const city = new CityConstructor(this._barracks, this._guard, this._cop);
 
 		this.setRegion(city);
-		TriggerRegisterUnitEvent(UnitTrainedEvent, city.barrack.unit, EVENT_UNIT_TRAIN_FINISH);
+		TriggerRegisterUnitEvent(UnitTrainedTrigger, city.barrack.unit, EVENT_UNIT_TRAIN_FINISH);
 		UnitToCity.set(this._barracks.unit, city);
 		UnitToCity.set(this._guard.unit, city);
 		city.setOwner(NEUTRAL_HOSTILE);
@@ -162,8 +162,8 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 		const region = CreateRegion();
 		RegionAddRect(region, rect);
 		RemoveRect(rect);
-		TriggerRegisterEnterRegion(EnterRegionEvent, region, null);
-		TriggerRegisterLeaveRegion(LeaveRegionEvent, region, null);
+		TriggerRegisterEnterRegion(EnterRegionTrigger, region, null);
+		TriggerRegisterLeaveRegion(LeaveRegionTrigger, region, null);
 		RegionToCity.set(region, city);
 	}
 }

@@ -12,7 +12,7 @@ import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
 import { GameManager } from '../game/game-manager';
 
-export function onOwnerChange() {
+export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {

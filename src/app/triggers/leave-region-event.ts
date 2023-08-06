@@ -6,11 +6,11 @@ import { CityRegionSize } from 'src/configs/city-settings';
 import { CompareUnitByValue } from '../utils/unit-comparisons';
 import { GetUnitsInRangeByAllegiance } from '../utils/guard-filters';
 
-export const LeaveRegionEvent: trigger = CreateTrigger();
+export const LeaveRegionTrigger: trigger = CreateTrigger();
 
-export function onLeave() {
+export function LeaveRegionEvent() {
 	TriggerAddCondition(
-		LeaveRegionEvent,
+		LeaveRegionTrigger,
 		Condition(() => {
 			if (!IsUnitType(GetTriggerUnit(), UNIT_TYPE.GUARD)) return false;
 

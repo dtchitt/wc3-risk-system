@@ -2,11 +2,11 @@ import { City } from '../city/city';
 import { RegionToCity, UnitToCity } from '../city/city-map';
 import { UNIT_TYPE } from '../utils/unit-types';
 
-export const EnterRegionEvent: trigger = CreateTrigger();
+export const EnterRegionTrigger: trigger = CreateTrigger();
 
-export function onEnter() {
+export function EnterRegionEvent() {
 	TriggerAddCondition(
-		EnterRegionEvent,
+		EnterRegionTrigger,
 		Condition(() => {
 			if (IsUnitType(GetTriggerUnit(), UNIT_TYPE.TRANSPORT)) return false;
 

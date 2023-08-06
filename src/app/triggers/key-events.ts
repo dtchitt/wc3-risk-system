@@ -3,7 +3,7 @@ import { ActivePlayer } from '../player/types/active-player';
 import { Scoreboards } from '../scoreboard/scoreboard-array';
 import { PLAYER_SLOTS } from '../utils/utils';
 
-export function keyEvents() {
+export function KeyEvents() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < PLAYER_SLOTS; i++) {

@@ -4,7 +4,7 @@ import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { PLAYER_SLOTS } from '../utils/utils';
 
-export function onSpellEffect() {
+export function SpellEffectEvent() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < PLAYER_SLOTS; i++) {
