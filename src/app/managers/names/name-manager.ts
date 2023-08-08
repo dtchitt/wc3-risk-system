@@ -34,9 +34,13 @@ export class NameManager {
 		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const player = Player(i);
 
+			if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_PLAYING) continue;
+
 			if (isNonEmptySubstring(string, this.getBtag(player))) {
 				foundPlayers.push(player);
-			} else if (isNonEmptySubstring(string, this.getColor(player))) foundPlayers.push(player);
+			} else if (isNonEmptySubstring(string, this.getColor(player))) {
+				foundPlayers.push(player);
+			}
 		}
 
 		return foundPlayers;
