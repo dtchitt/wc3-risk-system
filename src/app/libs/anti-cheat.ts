@@ -64,8 +64,8 @@ export class AntiCheat {
 				const multiAcct: player = NameManager.getInstance().getPlayerFromBtag(player.multiName);
 
 				if (multiAcct) {
-					//AntiCheat.removePlayer(player.player);
-					//AntiCheat.removePlayer(multiAcct);
+					AntiCheat.removePlayer(player.player);
+					AntiCheat.removePlayer(multiAcct);
 				}
 			} catch (error) {
 				print(error);

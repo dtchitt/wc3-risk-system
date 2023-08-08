@@ -75,7 +75,6 @@ export class GameManager {
 			if (!this.isStateMetaGame()) return;
 
 			const players: player[] = nameManager.getPlayerByAnyName(GetEventPlayerChatString().split(' ')[1]);
-
 			const player: player = GetTriggerPlayer();
 
 			if (players.length >= 2) {
