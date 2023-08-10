@@ -80,7 +80,7 @@ Frame "TEXT" "StatisticsHeader" {
     FontJustificationV JUSTIFYMIDDLE,
 }
 
-Frame "TEXT" "StatisticsDataHeaders" {
+Frame "TEXT" "StatisticsColumnHeaders" {
     DecorateFileNames,
     FrameFont "MasterFont", 0.011,"",
     LayerStyle "IGNORETRACKEVENTS", 
@@ -88,9 +88,9 @@ Frame "TEXT" "StatisticsDataHeaders" {
     FontJustificationV JUSTIFYMIDDLE,
 }
 
-Frame "TEXT" "StatisticsDataHeadersSmall" {
+Frame "TEXT" "StatisticsData" {
     DecorateFileNames,
-    FrameFont "MasterFont", 0.0085,"",
+    FrameFont "MasterFont", 0.0090,"",
     LayerStyle "IGNORETRACKEVENTS", 
     FontJustificationH JUSTIFYLEFT,
     FontJustificationV JUSTIFYMIDDLE,

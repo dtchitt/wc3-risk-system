@@ -90,7 +90,9 @@ export class VictoryManager {
 				this.ranks.push(player);
 			}
 
-			player.setEndData();
+			if (player.trackedData.turnDied == -1) {
+				player.setEndData();
+			}
 		});
 
 		this.ranks.push(this._leader);

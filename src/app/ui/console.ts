@@ -97,13 +97,8 @@ export function SetConsoleUI() {
 	}
 }
 
-export function HideUI(hidden: boolean) {
-	BlzHideOriginFrames(hidden);
-	BlzFrameSetVisible(BlzGetFrameByName('ConsoleUIBackdrop', 0), !hidden);
-	BlzFrameSetVisible(BlzGetFrameByName('UpperButtonBarFrame', 0), !hidden);
+export function HideMapInfo(hidden: boolean) {
 	BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
-
-	//BlzEnableSelections(!hidden, !hidden);
 }
 
 export function AllyMenuFFASetup() {

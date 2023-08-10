@@ -170,7 +170,7 @@ export function SetCountries() {
 				barrack: { x: 4736.0, y: -8768.0 },
 			},
 			{
-				barrack: { typeId: UNIT_ID.PORT, x: 3680.0, y: -7904.0 },
+				barrack: { typeId: UNIT_ID.PORT, x: 3600.0, y: -8017.0 },
 				cityType: 'port',
 			},
 		],
