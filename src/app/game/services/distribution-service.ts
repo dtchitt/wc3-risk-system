@@ -1,50 +1,49 @@
 import { City } from 'src/app/city/city';
-import { RegionToCity } from 'src/app/city/city-map';
 import { Country } from 'src/app/country/country';
 import { CityToCountry } from 'src/app/country/country-map';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { ActivePlayer } from 'src/app/player/types/active-player';
-import { MultiMap } from 'src/app/utils/multi-map';
-import { ShuffleArray } from 'src/app/utils/utils';
+import { GetRandomElementFromArray } from 'src/app/utils/utils';
 
 export class DistributionService {
-	private cityMax: number;
+	private maxCitiesPerPlayer: number;
+	private cities: City[];
 
 	constructor() {
-		this.cityMax = 20;
+		this.maxCitiesPerPlayer = 20;
+		this.cities = this.buildCityPool();
 	}
 
 	public standardDistro() {
-		const cities: City[] = [...RegionToCity.values()];
-		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-		const countryData: MultiMap<Country, ActivePlayer, number> = new MultiMap<Country, ActivePlayer, number>();
-
-		this.cityMax = Math.min(Math.floor(cities.length / players.length), 20);
-		ShuffleArray(players);
-
 		try {
+			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
+			const ownedCities: City[] = [];
+
+			this.maxCitiesPerPlayer = Math.min(Math.floor(this.cities.length / players.length), 20);
+
 			while (players.length > 0) {
-				let city: City = this.getRandomCity(cities);
-				let player: ActivePlayer = players.pop();
+				let city: City = GetRandomElementFromArray(this.cities);
 				let country: Country = CityToCountry.get(city);
+				let player: ActivePlayer = players.shift();
 
-				if (this.canChangeCityOwner(countryData, country, player)) {
-					this.changeCityOwner(city, player, countryData);
+				if (this.isCityValidForPlayer(player, country)) {
+					this.changeCityOwner(city, player);
 				} else {
-					for (let counter = 0; counter <= 50; counter++) {
-						cities.push(city);
-						city = this.getRandomCity(cities);
-						country = CityToCountry.get(city);
+					const swapCity: City = this.getRandomValidCity(player, ownedCities);
+					const swapCountry: Country = CityToCountry.get(swapCity);
+					const swapPlayer: ActivePlayer = this.getRandomValidPlayer(
+						swapCountry,
+						[...PlayerManager.getInstance().players.values()],
+						player
+					);
 
-						if (this.canChangeCityOwner(countryData, country, player)) {
-							break;
-						}
-					}
-
-					this.changeCityOwner(city, player, countryData);
+					this.changeCityOwner(city, swapPlayer);
+					this.changeCityOwner(swapCity, player);
 				}
 
-				if (player.trackedData.cities.cities.length < this.cityMax) {
+				ownedCities.push(city);
+
+				if (player.trackedData.cities.cities.length < this.maxCitiesPerPlayer) {
 					players.push(player);
 				}
 			}
@@ -53,34 +52,60 @@ export class DistributionService {
 		}
 	}
 
-	private getRandomCity(cities: City[]): City {
-		const randomIndex = Math.floor(Math.random() * cities.length);
-		const lastIndex = cities.length - 1;
+	private getRandomValidPlayer(country: Country, players: ActivePlayer[], currPlayer: ActivePlayer): ActivePlayer {
+		let result: ActivePlayer | null = null;
 
-		[cities[randomIndex], cities[lastIndex]] = [cities[lastIndex], cities[randomIndex]];
+		while (!result) {
+			const randomIndex = Math.floor(Math.random() * players.length);
+			const randomPlayer: ActivePlayer = players[randomIndex];
 
-		const city = cities.pop();
+			if (currPlayer === randomPlayer) continue;
+			if (!this.isCityValidForPlayer(randomPlayer, country)) continue;
+			if (randomPlayer.trackedData.cities.cities.length >= this.maxCitiesPerPlayer) continue;
 
-		if (CityToCountry.get(city).getCities().length === 1) {
-			return this.getRandomCity(cities);
+			result = randomPlayer;
 		}
 
-		return city;
+		return result;
 	}
 
-	private changeCityOwner(city: City, player: ActivePlayer, countryData: MultiMap<Country, ActivePlayer, number>) {
-		const country: Country = CityToCountry.get(city);
+	private getRandomValidCity(player: ActivePlayer, cities: City[]): City {
+		let result: City | null = null;
 
-		if (this.canChangeCityOwner(countryData, country, player)) {
-			city.setOwner(player.getPlayer());
-			SetUnitOwner(city.guard.unit, player.getPlayer(), true);
-			countryData.set(country, player, countryData.get(country, player) + 1);
+		while (!result) {
+			const randomIndex = Math.floor(Math.random() * cities.length);
+			const randomCity: City = cities[randomIndex];
+
+			if (randomCity.getOwner() != player.getPlayer() && this.isCityValidForPlayer(player, CityToCountry.get(randomCity))) {
+				result = randomCity;
+			}
 		}
+
+		return result;
 	}
 
-	private canChangeCityOwner(countryData: MultiMap<Country, ActivePlayer, number>, country: Country, player: ActivePlayer) {
-		if (!countryData.has(country, player)) countryData.set(country, player, 0);
+	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
+		if (!player.trackedData.countries.has(country)) {
+			player.trackedData.countries.set(country, 0);
+		}
 
-		return countryData.get(country, player) < Math.floor(country.getCities().length / 2);
+		return player.trackedData.countries.get(country) < Math.floor(country.getCities().length / 2);
+	}
+
+	private buildCityPool(): City[] {
+		const result: City[] = [];
+
+		CityToCountry.forEach((country, city) => {
+			if (country.getCities().length > 1) {
+				result.push(city);
+			}
+		});
+
+		return result;
+	}
+
+	private changeCityOwner(city: City, player: ActivePlayer) {
+		city.setOwner(player.getPlayer());
+		SetUnitOwner(city.guard.unit, player.getPlayer(), true);
 	}
 }

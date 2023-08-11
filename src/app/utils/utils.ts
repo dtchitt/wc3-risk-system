@@ -92,3 +92,16 @@ export function DistanceBetweenCoords(x1: number, y1: number, x2: number, y2: nu
 export function IsUnitMelee(unit: unit): boolean {
 	return IsUnitType(unit, UNIT_TYPE_MELEE_ATTACKER);
 }
+
+export function GetRandomElementFromArray<T>(items: T[]): T | null {
+	if (items.length < 1) return null;
+
+	const randomIndex = Math.floor(Math.random() * items.length);
+	const lastIndex = items.length - 1;
+
+	[items[randomIndex], items[lastIndex]] = [items[lastIndex], items[randomIndex]];
+
+	const item = items.pop();
+
+	return item;
+}
