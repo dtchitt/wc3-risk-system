@@ -14,7 +14,7 @@ export class StatisticsBoard {
 		{ column: 2, size: 0.09, header: 'Biggest Rival' },
 		{ column: 3, size: 0.06, header: 'Last Turn' },
 		{ column: 4, size: 0.06, header: 'Cities\nMax/End' },
-		{ column: 5, size: 0.08, header: 'Income\nMax/End' },
+		{ column: 5, size: 0.06, header: 'Income\nMax/End' },
 		{ column: 6, size: 0.05, header: 'Bounty' },
 		{ column: 7, size: 0.05, header: 'Bonus' },
 		{ column: 8, size: 0.09, header: 'Gold Earned/\nMax/End' },
