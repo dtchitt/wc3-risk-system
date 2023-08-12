@@ -4,92 +4,64 @@ import { CityToCountry } from 'src/app/country/country-map';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
+import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 
 export class DistributionService {
+	private citiesPerPlayerUpperBound: number = 20;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
+	private players: DoublyLinkedList<ActivePlayer>;
 
 	constructor() {
-		this.maxCitiesPerPlayer = 20;
 		this.cities = this.buildCityPool();
+		this.players = new DoublyLinkedList<ActivePlayer>();
+
+		PlayerManager.getInstance().players.forEach((player) => {
+			this.players.addFirst(player);
+		});
+
+		this.maxCitiesPerPlayer = Math.min(Math.floor(this.cities.length / this.players.length()), this.citiesPerPlayerUpperBound);
 	}
 
-	public standardDistro() {
+	public runDistro(callback: () => void) {
+		//TODO used to control which distro mode to use
+		this.standardDistro();
+
+		callback();
+	}
+
+	private standardDistro() {
 		try {
-			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-			const ownedCities: City[] = [];
+			const neutralCities: City[] = [];
+			const numOfCities: number = this.cities.length;
 
-			this.maxCitiesPerPlayer = Math.min(Math.floor(this.cities.length / players.length), 20);
+			for (let i = 0; i < numOfCities; i++) {
+				const city: City = GetRandomElementFromArray(this.cities);
+				const player: ActivePlayer = this.getValidPlayerForCity(city);
 
-			while (players.length > 0) {
-				let city: City = GetRandomElementFromArray(this.cities);
-				let country: Country = CityToCountry.get(city);
-				let player: ActivePlayer = players.shift();
-
-				if (this.isCityValidForPlayer(player, country)) {
+				if (player) {
 					this.changeCityOwner(city, player);
+
+					if (!this.isPlayerFull(player)) {
+						this.players.addLast(player);
+					}
 				} else {
-					const swapCity: City = this.getRandomValidCity(player, ownedCities);
-					const swapCountry: Country = CityToCountry.get(swapCity);
-					const swapPlayer: ActivePlayer = this.getRandomValidPlayer(
-						swapCountry,
-						[...PlayerManager.getInstance().players.values()],
-						player
-					);
-
-					this.changeCityOwner(city, swapPlayer);
-					this.changeCityOwner(swapCity, player);
+					neutralCities.push(city);
 				}
 
-				ownedCities.push(city);
-
-				if (player.trackedData.cities.cities.length < this.maxCitiesPerPlayer) {
-					players.push(player);
-				}
+				if (this.players.length() == 0) break;
 			}
+
+			//TODO
+			//Here I will check if each player has this.maxCitiesPerPlayer
+			//It is safe to assume no player has more at this point
+			//I can check the neutral cities to see if a players who need one
+			//can take one, and do it if so. repeat the process until they are all full
+			//There is some RARE edge cases where the player cannot get any of the neutral cities.
+			//I should handle that as well
 		} catch (error) {
 			print('Error in StandardDistro' + error);
 		}
-	}
-
-	private getRandomValidPlayer(country: Country, players: ActivePlayer[], currPlayer: ActivePlayer): ActivePlayer {
-		let result: ActivePlayer | null = null;
-
-		while (!result) {
-			const randomIndex = Math.floor(Math.random() * players.length);
-			const randomPlayer: ActivePlayer = players[randomIndex];
-
-			if (currPlayer === randomPlayer) continue;
-			if (!this.isCityValidForPlayer(randomPlayer, country)) continue;
-			if (randomPlayer.trackedData.cities.cities.length >= this.maxCitiesPerPlayer) continue;
-
-			result = randomPlayer;
-		}
-
-		return result;
-	}
-
-	private getRandomValidCity(player: ActivePlayer, cities: City[]): City {
-		let result: City | null = null;
-
-		while (!result) {
-			const randomIndex = Math.floor(Math.random() * cities.length);
-			const randomCity: City = cities[randomIndex];
-
-			if (randomCity.getOwner() != player.getPlayer() && this.isCityValidForPlayer(player, CityToCountry.get(randomCity))) {
-				result = randomCity;
-			}
-		}
-
-		return result;
-	}
-
-	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
-		if (!player.trackedData.countries.has(country)) {
-			player.trackedData.countries.set(country, 0);
-		}
-
-		return player.trackedData.countries.get(country) < Math.floor(country.getCities().length / 2);
 	}
 
 	private buildCityPool(): City[] {
@@ -102,6 +74,35 @@ export class DistributionService {
 		});
 
 		return result;
+	}
+
+	private getValidPlayerForCity(city: City): ActivePlayer | null {
+		const maxIterations: number = this.players.length();
+		const country: Country = CityToCountry.get(city);
+
+		for (let i = 0; i < maxIterations; i++) {
+			const player: ActivePlayer = this.players.removeFirst();
+
+			if (this.isCityValidForPlayer(player, country)) {
+				return player;
+			} else {
+				this.players.addLast(player);
+			}
+		}
+
+		return null;
+	}
+
+	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
+		if (!player.trackedData.countries.has(country)) {
+			player.trackedData.countries.set(country, 0);
+		}
+
+		return player.trackedData.countries.get(country) < Math.floor(country.getCities().length / 2);
+	}
+
+	private isPlayerFull(player: ActivePlayer): boolean {
+		return player.trackedData.cities.cities.length >= this.maxCitiesPerPlayer;
 	}
 
 	private changeCityOwner(city: City, player: ActivePlayer) {

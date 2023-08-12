@@ -5,8 +5,8 @@ import { GameState } from './game-state';
 import { TreeService } from '../services/tree-service';
 import { RegionToCity } from 'src/app/city/city-map';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
-import { DistributionService } from '../services/distribution-service';
 import { SlavePlayer } from 'src/app/player/types/slave-player';
+import { DistributionService } from '../services/distribution-service';
 
 export class PreGame implements GameState {
 	private manager: GameManager;
@@ -52,17 +52,17 @@ export class PreGame implements GameState {
 
 	public end(): void {
 		this.distributionService = new DistributionService();
-		this.distributionService.standardDistro();
+		this.distributionService.runDistro(() => {
+			RegionToCity.forEach((city) => {
+				//Prevent guards from moving and update unit counts
+				IssueImmediateOrder(city.guard.unit, 'stop');
 
-		//Prevent guards from moving and update unit counts
-		RegionToCity.forEach((city) => {
-			IssueImmediateOrder(city.guard.unit, 'stop');
+				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
+					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+				}
+			});
 
-			if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-				PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
-			}
+			this.manager.updateState(this.nextState);
 		});
-
-		this.manager.updateState(this.nextState);
 	}
 }

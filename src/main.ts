@@ -26,7 +26,7 @@ import { AntiCheat } from './app/libs/anti-cheat';
 
 function tsMain() {
 	try {
-		DoNotSaveReplay();
+		//DoNotSaveReplay();
 
 		if (!BlzLoadTOCFile('war3mapimported\\Risk.toc')) {
 			print('Failed to load TOC file!');

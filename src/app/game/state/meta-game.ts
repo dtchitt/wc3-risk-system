@@ -30,7 +30,6 @@ export class MetaGame implements GameState {
 		try {
 			SettingsContext.getInstance().applyStrategy('Fog');
 			BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
-			CountdownMessage(`The Game will start in:\n3`);
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));
 			const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
@@ -45,7 +44,7 @@ export class MetaGame implements GameState {
 			});
 
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 3;
+			let duration: number = 4;
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`The Game will start in:\n${duration}`);
 
