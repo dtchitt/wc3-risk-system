@@ -1,6 +1,5 @@
 import { FogService } from 'src/app/libs/fog-service';
 import { SettingsStrategy } from './settings-strategy';
-import { PLAYER_SLOTS } from 'src/app/utils/utils';
 
 export const FogOptions: Record<number, string> = {
 	0: 'off',

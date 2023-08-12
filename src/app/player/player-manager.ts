@@ -4,7 +4,6 @@ import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
-import { PLAYER_SLOTS } from '../utils/utils';
 
 const banList: string[] = ['nappa#11822', 'keen13#2151'];
 
@@ -23,7 +22,7 @@ export class PlayerManager {
 		this._observerFromHandle = new Map<player, HumanPlayer>();
 		this._slavesFromHandle = new Map<player, SlavePlayer>();
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
 
 			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_EMPTY) {

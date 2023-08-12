@@ -1,4 +1,3 @@
-import { AllianceManager } from 'src/app/managers/alliances/alliance-manager';
 import { SettingsStrategy } from './settings-strategy';
 import { AllyMenuFFASetup } from 'src/app/ui/console';
 import { PLAYER_SLOTS } from 'src/app/utils/utils';
