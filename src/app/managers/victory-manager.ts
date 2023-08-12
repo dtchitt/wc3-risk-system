@@ -37,9 +37,11 @@ export class VictoryManager {
 	public removePlayer(player: ActivePlayer) {
 		const index: number = this.players.indexOf(player);
 
-		if (index > -1) this.players.splice(index, 1);
+		if (index > -1) {
+			this.players.splice(index, 1);
+			this.ranks.push(player);
+		}
 
-		this.ranks.push(player);
 		this.checkKnockOutVictory();
 	}
 
@@ -86,12 +88,12 @@ export class VictoryManager {
 		});
 
 		this.players.forEach((player) => {
-			if (player != this._leader) {
-				this.ranks.push(player);
-			}
-
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
+			}
+
+			if (player != this._leader) {
+				this.ranks.push(player);
 			}
 		});
 
