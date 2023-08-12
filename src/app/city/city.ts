@@ -122,42 +122,4 @@ export abstract class City implements Resetable, Ownable {
 		SetUnitPosition(oldGuard, x, y);
 		this.guard.reposition();
 	}
-
-	/**
-	 * Checks if the city's guard is within an acceptable distance from its default position.
-	 * If the guard is too far, it attempts to replace the guard with a valid unit in range,
-	 * otherwise, it creates a new dummy guard at the guard's default position.
-	 */
-	protected checkGuardDistance() {
-		const distance: number = DistanceBetweenCoords(
-			GetUnitX(this.guard.unit),
-			GetUnitY(this.guard.unit),
-			this.guard.defaultX,
-			this.guard.defaultY
-		);
-
-		if (distance >= CityRegionSize - 15) {
-			const group: group = CreateGroup();
-
-			GroupEnumUnitsInRange(
-				group,
-				this.guard.defaultX,
-				this.guard.defaultY,
-				CityRegionSize - 15,
-				Filter(() => this.isValidGuard(GetFilterUnit()) && IsUnitOwnedByPlayer(GetFilterUnit(), this.getOwner()))
-			);
-
-			if (BlzGroupGetSize(group) >= 1) {
-				UnitToCity.delete(this.guard.unit);
-				this.guard.replace(GroupPickRandomUnit(group));
-				UnitToCity.set(this.guard.unit, this);
-			} else {
-				UnitToCity.delete(this.guard.unit);
-				this.guard.replace(CreateUnit(this.getOwner(), UNIT_ID.DUMMY_GUARD, this.guard.defaultX, this.guard.defaultY, 270));
-				UnitToCity.set(this.guard.unit, this);
-			}
-
-			DestroyGroup(group);
-		}
-	}
 }

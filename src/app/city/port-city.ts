@@ -49,14 +49,12 @@ export class PortCity extends City {
 			(IsUnitType(this.guard.unit, UNIT_TYPE.SHIP) && !IsUnitType(unit, UNIT_TYPE.SHIP)) ||
 			(IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.MARINE)
 		) {
-			SetUnitPosition(this.guard.unit, GetUnitX(unit), GetUnitY(unit));
+			SetUnitPosition(unit, this.guard.defaultX, this.guard.defaultY);
 			UnitToCity.delete(this.guard.unit);
 			this.guard.replace(unit);
 			UnitToCity.set(this.guard.unit, this);
 			this.guard.reposition();
 		}
-
-		this.checkGuardDistance();
 	}
 
 	/**
@@ -68,6 +66,5 @@ export class PortCity extends City {
 		if (IsUnitType(GetSpellTargetUnit(), UNIT_TYPE.TRANSPORT)) return;
 
 		this.castHandler();
-		this.checkGuardDistance();
 	}
 }

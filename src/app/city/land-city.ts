@@ -41,7 +41,7 @@ export class LandCity extends City {
 	 */
 	public onUnitTrain(unit: unit): void {
 		if (IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.RIFLEMEN) {
-			SetUnitPosition(this.guard.unit, GetUnitX(unit), GetUnitY(unit));
+			SetUnitPosition(unit, this.guard.defaultX, this.guard.defaultY);
 			UnitToCity.delete(this.guard.unit);
 			this.guard.replace(unit);
 			UnitToCity.set(this.guard.unit, this);
@@ -58,6 +58,5 @@ export class LandCity extends City {
 		if (IsUnitType(GetSpellTargetUnit(), UNIT_TYPE.GUARD)) return;
 
 		this.castHandler();
-		this.checkGuardDistance();
 	}
 }
