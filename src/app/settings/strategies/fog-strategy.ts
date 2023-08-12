@@ -21,7 +21,7 @@ export class FogStrategy implements SettingsStrategy {
 		this.fog = fog;
 		FogStrategy.fogService = new FogService();
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			FogStrategy.fogService.add(Player(i));
 		}
 	}
