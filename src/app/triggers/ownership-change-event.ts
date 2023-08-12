@@ -69,6 +69,10 @@ export function OwnershipChangeEvent() {
 
 					if (owner.status.isAlive()) {
 						ownerData.income.income += country.getCities().length;
+
+						if (ownerData.income.income > ownerData.income.max) {
+							ownerData.income.max = ownerData.income.income;
+						}
 					}
 
 					Scoreboards.forEach((board) => {
