@@ -81,7 +81,7 @@ export class StatisticsBoard {
 			//Game Time
 			const gameTime: framehandle = BlzCreateFrame('StatisticsHeader', backdrop, 0, 0);
 			const turnTime: number = 60;
-			const minutes: number = parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0))) - 1;
+			const minutes: number = parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0)));
 			const seconds: number = turnTime - parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarUpkeepText', 0)));
 			const hours: number = Math.floor(minutes / 60);
 			const remainingMinutes: number = minutes % 60;
