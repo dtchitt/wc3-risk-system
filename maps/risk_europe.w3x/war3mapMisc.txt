@@ -25,6 +25,7 @@ HeroExpRange=0.0
 IntManaBonus=0.0
 IntRegenBonus=0.0
 MaxHeroLevel=1
+MinUnitSpeed=1.0
 StrAttackBonus=0.0
 StrHitPointBonus=0.0
 StrRegenBonus=0.0

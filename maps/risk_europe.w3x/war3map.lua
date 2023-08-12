@@ -701,7 +701,7 @@ SetStartLocPrio(22, 21, 21, MAP_LOC_PRIO_HIGH)
 end
 
 function main()
-SetCameraBounds(-13696.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -15872.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 18816.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 16256.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -13696.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 16256.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 18816.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -15872.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+SetCameraBounds(-13696.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -15872.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 18816.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 16384.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -13696.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 16384.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 18816.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -15872.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
 SetDayNightModels("Environment\\DNC\\DNCAshenvale\\DNCAshenvaleTerrain\\DNCAshenvaleTerrain.mdl", "Environment\\DNC\\DNCAshenvale\\DNCAshenvaleUnit\\DNCAshenvaleUnit.mdl")
 SetTerrainFogEx(0, 100000.0, 100000.0, 0.000, 0.000, 0.000, 0.000)
 NewSoundEnvironment("Default")
