@@ -725,18 +725,6 @@ STRING 7252
 Produces every round spawns.
 }
 
-STRING 7255
-// Destructibles: B00E (Pathing Blocker (Both) (2x8)), Name (Name)
-{
-Pathing Blocker (Both) (2x8)
-}
-
-STRING 7256
-// Destructibles: B00Q (Pathing Blocker (Both) (8x2)), Name (Name)
-{
-Pathing Blocker (Both) (8x2)
-}
-
 STRING 7258
 {
 This value represent how many kills remain before your next gold bonus.
@@ -1470,5 +1458,53 @@ STRING 7459
 // Units: u010 (|cffff8000Admiral|r), Tip (Tooltip - Basic)
 {
 Recruit |cffff8000Admiral|r
+}
+
+STRING 7460
+// Destructibles: B004 (Pathing Blocker (Both) (6x10)), Name (Name)
+{
+Pathing Blocker (Both) (6x10)
+}
+
+STRING 7461
+// Destructibles: B004 (Pathing Blocker (Both) (6x10)), EditorSuffix (Editor Suffix)
+{
+Vertical
+}
+
+STRING 7462
+// Destructibles: B005 (Pathing Blocker (Both) (6x10)), Name (Name)
+{
+Pathing Blocker (Both) (6x10)
+}
+
+STRING 7463
+// Destructibles: B005 (Pathing Blocker (Both) (6x10)), EditorSuffix (Editor Suffix)
+{
+Horizontal
+}
+
+STRING 7464
+// Destructibles: B006 (Pathing Blocker (Both) (4x6)), Name (Name)
+{
+Pathing Blocker (Both) (4x6)
+}
+
+STRING 7465
+// Destructibles: B006 (Pathing Blocker (Both) (4x6)), EditorSuffix (Editor Suffix)
+{
+Horizontal
+}
+
+STRING 7466
+// Destructibles: B009 (Pathing Blocker (Both) (4x6)), Name (Name)
+{
+Pathing Blocker (Both) (4x6)
+}
+
+STRING 7467
+// Destructibles: B009 (Pathing Blocker (Both) (4x6)), EditorSuffix (Editor Suffix)
+{
+Vertical
 }
 
