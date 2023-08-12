@@ -97,10 +97,6 @@ export function SetConsoleUI() {
 	}
 }
 
-export function HideMapInfo(hidden: boolean) {
-	BlzFrameSetVisible(BlzGetFrameByName('mapInfo', 0), !hidden);
-}
-
 export function AllyMenuFFASetup() {
 	let AllyMenuTitle: framehandle = BlzGetFrameByName('AllianceTitle', 0);
 	let tempText: string = 'discord.me/risk';
