@@ -91,7 +91,6 @@ function tsMain() {
 				TransportManager.getInstance();
 				GameManager.getInstance();
 				ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
-
 				PauseTimer(onLoadTimer);
 				DestroyTimer(onLoadTimer);
 			});
