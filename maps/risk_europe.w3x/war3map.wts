@@ -1389,30 +1389,6 @@ STRING 7443
 E
 }
 
-STRING 7445
-// Abilities: a006 (Autoload), Name (Name)
-{
-Autoload
-}
-
-STRING 7446
-// Abilities: a006 (Autoload), Tip (Tooltip - Normal)
-{
-Autoload Units
-}
-
-STRING 7447
-// Abilities: a006 (Autoload), Ubertip (Tooltip - Normal - Extended)
-{
-Automatically loads units into this transport when they come within range
-}
-
-STRING 7448
-// Abilities: a007 (Autoload Ensnare), Name (Name)
-{
-Autoload Ensnare
-}
-
 STRING 7449
 // Units: u052 (Dummy Caster), Name (Name)
 {
@@ -1506,5 +1482,53 @@ STRING 7467
 // Destructibles: B009 (Pathing Blocker (Both) (4x6)), EditorSuffix (Editor Suffix)
 {
 Vertical
+}
+
+STRING 7470
+// Abilities: a013 (Autoload - ON), Name (Name)
+{
+Autoload - ON
+}
+
+STRING 7472
+// Abilities: a014 (Autoload - OFF), Name (Name)
+{
+Autoload - OFF
+}
+
+STRING 7475
+// Abilities: a013 (Autoload - ON), Hotkey (Hotkey - Normal)
+{
+V
+}
+
+STRING 7476
+// Abilities: a013 (Autoload - ON), Tip (Tooltip - Normal)
+{
+|cffff8000Autoload |cff3BA0CBOn|r
+}
+
+STRING 7477
+// Abilities: a013 (Autoload - ON), Ubertip (Tooltip - Normal - Extended)
+{
+|cffff8000Autoload units who come within |cff3BA0CB250|r |cffff8000range of this transport|r|n|cffff8000Autoload will stop when the transport is full or if the ability is cast again|n|n|cFFFF0000Cannot be turned off manually for 5 seconds!
+}
+
+STRING 7478
+// Abilities: a014 (Autoload - OFF), Hotkey (Hotkey - Normal)
+{
+V
+}
+
+STRING 7479
+// Abilities: a014 (Autoload - OFF), Tip (Tooltip - Normal)
+{
+|cffff8000Autoload |cff3BA0CBOff|r
+}
+
+STRING 7480
+// Abilities: a014 (Autoload - OFF), Ubertip (Tooltip - Normal - Extended)
+{
+|cffff8000Deactivate autoload|r|n|n|cFFFF0000Cannot be turned on manually for 5 seconds!
 }
 

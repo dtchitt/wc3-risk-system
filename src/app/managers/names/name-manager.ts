@@ -12,7 +12,7 @@ export class NameManager {
 	private constructor() {
 		this.names = new Map<player, PlayerNames>();
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const p: player = Player(i);
 
 			this.names.set(p, new PlayerNames(GetPlayerName(p)));
@@ -31,7 +31,7 @@ export class NameManager {
 	public getPlayerByAnyName(string: string): player[] {
 		const foundPlayers: player[] = [];
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
 
 			if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_PLAYING) continue;

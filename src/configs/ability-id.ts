@@ -6,9 +6,6 @@ export const ABILITY_ID = {
 	FRENZY: FourCC('a003'),
 	UNHOLY_FRENZY: FourCC('a004'),
 	BERSERK: FourCC('a005'),
-	AUTOLOAD: FourCC('a006'),
-	//Dummy Abilities
-	AUTOLOAD_ENSNARE: FourCC('a007'),
 	//City Ability
 	SWAP: FourCC('a030'),
 	//Spawner Abilities
@@ -20,6 +17,8 @@ export const ABILITY_ID = {
 	CARGO_HOLD: FourCC('a009'),
 	LOAD: FourCC('a010'),
 	UNLOAD: FourCC('a011'),
+	AUTOLOAD_ON: FourCC('a013'),
+	AUTOLOAD_OFF: FourCC('a014'),
 
 	//Player Tools Abilities
 	FORFEIT: FourCC('a050'),
