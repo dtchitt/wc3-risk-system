@@ -39,7 +39,7 @@ export const AntiSpam = () => {
 					count: 1,
 				});
 
-				let duration: number = 1;
+				let duration: number = 5;
 				let tick: number = 0.03;
 				let timer: timer = spamMap.get(player).timer;
 

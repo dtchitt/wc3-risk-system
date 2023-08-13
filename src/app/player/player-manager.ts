@@ -5,7 +5,7 @@ import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
 
-const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239'];
+const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725'];
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
