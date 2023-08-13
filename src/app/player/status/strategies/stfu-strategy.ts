@@ -14,7 +14,7 @@ export class STFUStrategy implements StatusStrategy {
 		const tick: number = 1;
 
 		TimerStart(muteTimer, tick, true, () => {
-			if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+			if (!gamePlayer.status.isSTFU()) {
 				gamePlayer.status.set(PLAYER_STATUS.LEFT);
 				PauseTimer(muteTimer);
 				DestroyTimer(muteTimer);
