@@ -5,6 +5,7 @@ import { UnitToCity } from './city-map';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
 import { IsUnitMelee } from '../utils/utils';
+import { DefaultGuardType } from 'src/configs/country-settings';
 
 /**
  * LandCity is a variant of City for land based terrain.
@@ -40,7 +41,9 @@ export class LandCity extends City {
 	 * @param unit - The trained unit.
 	 */
 	public onUnitTrain(unit: unit): void {
-		if (IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.RIFLEMEN) {
+		//TODO remove the defaultguardtype dependancy here.
+		//Maybe just run player options instead
+		if (IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == DefaultGuardType) {
 			SetUnitPosition(unit, this.guard.defaultX, this.guard.defaultY);
 			UnitToCity.delete(this.guard.unit);
 			this.guard.replace(unit);
