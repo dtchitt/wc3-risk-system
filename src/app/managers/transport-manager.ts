@@ -8,7 +8,6 @@
  * IsUnitInTransport = Check if given unit is loaded into given transport
  * IsUnitLoaded = Check if given unit is loaded into any transport
  */
-import { UNIT_ID } from 'src/configs/unit-id';
 import { ABILITY_ID } from '../../configs/ability-id';
 import { ErrorMsg } from '../utils/messages';
 import { UNIT_TYPE } from '../utils/unit-types';
@@ -227,6 +226,7 @@ export class TransportManager {
 
 					if (IsUnitType(unit, UNIT_TYPE.SHIP)) return;
 					if (IsUnitType(unit, UNIT_TYPE.GUARD)) return;
+					if (IsUnitType(unit, UNIT_TYPE.CITY)) return;
 
 					IssueTargetOrder(unit, 'smart', transport.unit);
 				})
