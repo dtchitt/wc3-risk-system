@@ -659,12 +659,6 @@ STRING 7227
 Q
 }
 
-STRING 7228
-// Abilities: a003 (Frenzy), Name (Name)
-{
-Frenzy
-}
-
 STRING 7232
 // Abilities: a051 (Lowest Health Defender), Hotkey (Hotkey - Normal)
 {
