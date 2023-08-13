@@ -59,4 +59,11 @@ export class LandCity extends City {
 
 		this.castHandler();
 	}
+
+	/**
+	 * Checks if this city type is a port
+	 */
+	public isPort(): boolean {
+		return false;
+	}
 }

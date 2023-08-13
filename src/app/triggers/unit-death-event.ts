@@ -103,7 +103,7 @@ function guardDeath(dyingUnit: unit, killingUnit: unit) {
 			guardChoice = GroupPickRandomUnit(g);
 			foundValidUnits(g, city, guardChoice);
 		} else {
-			if (IsUnitType(killingUnit, UNIT_TYPE.SHIP) && GetUnitTypeId(city.barrack.unit) != UNIT_ID.PORT) {
+			if (IsUnitType(killingUnit, UNIT_TYPE.SHIP) && !city.isPort()) {
 				guardChoice = CreateUnit(GetOwningPlayer(dyingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
 			} else {
 				if (IsUnitType(killingUnit, UNIT_TYPE.CITY)) {

@@ -5,7 +5,7 @@ import { Income } from './income';
 import { Bounty } from '../bonus/bounty';
 import { FightBonus } from '../bonus/fight-bonus';
 import { KillsDeaths } from './kills-death';
-import { TRACKED_UNITS } from 'src/app/utils/tracked-units';
+import { TRACKED_UNITS } from 'src/configs/tracked-units';
 import { NEUTRAL_HOSTILE, PLAYER_SLOTS } from 'src/app/utils/utils';
 
 export class TrackedData {

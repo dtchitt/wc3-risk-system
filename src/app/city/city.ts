@@ -1,7 +1,6 @@
-import { CityRegionSize } from 'src/configs/city-settings';
 import { Ownable } from '../interfaces/ownable';
 import { Resetable } from '../interfaces/resetable';
-import { DistanceBetweenCoords, NEUTRAL_HOSTILE } from '../utils/utils';
+import { NEUTRAL_HOSTILE } from '../utils/utils';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
 import { UnitToCity } from './city-map';
@@ -33,6 +32,7 @@ export abstract class City implements Resetable, Ownable {
 	public abstract isValidGuard(unit: unit): boolean;
 	public abstract onUnitTrain(unit: unit): void;
 	public abstract onCast(): void;
+	public abstract isPort(): boolean;
 
 	/** Resets the city, returning it to its default state */
 	public reset(): void {
