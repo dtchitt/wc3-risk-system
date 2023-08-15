@@ -2,8 +2,6 @@ import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
 
-//TODO remake this
-//Consider all possiblilitys
 export class NomadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isLeft()) return;

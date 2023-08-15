@@ -24,11 +24,11 @@ export class GoldStrategy implements SettingsStrategy {
 	}
 
 	private handleGoldSending(): void {
-		//TODO - we can add the chat command here the command will slightly vary in each case
+		//TODO - I can add the chat command here the command will slightly vary in each case
 	}
 
 	private handleNoGoldSending(): void {
-		//TODO - we can add the chat command here the command will slightly vary in each case
+		//TODO - I can add the chat command here the command will slightly vary in each case
 	}
 }
 

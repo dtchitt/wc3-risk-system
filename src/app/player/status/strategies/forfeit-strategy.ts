@@ -6,7 +6,6 @@ import { PLAYER_STATUS } from '../status-enum';
 import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayLocalSound } from 'src/app/utils/utils';
 
-//TODO honestly I should combine forfeit and dead strats. They have VERY FEW differences
 export class ForfeitStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit()) return;

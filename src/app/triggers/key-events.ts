@@ -1,12 +1,11 @@
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { Scoreboards } from '../scoreboard/scoreboard-array';
-import { PLAYER_SLOTS } from '../utils/utils';
 
 export function KeyEvents() {
 	const t: trigger = CreateTrigger();
 
-	for (let i = 0; i < PLAYER_SLOTS; i++) {
+	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 		BlzTriggerRegisterPlayerKeyEvent(t, Player(i), OSKEY_F7, 0, false);
 	}
 

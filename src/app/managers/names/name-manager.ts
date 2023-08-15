@@ -1,6 +1,6 @@
 import { PLAYER_COLOR_CODES_MAP, PLAYER_COLOR_MAP } from 'src/app/utils/player-colors';
 import { PlayerNames } from './player-names';
-import { PLAYER_SLOTS, isNonEmptySubstring } from 'src/app/utils/utils';
+import { isNonEmptySubstring } from 'src/app/utils/utils';
 
 type Names = 'btag' | 'acct' | 'color';
 
@@ -49,7 +49,7 @@ export class NameManager {
 	public getPlayerFromBtag(string: string): player | null {
 		let result: player = null;
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
 
 			if (isNonEmptySubstring(string, this.getBtag(player))) {
