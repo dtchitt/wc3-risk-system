@@ -74,15 +74,13 @@ export class GameManager {
 		chatManager.addCmd(['-stfu', '-mute'], () => {
 			if (!this.isStateMetaGame()) return;
 
-			const players: player[] = nameManager.getPlayerByAnyName(GetEventPlayerChatString().split(' ')[1]);
+			const players: player[] = nameManager.getPlayersByAnyName(GetEventPlayerChatString().split(' ')[1]);
 			const player: player = GetTriggerPlayer();
 
 			if (players.length >= 2) {
 				ErrorMsg(player, 'Multiple players found, be more specific!');
-				return;
 			} else if (players.length <= 0) {
 				ErrorMsg(player, 'Player not found!', 2);
-				return;
 			} else if (playerManager.players.get(players[0]).isAdmin()) {
 				ErrorMsg(player, "You can't mute that player! :P");
 			} else {

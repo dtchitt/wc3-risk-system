@@ -28,7 +28,7 @@ export class NameManager {
 		return this.instance;
 	}
 
-	public getPlayerByAnyName(string: string): player[] {
+	public getPlayersByAnyName(string: string): player[] {
 		const foundPlayers: player[] = [];
 
 		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
@@ -36,9 +36,11 @@ export class NameManager {
 
 			if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_PLAYING) continue;
 
-			if (isNonEmptySubstring(string, this.getBtag(player))) {
+			if (isNonEmptySubstring(string, this.getColor(player))) {
 				foundPlayers.push(player);
-			} else if (isNonEmptySubstring(string, this.getColor(player))) {
+			}
+
+			if (isNonEmptySubstring(string, this.getBtag(player))) {
 				foundPlayers.push(player);
 			}
 		}
@@ -51,6 +53,8 @@ export class NameManager {
 
 		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 			const player = Player(i);
+
+			if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_PLAYING) continue;
 
 			if (isNonEmptySubstring(string, this.getBtag(player))) {
 				result = player;
