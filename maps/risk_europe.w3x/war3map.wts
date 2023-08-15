@@ -1389,11 +1389,6 @@ STRING 7449
 Dummy Caster
 }
 
-STRING 7453
-{
-Force 1
-}
-
 STRING 7454
 // Units: u005 (|cffff8000General|r), Name (Name)
 {
@@ -1524,5 +1519,10 @@ STRING 7480
 // Abilities: a014 (Autoload - OFF), Ubertip (Tooltip - Normal - Extended)
 {
 |cffff8000Deactivate autoload|r|n|n|cFFFF0000Cannot be turned on manually for 5 seconds!
+}
+
+STRING 7487
+{
+Force 1
 }
 
