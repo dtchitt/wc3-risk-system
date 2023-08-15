@@ -41,7 +41,8 @@ export class PlayerManager {
 			if (GetPlayerController(player) == MAP_CONTROL_USER || GetPlayerController(player) == MAP_CONTROL_COMPUTER) {
 				if (IsPlayerObserver(player)) {
 					this._observerFromHandle.set(player, new HumanPlayer(player));
-					//SetPlayerState(player, PLAYER_STATE_OBSERVER, 0);
+					SetPlayerState(player, PLAYER_STATE_OBSERVER, 0);
+					continue;
 				} else if (!this._slavesFromHandle.has(player)) {
 					this._playerFromHandle.set(player, new HumanPlayer(player));
 				}
