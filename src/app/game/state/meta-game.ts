@@ -11,6 +11,7 @@ import { TimerService } from '../services/timer-service';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { CountdownMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
+import { ObserverBoard } from 'src/app/scoreboard/observer-board';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
@@ -34,7 +35,15 @@ export class MetaGame implements GameState {
 			Scoreboards.push(new StandardBoard([...PlayerManager.getInstance().players.values()]));
 			const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
 			Scoreboards.push(new MiniBoard([...PlayerManager.getInstance().players.values()]));
+			Scoreboards.push(new ObserverBoard([...PlayerManager.getInstance().players.values()]));
 			Scoreboards[0].setVisibility(true);
+
+			PlayerManager.getInstance().observers.forEach((obj, handle) => {
+				if (GetLocalPlayer() == handle) {
+					Scoreboards[0].setVisibility(false);
+					Scoreboards[2].setVisibility(true);
+				}
+			});
 
 			PlayerManager.getInstance().players.forEach((player) => {
 				player.status.set(PLAYER_STATUS.ALIVE);

@@ -40,6 +40,7 @@ export function OwnershipChangeEvent() {
 
 					if (prevOwner.status.isAlive()) {
 						prevOwner.trackedData.income.income -= country.getCities().length;
+						prevOwner.trackedData.income.delta -= country.getCities().length;
 					}
 				}
 
@@ -69,6 +70,7 @@ export function OwnershipChangeEvent() {
 
 					if (owner.status.isAlive()) {
 						ownerData.income.income += country.getCities().length;
+						ownerData.income.delta += country.getCities().length;
 
 						if (ownerData.income.income > ownerData.income.max) {
 							ownerData.income.max = ownerData.income.income;

@@ -25,6 +25,7 @@ export class TrackedData {
 			income: 0,
 			max: 0,
 			end: 0,
+			delta: 0,
 		};
 		this._gold = {
 			earned: 0,
@@ -49,6 +50,7 @@ export class TrackedData {
 		this.income.income = 0;
 		this.income.max = 0;
 		this.income.end = 0;
+		this.income.delta = 0;
 		this.gold.earned = 0;
 		this.gold.max = 0;
 		this.gold.end = 0;

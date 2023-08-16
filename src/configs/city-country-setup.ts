@@ -514,7 +514,7 @@ export function SetCountries() {
 				barrack: { x: -7616.0, y: -6976.0 },
 			},
 			{
-				barrack: { x: -10112.0, y: -5952.0 },
+				barrack: { x: -10112.0, y: -5972.0 },
 			},
 			{
 				barrack: { typeId: UNIT_ID.PORT, x: -6688.0, y: -10272.0 },
@@ -956,7 +956,7 @@ export function SetCountries() {
 		},
 		cities: [
 			{
-				barrack: { x: 320.0, y: -10368.0 },
+				barrack: { x: 450.0, y: -10368.0 },
 			},
 			{
 				barrack: { typeId: UNIT_ID.PORT, x: 1238.0, y: -11566.0 },
@@ -1018,7 +1018,7 @@ export function SetCountries() {
 		},
 		cities: [
 			{
-				barrack: { x: -8000.0, y: 4672.0 },
+				barrack: { x: -7950.0, y: 4672.0 },
 			},
 			{
 				barrack: { x: -7552.0, y: 5952.0 },
@@ -1189,7 +1189,7 @@ export function SetCountries() {
 				barrack: { x: -7936.0, y: 14336.0 },
 			},
 			{
-				barrack: { x: -9472.0, y: 13696.0 },
+				barrack: { x: -9262.0, y: 13906.0 },
 			},
 		],
 	});
@@ -1203,7 +1203,7 @@ export function SetCountries() {
 				barrack: { x: -12736.0, y: 14976.0 },
 			},
 			{
-				barrack: { x: -12352.0, y: 13120.0 },
+				barrack: { x: -12352.0, y: 13320.0 },
 			},
 		],
 	});
