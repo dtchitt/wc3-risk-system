@@ -74,6 +74,7 @@ export class StatisticsBoard {
 		StatisticsBoard.header(backdrop);
 		//StatisticsBoard.slider(backdrop);
 		StatisticsBoard.buildColumns(backdrop);
+		StatisticsBoard.minimizeButton(backdrop);
 	}
 
 	private static header(backdrop: framehandle) {
@@ -96,7 +97,7 @@ export class StatisticsBoard {
 			const gameNameText: framehandle = BlzCreateFrame('StatisticsHeader', backdrop, 0, 0);
 
 			BlzFrameSetText(gameNameText, `${HexColors.TANGERINE}${MAP_NAME} ${MAP_VERSION}|r`);
-			BlzFrameSetPoint(gameNameText, FRAMEPOINT_TOPRIGHT, backdrop, FRAMEPOINT_TOPRIGHT, -0.01, -0.01);
+			BlzFrameSetPoint(gameNameText, FRAMEPOINT_TOPRIGHT, backdrop, FRAMEPOINT_TOPRIGHT, -0.085, -0.01);
 
 			//Winner
 			const winnerText: framehandle = BlzCreateFrame('StatisticsHeader', backdrop, 0, 0);
@@ -179,6 +180,44 @@ export class StatisticsBoard {
 
 	private static reset() {
 		StatisticsBoard.ranks = VictoryManager.getInstance().ranks;
+	}
+
+	private static minimizeButton(backdrop: framehandle) {
+		const minimizeButton: framehandle = BlzCreateFrameByType('GLUETEXTBUTTON', 'minimizeButton', backdrop, 'ScriptDialogButton', 0);
+		BlzFrameSetPoint(minimizeButton, FRAMEPOINT_TOPRIGHT, backdrop, FRAMEPOINT_TOPRIGHT, 0, 0);
+		BlzFrameSetText(minimizeButton, 'Minimize');
+		BlzFrameSetSize(minimizeButton, 0.08, 0.03);
+
+		const t: trigger = CreateTrigger();
+
+		BlzTriggerRegisterFrameEvent(t, minimizeButton, FRAMEEVENT_CONTROL_CLICK);
+
+		TriggerAddCondition(
+			t,
+			Condition(() => {
+				const player: player = GetTriggerPlayer();
+
+				if (GetLocalPlayer() == player) {
+					if (BlzFrameGetText(minimizeButton) == 'Minimize') {
+						BlzFrameSetSize(backdrop, 1, 0.05);
+						BlzFrameSetAbsPoint(backdrop, FRAMEPOINT_CENTER, 0.4, 0.55);
+						BlzFrameSetText(minimizeButton, 'Maximize');
+						for (let i = 0; i < StatisticsBoard.columns.length; i++) {
+							BlzFrameSetVisible(BlzGetFrameByName(`Column${i}`, 0), false);
+						}
+					} else if (BlzFrameGetText(minimizeButton) == 'Maximize') {
+						BlzFrameSetAbsPoint(backdrop, FRAMEPOINT_CENTER, 0.4, 0.3);
+						BlzFrameSetSize(backdrop, 1, 0.56);
+						BlzFrameSetText(minimizeButton, 'Minimize');
+						for (let i = 0; i < StatisticsBoard.columns.length; i++) {
+							BlzFrameSetVisible(BlzGetFrameByName(`Column${i}`, 0), true);
+						}
+					}
+				}
+
+				return false;
+			})
+		);
 	}
 
 	private static getrival(player: ActivePlayer): string {
