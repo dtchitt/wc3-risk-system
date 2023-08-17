@@ -5,7 +5,12 @@ import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
 
-const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725'];
+const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725', 'plagueltw#1135'];
+//nappa for death threats // calling people nigger // full screen spam when he loses
+//keen for being a toxic POS and spamming
+//aelex for calling people nigger // full screen spam when he loses  (by passing filter by slowly doing it but doing enough to fill screen)
+//macaocao for calling people nigger // full screen spam when he loses  (by passing filter by slowly doing it but doing enough to fill screen)
+//plagueltw for calling people nigger // full screen spam when he loses (by passing filter by slowly doing it but doing enough to fill screen)
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
