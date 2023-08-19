@@ -70,10 +70,16 @@ export class ObserverBoard extends Scoreboard {
 		this.players.forEach((player) => {
 			player.trackedData.income.delta = 0;
 			const data: TrackedData = player.trackedData;
-			let textColor: string = HexColors.WHITE;
+			const textColor: string = HexColors.WHITE;
 
 			if (player.status.isAlive() || player.status.isNomad()) {
-				this.setItemValue(`${textColor}${data.income.income}`, row, this.INCOME_COL);
+				this.setItemValue(
+					`${textColor}${player.trackedData.income.income - player.trackedData.income.delta}(${this.getIncomeDelta(
+						player.trackedData.income.delta
+					)})`,
+					row,
+					this.INCOME_COL
+				);
 			} else {
 				this.setItemValue(`${textColor}-`, row, 2);
 			}
@@ -105,13 +111,19 @@ export class ObserverBoard extends Scoreboard {
 
 	private setColumns(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
-		this.setItemValue(
-			`${textColor}${player.trackedData.income.income - player.trackedData.income.delta}(${this.getIncomeDelta(
-				player.trackedData.income.delta
-			)})`,
-			row,
-			this.INCOME_COL
-		);
+
+		if (player.status.isAlive() || player.status.isNomad()) {
+			this.setItemValue(
+				`${textColor}${player.trackedData.income.income - player.trackedData.income.delta}(${this.getIncomeDelta(
+					player.trackedData.income.delta
+				)})`,
+				row,
+				this.INCOME_COL
+			);
+		} else {
+			this.setItemValue(`${textColor}-`, row, 2);
+		}
+
 		this.setItemValue(`${textColor}${GetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD)}`, row, this.GOLD_COL);
 		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
 		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
