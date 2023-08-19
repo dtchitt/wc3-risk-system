@@ -9,7 +9,7 @@ import { UNIT_ID } from 'src/configs/unit-id';
 
 export const EnterRegionTrigger: trigger = CreateTrigger();
 const guardDistanceAllowed: number = CityRegionSize / 2 + 50;
-//Refactor this to run a check inside the CoP before passing to enemy unit.
+
 export function EnterRegionEvent() {
 	TriggerAddCondition(
 		EnterRegionTrigger,
