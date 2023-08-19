@@ -9,6 +9,8 @@ import { PlayerManager } from '../player/player-manager';
  * @returns The unit that fits the player's settings. If the units have the same value, it then compares based on their health.
  */
 export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
+	if (!initialUnit) return compareUnit;
+	if (!compareUnit) return initialUnit;
 	if (compareUnit == initialUnit) return initialUnit;
 
 	const initialUnitValue: number = GetUnitPointValue(initialUnit);
