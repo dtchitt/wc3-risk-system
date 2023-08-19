@@ -15,20 +15,33 @@ export class NomadStrategy implements StatusStrategy {
 		gamePlayer.status.statusDuration = 60;
 
 		TimerStart(nomadTimer, tick, true, () => {
-			if (!gamePlayer.status.isNomad() || gamePlayer.trackedData.cities.cities.length >= 1) {
-				gamePlayer.status.set(PLAYER_STATUS.ALIVE);
+			if (!gamePlayer.status.isAlive() && gamePlayer.trackedData.cities.cities.length >= 1) {
+				if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+					gamePlayer.status.set(PLAYER_STATUS.LEFT);
+				} else if (gamePlayer.status.isForfeit()) {
+					gamePlayer.status.set(PLAYER_STATUS.FORFEIT);
+				} else {
+					gamePlayer.status.set(PLAYER_STATUS.ALIVE);
 
-				gamePlayer.trackedData.countries.forEach((val, country) => {
-					if (country.getOwner() == gamePlayer.getPlayer()) {
-						gamePlayer.trackedData.income.income += country.getCities().length;
-					}
-				});
+					gamePlayer.trackedData.countries.forEach((val, country) => {
+						if (country.getOwner() == gamePlayer.getPlayer()) {
+							gamePlayer.trackedData.income.income += country.getCities().length;
+						}
+					});
+				}
 
 				PauseTimer(nomadTimer);
 				DestroyTimer(nomadTimer);
-			}
+			} else if (gamePlayer.trackedData.cities.cities.length <= 0 && gamePlayer.trackedData.units.size <= 0) {
+				if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+					gamePlayer.status.set(PLAYER_STATUS.LEFT);
+				} else {
+					gamePlayer.status.set(PLAYER_STATUS.DEAD);
+				}
 
-			if (gamePlayer.status.isNomad()) {
+				PauseTimer(nomadTimer);
+				DestroyTimer(nomadTimer);
+			} else if (gamePlayer.status.isNomad()) {
 				gamePlayer.status.statusDuration--;
 
 				if (gamePlayer.status.statusDuration <= 0 || gamePlayer.trackedData.units.size <= 0) {
