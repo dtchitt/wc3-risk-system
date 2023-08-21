@@ -31,6 +31,11 @@ export const AntiSpam = () => {
 					spamMap.get(player).string.length >= 21
 				) {
 					spamMap.get(player).count++;
+					if (onSpamDetection(spamMap, player, threshold)) {
+						spamMap.delete(player);
+						PauseTimer(spamMap.get(player).timer);
+						DestroyTimer(spamMap.get(player).timer);
+					}
 				}
 			} else {
 				spamMap.set(player, <AntiSpamData>{
@@ -45,18 +50,11 @@ export const AntiSpam = () => {
 
 				TimerStart(timer, tick, true, () => {
 					if (duration <= 0) {
-						if (spamMap.get(player).count >= threshold) {
-							if (!GameManager.getInstance().isStateMetaGame()) return;
-
-							const gPlayer: ActivePlayer = PlayerManager.getInstance().players.get(player);
-
-							gPlayer.status.set(PLAYER_STATUS.FORFEIT);
-							SetPlayerState(gPlayer.getPlayer(), PLAYER_STATE_OBSERVER, 1);
-						}
+						onSpamDetection(spamMap, player, threshold);
 
 						spamMap.delete(player);
-						PauseTimer(timer);
-						DestroyTimer(timer);
+						PauseTimer(spamMap.get(player).timer);
+						DestroyTimer(spamMap.get(player).timer);
 					}
 
 					duration -= tick;
@@ -67,3 +65,18 @@ export const AntiSpam = () => {
 		})
 	);
 };
+
+function onSpamDetection(spamMap: Map<player, AntiSpamData>, player: player, threshold: number): boolean {
+	if (!GameManager.getInstance().isStateMetaGame()) return false;
+
+	if (spamMap.get(player).count >= threshold) {
+		const gPlayer: ActivePlayer = PlayerManager.getInstance().players.get(player);
+
+		gPlayer.status.set(PLAYER_STATUS.FORFEIT);
+		SetPlayerState(gPlayer.getPlayer(), PLAYER_STATE_OBSERVER, 1);
+
+		return true;
+	}
+
+	return false;
+}
