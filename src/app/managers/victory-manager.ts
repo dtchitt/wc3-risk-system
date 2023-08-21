@@ -84,7 +84,7 @@ export class VictoryManager {
 
 	private endGame() {
 		this.players.sort((playerA, playerB) => {
-			return playerB.trackedData.cities.cities.length - playerA.trackedData.cities.cities.length;
+			return playerA.trackedData.cities.cities.length - playerB.trackedData.cities.cities.length;
 		});
 
 		this.players.forEach((player) => {
