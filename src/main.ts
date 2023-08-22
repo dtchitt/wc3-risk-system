@@ -21,6 +21,7 @@ import { UnitDeathEvent } from './app/triggers/unit-death-event';
 import { UnitTrainedEvent } from './app/triggers/unit-trained-event';
 import { KeyEvents } from './app/triggers/key-events';
 import { AntiCheat } from './app/libs/anti-cheat';
+import { Quests } from './app/quests/quests';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -76,6 +77,9 @@ function tsMain() {
 		SpellEffectEvent();
 		AntiSpam();
 		KeyEvents();
+
+		//Create Quests
+		Quests.Credits();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
