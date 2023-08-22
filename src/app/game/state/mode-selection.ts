@@ -37,13 +37,6 @@ export class ModeSelection implements GameState {
 		settings.initStrategies();
 		settings.applyStrategy('Diplomacy');
 		settings.applyStrategy('Promode');
-
-		const modeEndTimer: timer = CreateTimer();
-
-		TimerStart(modeEndTimer, 1, false, () => {
-			PauseTimer(modeEndTimer);
-			DestroyTimer(modeEndTimer);
-			this.manager.updateState(this.nextState);
-		});
+		this.manager.updateState(this.nextState);
 	}
 }
