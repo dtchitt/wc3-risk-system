@@ -8,12 +8,8 @@ export function SetCountries() {
 			unitData: { x: -960.0, y: -1088.0 },
 		},
 		cities: [
-			{
-				barrack: { x: 320, y: 320 },
-			},
-			{
-				barrack: { x: -832.0, y: 64.0 },
-			},
+			{ barrack: { x: 320, y: 320 } },
+			{ barrack: { x: -832.0, y: 64.0 } },
 			{
 				barrack: { x: 320, y: -1024.0 },
 			},
@@ -508,16 +504,27 @@ export function SetCountries() {
 				barrack: { x: -9408.0, y: -8192.0 },
 			},
 			{
-				barrack: { x: -6976.0, y: -8384.0 },
-			},
-			{
 				barrack: { x: -7616.0, y: -6976.0 },
 			},
 			{
 				barrack: { x: -10112.0, y: -5972.0 },
 			},
 			{
-				barrack: { typeId: UNIT_ID.PORT, x: -6688.0, y: -10272.0 },
+				barrack: { x: -8035.0, y: -9572.0 },
+			},
+		],
+	});
+	CountrySettings.push({
+		name: 'Catalonia',
+		spawnerData: {
+			unitData: { x: -7104, y: -8640 },
+		},
+		cities: [
+			{
+				barrack: { x: -6450.0, y: -7835.0 },
+			},
+			{
+				barrack: { typeId: UNIT_ID.PORT, x: -6634.0, y: -9181.0 },
 				cityType: 'port',
 			},
 		],
@@ -890,37 +897,57 @@ export function SetCountries() {
 			},
 		],
 	});
+
 	CountrySettings.push({
-		name: 'North Russia',
+		name: 'Karelia',
 		spawnerData: {
-			unitData: { x: 9536.0, y: 8896.0 },
+			unitData: { x: 6592, y: 8896 },
 		},
 		cities: [
-			{
-				barrack: { x: 6272.0, y: 12224.0 },
-			},
-			{
-				barrack: { x: 10624.0, y: 11776.0 },
-			},
-			{
-				barrack: { x: 10688.0, y: 9984.0 },
-			},
-			{
-				barrack: { x: 12288.0, y: 8448.0 },
-			},
-			{
-				barrack: { x: 9280.0, y: 6208.0 },
-			},
-			{
-				barrack: { typeId: UNIT_ID.PORT, x: 6048.0, y: 6112.0 },
-				cityType: 'port',
-			},
+			{ barrack: { x: 7680.0, y: 8960.0 } },
+			{ barrack: { x: 5824.0, y: 9728.0 } },
+			{ barrack: { x: 6144.0, y: 12416.0 } },
 			{
 				barrack: { typeId: UNIT_ID.PORT, x: 6880.0, y: 10464.0 },
 				cityType: 'port',
 			},
 		],
 	});
+	CountrySettings.push({
+		name: 'Leningrad',
+		spawnerData: {
+			unitData: { x: 7872, y: 5440 },
+		},
+		cities: [
+			{ barrack: { x: 6848.0, y: 4672.0 } },
+			{ barrack: { x: 8896.0, y: 6080.0 } },
+			{
+				barrack: { typeId: UNIT_ID.PORT, x: 6048.0, y: 6112.0 },
+				cityType: 'port',
+			},
+		],
+	});
+	CountrySettings.push({
+		name: 'Arkhangelsk',
+		spawnerData: {
+			unitData: { x: 10688, y: 9536 },
+		},
+		cities: [{ barrack: { x: 12160.0, y: 7872.0 } }, { barrack: { x: 9408.0, y: 8448.0 } }, { barrack: { x: 9920.0, y: 10880.0 } }],
+	});
+	CountrySettings.push({
+		name: 'North Russia',
+		spawnerData: {
+			unitData: { x: 14144, y: 12736 },
+		},
+		cities: [
+			{ barrack: { x: 17920.0, y: 13888.0 } },
+			{ barrack: { x: 13440.0, y: 11520.0 } },
+			{ barrack: { x: 12544.0, y: 13376.0 } },
+			{ barrack: { x: 14976.0, y: 14016.0 } },
+			{ barrack: { x: 17408.0, y: 10496.0 } },
+		],
+	});
+
 	CountrySettings.push({
 		name: 'Slovakia',
 		spawnerData: {
