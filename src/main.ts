@@ -6,13 +6,11 @@ import { CountrySettings } from './app/country/countries';
 import { ConcreteSpawnerBuilder } from './app/spawner/concrete-spawn-builder';
 import { SetCountries } from './configs/city-country-setup';
 import { NameManager } from './app/managers/names/name-manager';
-import CameraManager from './app/managers/camera-manager';
 import { ChatManager } from './app/managers/chat-manager';
 import { TransportManager } from './app/managers/transport-manager';
 import { SetConsoleUI } from './app/ui/console';
 import { GameManager } from './app/game/game-manager';
 import { OwnershipChangeEvent } from './app/triggers/ownership-change-event';
-import { AntiSpam } from './app/triggers/anti-spam';
 import { EnterRegionEvent } from './app/triggers/enter-region-event';
 import { LeaveRegionEvent } from './app/triggers/leave-region-event';
 import { SpellEffectEvent } from './app/triggers/spell-effect-event';
@@ -22,6 +20,9 @@ import { UnitTrainedEvent } from './app/triggers/unit-trained-event';
 import { KeyEvents } from './app/triggers/key-events';
 import { AntiCheat } from './app/libs/anti-cheat';
 import { Quests } from './app/quests/quests';
+import CameraManager from './app/managers/camera-manager';
+import { TimedEventManager } from './app/libs/timer/timed-event-manager';
+import { AntiSpam } from './app/triggers/anti-spam';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -90,12 +91,13 @@ function tsMain() {
 			SetConsoleUI();
 
 			AntiCheat.checkMultiAccounts(() => {
+				PauseTimer(onLoadTimer);
+				DestroyTimer(onLoadTimer);
 				CameraManager.getInstance();
 				ChatManager.getInstance();
 				TransportManager.getInstance();
 				ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
-				PauseTimer(onLoadTimer);
-				DestroyTimer(onLoadTimer);
+				TimedEventManager.getInstance();
 				GameManager.getInstance();
 			});
 		});
