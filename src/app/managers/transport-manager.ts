@@ -9,6 +9,8 @@
  * IsUnitLoaded = Check if given unit is loaded into any transport
  */
 import { ABILITY_ID } from '../../configs/ability-id';
+import { TimedEvent } from '../libs/timer/timed-event';
+import { TimedEventManager } from '../libs/timer/timed-event-manager';
 import { ErrorMsg } from '../utils/messages';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { PLAYER_SLOTS } from '../utils/utils';
@@ -16,16 +18,17 @@ import { PLAYER_SLOTS } from '../utils/utils';
 type Transport = {
 	unit: unit;
 	cargo: unit[];
-	timer: timer | null;
 	effect: effect | null;
 	duration: number;
+	autoloadStatus: boolean;
 };
+
+const AUTO_LOAD_DISTANCE: number = 350;
+const AUTO_LOAD_DURATION: number = 600;
 
 export class TransportManager {
 	private static instance: TransportManager;
 	private transports: Map<unit, Transport>;
-	private autoloadDistance: number = 250;
-	private autoloadCooldown: number = 5;
 
 	public static getInstance() {
 		if (this.instance == null) {
@@ -47,9 +50,9 @@ export class TransportManager {
 		const transport: Transport = {
 			unit: unit,
 			cargo: [],
-			timer: null,
 			effect: null,
 			duration: 0,
+			autoloadStatus: false,
 		};
 
 		this.transports.set(unit, transport);
@@ -73,14 +76,11 @@ export class TransportManager {
 
 		transportData.cargo = null;
 
-		if (transportData.timer != null) {
-			PauseTimer(transportData.timer);
-			DestroyTimer(transportData.timer);
-		}
-
 		if (transportData.effect != null) {
 			DestroyEffect(transportData.effect);
 		}
+
+		transportData.autoloadStatus = false;
 
 		this.transports.delete(unit);
 	}
@@ -99,6 +99,9 @@ export class TransportManager {
 			t,
 			Condition(() => {
 				let transport: unit = GetTransportUnit();
+
+				if (!transport) return false;
+
 				let loadedUnit: unit = GetLoadedUnit();
 
 				this.transports.get(transport).cargo.push(loadedUnit);
@@ -122,6 +125,8 @@ export class TransportManager {
 			Condition(() => {
 				if (GetIssuedOrderId() == 852047) {
 					const transport: Transport = this.transports.get(GetTriggerUnit());
+
+					if (!transport) return false;
 
 					if (this.isTerrainInvalid(transport.unit)) {
 						BlzPauseUnitEx(transport.unit, true);
@@ -153,6 +158,8 @@ export class TransportManager {
 			Condition(() => {
 				const transport: Transport = this.transports.get(GetTriggerUnit());
 
+				if (!transport) return false;
+
 				if (this.isTerrainInvalid(transport.unit)) {
 					if (GetSpellAbilityId() == ABILITY_ID.LOAD || GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON) {
 						IssueImmediateOrder(transport.unit, 'stop');
@@ -163,9 +170,9 @@ export class TransportManager {
 						IssueImmediateOrder(transport.unit, 'stop');
 						ErrorMsg(GetOwningPlayer(transport.unit), 'You may only unload on pebble terrain!');
 					}
-				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON) {
+				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON && !transport.autoloadStatus) {
 					this.handleAutoLoadOn(transport);
-				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_OFF) {
+				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_OFF && transport.autoloadStatus == true) {
 					this.handleAutoLoadOff(transport);
 				}
 				return false;
@@ -200,27 +207,25 @@ export class TransportManager {
 
 	private handleAutoLoadOn(transport: Transport) {
 		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
-		SetUnitMoveSpeed(transport.unit, 1);
+		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
+		transport.autoloadStatus = true;
 
 		transport.effect = AddSpecialEffectTarget(
 			'Abilities\\Spells\\NightElf\\Rejuvenation\\RejuvenationTarget.mdl',
 			transport.unit,
 			'overhead'
 		);
-		transport.timer = CreateTimer();
 
-		TimerStart(transport.timer, 1, true, () => {
-			if (transport.duration >= this.autoloadCooldown) {
-				UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
-			}
+		const timedEventManager: TimedEventManager = TimedEventManager.getInstance();
 
+		const event: TimedEvent = timedEventManager.registerTimedEvent(AUTO_LOAD_DURATION, () => {
 			let group: group = CreateGroup();
 
 			GroupEnumUnitsInRange(
 				group,
 				GetUnitX(transport.unit),
 				GetUnitY(transport.unit),
-				this.autoloadDistance,
+				AUTO_LOAD_DISTANCE,
 				Filter(() => {
 					let unit: unit = GetFilterUnit();
 
@@ -235,32 +240,17 @@ export class TransportManager {
 			DestroyGroup(group);
 			group = null;
 
-			if (transport.cargo.length >= 10) {
+			if (transport.cargo.length >= 10 || !transport.autoloadStatus || this.isTerrainInvalid(transport.unit)) {
 				this.handleAutoLoadOff(transport);
+				event.duration = -1;
 			}
-
-			transport.duration += 1;
 		});
 	}
 
 	private handleAutoLoadOff(transport: Transport) {
 		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
-		PauseTimer(transport.timer);
-		DestroyTimer(transport.timer);
+		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
 		DestroyEffect(transport.effect);
-		SetUnitMoveSpeed(transport.unit, GetUnitDefaultMoveSpeed(transport.unit));
-
-		transport.duration = 0;
-		transport.timer = CreateTimer();
-
-		TimerStart(transport.timer, 1, true, () => {
-			if (transport.duration >= this.autoloadCooldown) {
-				UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
-				PauseTimer(transport.timer);
-				DestroyTimer(transport.timer);
-			}
-
-			transport.duration += 1;
-		});
+		transport.autoloadStatus = false;
 	}
 }

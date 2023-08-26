@@ -1497,12 +1497,6 @@ STRING 7476
 |cffff8000Autoload |cff3BA0CBOn|r
 }
 
-STRING 7477
-// Abilities: a013 (Autoload - ON), Ubertip (Tooltip - Normal - Extended)
-{
-|cffff8000Autoload units who come within |cff3BA0CB250|r |cffff8000range of this transport|r|n|cffff8000Autoload will stop when the transport is full or if the ability is cast again|n|n|cFFFF0000Cannot be turned off manually for 5 seconds!
-}
-
 STRING 7478
 // Abilities: a014 (Autoload - OFF), Hotkey (Hotkey - Normal)
 {
@@ -1515,14 +1509,20 @@ STRING 7479
 |cffff8000Autoload |cff3BA0CBOff|r
 }
 
-STRING 7480
-// Abilities: a014 (Autoload - OFF), Ubertip (Tooltip - Normal - Extended)
-{
-|cffff8000Deactivate autoload|r|n|n|cFFFF0000Cannot be turned on manually for 5 seconds!
-}
-
 STRING 7487
 {
 Force 1
+}
+
+STRING 7490
+// Abilities: a013 (Autoload - ON), Ubertip (Tooltip - Normal - Extended)
+{
+|cffff8000Autoload units who come within |cff3BA0CB350|r |cffff8000range of this transport|r|n|cffff8000Autoload will stop if any of the three conditions are met.|n1. The transport is full.|n2. The transport is no longer on pebble terrain.|n3. Autoload is manually turned off.
+}
+
+STRING 7491
+// Abilities: a014 (Autoload - OFF), Ubertip (Tooltip - Normal - Extended)
+{
+|cffff8000Deactivate autoload|r
 }
 
