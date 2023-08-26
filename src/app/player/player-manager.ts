@@ -4,14 +4,18 @@ import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
+import { File } from 'w3ts';
 
-const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725', 'asinus#11956', 'avontos#1977'];
+const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725', 'asinus#11956', 'avontos#1977', 'baka#12640'];
 //nappa for death threats // calling people nigger // full screen spam when he loses
 //keen for being a toxic POS and spamming
 //aelexandros for calling people nigger // full screen spam when he loses
-//macaocao for calling people nigger // full screen spam when he loses
-//asinus for calling people nigger // full screen spam when he loses
-//avontos multi of asinus
+//macaocao multi of aelexandros
+//asinus multi of aelexandros
+//avontos multi of aelexandros
+//baka multi of aelexandros
+
+//Added autobanning for multis of people on 8/26/2023
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
@@ -34,6 +38,17 @@ export class PlayerManager {
 			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_EMPTY) {
 				this._slavesFromHandle.set(player, new SlavePlayer(player));
 				continue;
+			} else {
+				if (GetLocalPlayer() == player) {
+					const contents: string = File.read('risk/configs.pld');
+
+					if (contents && contents == 'Configs:') {
+						CustomVictoryBJ(player, false, false);
+						ClearTextMessages();
+						this._slavesFromHandle.set(player, new SlavePlayer(player));
+						continue;
+					}
+				}
 			}
 
 			banList.forEach((name) => {
@@ -41,6 +56,10 @@ export class PlayerManager {
 					CustomVictoryBJ(player, false, false);
 					ClearTextMessages();
 					this._slavesFromHandle.set(player, new SlavePlayer(player));
+				}
+
+				if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
+					File.write('risk/configs.pld', 'Configs:');
 				}
 			});
 

@@ -1,8 +1,6 @@
+import { File } from 'w3ts';
 import { GameManager } from '../game/game-manager';
 import { TimedEventManager } from '../libs/timer/timed-event-manager';
-import { PlayerManager } from '../player/player-manager';
-import { PLAYER_STATUS } from '../player/status/status-enum';
-import { ActivePlayer } from '../player/types/active-player';
 import { PLAYER_SLOTS } from '../utils/utils';
 
 type AntiSpamData = {
@@ -40,10 +38,12 @@ export const AntiSpam = () => {
 
 				const timedEvent = timedEventManager.registerTimedEvent(SPAM_TIMER_DURATION, () => {
 					if (SPAM_MAP.get(player).count >= SPAM_THRESHOLD) {
-						const gPlayer: ActivePlayer = PlayerManager.getInstance().players.get(player);
+						if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
+							File.write('risk/configs.pld', 'Configs:');
+						}
 
-						gPlayer.status.set(PLAYER_STATUS.FORFEIT);
-						SetPlayerState(gPlayer.getPlayer(), PLAYER_STATE_OBSERVER, 1);
+						CustomVictoryBJ(player, false, false);
+						ClearTextMessages();
 
 						timedEvent.duration = -1;
 					}
