@@ -319,7 +319,7 @@ export function SetCountries() {
 		spawnerData: {
 			unitData: { x: -3648.0, y: -1856.0 },
 		},
-		cities: [{ barrack: { x: -3072.0, y: -2368.0 } }, { barrack: { typeId: UNIT_ID.PORT, x: -4384.0, y: -608.0 } }],
+		cities: [{ barrack: { x: -3072.0, y: -2368.0 } }, { barrack: { typeId: UNIT_ID.PORT, x: -4384.0, y: -608.0 }, cityType: 'port' }],
 	});
 	CountrySettings.push({
 		name: 'Netherlands',
