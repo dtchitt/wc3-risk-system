@@ -1,6 +1,10 @@
+import { TimedEventManager } from 'src/app/libs/timer/timed-event-manager';
 import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
+import { TimedEvent } from 'src/app/libs/timer/timed-event';
+
+const STFU_DURATION: number = 300;
 
 export class STFUStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
@@ -8,21 +12,17 @@ export class STFUStrategy implements StatusStrategy {
 		const oldStatus = gamePlayer.status.status;
 		gamePlayer.status.status = PLAYER_STATUS.STFU;
 		SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 1);
+		gamePlayer.status.statusDuration = STFU_DURATION;
 
-		gamePlayer.status.statusDuration = 300;
-		const muteTimer: timer = CreateTimer();
-		const tick: number = 1;
+		const timedEventManager: TimedEventManager = TimedEventManager.getInstance();
 
-		TimerStart(muteTimer, tick, true, () => {
-			if (!gamePlayer.status.isSTFU()) {
+		const event: TimedEvent = timedEventManager.registerTimedEvent(gamePlayer.status.statusDuration, () => {
+			if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
 				gamePlayer.status.set(PLAYER_STATUS.LEFT);
-				PauseTimer(muteTimer);
-				DestroyTimer(muteTimer);
-			} else if (gamePlayer.status.statusDuration <= 0) {
+				event.duration = -1;
+			} else if (gamePlayer.status.statusDuration <= 1) {
 				SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 0);
 				gamePlayer.status.status = oldStatus;
-				PauseTimer(muteTimer);
-				DestroyTimer(muteTimer);
 			}
 
 			gamePlayer.status.statusDuration--;
