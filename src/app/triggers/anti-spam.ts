@@ -39,7 +39,7 @@ export const AntiSpam = () => {
 				const timedEvent = timedEventManager.registerTimedEvent(SPAM_TIMER_DURATION, () => {
 					if (SPAM_MAP.get(player).count >= SPAM_THRESHOLD) {
 						if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
-							File.write('risk/configs.pld', 'Configs:');
+							File.write('risk/configs.pld', 'Test Configs');
 						}
 
 						CustomVictoryBJ(player, false, false);

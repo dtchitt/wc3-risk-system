@@ -6,7 +6,16 @@ import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
 import { File } from 'w3ts';
 
-const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'macaocao#1725', 'asinus#11956', 'avontos#1977', 'baka#12640'];
+const banList: string[] = [
+	'nappa#11822',
+	'keen13#2151',
+	'aelexandros#1239',
+	'macaocao#1725',
+	'asinus#11956',
+	'avontos#1977',
+	'baka#12640',
+	'shazii#11109',
+];
 //nappa for death threats // calling people nigger // full screen spam when he loses
 //keen for being a toxic POS and spamming
 //aelexandros for calling people nigger // full screen spam when he loses
@@ -14,6 +23,7 @@ const banList: string[] = ['nappa#11822', 'keen13#2151', 'aelexandros#1239', 'ma
 //asinus multi of aelexandros
 //avontos multi of aelexandros
 //baka multi of aelexandros
+//shazii multi of aelexandros
 
 //Added autobanning for multis of people on 8/26/2023
 
@@ -42,7 +52,7 @@ export class PlayerManager {
 				if (GetLocalPlayer() == player) {
 					const contents: string = File.read('risk/configs.pld');
 
-					if (contents && contents == 'Configs:') {
+					if (contents && contents == 'Test Configs') {
 						CustomVictoryBJ(player, false, false);
 						ClearTextMessages();
 						this._slavesFromHandle.set(player, new SlavePlayer(player));
@@ -56,10 +66,10 @@ export class PlayerManager {
 					CustomVictoryBJ(player, false, false);
 					ClearTextMessages();
 					this._slavesFromHandle.set(player, new SlavePlayer(player));
-				}
 
-				if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
-					File.write('risk/configs.pld', 'Configs:');
+					if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
+						File.write('risk/configs.pld', 'Test Configs');
+					}
 				}
 			});
 
