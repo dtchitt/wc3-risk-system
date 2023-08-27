@@ -82,6 +82,11 @@ export class VictoryManager {
 		this.gameTimer = timer;
 	}
 
+	public reset() {
+		this.players = [];
+		this._ranks = [];
+	}
+
 	private endGame() {
 		this.players.sort((playerA, playerB) => {
 			return playerA.trackedData.cities.cities.length - playerB.trackedData.cities.cities.length;

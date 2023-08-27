@@ -75,6 +75,8 @@ export class StatisticsBoard {
 		//StatisticsBoard.slider(backdrop);
 		StatisticsBoard.buildColumns(backdrop);
 		StatisticsBoard.minimizeButton(backdrop);
+
+		return this;
 	}
 
 	private static header(backdrop: framehandle) {
@@ -174,8 +176,8 @@ export class StatisticsBoard {
 		return num < 10 ? `0${num}` : `${num}`;
 	}
 
-	private static hide() {
-		//BlzFrameSetVisible()
+	public static hide() {
+		BlzFrameSetVisible(BlzGetFrameByName('QuestButtonBaseTemplate', 0), false);
 	}
 
 	private static reset() {

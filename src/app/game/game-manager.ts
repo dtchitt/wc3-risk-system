@@ -13,13 +13,23 @@ import { PreGame } from './state/pre-game';
 export class GameManager {
 	private _state: GameState;
 	private _round: number;
+	private modeSelectionState: ModeSelection;
+	private preGameState: PreGame;
+	private metaGameState: MetaGame;
+	private postGameState: PostGame;
 
 	private static instance: GameManager;
 
 	private constructor() {
 		this._round = 1;
 		this.setCommands();
-		this.updateState(new ModeSelection(new PreGame(new MetaGame(new PostGame()))));
+
+		this.postGameState = new PostGame();
+		this.metaGameState = new MetaGame(this.postGameState);
+		this.preGameState = new PreGame(this.metaGameState);
+		this.modeSelectionState = new ModeSelection(this.preGameState);
+
+		this.updateState(this.modeSelectionState);
 	}
 
 	public static getInstance() {
@@ -45,11 +55,11 @@ export class GameManager {
 	}
 
 	public fastRestart() {
-		this.updateState(new PreGame(new MetaGame(new PostGame())));
+		this.updateState(this.preGameState);
 	}
 
 	public fullRestart() {
-		this.updateState(new ModeSelection(new PreGame(new MetaGame(new PostGame()))));
+		this.updateState(this.modeSelectionState);
 	}
 
 	public get state(): GameState {
@@ -90,6 +100,9 @@ export class GameManager {
 
 		chatManager.addCmd(['-ng'], () => {
 			if (!this.isStatePostGame()) return;
+
+			this.state.end();
+			this.fastRestart();
 		});
 
 		chatManager.addCmd(['-names', '-players'], () => {

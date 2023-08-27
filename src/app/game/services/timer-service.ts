@@ -87,12 +87,10 @@ export class TimerService implements Resetable {
 		});
 
 		PauseTimer(this._timer);
-		DestroyTimer(this._timer);
 		this.gameState.end();
 	}
 
 	public reset(): void {
-		this._timer = CreateTimer();
 		this._tick = this._duration;
 		this._turn = 1;
 	}

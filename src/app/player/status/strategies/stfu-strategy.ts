@@ -23,6 +23,9 @@ export class STFUStrategy implements StatusStrategy {
 			} else if (gamePlayer.status.statusDuration <= 1) {
 				SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 0);
 				gamePlayer.status.status = oldStatus;
+			} else if (gamePlayer.status.isAlive()) {
+				SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 0);
+				event.duration = -1;
 			}
 
 			gamePlayer.status.statusDuration--;

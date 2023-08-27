@@ -4,6 +4,7 @@ import { Options } from '../options';
 import { Status } from '../status/status';
 import { GamePlayer } from './game-player';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { PLAYER_STATUS } from '../status/status-enum';
 
 //Use lowercase for simplicity here
 const adminList: string[] = ['forlolz#11696', 'poomonky#1939', 'theredbeard#11245', 'easterbunny#2707'];
@@ -42,7 +43,15 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 	}
 
 	public reset(): void {
-		//TODO
+		this.trackedData.reset();
+		this.status.set(PLAYER_STATUS.ALIVE);
+
+		this._options = {
+			health: false,
+			value: false,
+			ping: false,
+			board: 0,
+		};
 	}
 
 	public giveGold(val?: number): void {

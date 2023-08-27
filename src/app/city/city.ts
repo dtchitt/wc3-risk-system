@@ -36,10 +36,12 @@ export abstract class City implements Resetable, Ownable {
 
 	/** Resets the city, returning it to its default state */
 	public reset(): void {
+		UnitToCity.delete(this.guard.unit);
+		SetUnitOwner(this._cop, NEUTRAL_HOSTILE, true);
+		this.owner = NEUTRAL_HOSTILE;
 		this._barrack.reset();
 		this._guard.reset();
-		this.owner = NEUTRAL_HOSTILE;
-		SetUnitOwner(this._cop, NEUTRAL_HOSTILE, true);
+		UnitToCity.set(this.guard.unit, this);
 	}
 
 	/**

@@ -76,13 +76,17 @@ export class MetaGame implements GameState {
 
 	public end(): void {
 		Scoreboards.forEach((board) => {
-			board.setVisibility(false);
+			board.destory();
 		});
+
+		Scoreboards.length = 0;
 
 		PlayerManager.getInstance().players.forEach((player) => {
 			player.trackedData.bonus.hideUI();
 			NameManager.getInstance().setName(player.getPlayer(), 'btag');
 		});
+
+		this.timer.reset();
 
 		this.manager.updateState(this.nextState);
 	}
