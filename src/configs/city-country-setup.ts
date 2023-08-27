@@ -170,7 +170,7 @@ export function SetCountries() {
 		spawnerData: {
 			unitData: { x: 16704.0, y: -10048.0 },
 		},
-		cities: [{ barrack: { x: 17472.0, y: -9664.0 } }, { barrack: { x: 16064.0, y: -9408.0 } }, { barrack: { x: 16512.0, y: -10880.0 } }],
+		cities: [{ barrack: { x: 17472.0, y: -9664.0 } }, { barrack: { x: 16064.0, y: -9408.0 } }, { barrack: { x: 16512.0, y: -10800.0 } }],
 	});
 	CountrySettings.push({
 		name: 'Lebanon',

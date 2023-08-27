@@ -15,15 +15,16 @@ const banList: string[] = [
 	'avontos#1977',
 	'baka#12640',
 	'shazii#11109',
+	'arfan#11830',
 ];
 //nappa for death threats // calling people nigger // full screen spam when he loses
 //keen for being a toxic POS and spamming
-//aelexandros for calling people nigger // full screen spam when he loses
-//macaocao multi of aelexandros
-//asinus multi of aelexandros
-//avontos multi of aelexandros
-//baka multi of aelexandros
-//shazii multi of aelexandros
+//aelexandros multi of nappa
+//macaocao multi of nappa
+//asinus multi of nappa
+//avontos multi of nappa
+//baka multi of nappa
+//shazii multi of nappa
 
 //Added autobanning for multis of people on 8/26/2023
 
