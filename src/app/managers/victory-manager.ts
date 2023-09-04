@@ -52,20 +52,26 @@ export class VictoryManager {
 		return this._leader;
 	}
 
-	public checkCityVictory() {
+	public checkCityVictory(): boolean {
 		this.players.forEach((player) => {
 			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
 				this._leader = player;
 				this.endGame();
+				return true;
 			}
 		});
+
+		return false;
 	}
 
-	public checkKnockOutVictory() {
+	public checkKnockOutVictory(): boolean {
 		if (this.players.length == 1) {
 			this._leader = this.players[0];
 			this.endGame();
+			return true;
 		}
+
+		return false;
 	}
 
 	// public capitalsVictory(): ActivePlayer | null {}
