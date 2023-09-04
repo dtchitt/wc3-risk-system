@@ -36,7 +36,7 @@ export class TimerService implements Resetable {
 						player.giveGold();
 					});
 
-					this.victoryManager.checkCityVictory();
+					if (this.victoryManager.checkCityVictory()) return;
 
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
@@ -55,7 +55,7 @@ export class TimerService implements Resetable {
 					}
 				}
 
-				this.victoryManager.checkKnockOutVictory();
+				if (this.victoryManager.checkKnockOutVictory()) return;
 
 				Scoreboards.forEach((board) => {
 					if (this._tick == this._duration) {
