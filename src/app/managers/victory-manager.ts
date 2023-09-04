@@ -9,12 +9,10 @@ export class VictoryManager {
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
-	private _ranks: ActivePlayer[];
 	private gameTimer: TimerService;
 
 	private constructor() {
 		this.players = [];
-		this._ranks = [];
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
@@ -39,7 +37,6 @@ export class VictoryManager {
 
 		if (index > -1) {
 			this.players.splice(index, 1);
-			this.ranks.push(player);
 		}
 
 		this.checkKnockOutVictory();
@@ -53,10 +50,6 @@ export class VictoryManager {
 
 	public get leader(): ActivePlayer {
 		return this._leader;
-	}
-
-	public get ranks(): ActivePlayer[] {
-		return this._ranks;
 	}
 
 	public checkCityVictory() {
@@ -84,7 +77,6 @@ export class VictoryManager {
 
 	public reset() {
 		this.players = [];
-		this._ranks = [];
 	}
 
 	private endGame() {
@@ -96,14 +88,7 @@ export class VictoryManager {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
 			}
-
-			if (player != this._leader) {
-				this.ranks.push(player);
-			}
 		});
-
-		this.ranks.push(this._leader);
-		this.ranks.reverse();
 
 		BlzEnableSelections(false, false);
 		this.gameTimer.stop();
