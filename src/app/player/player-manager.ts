@@ -16,6 +16,9 @@ const banList: string[] = [
 	'baka#12640',
 	'shazii#11109',
 	'arfan#11830',
+	'selinace#1683',
+	'serenity#13183',
+	'boris#1897',
 ];
 //nappa for death threats // calling people nigger // full screen spam when he loses
 //keen for being a toxic POS and spamming
@@ -25,6 +28,9 @@ const banList: string[] = [
 //avontos multi of nappa
 //baka multi of nappa
 //shazii multi of nappa
+//selinace mutli accounting
+//serenity multi of selinace
+//boris calling people nigger, death threats
 
 //Added autobanning for multis of people on 8/26/2023
 
