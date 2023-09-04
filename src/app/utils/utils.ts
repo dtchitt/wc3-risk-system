@@ -105,3 +105,7 @@ export function GetRandomElementFromArray<T>(items: T[]): T | null {
 
 	return item;
 }
+
+export function AddLeadingZero(num: number): string {
+	return num < 10 ? `0${num}` : `${num}`;
+}
