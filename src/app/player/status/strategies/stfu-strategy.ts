@@ -19,13 +19,14 @@ export class STFUStrategy implements StatusStrategy {
 		const event: TimedEvent = timedEventManager.registerTimedEvent(gamePlayer.status.statusDuration, () => {
 			if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
 				gamePlayer.status.set(PLAYER_STATUS.LEFT);
-				event.duration = -1;
+				timedEventManager.removeTimedEvent(event);
 			} else if (gamePlayer.status.statusDuration <= 1) {
 				SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 0);
 				gamePlayer.status.status = oldStatus;
+				timedEventManager.removeTimedEvent(event);
 			} else if (gamePlayer.status.isAlive()) {
 				SetPlayerState(gamePlayer.getPlayer(), PLAYER_STATE_OBSERVER, 0);
-				event.duration = -1;
+				timedEventManager.removeTimedEvent(event);
 			}
 
 			gamePlayer.status.statusDuration--;

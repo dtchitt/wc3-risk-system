@@ -242,7 +242,7 @@ export class TransportManager {
 
 			if (transport.cargo.length >= 10 || !transport.autoloadStatus || this.isTerrainInvalid(transport.unit)) {
 				this.handleAutoLoadOff(transport);
-				event.duration = -1;
+				timedEventManager.removeTimedEvent(event);
 			}
 		});
 	}
