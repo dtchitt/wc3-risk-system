@@ -93,6 +93,13 @@ export function IsUnitMelee(unit: unit): boolean {
 	return IsUnitType(unit, UNIT_TYPE_MELEE_ATTACKER);
 }
 
+/**
+ * Retrieves a random element from an array, removes it from the array, and then returns it.
+ * If the array is empty, it returns null.
+ * This will mutate the original array.
+ * @param items The array of items from which a random element should be retrieved.
+ * @return The randomly selected element or null if the array is empty.
+ */
 export function GetRandomElementFromArray<T>(items: T[]): T | null {
 	if (items.length < 1) return null;
 
@@ -106,6 +113,28 @@ export function GetRandomElementFromArray<T>(items: T[]): T | null {
 	return item;
 }
 
+/**
+ * Adds a leading zero to numbers less than 10 and returns the result as a string.
+ * @param num The number to which a leading zero might be added.
+ * @return The number as a string with a leading zero if it's less than 10.
+ */
 export function AddLeadingZero(num: number): string {
 	return num < 10 ? `0${num}` : `${num}`;
+}
+
+/**
+ * Computes the ratio of the dividend to the divisor and returns the result as a string with two decimal places.
+ * If both the dividend and divisor are zero, returns '0.00'.
+ * If only the divisor is zero, returns the dividend as a string with two decimal places.
+ * If only the dividend is zero, returns the negative divisor as a string with two decimal places.
+ * @param dividend The number to be divided.
+ * @param divisor The number by which the dividend is divided.
+ * @return The result of the division as a string with two decimal places.
+ */
+export function computeRatio(dividend: number, divisor: number): string {
+	if (dividend === 0 && divisor === 0) return '0.00';
+	if (divisor === 0) return dividend.toFixed(2);
+	if (dividend === 0) return (-divisor).toFixed(2);
+
+	return (dividend / divisor).toFixed(2);
 }
