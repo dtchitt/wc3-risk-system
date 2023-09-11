@@ -8,11 +8,11 @@ export class VictoryManager {
 	public static CITIES_TO_WIN: number;
 
 	private _leader: ActivePlayer;
-	private _players: ActivePlayer[];
+	private players: ActivePlayer[];
 	private gameTimer: TimerService;
 
 	private constructor() {
-		this._players = [];
+		this.players = [];
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
@@ -82,7 +82,7 @@ export class VictoryManager {
 	}
 
 	public reset() {
-		this._players = [];
+		this.players = [];
 	}
 
 	private endGame() {
@@ -94,9 +94,5 @@ export class VictoryManager {
 
 		BlzEnableSelections(false, false);
 		this.gameTimer.stop();
-	}
-
-	public get players(): ActivePlayer[] {
-		return this._players;
 	}
 }
