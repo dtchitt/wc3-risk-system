@@ -248,9 +248,9 @@ export class TransportManager {
 	}
 
 	private handleAutoLoadOff(transport: Transport) {
+		transport.autoloadStatus = false;
 		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
 		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
 		DestroyEffect(transport.effect);
-		transport.autoloadStatus = false;
 	}
 }
