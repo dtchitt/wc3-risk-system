@@ -1,5 +1,7 @@
 IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
 IncludeFile "UI\FrameDef\UI\UpperButtonBar.fdf",
+IncludeFile "UI\FrameDef\UI\ScriptDialog.fdf",
+IncludeFile "UI\FrameDef\UI\QuestDialog.fdf",
 
 //UI Message Frames
 Frame "TEXT" "ErrorMessageFrame" INHERITS "EscMenuButtonTextTemplate" {
@@ -63,35 +65,86 @@ Frame "SIMPLESTATUSBAR" "MyBarEx" {
 	}
 }
 
-//Obs Button
-Frame "SIMPLEBUTTON" "ObserverControlButton" INHERITS "UpperButtonBarButtonTemplate" {
-	SetPoint TOPLEFT,"UpperButtonBarFrame",TOPLEFT,0.002,0,
-	NormalText "UpperButtonBarButtonTextTemplate" "Obs Control",
-	DisabledText "UpperButtonBarButtonDisabledTextTemplate" "Obs Control",
-	HighlightText "UpperButtonBarButtonHighlightTextTemplate" "Obs Control",
+Frame "TEXT" "ColumnHeaderText" {
+	FontColor 0.99 0.827 0.0705 1.0,
+	DecorateFileNames,
+	FrameFont "MasterFont", 0.011,"",
+	LayerStyle "IGNORETRACKEVENTS", 
+	FontJustificationH JUSTIFYLEFT,
+	FontJustificationV JUSTIFYMIDDLE,
+	Width  0.11f,
+	Height 0.02f,
 }
 
-//Statistics Info Text
-Frame "TEXT" "StatisticsHeader" {
-    DecorateFileNames,
-    FrameFont "MasterFont", 0.0115,"",
-    LayerStyle "IGNORETRACKEVENTS", 
-    FontJustificationH JUSTIFYLEFT,
-    FontJustificationV JUSTIFYMIDDLE,
-}
-
-Frame "TEXT" "StatisticsColumnHeaders" {
-    DecorateFileNames,
-    FrameFont "MasterFont", 0.011,"",
-    LayerStyle "IGNORETRACKEVENTS", 
-    FontJustificationH JUSTIFYLEFT,
-    FontJustificationV JUSTIFYMIDDLE,
-}
-
-Frame "TEXT" "StatisticsData" {
+Frame "TEXT" "ColumnDataText" {
     DecorateFileNames,
     FrameFont "MasterFont", 0.0090,"",
     LayerStyle "IGNORETRACKEVENTS", 
     FontJustificationH JUSTIFYLEFT,
     FontJustificationV JUSTIFYMIDDLE,
+	Width  0.11f,
+	Height 0.02f,
 }
+
+Frame "BACKDROP" "StatisticsBoard" INHERITS "QuestButtonBaseTemplate" {
+	Width 1.0f,
+    Height 0.56f,
+	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.0,
+
+	Frame "FRAME" "StatisticsHeader" {
+		Width  1.0f,
+		Height 0.05f,
+		SetPoint TOPLEFT,"StatisticsBoard",TOPLEFT,0.0,0.0,
+
+		Frame "TEXT" "PlayedTime" {
+			SetPoint TOPLEFT,"StatisticsHeader",TOPLEFT,0.01,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "TEXT" "WinningPlayer" {
+			SetPoint TOP,"StatisticsHeader",TOP,0,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "TEXT" "MapName" {
+			SetPoint TOPRIGHT,"StatisticsHeader",TOPRIGHT,-0.085,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "GLUETEXTBUTTON" "HideButton" INHERITS WITHCHILDREN "EscMenuButtonTemplate" {
+			SetPoint TOPRIGHT,"StatisticsHeader",TOPRIGHT,0,0,
+			Width  0.08f,
+			Height 0.03f,
+			UseActiveContext,
+			ButtonText "ScriptDialogButtonText",
+
+			Frame "TEXT" "ScriptDialogButtonText" INHERITS "EscMenuButtonTextTemplate" {
+				Text "Hide Stats",
+			}
+		}  
+	}
+
+	// Frame "FRAME" "PlayersColumn" {
+	// 	Width  0.11f,
+	// 	Height 0.46f,
+	// 	SetPoint TOPLEFT,"StatisticsHeader",BOTTOMLEFT,0.01,0,
+
+	// 	Frame "TEXT" "PlayersColumnHeader" INHERITS "ColumnHeaderText" {
+	// 		SetPoint TOPLEFT,"PlayersColumn",TOPLEFT,0.0,0.0,
+	// 		Text "Player Names",
+	// 	}
+	// }
+}
+

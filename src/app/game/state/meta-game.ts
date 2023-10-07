@@ -46,6 +46,7 @@ export class MetaGame implements GameState {
 			});
 
 			PlayerManager.getInstance().players.forEach((player) => {
+				SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
 				player.status.set(PLAYER_STATUS.ALIVE);
 				player.trackedData.bonus.showForPlayer(player.getPlayer());
 				player.trackedData.bonus.repositon(mbFrame);

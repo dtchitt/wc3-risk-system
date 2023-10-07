@@ -131,7 +131,7 @@ export function AddLeadingZero(num: number): string {
  * @param divisor The number by which the dividend is divided.
  * @return The result of the division as a string with two decimal places.
  */
-export function computeRatio(dividend: number, divisor: number): string {
+export function ComputeRatio(dividend: number, divisor: number): string {
 	if (dividend === 0 && divisor === 0) return '0.00';
 	if (divisor === 0) return dividend.toFixed(2);
 	if (dividend === 0) return (-divisor).toFixed(2);
