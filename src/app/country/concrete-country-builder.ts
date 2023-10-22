@@ -9,25 +9,39 @@ import { Spawner } from '../spawner/spawner';
 import { SpawnerBuilder } from '../spawner/spawner-builder';
 import { SpawnerData } from '../spawner/spawner-data';
 
+/**
+ * ConcreteCountryBuilder is an implementation of the CountryBuilder interface.
+ * It allows for the construction of Country objects.
+ */
 export class ConcreteCountryBuilder implements CountryBuilder {
 	private name: string;
 	private cities: City[] = [];
 	private spawn: Spawner;
 
+	/**
+	 * Sets the name for the country being built.
+	 * @param name - The name of the country.
+	 * @returns The current builder instance.
+	 */
 	public setName(name: string): CountryBuilder {
 		this.name = name;
 
 		return this;
 	}
 
+	/**
+	 * Adds a city to the country being built.
+	 * @param city - The data for constructing the city.
+	 * @param builder - The builder for the city.
+	 * @param guardData - The data for constructing the guard unit.
+	 * @returns The current builder instance.
+	 */
 	public addCity(city: CityData, builder: CityBuilder, guardData: number): CountryBuilder {
 		builder.setBarracks(city.barrack);
-		if (city.name) builder.setName(city.name);
 		builder.setCOP(city.cop);
 
-		if (!city.guard) {
-			city.guard = guardData;
-		}
+		if (city.name) builder.setName(city.name);
+		if (!city.guard) city.guard = guardData;
 
 		builder.setGuard(city.guard);
 		builder.setCityType(city.cityType);
@@ -38,6 +52,12 @@ export class ConcreteCountryBuilder implements CountryBuilder {
 		return this;
 	}
 
+	/**
+	 * Sets the spawn conditions for the country.
+	 * @param spawn - The data for the spawner.
+	 * @param builder - The builder for the spawner.
+	 * @returns The current builder instance.
+	 */
 	public setSpawn(spawn: SpawnerData, builder: SpawnerBuilder): CountryBuilder {
 		builder.setUnit(spawn.unitData);
 		builder.setCountry(this.name);
@@ -61,6 +81,11 @@ export class ConcreteCountryBuilder implements CountryBuilder {
 		return this;
 	}
 
+	/**
+	 * Constructs a new Country object.
+	 * @returns The built Country object.
+	 * @throws An error if any of the required components are missing.
+	 */
 	public build(): Country {
 		if (!this.name || this.cities.length === 0 || !this.spawn) {
 			print('Country builder is missing required components.');
@@ -78,6 +103,9 @@ export class ConcreteCountryBuilder implements CountryBuilder {
 		return country;
 	}
 
+	/**
+	 * Resets the builder state to its default values.
+	 */
 	public reset(): void {
 		this.name = null;
 		this.cities = [];

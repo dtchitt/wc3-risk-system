@@ -1,9 +1,29 @@
 import { CityData } from '../city/city-data';
 import { SpawnerData } from '../spawner/spawner-data';
 
+/**
+ * CountryData is an interface that defines the data structure for Country objects.
+ */
 export interface CountryData {
-	name: string; //The name of the country.
-	spawnerData: SpawnerData; //The rect or center x/y coords of the spawn location for this country
+	/**
+	 * The name of the country.
+	 */
+	name: string;
+
+	/**
+	 * The rect or center x/y coordinates of the spawn location for this country.
+	 */
+	spawnerData: SpawnerData;
+
+	/**
+	 * An array of CityData objects representing the cities in this country.
+	 */
 	cities: CityData[];
-	guardType?: number; //The default guard type for all Cities in this country. More specific City settings will override this.
+
+	/**
+	 * The default guard type for all Cities in this country.
+	 * More specific City settings will override this.
+	 * This is an optional property.
+	 */
+	guardType?: number;
 }

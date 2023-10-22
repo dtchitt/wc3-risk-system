@@ -5,6 +5,10 @@ import { HexColors } from '../utils/hex-colors';
 import { LocalMessage } from '../utils/messages';
 import { NEUTRAL_HOSTILE } from '../utils/utils';
 
+/**
+ * Country is a class that represents a country within the game.
+ * It implements the Resetable interface.
+ */
 export class Country implements Resetable {
 	private readonly name: string;
 	private readonly cities: City[];
@@ -12,6 +16,12 @@ export class Country implements Resetable {
 	private readonly text: texttag;
 	private owner: player;
 
+	/**
+	 * Country constructor.
+	 * @param name - The name of the country.
+	 * @param cities - An array of City objects that belong to this country.
+	 * @param spawn - The Spawner object for this country.
+	 */
 	constructor(name: string, cities: City[], spawn: Spawner) {
 		this.name = name;
 		this.cities = cities;
@@ -28,6 +38,9 @@ export class Country implements Resetable {
 		SetTextTagPermanent(this.text, true);
 	}
 
+	/**
+	 * Resets the country, which involves resetting all its cities and spawn.
+	 */
 	public reset(): void {
 		this.cities.forEach((city) => {
 			city.reset();
@@ -37,22 +50,30 @@ export class Country implements Resetable {
 		this.owner = NEUTRAL_HOSTILE;
 	}
 
+	/** @returns The name of the country. */
 	public getName(): string {
 		return this.name;
 	}
 
+	/** @returns An array of City objects that belong to this country. */
 	public getCities(): City[] {
 		return this.cities;
 	}
 
+	/** @returns The Spawner object for this country. */
 	public getSpawn(): Spawner {
 		return this.spawn;
 	}
 
+	/** @returns The player who currently owns this country. */
 	public getOwner(): player {
 		return this.owner;
 	}
 
+	/**
+	 * Sets the owner of the country.
+	 * @param player - The player object representing the new owner.
+	 */
 	public setOwner(player: player): void {
 		if (player == null) player = NEUTRAL_HOSTILE;
 
@@ -61,6 +82,10 @@ export class Country implements Resetable {
 		this.onOwnerChange();
 	}
 
+	/**
+	 * Private method called when the owner of the country changes.
+	 * Triggers various game events.
+	 */
 	private onOwnerChange() {
 		if (this.owner == NEUTRAL_HOSTILE) return;
 
