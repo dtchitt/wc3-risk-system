@@ -11,7 +11,7 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 
 /**
- * TimerService is a class responsible for managing game timers.
+ * TimerService is a class responsible for managing the main game timer.
  * It implements the Resetable interface.
  */
 export class TimerService implements Resetable {
