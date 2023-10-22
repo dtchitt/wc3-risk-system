@@ -1,3 +1,4 @@
+import { Resetable } from 'src/app/interfaces/resetable';
 import { Destructable } from 'w3ts';
 
 // Tree type constants
@@ -53,13 +54,24 @@ const ASHENV_CANOPY_COLORS = {
 
 const ASHENV_CANOPY_DEFAULT_COLOR = FourCC('B00B');
 
-export class TreeService {
+/**
+ * TreeService is a class responsible for managing trees in the game.
+ * It handles the setup, and resetting of tree states.
+ * It implements the Resetable interface.
+ */
+export class TreeService implements Resetable {
 	private treeArray: destructable[] = [];
 
+	/**
+	 * Constructor initializes the tree setup.
+	 */
 	constructor() {
 		this.treeSetup();
 	}
 
+	/**
+	 * Resets the trees to their maximum life if they are damaged.
+	 */
 	public reset() {
 		this.treeArray.forEach((tree) => {
 			if (GetDestructableLife(tree) < GetDestructableMaxLife(tree)) {
@@ -68,6 +80,9 @@ export class TreeService {
 		});
 	}
 
+	/**
+	 * Set up trees on the map by changing their model based on the terrain tile type they are on.
+	 */
 	private treeSetup() {
 		EnumDestructablesInRect(GetEntireMapRect(), null, () => {
 			let enumObject = Destructable.fromHandle(GetEnumDestructable());
@@ -110,6 +125,13 @@ export class TreeService {
 		});
 	}
 
+	/**
+	 * Determines the color type for a tree based on the terrain type.
+	 * @param treeColorMap - A mapping from terrain types to tree color types.
+	 * @param terrainType - The type of terrain where the tree is located.
+	 * @param defaultColor - The default color type for the tree.
+	 * @returns The tree color type.
+	 */
 	private getTreeColor(treeColorMap: Record<number, number>, terrainType: number, defaultColor: number) {
 		return treeColorMap[terrainType] ?? defaultColor;
 	}

@@ -83,7 +83,7 @@ export class Country implements Resetable {
 	}
 
 	/**
-	 * Private method called when the owner of the country changes.
+	 * Called when the owner of the country changes.
 	 * Triggers various game events.
 	 */
 	private onOwnerChange() {

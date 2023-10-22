@@ -10,6 +10,10 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 
+/**
+ * TimerService is a class responsible for managing game timers.
+ * It implements the Resetable interface.
+ */
 export class TimerService implements Resetable {
 	private _timer: timer;
 	private _duration: number;
@@ -18,6 +22,10 @@ export class TimerService implements Resetable {
 	private gameState: GameState;
 	private victoryManager: VictoryManager;
 
+	/**
+	 * TimerService constructor.
+	 * @param gameState - The current game state.
+	 */
 	public constructor(gameState: GameState) {
 		this._timer = CreateTimer();
 		this._duration = 60;
@@ -28,6 +36,9 @@ export class TimerService implements Resetable {
 		this.victoryManager.setTimer(this);
 	}
 
+	/**
+	 * Starts the timer and begins the game logic for each tick.
+	 */
 	public start(): void {
 		TimerStart(this._timer, 1, true, () => {
 			try {
@@ -79,6 +90,9 @@ export class TimerService implements Resetable {
 		});
 	}
 
+	/**
+	 * Stops the timer and finalizes player and game data.
+	 */
 	public stop() {
 		PlayerManager.getInstance().players.forEach((val, key) => {
 			const data: TrackedData = val.trackedData;
@@ -90,11 +104,17 @@ export class TimerService implements Resetable {
 		this.gameState.end();
 	}
 
+	/**
+	 * Resets the timer back to its initial state.
+	 */
 	public reset(): void {
 		this._tick = this._duration;
 		this._turn = 1;
 	}
 
+	/**
+	 * Update the UI elements related to the timer.
+	 */
 	private updateUI() {
 		let tick: string = `${this._tick}`;
 
