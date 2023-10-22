@@ -1,4 +1,11 @@
+/**
+ * Responsible for creating in-game quests.
+ */
 export class Quests {
+	/**
+	 * Creates the "Credits" quest.
+	 * Sets the title, description, icon, and various other properties.
+	 */
 	public static Credits() {
 		const credits: quest = CreateQuest();
 		QuestSetTitle(credits, 'Credits');

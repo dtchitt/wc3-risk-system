@@ -1,6 +1,9 @@
 import { MAP_VERSION } from '../utils/map-info';
 import { PLAYER_SLOTS } from '../utils/utils';
 
+/**
+ * Sets up the console UI for the game.
+ */
 export function SetConsoleUI() {
 	// Disable Resource Tooltips
 	const resourceFrame: framehandle = BlzGetFrameByName('ResourceBarFrame', 0);
@@ -97,6 +100,9 @@ export function SetConsoleUI() {
 	}
 }
 
+/**
+ * Sets up the Ally Menu for Free-for-All game mode.
+ */
 export function AllyMenuFFASetup() {
 	let AllyMenuTitle: framehandle = BlzGetFrameByName('AllianceTitle', 0);
 	let tempText: string = 'discord.me/risk';
