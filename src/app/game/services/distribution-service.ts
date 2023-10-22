@@ -6,12 +6,18 @@ import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
 import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 
+/**
+ * Handles the distribution of cities among active players.
+ */
 export class DistributionService {
 	private citiesPerPlayerUpperBound: number = 20;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
 	private players: DoublyLinkedList<ActivePlayer>;
 
+	/**
+	 * Initializes city pool and player list.
+	 */
 	constructor() {
 		this.cities = this.buildCityPool();
 		this.players = new DoublyLinkedList<ActivePlayer>();
@@ -23,6 +29,11 @@ export class DistributionService {
 		this.maxCitiesPerPlayer = Math.min(Math.floor(this.cities.length / this.players.length()), this.citiesPerPlayerUpperBound);
 	}
 
+	/**
+	 * Executes the distribution algorithm.
+	 * It will run the correct algorithm based on game settings.
+	 * @param callback - Function to call after distribution is complete.
+	 */
 	public runDistro(callback: () => void) {
 		//TODO used to control which distro mode to use
 		this.standardDistro();
@@ -30,6 +41,9 @@ export class DistributionService {
 		callback();
 	}
 
+	/**
+	 * Implements the standard distribution algorithm.
+	 */
 	private standardDistro() {
 		try {
 			const neutralCities: City[] = [];
@@ -64,6 +78,10 @@ export class DistributionService {
 		}
 	}
 
+	/**
+	 * Builds a pool of cities that are eligible for distribution.
+	 * @returns An array of eligible cities.
+	 */
 	private buildCityPool(): City[] {
 		const result: City[] = [];
 
@@ -76,6 +94,11 @@ export class DistributionService {
 		return result;
 	}
 
+	/**
+	 * Finds a valid player for a given city.
+	 * @param city - The city for which a player is needed.
+	 * @returns An ActivePlayer object if found, otherwise null.
+	 */
 	private getValidPlayerForCity(city: City): ActivePlayer | null {
 		const maxIterations: number = this.players.length();
 		const country: Country = CityToCountry.get(city);
@@ -93,6 +116,12 @@ export class DistributionService {
 		return null;
 	}
 
+	/**
+	 * Checks if a city can be validly owned by a player.
+	 * @param player - The player in question.
+	 * @param country - The country where the city is located.
+	 * @returns A boolean indicating if the city is valid for the player.
+	 */
 	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
 		if (!player.trackedData.countries.has(country)) {
 			player.trackedData.countries.set(country, 0);
@@ -101,10 +130,20 @@ export class DistributionService {
 		return player.trackedData.countries.get(country) < Math.floor(country.getCities().length / 2);
 	}
 
+	/**
+	 * Checks if a player has reached the maximum number of cities.
+	 * @param player - The player in question.
+	 * @returns A boolean indicating if the player is full.
+	 */
 	private isPlayerFull(player: ActivePlayer): boolean {
 		return player.trackedData.cities.cities.length >= this.maxCitiesPerPlayer;
 	}
 
+	/**
+	 * Changes the ownership of a city to a specific player.
+	 * @param city - The city for which the ownership is to be changed.
+	 * @param player - The new owner of the city.
+	 */
 	private changeCityOwner(city: City, player: ActivePlayer) {
 		city.setOwner(player.getPlayer());
 		SetUnitOwner(city.guard.unit, player.getPlayer(), true);
