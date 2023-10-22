@@ -4,7 +4,6 @@ import { StatusStrategy } from './status-strategy';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PLAYER_STATUS } from '../status-enum';
 import { GlobalMessage } from 'src/app/utils/messages';
-import { PlayLocalSound } from 'src/app/utils/utils';
 
 export class ForfeitStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
@@ -18,6 +17,7 @@ export class ForfeitStrategy implements StatusStrategy {
 			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has forfeit the game!`,
 			'Sound\\Interface\\SecretFound.flac'
 		);
-		PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
+
+		//PlayLocalSound('Sounds\\UR_DONE.mp3', gamePlayer.getPlayer());
 	}
 }

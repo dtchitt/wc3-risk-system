@@ -54,11 +54,6 @@ export class ChatManager {
 }
 
 // 			case "-restart":
-// 			case "-ng":
-// 			case "-names":
-// 			case "-players":
-// 			case "-stfu":
-// 			case "-mute":
 // 			case "-g":
 // 			case "-gold":
 // 			case "-ally":
