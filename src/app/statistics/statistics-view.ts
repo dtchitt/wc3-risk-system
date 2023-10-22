@@ -18,6 +18,7 @@ export class StatisticsView {
 		this.columns = [];
 		this.rows = new Map<string, framehandle>();
 		this.buildColumns(model);
+		this.setVisibility(false);
 	}
 
 	public setVisibility(isVisible: boolean) {
@@ -56,7 +57,7 @@ export class StatisticsView {
 		});
 	}
 
-	public onMinimizeButtonClick(callback: () => void): void {
+	public setMinimizeButtonClickEvent(callback: () => void): void {
 		const t: trigger = CreateTrigger();
 		BlzTriggerRegisterFrameEvent(t, this.minimizeButton, FRAMEEVENT_CONTROL_CLICK);
 		TriggerAddCondition(t, Condition(callback));

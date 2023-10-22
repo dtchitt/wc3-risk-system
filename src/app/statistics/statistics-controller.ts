@@ -10,9 +10,8 @@ export class StatisticsController {
 	private constructor() {
 		this.model = new StatisticsModel();
 		this.view = new StatisticsView(this.model);
-		//this.refreshView();
 
-		this.view.onMinimizeButtonClick(() => {
+		this.view.setMinimizeButtonClickEvent(() => {
 			const player: player = GetTriggerPlayer();
 
 			if (this.view.getMinimizeButtonText() === 'Hide Stats') {
@@ -23,8 +22,6 @@ export class StatisticsController {
 
 			return false;
 		});
-
-		this.setViewVisibility(false);
 	}
 
 	public static getInstance(): StatisticsController {
