@@ -20,6 +20,7 @@ const banList: string[] = [
 	'serenity#13183',
 	'boris#1897',
 ];
+
 //nappa for death threats // calling people nigger // full screen spam when he loses
 //keen for being a toxic POS and spamming
 //aelexandros multi of nappa
@@ -31,8 +32,6 @@ const banList: string[] = [
 //selinace mutli accounting
 //serenity multi of selinace
 //boris calling people nigger, death threats
-
-//Added autobanning for multis of people on 8/26/2023
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
@@ -59,7 +58,7 @@ export class PlayerManager {
 				if (GetLocalPlayer() == player) {
 					const contents: string = File.read('risk/configs.pld');
 
-					if (contents && contents == 'Test Configs') {
+					if (contents && contents == 'Test Config') {
 						CustomVictoryBJ(player, false, false);
 						ClearTextMessages();
 						this._slavesFromHandle.set(player, new SlavePlayer(player));
@@ -75,7 +74,7 @@ export class PlayerManager {
 					this._slavesFromHandle.set(player, new SlavePlayer(player));
 
 					if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
-						File.write('risk/configs.pld', 'Test Configs');
+						File.write('risk/configs.pld', 'Test Config');
 					}
 				}
 			});

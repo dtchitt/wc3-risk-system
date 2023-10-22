@@ -1,4 +1,3 @@
-import { File } from 'w3ts';
 import { GameManager } from '../game/game-manager';
 import { TimedEventManager } from '../libs/timer/timed-event-manager';
 import { PLAYER_SLOTS } from '../utils/utils';
@@ -38,10 +37,6 @@ export const AntiSpam = () => {
 
 				const timedEvent = timedEventManager.registerTimedEvent(SPAM_TIMER_DURATION, () => {
 					if (SPAM_MAP.get(player).count >= SPAM_THRESHOLD) {
-						if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
-							File.write('risk/configs.pld', 'Test Configs');
-						}
-
 						CustomVictoryBJ(player, false, false);
 						ClearTextMessages();
 
