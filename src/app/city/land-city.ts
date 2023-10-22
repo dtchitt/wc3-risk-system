@@ -1,4 +1,3 @@
-import { UNIT_ID } from 'src/configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { City } from './city';
 import { UnitToCity } from './city-map';
