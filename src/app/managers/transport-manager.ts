@@ -1,13 +1,3 @@
-/**
- * For use with TriggerRegisterPlayerUnitEvent
- * EVENT_PLAYER_UNIT_LOADED =
- * GetTransportUnit = The transport being loaded
- * GetLoadedUnit = The unit being loaded
- * GetTriggerUnit = The unit being loaded
- *
- * IsUnitInTransport = Check if given unit is loaded into given transport
- * IsUnitLoaded = Check if given unit is loaded into any transport
- */
 import { ABILITY_ID } from '../../configs/ability-id';
 import { TimedEvent } from '../libs/timer/timed-event';
 import { TimedEventManager } from '../libs/timer/timed-event-manager';
@@ -26,10 +16,25 @@ type Transport = {
 const AUTO_LOAD_DISTANCE: number = 350;
 const AUTO_LOAD_DURATION: number = 600;
 
+/**
+ * Manages transport units and their cargo.
+ * To be used in conjunction with TriggerRegisterPlayerUnitEvent.
+ * EVENT_PLAYER_UNIT_LOADED specific event variables:
+ * - GetTransportUnit: The transport being loaded into.
+ * - GetLoadedUnit: The unit being loaded.
+ * - GetTriggerUnit: The unit being loaded.
+ * Helper functions:
+ * - IsUnitInTransport: Check if given unit is loaded into given transport.
+ * - IsUnitLoaded: Check if given unit is loaded into any transport.
+ */
 export class TransportManager {
 	private static instance: TransportManager;
 	private transports: Map<unit, Transport>;
 
+	/**
+	 * Gets the singleton instance of the TransportManager.
+	 * @returns The singleton instance.
+	 */
 	public static getInstance() {
 		if (this.instance == null) {
 			this.instance = new TransportManager();
@@ -38,6 +43,9 @@ export class TransportManager {
 		return this.instance;
 	}
 
+	/**
+	 * Private constructor to initialize the TransportManager.
+	 */
 	private constructor() {
 		this.transports = new Map<unit, Transport>();
 		this.onLoad();
@@ -46,6 +54,10 @@ export class TransportManager {
 		this.spellEndCastHandler();
 	}
 
+	/**
+	 * Adds a transport unit to the TransportManager.
+	 * @param unit - The transport unit to be added.
+	 */
 	public add(unit: unit) {
 		const transport: Transport = {
 			unit: unit,
@@ -58,6 +70,11 @@ export class TransportManager {
 		this.transports.set(unit, transport);
 	}
 
+	/**
+	 * Handles the death event of a transport unit.
+	 * @param killer - The unit that killed the transport.
+	 * @param unit - The transport unit that is killed.
+	 */
 	public onDeath(killer: unit, unit: unit) {
 		if (!this.transports.has(unit)) return;
 
@@ -86,7 +103,7 @@ export class TransportManager {
 	}
 
 	/**
-	 * Handles the generic on load event that is based on the unit being loaded into a transport.
+	 * Initializes the trigger for units being loaded into transports using the generic load event
 	 */
 	private onLoad() {
 		const t: trigger = CreateTrigger();
@@ -113,6 +130,9 @@ export class TransportManager {
 		);
 	}
 
+	/**
+	 * Initializes the trigger for the unload order for transports.
+	 */
 	private orderUnloadHandler() {
 		const t = CreateTrigger();
 
@@ -146,6 +166,9 @@ export class TransportManager {
 		);
 	}
 
+	/**
+	 * Initializes the trigger for spell effects on transports.
+	 */
 	private spellEffectHandler() {
 		const t = CreateTrigger();
 
@@ -180,6 +203,9 @@ export class TransportManager {
 		);
 	}
 
+	/**
+	 * Initializes the trigger for spell end casting on transports.
+	 */
 	private spellEndCastHandler() {
 		const t = CreateTrigger();
 
@@ -201,10 +227,19 @@ export class TransportManager {
 		);
 	}
 
+	/**
+	 * Checks if a transport unit is on invalid terrain.
+	 * @param transport - The transport unit to be checked.
+	 * @returns True if terrain is invalid, otherwise false.
+	 */
 	private isTerrainInvalid(transport: unit): boolean {
 		return GetTerrainType(GetUnitX(transport), GetUnitY(transport)) != FourCC('Vcbp');
 	}
 
+	/**
+	 * Handles the activation of the Auto-Load ability.
+	 * @param transport - The transport unit with the Auto-Load ability activated.
+	 */
 	private handleAutoLoadOn(transport: Transport) {
 		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
 		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
@@ -247,6 +282,10 @@ export class TransportManager {
 		});
 	}
 
+	/**
+	 * Handles the deactivation of the Auto-Load ability.
+	 * @param transport - The transport unit with the Auto-Load ability deactivated.
+	 */
 	private handleAutoLoadOff(transport: Transport) {
 		transport.autoloadStatus = false;
 		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);

@@ -1,7 +1,14 @@
+/**
+ * Manages chat commands and their associated actions.
+ */
 export class ChatManager {
 	private static _instance: ChatManager;
 	private _chatActions: Map<string, Function> = new Map<string, Function>();
 
+	/**
+	 * Gets the singleton instance of the ChatManager.
+	 * @returns The singleton instance.
+	 */
 	public static getInstance() {
 		if (this._instance == null) {
 			this._instance = new ChatManager();
@@ -9,6 +16,9 @@ export class ChatManager {
 		return this._instance;
 	}
 
+	/**
+	 * Private constructor to initialize the ChatManager.
+	 */
 	private constructor() {
 		const t: trigger = CreateTrigger();
 
@@ -30,8 +40,8 @@ export class ChatManager {
 
 	/**
 	 * Adds commands linked to a function to the ChatManager.
-	 * @param cmds acceptable commands that will trigger the given action
-	 * @param action the action that will happen when the command is sent
+	 * @param cmds - Acceptable commands that will trigger the given action.
+	 * @param action - The action that will be executed when the command is sent.
 	 */
 	public addCmd(cmds: string[], action: Function) {
 		cmds.forEach((cmd) => {
@@ -42,9 +52,8 @@ export class ChatManager {
 	}
 
 	/**
-	 * Remove commands linked to a function from the ChatManager.
-	 * @param cmds acceptable commands that will trigger the given action
-	 * @param action the action that will happen when the command is sent
+	 * Removes commands linked to a function from the ChatManager.
+	 * @param cmds - The commands to be removed.
 	 */
 	public removeCmd(cmds: string[]) {
 		cmds.forEach((cmd) => {
