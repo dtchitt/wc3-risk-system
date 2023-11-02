@@ -10,14 +10,20 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 export class PostGame implements GameState {
 	private manager: GameManager;
 	private nextState: GameState;
+	private isOver: boolean;
 
-	public constructor() {}
+	public constructor() {
+		this.isOver = false;
+	}
 
 	public setObserver(observer: GameManager) {
 		this.manager = observer;
 	}
 
 	public start(): void {
+		if (this.isOver) return;
+		this.isOver = true;
+
 		const statsController: StatisticsController = StatisticsController.getInstance();
 		statsController.refreshView();
 		statsController.setViewVisibility(true);
@@ -26,6 +32,7 @@ export class PostGame implements GameState {
 	}
 
 	public end(): void {
+		this.isOver = false;
 		VictoryManager.getInstance().reset();
 		StatisticsController.getInstance().setViewVisibility(false);
 		PlayerManager.getInstance().players.forEach((player) => {

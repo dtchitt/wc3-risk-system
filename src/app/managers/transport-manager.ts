@@ -193,10 +193,12 @@ export class TransportManager {
 						IssueImmediateOrder(transport.unit, 'stop');
 						ErrorMsg(GetOwningPlayer(transport.unit), 'You may only unload on pebble terrain!');
 					}
-				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON && !transport.autoloadStatus) {
-					this.handleAutoLoadOn(transport);
-				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_OFF && transport.autoloadStatus == true) {
-					this.handleAutoLoadOff(transport);
+				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON) {
+					if (!transport.autoloadStatus) {
+						this.handleAutoLoadOn(transport);
+					} else {
+						this.handleAutoLoadOff(transport);
+					}
 				}
 				return false;
 			})
@@ -241,8 +243,8 @@ export class TransportManager {
 	 * @param transport - The transport unit with the Auto-Load ability activated.
 	 */
 	private handleAutoLoadOn(transport: Transport) {
-		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
-		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
+		//UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
+		//UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
 		transport.autoloadStatus = true;
 
 		transport.effect = AddSpecialEffectTarget(
@@ -288,8 +290,8 @@ export class TransportManager {
 	 */
 	private handleAutoLoadOff(transport: Transport) {
 		transport.autoloadStatus = false;
-		UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
-		UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
+		//UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
+		//UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
 		DestroyEffect(transport.effect);
 	}
 }
