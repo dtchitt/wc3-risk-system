@@ -50,6 +50,7 @@ export class TransportManager {
 		this.transports = new Map<unit, Transport>();
 		this.onLoad();
 		this.orderUnloadHandler();
+		this.spellCastHandler();
 		this.spellEffectHandler();
 		this.spellEndCastHandler();
 	}
@@ -125,6 +126,7 @@ export class TransportManager {
 
 				transport = null;
 				loadedUnit = null;
+
 				return true;
 			})
 		);
@@ -161,6 +163,30 @@ export class TransportManager {
 						}
 					}
 				}
+
+				return false;
+			})
+		);
+	}
+
+	private spellCastHandler() {
+		const t = CreateTrigger();
+
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_SPELL_CAST, null);
+		}
+
+		TriggerAddCondition(
+			t,
+			Condition(() => {
+				const transport: Transport = this.transports.get(GetTriggerUnit());
+
+				if (GetSpellAbilityId() != ABILITY_ID.AUTOLOAD_ON) return false;
+				if (this.isTerrainInvalid(transport.unit)) return false;
+				if (transport.autoloadStatus) return false;
+
+				this.handleAutoLoadOn(transport);
+
 				return false;
 			})
 		);
@@ -182,24 +208,18 @@ export class TransportManager {
 				const transport: Transport = this.transports.get(GetTriggerUnit());
 
 				if (!transport) return false;
+				if (!this.isTerrainInvalid(transport.unit)) return false;
 
-				if (this.isTerrainInvalid(transport.unit)) {
-					if (GetSpellAbilityId() == ABILITY_ID.LOAD || GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON) {
-						IssueImmediateOrder(transport.unit, 'stop');
-						BlzPauseUnitEx(transport.unit, true);
-						BlzPauseUnitEx(transport.unit, false);
-						ErrorMsg(GetOwningPlayer(transport.unit), 'You may only load on pebble terrain!');
-					} else if (GetSpellAbilityId() == ABILITY_ID.UNLOAD) {
-						IssueImmediateOrder(transport.unit, 'stop');
-						ErrorMsg(GetOwningPlayer(transport.unit), 'You may only unload on pebble terrain!');
-					}
-				} else if (GetSpellAbilityId() == ABILITY_ID.AUTOLOAD_ON) {
-					if (!transport.autoloadStatus) {
-						this.handleAutoLoadOn(transport);
-					} else {
-						this.handleAutoLoadOff(transport);
-					}
+				if (GetSpellAbilityId() == ABILITY_ID.LOAD) {
+					IssueImmediateOrder(transport.unit, 'stop');
+					BlzPauseUnitEx(transport.unit, true);
+					BlzPauseUnitEx(transport.unit, false);
+					ErrorMsg(GetOwningPlayer(transport.unit), 'You may only load on pebble terrain!');
+				} else if (GetSpellAbilityId() == ABILITY_ID.UNLOAD) {
+					IssueImmediateOrder(transport.unit, 'stop');
+					ErrorMsg(GetOwningPlayer(transport.unit), 'You may only unload on pebble terrain!');
 				}
+
 				return false;
 			})
 		);
@@ -243,8 +263,6 @@ export class TransportManager {
 	 * @param transport - The transport unit with the Auto-Load ability activated.
 	 */
 	private handleAutoLoadOn(transport: Transport) {
-		//UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
-		//UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
 		transport.autoloadStatus = true;
 
 		transport.effect = AddSpecialEffectTarget(
@@ -290,8 +308,6 @@ export class TransportManager {
 	 */
 	private handleAutoLoadOff(transport: Transport) {
 		transport.autoloadStatus = false;
-		//UnitRemoveAbility(transport.unit, ABILITY_ID.AUTOLOAD_OFF);
-		//UnitAddAbility(transport.unit, ABILITY_ID.AUTOLOAD_ON);
 		DestroyEffect(transport.effect);
 	}
 }
