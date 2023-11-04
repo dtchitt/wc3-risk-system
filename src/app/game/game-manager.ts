@@ -98,12 +98,12 @@ export class GameManager {
 			}
 		});
 
-		chatManager.addCmd(['-ng'], () => {
-			if (!this.isStatePostGame()) return;
+		// chatManager.addCmd(['-ng'], () => {
+		// 	if (!this.isStatePostGame()) return;
 
-			this.state.end();
-			this.fastRestart();
-		});
+		// 	this.state.end();
+		//	this.fastRestart();
+		// });
 
 		chatManager.addCmd(['-names', '-players'], () => {
 			if (!this.isStateMetaGame()) return;

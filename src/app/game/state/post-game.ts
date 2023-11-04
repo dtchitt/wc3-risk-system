@@ -27,11 +27,13 @@ export class PostGame implements GameState {
 		const statsController: StatisticsController = StatisticsController.getInstance();
 		statsController.refreshView();
 		statsController.setViewVisibility(true);
-		this.removeUnits();
-		this.resetCountries();
+		//this.removeUnits();
+		//this.resetCountries();
 	}
 
 	public end(): void {
+		if (!this.isOver) return;
+
 		this.isOver = false;
 		VictoryManager.getInstance().reset();
 		StatisticsController.getInstance().setViewVisibility(false);
