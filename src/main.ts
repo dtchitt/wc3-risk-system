@@ -24,6 +24,10 @@ import CameraManager from './app/managers/camera-manager';
 import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { StatisticsController } from './app/statistics/statistics-controller';
+import { SetRegions } from './configs/region-setup';
+import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
+import { RegionSettings } from './app/region/regions';
+import { StringToCountry } from './app/country/country-map';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -54,6 +58,7 @@ function tsMain() {
 
 		//Set up countries
 		SetCountries();
+		SetRegions();
 		//Build countries, spawners, and cities
 		const countryBuilder = new ConcreteCountryBuilder();
 		const cityBuilder = new ConcreteCityBuilder();
@@ -67,6 +72,18 @@ function tsMain() {
 
 			countryBuilder.setSpawn(country.spawnerData, spawnerBuilder);
 			countryBuilder.build();
+		}
+		//Build regions
+		const regionBuilder = new ConcreteRegionBuilder();
+
+		for (const region of RegionSettings) {
+			region.countryNames.forEach((countryName) => {
+				const country = StringToCountry.get(countryName);
+				regionBuilder.addCountry(country);
+			});
+
+			regionBuilder.setGoldBonus(region.goldBonus);
+			regionBuilder.build();
 		}
 
 		//Set up triggers
