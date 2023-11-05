@@ -5,7 +5,7 @@ import { NEUTRAL_HOSTILE } from '../utils/utils';
 export class Region implements Resetable {
 	private _countries: Country[];
 	private _goldBonus: number;
-	private owner: player;
+	private _owner: player;
 
 	constructor(countryData: Country[], goldBonus: number) {
 		this._countries = [];
@@ -15,15 +15,23 @@ export class Region implements Resetable {
 		});
 
 		this._goldBonus = goldBonus;
-		this.owner = NEUTRAL_HOSTILE;
+		this._owner = NEUTRAL_HOSTILE;
 	}
 
 	public reset(): void {
-		this.owner = NEUTRAL_HOSTILE;
+		this._owner = NEUTRAL_HOSTILE;
 	}
 
 	public setOwner(owner: player) {
-		this.owner = owner;
+		this._owner = owner;
+	}
+
+	public isOwnedByPlayer(player: player) {
+		for (const country of this._countries) {
+			if (country.getOwner() != player) return false;
+		}
+
+		return true;
 	}
 
 	public get countries(): Country[] {
@@ -32,5 +40,9 @@ export class Region implements Resetable {
 
 	public get goldBonus(): number {
 		return this._goldBonus;
+	}
+
+	public get owner(): player {
+		return this._owner;
 	}
 }
