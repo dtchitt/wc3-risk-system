@@ -11,6 +11,8 @@ import { Scoreboards } from '../scoreboard/scoreboard-array';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
 import { GameManager } from '../game/game-manager';
+import { CountryToRegion } from '../region/region-map';
+import { Region } from '../region/region';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -26,6 +28,7 @@ export function OwnershipChangeEvent() {
 
 			const city: City = UnitToCity.get(GetChangingUnit());
 			const country: Country = CityToCountry.get(city);
+			const region: Region = CountryToRegion.get(country);
 			const prevOwner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(GetChangingUnitPrevOwner());
 			const owner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(city.getOwner());
 
@@ -42,6 +45,12 @@ export function OwnershipChangeEvent() {
 						prevOwner.trackedData.income.income -= country.getCities().length;
 						prevOwner.trackedData.income.delta -= country.getCities().length;
 					}
+				}
+
+				if (region && region.owner == prevOwner.getPlayer()) {
+					region.setOwner(null);
+					prevOwner.trackedData.income.income -= region.goldBonus;
+					prevOwner.trackedData.income.delta -= region.goldBonus;
 				}
 
 				if (prevOwnerData.cities.cities.length == 0) {
@@ -74,6 +83,12 @@ export function OwnershipChangeEvent() {
 
 						if (ownerData.income.income > ownerData.income.max) {
 							ownerData.income.max = ownerData.income.income;
+						}
+
+						if (region && region.isOwnedByPlayer(owner.getPlayer())) {
+							region.setOwner(owner.getPlayer());
+							ownerData.income.income += region.goldBonus;
+							ownerData.income.delta += region.goldBonus;
 						}
 					}
 
