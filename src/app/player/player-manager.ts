@@ -92,8 +92,6 @@ export class PlayerManager {
 				SetUnitPathing(tools, false);
 				UnitRemoveAbility(tools, ABILITY_ID.LOW_HEALTH_DEFENDER);
 				UnitRemoveAbility(tools, ABILITY_ID.LOW_VALUE_DEFENDER);
-				UnitRemoveAbility(tools, ABILITY_ID.ALLOW_PINGS);
-				UnitRemoveAbility(tools, ABILITY_ID.FORFEIT);
 			}
 		}
 	}
