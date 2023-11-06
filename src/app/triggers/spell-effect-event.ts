@@ -38,41 +38,6 @@ export function SpellEffectEvent() {
 					player.options.value = true;
 					swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_VALUE_DEFENDER, ABILITY_ID.LOW_VALUE_DEFENDER);
 					break;
-				case ABILITY_ID.ALLOW_PINGS:
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.ALLOW_PINGS, ABILITY_ID.BLOCK_PINGS);
-					player.options.ping = true;
-					break;
-				case ABILITY_ID.BLOCK_PINGS:
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.BLOCK_PINGS, ABILITY_ID.ALLOW_PINGS);
-					player.options.ping = false;
-					break;
-				case ABILITY_ID.PING:
-					for (let i = 0; i < PLAYER_SLOTS; i++) {
-						const player: player = Player(i);
-					}
-					// let pingIndex: number = player.settings.names.colorIndex;
-					// let pingForce: force = CreateForce();
-
-					// GamePlayer.fromPlayer.forEach((gPlayer) => {
-					// 	if (!player.settings.isLeft() && player.settings.ping) {
-					// 		ForceAddPlayer(pingForce, player.settings.player);
-					// 	}
-					// });
-
-					// PingMinimapForForceEx(
-					// 	pingForce,
-					// 	x,
-					// 	y,
-					// 	4.0,
-					// 	bj_MINIMAPPINGSTYLE_FLASHY,
-					// 	pingRedPercent[pingIndex],
-					// 	pingGreenPercent[pingIndex],
-					// 	pingBluePercent[pingIndex]
-					// );
-
-					// DestroyForce(pingForce);
-					// pingForce = null;
-					break;
 				case ABILITY_ID.SPWN_3000:
 				case ABILITY_ID.SPWN_6000:
 					const radius: number = GetSpellAbilityId() == ABILITY_ID.SPWN_3000 ? 3000 : 6000;
