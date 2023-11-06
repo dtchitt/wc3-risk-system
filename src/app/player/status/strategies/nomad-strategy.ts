@@ -18,8 +18,6 @@ export class NomadStrategy implements StatusStrategy {
 			if (!gamePlayer.status.isAlive() && gamePlayer.trackedData.cities.cities.length >= 1) {
 				if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
 					gamePlayer.status.set(PLAYER_STATUS.LEFT);
-				} else if (gamePlayer.status.isForfeit()) {
-					gamePlayer.status.set(PLAYER_STATUS.FORFEIT);
 				} else {
 					gamePlayer.status.set(PLAYER_STATUS.ALIVE);
 

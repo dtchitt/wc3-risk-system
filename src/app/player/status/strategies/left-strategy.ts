@@ -9,7 +9,7 @@ export class LeftStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isLeft()) return;
 
-		if (gamePlayer.status.isDead() || gamePlayer.status.isForfeit() || gamePlayer.status.isSTFU()) {
+		if (gamePlayer.status.isDead() || gamePlayer.status.isSTFU()) {
 			gamePlayer.status.status = PLAYER_STATUS.LEFT;
 			return;
 		}

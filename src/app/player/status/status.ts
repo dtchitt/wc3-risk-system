@@ -2,7 +2,6 @@ import { ActivePlayer } from '../types/active-player';
 import { PLAYER_STATUS } from './status-enum';
 import { AliveStrategy } from './strategies/alive-strategy';
 import { DeadStrategy } from './strategies/dead-strategy';
-import { ForfeitStrategy } from './strategies/forfeit-strategy';
 import { LeftStrategy } from './strategies/left-strategy';
 import { NomadStrategy } from './strategies/nomad-strategy';
 import { StatusStrategy } from './strategies/status-strategy';
@@ -16,7 +15,6 @@ export class Status {
 	private static readonly STRATEGY_MAP: Map<string, StatusStrategy> = new Map([
 		[PLAYER_STATUS.ALIVE, new AliveStrategy()],
 		[PLAYER_STATUS.NOMAD, new NomadStrategy()],
-		[PLAYER_STATUS.FORFEIT, new ForfeitStrategy()],
 		[PLAYER_STATUS.DEAD, new DeadStrategy()],
 		[PLAYER_STATUS.LEFT, new LeftStrategy()],
 		[PLAYER_STATUS.STFU, new STFUStrategy()],
@@ -43,10 +41,6 @@ export class Status {
 
 	public isDead(): boolean {
 		return this._status == PLAYER_STATUS.DEAD;
-	}
-
-	public isForfeit(): boolean {
-		return this._status == PLAYER_STATUS.FORFEIT;
 	}
 
 	public isLeft(): boolean {

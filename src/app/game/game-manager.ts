@@ -78,7 +78,7 @@ export class GameManager {
 		chatManager.addCmd(['-ff', '-forfeit'], () => {
 			if (!this.isStateMetaGame()) return;
 
-			playerManager.players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.FORFEIT);
+			playerManager.players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.DEAD);
 		});
 
 		chatManager.addCmd(['-stfu', '-mute'], () => {

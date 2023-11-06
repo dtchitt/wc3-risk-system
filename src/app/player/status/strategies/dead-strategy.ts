@@ -7,7 +7,7 @@ import { GlobalMessage } from 'src/app/utils/messages';
 
 export class DeadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
-		if (gamePlayer.status.isForfeit() || gamePlayer.status.isLeft()) return;
+		if (gamePlayer.status.isDead() || gamePlayer.status.isLeft()) return;
 
 		gamePlayer.status.status = PLAYER_STATUS.DEAD;
 		gamePlayer.setEndData();
