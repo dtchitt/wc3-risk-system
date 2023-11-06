@@ -67,7 +67,13 @@ function guardDeath(dyingUnit: unit, killingUnit: unit) {
 			if (BlzGroupGetSize(g) >= 1) {
 				guardChoice = GroupPickRandomUnit(g);
 			} else {
-				GetUnitsInRangeByAllegiance(g, city, largeRadius, IsUnitEnemy, dyingUnit);
+				GetUnitsInRangeByAllegiance(
+					g,
+					city,
+					largeRadius,
+					(filterUnit, player) => IsUnitEnemy(filterUnit, player) && IsUnitAlly(filterUnit, GetOwningPlayer(dyingUnit)),
+					dyingUnit
+				);
 
 				if (BlzGroupGetSize(g) >= 1) {
 					guardChoice = GroupPickRandomUnit(g);
