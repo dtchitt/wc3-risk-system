@@ -648,13 +648,13 @@ Grants 25% damage bonus to all nearby friendly units.|nLasts 45 seconds.
 }
 
 STRING 7226
-// Abilities: a050 (Forfeit Game), Hotkey (Hotkey - Normal)
+// Abilities: a003 (Frenzy), Hotkey (Hotkey - Normal)
 {
 Q
 }
 
 STRING 7227
-// Abilities: a003 (Frenzy), Hotkey (Hotkey - Normal)
+// Abilities: a003 (Frenzy), Unhotkey (Hotkey - Turn Off)
 {
 Q
 }
@@ -666,7 +666,7 @@ W
 }
 
 STRING 7236
-// Abilities: a003 (Frenzy), Unhotkey (Hotkey - Turn Off)
+// Abilities: a004 (Adrenaline), Hotkey (Hotkey - Normal)
 {
 Q
 }
@@ -730,7 +730,7 @@ Artillery
 }
 
 STRING 7263
-// Abilities: a004 (Adrenaline), Hotkey (Hotkey - Normal)
+// Abilities: a005 (Berserk), Hotkey (Hotkey - Normal)
 {
 Q
 }
@@ -851,24 +851,6 @@ STRING 7307
 Z
 }
 
-STRING 7312
-// Abilities: a050 (Forfeit Game), Tip (Tooltip - Normal)
-{
-Forfeit Game
-}
-
-STRING 7314
-// Abilities: a050 (Forfeit Game), Ubertip (Tooltip - Normal - Extended)
-{
-This will forfeit the current game. It allows you to quit playing but still watch the game
-}
-
-STRING 7315
-// Abilities: a050 (Forfeit Game), Name (Name)
-{
-Forfeit Game
-}
-
 STRING 7316
 // Abilities: a051 (Lowest Health Defender), Tip (Tooltip - Normal)
 {
@@ -917,30 +899,6 @@ STRING 7333
 Highest Value Defender
 }
 
-STRING 7334
-// Abilities: a055 (Allow Pings), Tip (Tooltip - Normal)
-{
-Allow Pings
-}
-
-STRING 7337
-// Abilities: a055 (Allow Pings), Name (Name)
-{
-Allow Pings
-}
-
-STRING 7338
-// Abilities: a056 (Block Pings), Tip (Tooltip - Normal)
-{
-Block Pings
-}
-
-STRING 7341
-// Abilities: a056 (Block Pings), Name (Name)
-{
-Block Pings
-}
-
 STRING 7342
 // Units: H000 (Player Tools), Name (Name)
 {
@@ -959,46 +917,10 @@ STRING 7344
 Options
 }
 
-STRING 7345
-// Abilities: a057 (Ping), Name (Name)
-{
-Ping
-}
-
-STRING 7347
-// Abilities: a055 (Allow Pings), Hotkey (Hotkey - Normal)
-{
-R
-}
-
 STRING 7351
 // Abilities: a054 (Highest Value Defender), Hotkey (Hotkey - Normal)
 {
 E
-}
-
-STRING 7353
-// Abilities: a056 (Block Pings), Hotkey (Hotkey - Normal)
-{
-R
-}
-
-STRING 7355
-// Abilities: a057 (Ping), Tip (Tooltip - Normal)
-{
-Ping
-}
-
-STRING 7356
-// Abilities: a057 (Ping), Ubertip (Tooltip - Normal - Extended)
-{
-Pings the selected location for all players with pinging enabled.
-}
-
-STRING 7357
-// Abilities: a057 (Ping), Hotkey (Hotkey - Normal)
-{
-F
 }
 
 STRING 7358
@@ -1025,18 +947,6 @@ STRING 7361
 Prioritizes the highest value unit when chosing a city defender.
 }
 
-STRING 7362
-// Abilities: a055 (Allow Pings), Ubertip (Tooltip - Normal - Extended)
-{
-This will allow you to see other players pings
-}
-
-STRING 7363
-// Abilities: a056 (Block Pings), Ubertip (Tooltip - Normal - Extended)
-{
-This will block you from seeing other players pings.
-}
-
 STRING 7365
 // Units: H000 (Player Tools), Tip (Tooltip - Basic)
 {
@@ -1050,7 +960,7 @@ Adrenaline
 }
 
 STRING 7373
-// Abilities: a005 (Berserk), Hotkey (Hotkey - Normal)
+// Abilities: a031 (Set Spawner Rally Point - Radius 3000), Hotkey (Hotkey - Normal)
 {
 Q
 }
@@ -1059,12 +969,6 @@ STRING 7374
 // Abilities: a004 (Adrenaline), Tip (Tooltip - Normal)
 {
 Adrenaline
-}
-
-STRING 7376
-// Abilities: a031 (Set Spawner Rally Point - Radius 3000), Hotkey (Hotkey - Normal)
-{
-Q
 }
 
 STRING 7377
