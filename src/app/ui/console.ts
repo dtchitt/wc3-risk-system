@@ -32,8 +32,8 @@ export function SetConsoleUI() {
 	BlzFrameSetLevel(mapInfo, 2);
 	BlzFrameSetText(mapInfo, `v${MAP_VERSION}`);
 
-	const newTitle: string = 'discord.me/risk';
-	const newResourceHeader: string = 'www.youtube.com/@riskreforged3107';
+	const newTitle: string = 'discord.gg/wc3risk';
+	const newResourceHeader: string = 'www.youtube.com/@riskreforged';
 
 	BlzFrameSetText(BlzGetFrameByName('AllianceTitle', 0), newTitle);
 	BlzFrameSetText(BlzGetFrameByName('ResourceTradingTitle', 0), newResourceHeader);
@@ -108,9 +108,9 @@ export function AllyMenuFFASetup() {
 	let tempText: string = 'discord.me/risk';
 	tempText += '|n|n|cffffcc00Commands:|r';
 	tempText += '|n|cffffffff-cam OR -zoom #### (1000 min, 8500 max)';
-	tempText += '|n|cffffffff-ff OR -forfeit (forfeits the game without leaving it)';
-	//	tempText += '|n|cffffffff-restart OR -ng (restarts the game if its over)';
-	tempText += '|n|cffffffff-names OR -players displays a list of alive/nomad players in game';
+	tempText += '|n|cffffffff-ff (forfeits the game without leaving it)';
+	tempText += '|n|cffffffff-ng (restarts the game if its over)';
+	tempText += '|n|cffffffff-names displays a list of alive/nomad players in game';
 	tempText += '|n|cffffffff-stfu <player name/color> (mutes a player for 300 seconds)';
 	tempText += '|n|n|cffffcc00Hotkeys:|r';
 	tempText += '|n|cffffffff F1 (selects player tools)';
