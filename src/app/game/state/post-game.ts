@@ -6,6 +6,7 @@ import { StringToCountry } from 'src/app/country/country-map';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
+import { CountryToRegion } from 'src/app/region/region-map';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -27,19 +28,22 @@ export class PostGame implements GameState {
 		const statsController: StatisticsController = StatisticsController.getInstance();
 		statsController.refreshView();
 		statsController.setViewVisibility(true);
-		//this.removeUnits();
-		//this.resetCountries();
 	}
 
 	public end(): void {
 		if (!this.isOver) return;
 
-		this.isOver = false;
+		this.removeUnits();
+		this.resetCountries();
+		this.resetRegions();
+
 		VictoryManager.getInstance().reset();
 		StatisticsController.getInstance().setViewVisibility(false);
 		PlayerManager.getInstance().players.forEach((player) => {
 			player.reset();
 		});
+
+		this.isOver = false;
 	}
 
 	private removeUnits() {
@@ -69,6 +73,12 @@ export class PostGame implements GameState {
 	private resetCountries() {
 		StringToCountry.forEach((country) => {
 			country.reset();
+		});
+	}
+
+	private resetRegions() {
+		CountryToRegion.forEach((region) => {
+			region.reset();
 		});
 	}
 }
