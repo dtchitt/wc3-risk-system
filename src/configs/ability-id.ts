@@ -21,12 +21,8 @@ export const ABILITY_ID = {
 	AUTOLOAD_OFF: FourCC('a014'),
 
 	//Player Tools Abilities
-	FORFEIT: FourCC('a050'),
 	LOW_HEALTH_DEFENDER: FourCC('a051'),
 	HIGH_HEALTH_DEFENDER: FourCC('a052'),
 	LOW_VALUE_DEFENDER: FourCC('a053'),
 	HIGH_VALUE_DEFENDER: FourCC('a054'),
-	ALLOW_PINGS: FourCC('a055'),
-	BLOCK_PINGS: FourCC('a056'),
-	PING: FourCC('a057'),
 };
