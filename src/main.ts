@@ -28,6 +28,7 @@ import { SetRegions } from './configs/region-setup';
 import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
 import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
+import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -91,6 +92,7 @@ function tsMain() {
 		LeaveRegionEvent();
 		UnitDeathEvent();
 		UnitTrainedEvent();
+		//UnitUpgradeEvent();
 		OwnershipChangeEvent();
 		PlayerLeaveEvent();
 		SpellEffectEvent();
