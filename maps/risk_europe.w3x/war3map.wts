@@ -1430,3 +1430,15 @@ STRING 7491
 |cffff8000Deactivate autoload|r
 }
 
+STRING 7492
+// Units: h005 (|cffff8000Capital|r), Name (Name)
+{
+|cffff8000Capital|r
+}
+
+STRING 7493
+// Units: h005 (|cffff8000Capital|r), Ubertip (Tooltip - Extended)
+{
+Produces units for your armies.
+}
+
