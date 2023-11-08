@@ -23,12 +23,10 @@ import { Quests } from './app/quests/quests';
 import CameraManager from './app/managers/camera-manager';
 import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
-import { StatisticsController } from './app/statistics/statistics-controller';
 import { SetRegions } from './configs/region-setup';
 import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
 import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
-import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -119,7 +117,6 @@ function tsMain() {
 				ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
 				TimedEventManager.getInstance();
 				GameManager.getInstance();
-				StatisticsController.getInstance();
 			});
 		});
 	} catch (e) {
