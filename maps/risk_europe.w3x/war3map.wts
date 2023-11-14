@@ -791,8 +791,8 @@ STRING 7296
 
 STRING 7297
 {
-Youtube: https://www.youtube.com/@riskreforged3107
-Discord: https://discord.me/risk
+Youtube: https://www.youtube.com/@riskreforged
+Discord: https://discord.gg/wc3risk
 }
 
 STRING 7298
@@ -1032,19 +1032,6 @@ STRING 7385
 |cff3BA0CBAbilties:|r Load (10 Units)
 }
 
-STRING 7386
-// Units: s002 (|cffff8000Warship A|r), Ubertip (Tooltip - Extended)
-{
-|cffff8000DPS:|r 25.33 |cffff8000Type:|r Normal
-|cffff8000Range:|r 1000
-
-|cffff8000Hitpoints:|r 400 |cffff8000Hp Regen:|r .50
-|cffff8000Armor:|r 6 |cffff8000Type:|r Small
-|cffff8000Movespeed:|r 340
-
-|cff3BA0CBAbilties:|r Splash Damage (50 Range)
-}
-
 STRING 7388
 // Units: s004 (|cffff8000Battleship SS|r), Ubertip (Tooltip - Extended)
 {
@@ -1056,19 +1043,6 @@ STRING 7388
 |cffff8000Movespeed:|r 330
 
 |cff3BA0CBAbilties:|r Splash Damage (50 Range)
-}
-
-STRING 7389
-// Units: u001 (|cffff8000Medic|r), Ubertip (Tooltip - Extended)
-{
-|cffff8000DPS:|r 4.25 |cffff8000Type:|r Magic
-|cffff8000Range:|r 500
-
-|cffff8000Hitpoints:|r 250 |cffff8000Hp Regen:|r .50
-|cffff8000Armor:|r 1 |cffff8000Type:|r Unarmored
-|cffff8000Movespeed:|r 270
-
-|cff3BA0CBAbilties:|r Heal
 }
 
 STRING 7390
@@ -1136,19 +1110,6 @@ STRING 7397
 |cff3BA0CBAbilties:|r Frenzy
 }
 
-STRING 7398
-// Units: u010 (|cffff8000Admiral|r), Ubertip (Tooltip - Extended)
-{
-|cffff8000DPS:|r 48.28 |cffff8000Type:|r Normal
-|cffff8000Range:|r Melee
-
-|cffff8000Hitpoints:|r 800 |cffff8000Hp Regen:|r 1.0
-|cffff8000Armor:|r 14 |cffff8000Type:|r Large
-|cffff8000Movespeed:|r 280
-
-|cff3BA0CBAbilties:|r Berserk
-}
-
 STRING 7399
 // Abilities: a005 (Berserk), Ubertip (Tooltip - Normal - Extended)
 {
@@ -1165,18 +1126,6 @@ STRING 7406
 // Units: u051 (Camera Lock Unit), Name (Name)
 {
 Camera Lock Unit
-}
-
-STRING 7407
-// Units: u005 (|cffff8000General|r), Ubertip (Tooltip - Extended)
-{
-|cFFFF8000DPS:|r|cFFFFFFFF 42.07 |r|cFFFF8000Type:|r|cFFFFFFFF Normal|n|r|cFFFF8000Range:|r|cFFFFFFFF Melee|n|n|r|cFFFF8000Hitpoints:|r|cFFFFFFFF 800 |r|cFFFF8000Hp Regen:|r|cFFFFFFFF 1.0|n|r|cFFFF8000Armor:|r|cFFFFFFFF 10 |r|cFFFF8000Type:|r|cFFFFFFFF Large|n|r|cFFFF8000Movespeed:|r|cFFFFFFFF 350|n|n|r|cFF3BA0CBAbilties:|r|cFFFFFFFF Roar, Frenzy|r
-}
-
-STRING 7410
-// Units: u007 (|cffff8000Tank|r), Ubertip (Tooltip - Extended)
-{
-|cFFFF8000DPS:|r|cFFFFFFFF 32.78 |r|cFFFF8000Type:|r|cFFFFFFFF Siege|n|r|cFFFF8000Range:|r|cFFFFFFFF 500|n|n|r|cFFFF8000Hitpoints:|r|cFFFFFFFF 1700 |r|cFFFF8000Hp Regen:|r|cFFFFFFFF 1.0|n|r|cFFFF8000Armor:|r|cFFFFFFFF 9 |r|cFFFF8000Type:|r|cFFFFFFFF Fortified|n|r|cFFFF8000Movespeed:|r|cFFFFFFFF 260|n|n|r|cFF3BA0CBAbilties:|r|cFFFFFFFF Splash Damage (90 Range)|n|r|cFFFF0000*Cannot attack trees|r
 }
 
 STRING 7419
@@ -1440,5 +1389,56 @@ STRING 7493
 // Units: h005 (|cffff8000Capital|r), Ubertip (Tooltip - Extended)
 {
 Produces units for your armies.
+}
+
+STRING 7495
+// Units: s002 (|cffff8000Warship A|r), Ubertip (Tooltip - Extended)
+{
+|cffff8000DPS:|r 30.4 |cffff8000Type:|r Normal
+|cffff8000Range:|r 1000
+
+|cffff8000Hitpoints:|r 400 |cffff8000Hp Regen:|r .50
+|cffff8000Armor:|r 6 |cffff8000Type:|r Small
+|cffff8000Movespeed:|r 340
+
+|cff3BA0CBAbilties:|r Splash Damage (50 Range)
+}
+
+STRING 7496
+// Units: u001 (|cffff8000Medic|r), Ubertip (Tooltip - Extended)
+{
+|cffff8000DPS:|r 4.5 |cffff8000Type:|r Magic
+|cffff8000Range:|r 500
+
+|cffff8000Hitpoints:|r 250 |cffff8000Hp Regen:|r .50
+|cffff8000Armor:|r 1 |cffff8000Type:|r Unarmored
+|cffff8000Movespeed:|r 270
+
+|cff3BA0CBAbilties:|r Heal
+}
+
+STRING 7497
+// Units: u005 (|cffff8000General|r), Ubertip (Tooltip - Extended)
+{
+|cFFFF8000DPS:|r|cFFFFFFFF 42.76 |r|cFFFF8000Type:|r|cFFFFFFFF Normal|n|r|cFFFF8000Range:|r|cFFFFFFFF Melee|n|n|r|cFFFF8000Hitpoints:|r|cFFFFFFFF 800 |r|cFFFF8000Hp Regen:|r|cFFFFFFFF 1.0|n|r|cFFFF8000Armor:|r|cFFFFFFFF 10 |r|cFFFF8000Type:|r|cFFFFFFFF Large|n|r|cFFFF8000Movespeed:|r|cFFFFFFFF 350|n|n|r|cFF3BA0CBAbilties:|r|cFFFFFFFF Roar, Frenzy|r
+}
+
+STRING 7498
+// Units: u007 (|cffff8000Tank|r), Ubertip (Tooltip - Extended)
+{
+|cFFFF8000DPS:|r|cFFFFFFFF 35.56 |r|cFFFF8000Type:|r|cFFFFFFFF Siege|n|r|cFFFF8000Range:|r|cFFFFFFFF 500|n|n|r|cFFFF8000Hitpoints:|r|cFFFFFFFF 1700 |r|cFFFF8000Hp Regen:|r|cFFFFFFFF 1.6|n|r|cFFFF8000Armor:|r|cFFFFFFFF 9 |r|cFFFF8000Type:|r|cFFFFFFFF Normal|n|r|cFFFF8000Movespeed:|r|cFFFFFFFF 260|n|n|r|cFF3BA0CBAbilties:|r|cFFFFFFFF Splash Damage (90 Range)|n|r|cFFFF0000*Cannot attack trees|r
+}
+
+STRING 7499
+// Units: u010 (|cffff8000Admiral|r), Ubertip (Tooltip - Extended)
+{
+|cffff8000DPS:|r 48.28 |cffff8000Type:|r Normal
+|cffff8000Range:|r Melee
+
+|cffff8000Hitpoints:|r 800 |cffff8000Hp Regen:|r 1.0
+|cffff8000Armor:|r 12 |cffff8000Type:|r Large
+|cffff8000Movespeed:|r 280
+
+|cff3BA0CBAbilties:|r Berserk
 }
 
