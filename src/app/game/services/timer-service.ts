@@ -9,6 +9,7 @@ import { GameState } from '../state/game-state';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
+import { File } from 'w3ts';
 
 /**
  * TimerService is a class responsible for managing the main game timer.
@@ -43,11 +44,11 @@ export class TimerService implements Resetable {
 		TimerStart(this._timer, 1, true, () => {
 			try {
 				if (this._tick == this._duration) {
+					if (this.victoryManager.checkCityVictory()) return false;
+
 					PlayerManager.getInstance().players.forEach((player) => {
 						player.giveGold();
 					});
-
-					if (this.victoryManager.checkCityVictory()) return;
 
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
@@ -66,8 +67,6 @@ export class TimerService implements Resetable {
 					}
 				}
 
-				if (this.victoryManager.checkKnockOutVictory()) return;
-
 				Scoreboards.forEach((board) => {
 					if (this._tick == this._duration) {
 						board.updateFull();
@@ -85,7 +84,8 @@ export class TimerService implements Resetable {
 					this._turn++;
 				}
 			} catch (error) {
-				print('Error in Timer' + error);
+				File.write('errors', error as string);
+				print('Error in Timer ' + error);
 			}
 		});
 	}
