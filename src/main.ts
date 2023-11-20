@@ -27,6 +27,7 @@ import { SetRegions } from './configs/region-setup';
 import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
 import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
+import { SetCommands } from './app/commands/commands';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -114,9 +115,8 @@ function tsMain() {
 				CameraManager.getInstance();
 				ChatManager.getInstance();
 				TransportManager.getInstance();
-				ChatManager.getInstance().addCmd(['-cam', '-zoom'], () => CameraManager.getInstance().update(GetTriggerPlayer()));
 				TimedEventManager.getInstance();
-				GameManager.getInstance();
+				SetCommands(GameManager.getInstance());
 			});
 		});
 	} catch (e) {
