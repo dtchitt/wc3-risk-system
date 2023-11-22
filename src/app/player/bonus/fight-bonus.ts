@@ -69,8 +69,8 @@ export class FightBonus implements Bonus {
 	}
 
 	public disable() {
-		BlzFrameSetVisible(this.ui, false);
 		this.enabled = false;
+		this.hideUI();
 	}
 
 	private processBonus(): number {
