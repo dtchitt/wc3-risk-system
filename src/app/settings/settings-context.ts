@@ -39,9 +39,23 @@ export class SettingsContext {
 	public initStrategies() {
 		this.strategies.set('GameType', new GameTypeStrategy(this.settings.GameType));
 		this.strategies.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
+
+		let playerCount: number = 0;
+
+		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
+			if (GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING) {
+				playerCount++;
+			}
+		}
+
+		if (playerCount == 2) {
+			this.settings.Promode = 1;
+			this.settings.Fog = 1;
+		}
+
+		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
 		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
 		this.strategies.set('Gold', new GoldStrategy(this.settings.GoldSending));
-		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
 	}
 
 	/**
@@ -73,10 +87,18 @@ export class SettingsContext {
 	}
 
 	/**
-	 * Checks if the game setting promode is true
+	 * Checks if the game setting promode is on or off
 	 * @returns true if game is "promode"
 	 */
 	public isPromode(): boolean {
 		return this.settings.Promode == 1;
+	}
+
+	/**
+	 * Checks if the game setting for Fog is on or off
+	 * @returns true if fog is on
+	 */
+	public isFogOn(): boolean {
+		return this.settings.Fog == 1;
 	}
 }
