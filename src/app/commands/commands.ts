@@ -54,8 +54,15 @@ function restartCommand(chatManager: ChatManager, gameManager: GameManager) {
 	chatManager.addCmd(['-ng'], () => {
 		if (!gameManager.isStatePostGame()) return;
 
+		//TODO player feedback via a message.
 		gameManager.state.end();
-		gameManager.fastRestart();
+
+		const resetTimer: timer = CreateTimer();
+
+		TimerStart(resetTimer, 1.5, false, () => {
+			gameManager.fastRestart();
+			DestroyTimer(resetTimer);
+		});
 	});
 }
 
