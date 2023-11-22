@@ -16,6 +16,7 @@ export class PreGame implements GameState {
 
 	public constructor(nextState: GameState) {
 		this.nextState = nextState;
+		this.treeService = new TreeService();
 	}
 
 	public setObserver(observer: GameManager) {
@@ -23,11 +24,7 @@ export class PreGame implements GameState {
 	}
 
 	public start(): void {
-		if (!this.treeService) {
-			this.treeService = new TreeService();
-		} else {
-			this.treeService.reset();
-		}
+		this.treeService.reset();
 
 		PlayerManager.getInstance().players.forEach((val) => {
 			val.trackedData.setKDMaps();
@@ -46,8 +43,14 @@ export class PreGame implements GameState {
 		EnableDragSelect(false, false);
 		FogEnable(true);
 
+		const gameDelayTimer: timer = CreateTimer();
+
+		TimerStart(gameDelayTimer, 3, false, () => {
+			this.end();
+			DestroyTimer(gameDelayTimer);
+		});
+
 		//TODO capital selection
-		this.end();
 	}
 
 	public end(): void {
