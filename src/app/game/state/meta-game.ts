@@ -50,6 +50,11 @@ export class MetaGame implements GameState {
 				player.status.set(PLAYER_STATUS.ALIVE);
 				player.trackedData.bonus.showForPlayer(player.getPlayer());
 				player.trackedData.bonus.repositon(mbFrame);
+
+				if (SettingsContext.getInstance().isPromode()) {
+					player.trackedData.bonus.disable();
+				}
+
 				VictoryManager.getInstance().addPlayer(player);
 			});
 
@@ -84,7 +89,12 @@ export class MetaGame implements GameState {
 
 		PlayerManager.getInstance().players.forEach((player) => {
 			player.trackedData.bonus.hideUI();
-			NameManager.getInstance().setName(player.getPlayer(), 'btag');
+
+			if (SettingsContext.getInstance().isPromode()) {
+				NameManager.getInstance().setName(player.getPlayer(), 'acct');
+			} else {
+				NameManager.getInstance().setName(player.getPlayer(), 'btag');
+			}
 		});
 
 		this.timer.reset();
