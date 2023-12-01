@@ -135,16 +135,5 @@ Frame "BACKDROP" "StatisticsBoard" INHERITS "QuestButtonBaseTemplate" {
 			}
 		}  
 	}
-
-	// Frame "FRAME" "PlayersColumn" {
-	// 	Width  0.11f,
-	// 	Height 0.46f,
-	// 	SetPoint TOPLEFT,"StatisticsHeader",BOTTOMLEFT,0.01,0,
-
-	// 	Frame "TEXT" "PlayersColumnHeader" INHERITS "ColumnHeaderText" {
-	// 		SetPoint TOPLEFT,"PlayersColumn",TOPLEFT,0.0,0.0,
-	// 		Text "Player Names",
-	// 	}
-	// }
 }
 
