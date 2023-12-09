@@ -19,6 +19,9 @@ const banList: string[] = [
 	'selinace#1683',
 	'serenity#13183',
 	'boris#1897',
+	'easterbunny#2707',
+	'hotwheel95#2375',
+	'jax#2629',
 ];
 
 //nappa for death threats // calling people nigger // full screen spam when he loses
