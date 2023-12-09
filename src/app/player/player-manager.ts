@@ -19,6 +19,10 @@ const banList: string[] = [
 	'selinace#1683',
 	'serenity#13183',
 	'boris#1897',
+	'easterbunny#2707',
+	'hotwheel95#2375',
+	'jax#2629',
+	'LocalPlayer',
 ];
 
 //nappa for death threats // calling people nigger // full screen spam when he loses
@@ -29,9 +33,13 @@ const banList: string[] = [
 //avontos multi of nappa
 //baka multi of nappa
 //shazii multi of nappa
-//selinace mutli accounting
+//selinace multi accounting
 //serenity multi of selinace
 //boris calling people nigger, death threats
+//easterbunny preteaming with jax
+//hotwheel95 multi accounting
+//jax preteaming with easterbunny
+//KloXu test
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
