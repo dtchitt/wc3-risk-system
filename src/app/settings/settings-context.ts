@@ -3,10 +3,9 @@ import { DiplomacyStrategy } from './strategies/diplomacy-strategy';
 import { FogStrategy } from './strategies/fog-strategy';
 import { GameTypeStrategy } from './strategies/game-type-strategy';
 import { PromodeStrategy } from './strategies/promode-strategy';
-import { GoldStrategy } from './strategies/gold-strategy';
 import { Settings } from './settings';
 
-export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'GoldSending' | 'Promode';
+export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'Promode';
 
 export class SettingsContext {
 	private static instance: SettingsContext;
@@ -27,8 +26,6 @@ export class SettingsContext {
 					option: 0,
 				},
 				Fog: 0,
-				GoldSending: 0,
-				Ships: 0,
 				Promode: 0,
 			});
 		}
@@ -55,7 +52,6 @@ export class SettingsContext {
 
 		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
 		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
-		this.strategies.set('Gold', new GoldStrategy(this.settings.GoldSending));
 	}
 
 	/**

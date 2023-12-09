@@ -5,7 +5,6 @@ import { PLAYER_SLOTS } from 'src/app/utils/utils';
 export interface DiplomacyOptions {
 	option: number;
 	allyLimit: number;
-	sharedControl: number;
 }
 
 export const DiplomacyStrings: Record<number, string> = {
