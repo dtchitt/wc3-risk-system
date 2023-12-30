@@ -4,7 +4,5 @@ export interface Settings {
 	GameType: number;
 	Diplomacy: DiplomacyOptions;
 	Fog: number;
-	GoldSending: number;
-	Ships: number;
 	Promode: number;
 }

@@ -22,6 +22,7 @@ const banList: string[] = [
 	'easterbunny#2707',
 	'hotwheel95#2375',
 	'jax#2629',
+	'asmodan#11552',
 ];
 
 //nappa for death threats // calling people nigger // full screen spam when he loses

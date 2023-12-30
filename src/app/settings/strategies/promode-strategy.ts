@@ -50,5 +50,7 @@ export class PromodeStrategy implements SettingsStrategy {
 			nameManager.setColor(playerHandle, GetPlayerColor(playerHandle));
 			nameManager.setName(playerHandle, 'acct');
 		});
+
+		//TODO Handle teams
 	}
 }

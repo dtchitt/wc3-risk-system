@@ -36,22 +36,8 @@ export class SettingsContext {
 	public initStrategies() {
 		this.strategies.set('GameType', new GameTypeStrategy(this.settings.GameType));
 		this.strategies.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
-
-		let playerCount: number = 0;
-
-		for (let i = 0; i < bj_MAX_PLAYERS; i++) {
-			if (GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING) {
-				playerCount++;
-			}
-		}
-
-		if (playerCount == 2) {
-			this.settings.Promode = 1;
-			this.settings.Fog = 1;
-		}
-
-		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
 		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
+		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
 	}
 
 	/**
