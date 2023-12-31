@@ -20,17 +20,19 @@ export class ModeSelection implements GameState {
 	public start(): void {
 		const modeTimer: timer = CreateTimer();
 		const tick: number = 1;
-		let time: number = 1; //TODO set back to 15ish
+		let time: number = 15;
+		this.ui.update(time);
 
 		TimerStart(modeTimer, tick, true, () => {
-			if (time <= 0) {
+			this.ui.update(time);
+
+			if (time <= 0 || !this.ui.isVisible()) {
 				PauseTimer(modeTimer);
 				DestroyTimer(modeTimer);
-				//ui.hide();
+				this.ui.hide();
 				this.end();
 			}
 
-			//ui.timerText.setFrameText(`${Math.ceil(time)}`);
 			time -= tick;
 		});
 	}
