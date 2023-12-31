@@ -1,5 +1,6 @@
 import { SettingsStrategy } from './settings-strategy';
 import { AllyMenuFFASetup } from 'src/app/ui/console';
+import { HexColors } from 'src/app/utils/hex-colors';
 import { PLAYER_SLOTS } from 'src/app/utils/utils';
 
 export interface DiplomacyOptions {
@@ -8,10 +9,10 @@ export interface DiplomacyOptions {
 }
 
 export const DiplomacyStrings: Record<number, string> = {
-	0: 'ffa',
-	1: 'lobbyTeams',
-	2: 'randomTeams',
-	3: 'freeAlly',
+	0: `${HexColors.GREEN}FFA`,
+	1: `${HexColors.RED}Lobby Teams`,
+	2: `${HexColors.RED}Random Teams`,
+	3: `${HexColors.RED}Free Ally`,
 };
 
 export class DiplomacyStrategy implements SettingsStrategy {

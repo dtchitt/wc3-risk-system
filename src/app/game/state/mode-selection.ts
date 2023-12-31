@@ -1,16 +1,16 @@
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
-import { SettingsHostView } from 'src/app/settings/settings-host-view';
+import { SettingsView } from 'src/app/settings/settings-view';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
 	private nextState: GameState;
-	private ui: SettingsHostView;
+	private ui: SettingsView;
 
 	public constructor(nextState: GameState) {
 		this.nextState = nextState;
-		this.ui = new SettingsHostView();
+		this.ui = new SettingsView();
 	}
 
 	public setObserver(observer: GameManager) {

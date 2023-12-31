@@ -159,13 +159,13 @@ Frame "POPUPMENU" "MyPopupTemplate" {
     }	
 }
 
-Frame "BACKDROP" "SettingsHostView" INHERITS "QuestButtonBaseTemplate" {
+Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 	Width 0.25f,
     Height 0.31f,
 	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.05,
 
 	Frame "TEXT" "SettingsTitle" {
-		SetPoint TOP,"SettingsHostView",TOP, 0, -0.01,
+		SetPoint TOP,"SettingsView",TOP, 0, -0.01,
 		DecorateFileNames,
 		FrameFont "MasterFont", 0.03,"",
 		FontColor 1.0 0.8 0.0 1.0,
@@ -189,7 +189,7 @@ Frame "BACKDROP" "SettingsHostView" INHERITS "QuestButtonBaseTemplate" {
 	Frame "FRAME" "PopupMenus" {
 		Width  0.14f,
 		Height 0.1f,
-		SetPoint TOP,"SettingsHostView",TOP,0.03,-0.06,
+		SetPoint TOP,"SettingsView",TOP,0.03,-0.06,
 
 		Frame "POPUPMENU" "GameTypePopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
 		SetPoint TOP,"PopupMenus",TOP,0.0,0.00,
@@ -265,9 +265,9 @@ Frame "BACKDROP" "SettingsHostView" INHERITS "QuestButtonBaseTemplate" {
 	}
 
 	Frame "FRAME" "PopupLabels" {
-		Width  0.1f,
+		Width  0.08f,
 		Height 0.1f,
-		SetPoint TOPLEFT,"SettingsHostView",TOPLEFT,0.02,-0.068,
+		SetPoint TOPLEFT,"SettingsView",TOPLEFT,0.02,-0.068,
 
 		Frame "TEXT" "GameTypeLabel" {
 			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, 0,
@@ -325,4 +325,64 @@ Frame "BACKDROP" "SettingsHostView" INHERITS "QuestButtonBaseTemplate" {
 		}
 	}
 
+	Frame "FRAME" "PopupMenuOptions" {
+		Width  0.1f,
+		Height 0.1f,
+		SetPoint TOPLEFT,"PopupLabels",TOPRIGHT,0.0,-0.001,
+
+		Frame "TEXT" "GameTypeOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, 0,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Standard",
+		}
+
+		Frame "TEXT" "FogOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.05,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Off",
+		}
+
+		Frame "TEXT" "DiplomacyOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.1,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "FFA",
+		}
+
+		// Frame "TEXT" "DiplomacySliderOption" {
+		// 	SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
+		// 	DecorateFileNames,
+		// 	FrameFont "MasterFont", 0.012,"",
+		// 	FontColor 1.0 0.8 0.0 1.0,
+		// 	LayerStyle "IGNORETRACKEVENTS", 
+		// 	FontJustificationH JUSTIFYLEFT,
+		// 	FontJustificationV JUSTIFYMIDDLE,
+		// 	Text "Team Size:",
+		// }
+
+		Frame "TEXT" "PromodeOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Off",
+		}
+	}
 }

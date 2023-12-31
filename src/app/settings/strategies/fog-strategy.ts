@@ -1,10 +1,11 @@
 import { FogService } from 'src/app/libs/fog-service';
 import { SettingsStrategy } from './settings-strategy';
+import { HexColors } from 'src/app/utils/hex-colors';
 
 export const FogOptions: Record<number, string> = {
-	0: 'off',
-	1: 'on',
-	2: 'night',
+	0: `${HexColors.GREEN}Off`,
+	1: `${HexColors.RED}On`,
+	2: `${HexColors.RED}Night`,
 };
 
 export class FogStrategy implements SettingsStrategy {

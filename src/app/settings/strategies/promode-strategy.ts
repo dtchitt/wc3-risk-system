@@ -4,10 +4,11 @@ import { ActivePlayer } from 'src/app/player/types/active-player';
 import { PLAYER_COLORS } from 'src/app/utils/player-colors';
 import { ShuffleArray } from 'src/app/utils/utils';
 import { SettingsStrategy } from './settings-strategy';
+import { HexColors } from 'src/app/utils/hex-colors';
 
 export const PromodeOptions: Record<number, string> = {
-	0: 'off',
-	1: 'on',
+	0: `${HexColors.GREEN}Off`,
+	1: `${HexColors.RED}On`,
 };
 
 export class PromodeStrategy implements SettingsStrategy {
