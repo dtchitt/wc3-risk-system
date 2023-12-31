@@ -83,4 +83,12 @@ export class SettingsContext {
 	public isFogOn(): boolean {
 		return this.settings.Fog == 1;
 	}
+
+	/**
+	 * Checks if the game setting for Diplomancy is set to FFA
+	 * @returns true if FFA
+	 */
+	public isFFA(): boolean {
+		return this.settings.Diplomacy.option == 0;
+	}
 }

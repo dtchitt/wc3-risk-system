@@ -9,6 +9,7 @@ export class SettingsHostView {
 		this.backdrop = BlzCreateFrame('SettingsHostView', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 
 		BlzFrameSetValue(BlzGetFrameByName('GameTypePopup', 0), 0);
+		BlzFrameSetEnable(BlzGetFrameByName('GameTypePopup', 0), false);
 		BlzFrameSetValue(BlzGetFrameByName('FogPopup', 0), 0);
 		BlzFrameSetValue(BlzGetFrameByName('DiplomacyPopup', 0), 0);
 		this.buildStartButton();
@@ -17,6 +18,12 @@ export class SettingsHostView {
 		this.fogPopup();
 		this.diplomacyPopup();
 		this.promodeBox();
+
+		BlzFrameSetVisible(this.backdrop, false);
+
+		if (GetLocalPlayer() == Player(0)) {
+			BlzFrameSetVisible(this.backdrop, true);
+		}
 	}
 
 	public update(time: number) {
