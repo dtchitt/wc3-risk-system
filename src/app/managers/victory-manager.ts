@@ -2,6 +2,7 @@ import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
+import { WinTracker } from '../game/services/win-tracker';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
@@ -10,9 +11,11 @@ export class VictoryManager {
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
 	private gameTimer: TimerService;
+	private winTracker: WinTracker;
 
 	private constructor() {
 		this.players = [];
+		this.winTracker = new WinTracker();
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
@@ -83,6 +86,10 @@ export class VictoryManager {
 
 	public reset() {
 		this.players = [];
+	}
+
+	public updateWinTracker() {
+		this.winTracker.addWinForEntity(this._leader.getPlayer());
 	}
 
 	private endGame() {
