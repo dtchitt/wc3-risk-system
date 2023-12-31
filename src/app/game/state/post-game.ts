@@ -8,7 +8,6 @@ import { VictoryManager } from 'src/app/managers/victory-manager';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { CountryToRegion } from 'src/app/region/region-map';
 import { SettingsContext } from 'src/app/settings/settings-context';
-import { WinTracker } from 'src/app/utils/win-tracker';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -28,7 +27,7 @@ export class PostGame implements GameState {
 		this.isOver = true;
 
 		if (SettingsContext.getInstance().isPromode()) {
-			WinTracker.getInstance().updateData(VictoryManager.getInstance().leader.getPlayer());
+			VictoryManager.getInstance().updateWinTracker();
 		}
 
 		const statsController: StatisticsController = StatisticsController.getInstance();
