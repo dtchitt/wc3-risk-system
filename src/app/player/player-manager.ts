@@ -19,9 +19,6 @@ const banList: string[] = [
 	'selinace#1683',
 	'serenity#13183',
 	'boris#1897',
-	'easterbunny#2707',
-	'hotwheel95#2375',
-	'jax#2629',
 	'asmodan#11552',
 ];
 
@@ -36,6 +33,7 @@ const banList: string[] = [
 //selinace mutli accounting
 //serenity multi of selinace
 //boris calling people nigger, death threats
+//asmodan calling nigger, death threats
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
