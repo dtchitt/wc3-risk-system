@@ -15,7 +15,7 @@ import { EnterRegionEvent } from './app/triggers/enter-region-event';
 import { LeaveRegionEvent } from './app/triggers/leave-region-event';
 import { SpellEffectEvent } from './app/triggers/spell-effect-event';
 import { PlayerLeaveEvent } from './app/triggers/player-leave-event';
-import { UnitDeathEvent } from './app/triggers/unit-death-event';
+import { UnitDeathEvent } from './app/triggers/unit_death/unit-death-event';
 import { UnitTrainedEvent } from './app/triggers/unit-trained-event';
 import { KeyEvents } from './app/triggers/key-events';
 import { AntiCheat } from './app/libs/anti-cheat';
