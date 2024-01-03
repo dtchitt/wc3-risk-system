@@ -28,11 +28,13 @@ export class PostGame implements GameState {
 
 		if (SettingsContext.getInstance().isPromode()) {
 			VictoryManager.getInstance().updateWinTracker();
+		} else {
+			const statsController: StatisticsController = StatisticsController.getInstance();
+			statsController.refreshView();
+			statsController.setViewVisibility(true);
 		}
 
-		const statsController: StatisticsController = StatisticsController.getInstance();
-		statsController.refreshView();
-		statsController.setViewVisibility(true);
+		FogEnable(false);
 	}
 
 	public end(): void {
@@ -48,6 +50,7 @@ export class PostGame implements GameState {
 			player.reset();
 		});
 
+		FogEnable(true);
 		this.isOver = false;
 	}
 
