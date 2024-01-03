@@ -20,6 +20,7 @@ const banList: string[] = [
 	'serenity#13183',
 	'boris#1897',
 	'asmodan#11552',
+	'risknotlego#1666',
 ];
 
 //nappa for death threats // calling people nigger // full screen spam when he loses
