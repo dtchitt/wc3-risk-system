@@ -27,3 +27,23 @@ export function GetUnitsInRangeByAllegiance(
 		Filter(() => city.isValidGuard(GetFilterUnit()) && allegianceCheck(GetFilterUnit(), city.getOwner()))
 	);
 }
+
+export function GetUnitsInRangeOfUnitByAllegiance(
+	g: group,
+	city: City,
+	radius: number,
+	allegianceCheck: (filterUnit: unit, player: player) => boolean,
+	dyingUnit: unit,
+	killingUnit: unit
+) {
+	const x: number = GetUnitX(dyingUnit);
+	const y: number = GetUnitY(dyingUnit);
+
+	GroupEnumUnitsInRange(
+		g,
+		x,
+		y,
+		radius,
+		Filter(() => city.isValidGuard(GetFilterUnit()) && allegianceCheck(GetFilterUnit(), GetOwningPlayer(killingUnit)))
+	);
+}

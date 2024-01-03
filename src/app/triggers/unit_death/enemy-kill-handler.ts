@@ -1,7 +1,6 @@
-import { GetUnitsInRangeByAllegiance } from 'src/app/utils/guard-filters';
+import { GetUnitsInRangeByAllegiance, GetUnitsInRangeOfUnitByAllegiance } from 'src/app/utils/guard-filters';
 import { LargeSearchRadius, SmallSearchRadius } from './search-radii';
 import { City } from 'src/app/city/city';
-import { CompareUnitByValue } from 'src/app/utils/unit-comparisons';
 import { ReplaceGuard } from './replace-guard';
 
 export function EnemyKillHandler(city: City, dyingUnit: unit, killingUnit: unit): boolean {
@@ -18,12 +17,12 @@ export function EnemyKillHandler(city: City, dyingUnit: unit, killingUnit: unit)
 		return true;
 	}
 
-	//No city owned units found, Search for allied units in large radius of dying guard
-	GetUnitsInRangeByAllegiance(searchGroup, city, LargeSearchRadius, IsUnitEnemy, dyingUnit);
+	//No city owned units found, Search for allied units of killer in large radius of dying guard
+	GetUnitsInRangeOfUnitByAllegiance(searchGroup, city, LargeSearchRadius, IsUnitAlly, dyingUnit, killingUnit);
 
 	//Could not find valid units within large radius of guard, so we search in small radius by killer
 	if (BlzGroupGetSize(searchGroup) <= 0) {
-		GetUnitsInRangeByAllegiance(searchGroup, city, SmallSearchRadius, IsUnitEnemy, killingUnit);
+		GetUnitsInRangeOfUnitByAllegiance(searchGroup, city, LargeSearchRadius, IsUnitAlly, dyingUnit, killingUnit);
 	}
 
 	//Found valid guard units, set unit as guard
