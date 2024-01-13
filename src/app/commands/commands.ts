@@ -59,7 +59,8 @@ function restartCommand(chatManager: ChatManager, gameManager: GameManager) {
 
 		const resetTimer: timer = CreateTimer();
 
-		TimerStart(resetTimer, 1.5, false, () => {
+		TimerStart(resetTimer, 4, false, () => {
+			FogEnable(true);
 			gameManager.fastRestart();
 			DestroyTimer(resetTimer);
 		});

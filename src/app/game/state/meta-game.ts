@@ -59,7 +59,7 @@ export class MetaGame implements GameState {
 			});
 
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 4;
+			let duration: number = 3;
 
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`The Game will start in:\n${duration}`);
