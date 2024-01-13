@@ -54,10 +54,6 @@ function processInputs(strings, ...values) {
 
 //Example of how to do inputs
 processInputs`
-    gg_rct_North_Russia = Rect(14016.0, 12608.0, 14272.0, 12864.0);
-    gg_rct_Arkhangelsk = Rect(10560.0, 9408.0, 10816.0, 9664.0);
-    gg_rct_Leningrad = Rect(7744.0, 5312.0, 8000.0, 5568.0);
-    gg_rct_Karelia = Rect(6464.0, 8768.0, 6720.0, 9024.0);
-    gg_rct_Catalonia = Rect(-7232.0, -8768.0, -6976.0, -8512.0);
+    gg_rct_Region_000 = Rect(-1984.0, -8640.0, -1728.0, -8384.0)
 `;
 

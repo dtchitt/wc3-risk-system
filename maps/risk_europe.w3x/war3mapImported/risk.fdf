@@ -296,7 +296,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
-			LayerStyle "IGNORETRACKEVENTS", 
+			LayerStyle "IGNORETRACKEVENTS",
 			FontJustificationH JUSTIFYLEFT,
 			FontJustificationV JUSTIFYMIDDLE,
 			Text "Diplomacy:",
