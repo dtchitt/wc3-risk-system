@@ -674,11 +674,11 @@ export function SetCountries() {
 	CountrySettings.push({
 		name: 'Sardinia',
 		spawnerData: {
-			unitData: { x: -1856.0, y: -8256.0 },
+			unitData: { x: -1856.0, y: -8512.0 },
 		},
 		cities: [
-			{ barrack: { typeId: UNIT_ID.PORT, x: -2400.0, y: -7400.0 }, cityType: 'port' },
-			{ barrack: { typeId: UNIT_ID.PORT, x: -1376.0, y: -8928.0 }, cityType: 'port' },
+			{ barrack: { typeId: UNIT_ID.PORT, x: -2208.0, y: -9440.0 }, cityType: 'port' },
+			{ barrack: { typeId: UNIT_ID.PORT, x: -1888.0, y: -7456.0 }, cityType: 'port' },
 		],
 	});
 	CountrySettings.push({
