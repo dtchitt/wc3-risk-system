@@ -5,15 +5,15 @@ import { ReplaceGuard } from './replace-guard';
 
 export function EnemyKillHandler(city: City, dyingUnit: unit, killingUnit: unit): boolean {
 	if (!IsUnitEnemy(killingUnit, city.getOwner())) return null;
-
 	const searchGroup: group = CreateGroup();
 
 	//Search for city owned units within CoP of city
-	GetUnitsInRangeByAllegiance(searchGroup, city, SmallSearchRadius, IsUnitOwnedByPlayer);
+	GetUnitsInRangeByAllegiance(searchGroup, city, SmallSearchRadius, IsUnitAlly);
 
 	//Found city owned units within CoP
 	if (BlzGroupGetSize(searchGroup) >= 1) {
 		ReplaceGuard(city, searchGroup);
+		DestroyGroup(searchGroup);
 		return true;
 	}
 
@@ -22,12 +22,13 @@ export function EnemyKillHandler(city: City, dyingUnit: unit, killingUnit: unit)
 
 	//Could not find valid units within large radius of guard, so we search in small radius by killer
 	if (BlzGroupGetSize(searchGroup) <= 0) {
-		GetUnitsInRangeOfUnitByAllegiance(searchGroup, city, LargeSearchRadius, IsUnitAlly, dyingUnit, killingUnit);
+		GetUnitsInRangeOfUnitByAllegiance(searchGroup, city, SmallSearchRadius, IsUnitAlly, killingUnit, killingUnit);
 	}
 
 	//Found valid guard units, set unit as guard
 	if (BlzGroupGetSize(searchGroup) >= 1) {
 		ReplaceGuard(city, searchGroup);
+		DestroyGroup(searchGroup);
 		return true;
 	}
 
