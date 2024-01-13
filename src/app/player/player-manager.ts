@@ -20,21 +20,10 @@ const banList: string[] = [
 	'serenity#13183',
 	'boris#1897',
 	'asmodan#11552',
-	'risknotlego#1666',
+	'rhaekyr#1231',
+	'sajbakaman#2613',
+	'kimiko#11661',
 ];
-
-//nappa for death threats // calling people nigger // full screen spam when he loses
-//keen for being a toxic POS and spamming
-//aelexandros multi of nappa
-//macaocao multi of nappa
-//asinus multi of nappa
-//avontos multi of nappa
-//baka multi of nappa
-//shazii multi of nappa
-//selinace mutli accounting
-//serenity multi of selinace
-//boris calling people nigger, death threats
-//asmodan calling nigger, death threats
 
 export class PlayerManager {
 	public static readonly PLAYING: string = '|cFF00FFF0Playing|r';
