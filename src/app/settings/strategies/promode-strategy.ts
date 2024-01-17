@@ -50,6 +50,7 @@ export class PromodeStrategy implements SettingsStrategy {
 		playerManager.players.forEach((val, playerHandle) => {
 			nameManager.setColor(playerHandle, GetPlayerColor(playerHandle));
 			nameManager.setName(playerHandle, 'acct');
+			val.trackedData.bonus.disable();
 		});
 
 		//TODO Handle teams

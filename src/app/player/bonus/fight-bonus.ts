@@ -15,8 +15,6 @@ export class FightBonus implements Bonus {
 	private enabled: boolean;
 
 	constructor(player: player) {
-		this.delta = 0;
-		this.totalBonusVal = 0;
 		this.goldEarned = 0;
 		this.player = player;
 		this.enabled = true;
@@ -30,16 +28,22 @@ export class FightBonus implements Bonus {
 	}
 
 	public showForPlayer(player: player) {
+		if (!this.enabled) return;
+
 		if (player == GetLocalPlayer()) {
 			BlzFrameSetVisible(this.ui, true);
 		}
 	}
 
 	public hideUI() {
+		if (!this.enabled) return;
+
 		BlzFrameSetVisible(this.ui, false);
 	}
 
 	public reset(): void {
+		if (!this.enabled) return;
+
 		this.delta = 0;
 		this.totalBonusVal = 0;
 		BlzFrameSetValue(this.ui, this.delta);
@@ -65,6 +69,8 @@ export class FightBonus implements Bonus {
 	}
 
 	public repositon(reletiveFrame: framehandle) {
+		if (!this.enabled) return;
+
 		BlzFrameSetPoint(this.ui, FRAMEPOINT_BOTTOMRIGHT, reletiveFrame, FRAMEPOINT_TOPRIGHT, -0.025, 0);
 	}
 
@@ -74,6 +80,8 @@ export class FightBonus implements Bonus {
 	}
 
 	private processBonus(): number {
+		if (!this.enabled) return 0;
+
 		this.delta -= FightBonus.INTERVAL;
 
 		let bonusAmount: number = Math.floor(this.totalBonusVal / FightBonus.INTERVAL);
@@ -92,6 +100,8 @@ export class FightBonus implements Bonus {
 	}
 
 	private setText() {
+		if (!this.enabled) return;
+
 		BlzFrameSetText(BlzGetFrameByName('MyBarExText', GetPlayerId(this.player)), `Fight Bonus: ${this.delta} / ${FightBonus.INTERVAL}`);
 	}
 }
