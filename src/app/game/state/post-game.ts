@@ -45,9 +45,11 @@ export class PostGame implements GameState {
 		this.resetRegions();
 
 		VictoryManager.getInstance().reset();
+
 		if (!SettingsContext.getInstance().isPromode()) {
 			StatisticsController.getInstance().setViewVisibility(false);
 		}
+
 		PlayerManager.getInstance().players.forEach((player) => {
 			player.reset();
 		});
