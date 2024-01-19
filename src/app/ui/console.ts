@@ -69,7 +69,6 @@ export function SetConsoleUI() {
 
 	BlzCreateFrame('GlobalMessageFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 	BlzCreateFrame('CountdownFrame', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
-	// hideUI(true);
 
 	for (let i = 0; i < PLAYER_SLOTS; i++) {
 		const player = Player(i);

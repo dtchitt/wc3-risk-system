@@ -12,23 +12,20 @@ export function KeyEvents() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
-
-			if (player.options.board == 0) {
-				player.options.board = 1;
-
-				if (player.getPlayer() == GetLocalPlayer()) {
-					Scoreboards[0].setVisibility(false);
-					Scoreboards[1].setVisibility(true);
-				}
-			} else if (player.options.board == 1) {
-				player.options.board = 0;
-
-				if (player.getPlayer() == GetLocalPlayer()) {
-					Scoreboards[1].setVisibility(false);
-					Scoreboards[0].setVisibility(true);
-				}
-			}
+			// const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
+			// if (player.options.board == 0) {
+			// 	player.options.board = 1;
+			// 	if (player.getPlayer() == GetLocalPlayer()) {
+			// 		Scoreboards[0].setVisibility(false);
+			// 		Scoreboards[1].setVisibility(true);
+			// 	}
+			// } else if (player.options.board == 1) {
+			// 	player.options.board = 0;
+			// 	if (player.getPlayer() == GetLocalPlayer()) {
+			// 		Scoreboards[1].setVisibility(false);
+			// 		Scoreboards[0].setVisibility(true);
+			// 	}
+			// }
 		})
 	);
 }
