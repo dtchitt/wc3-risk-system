@@ -1,7 +1,6 @@
 import { GetUnitsInRangeByAllegiance } from 'src/app/utils/guard-filters';
 import { LargeSearchRadius, SmallSearchRadius } from './search-radii';
 import { City } from 'src/app/city/city';
-import { CompareUnitByValue } from 'src/app/utils/unit-comparisons';
 import { ReplaceGuard } from './replace-guard';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { AlliedKillHandler } from './allied-kill-handler';
