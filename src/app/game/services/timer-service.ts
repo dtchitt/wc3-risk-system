@@ -3,13 +3,13 @@ import { Resetable } from 'src/app/interfaces/resetable';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { TrackedData } from 'src/app/player/data/tracked-data';
 import { PlayerManager } from 'src/app/player/player-manager';
-import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { GameState } from '../state/game-state';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { File } from 'w3ts';
+import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 
 /**
  * TimerService is a class responsible for managing the main game timer.
@@ -65,15 +65,11 @@ export class TimerService implements Resetable {
 							4
 						);
 					}
-				}
 
-				Scoreboards.forEach((board) => {
-					if (this._tick == this._duration) {
-						board.updateFull();
-					} else {
-						board.updatePartial();
-					}
-				});
+					ScoreboardManager.getInstance().updateFull();
+				} else {
+					ScoreboardManager.getInstance().updatePartial();
+				}
 
 				this.updateUI();
 

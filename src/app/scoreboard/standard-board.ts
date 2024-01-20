@@ -47,7 +47,7 @@ export class StandardBoard extends Scoreboard {
 		MultiboardSetItemsStyle(this.board, true, false);
 		MultiboardMinimize(this.board, true);
 		MultiboardMinimize(this.board, false);
-		this.setVisibility(false);
+		this.setVisibility(true);
 	}
 
 	/**

@@ -29,7 +29,7 @@ export abstract class Scoreboard {
 	/**
 	 * Destroys the scoreboard.
 	 */
-	public destory() {
+	public destroy() {
 		this.players = [];
 		DestroyMultiboard(this.board);
 		this.board = null;

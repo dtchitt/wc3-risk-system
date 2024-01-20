@@ -7,12 +7,12 @@ import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
-import { Scoreboards } from '../scoreboard/scoreboard-array';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
 import { GameManager } from '../game/game-manager';
 import { CountryToRegion } from '../region/region-map';
 import { Region } from '../region/region';
+import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -93,18 +93,14 @@ export function OwnershipChangeEvent() {
 						}
 					}
 
-					Scoreboards.forEach((board) => {
-						board.setAlert(owner.getPlayer(), country.getName());
-					});
+					ScoreboardManager.getInstance().setAlert(owner.getPlayer(), country.getName());
 				}
 
-				Scoreboards.forEach((board) => {
-					board.setTitle(
-						`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
-							VictoryManager.getInstance().leader.trackedData.cities.cities.length
-						}/${VictoryManager.CITIES_TO_WIN} `
-					);
-				});
+				ScoreboardManager.getInstance().setTitle(
+					`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+						VictoryManager.getInstance().leader.trackedData.cities.cities.length
+					}/${VictoryManager.CITIES_TO_WIN} `
+				);
 			}
 
 			return false;

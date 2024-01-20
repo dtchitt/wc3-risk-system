@@ -1,7 +1,3 @@
-import { PlayerManager } from '../player/player-manager';
-import { ActivePlayer } from '../player/types/active-player';
-import { Scoreboards } from '../scoreboard/scoreboard-array';
-
 export function KeyEvents() {
 	const t: trigger = CreateTrigger();
 

@@ -1,9 +1,6 @@
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
-import { MiniBoard } from 'src/app/scoreboard/miniboard';
-import { Scoreboards } from 'src/app/scoreboard/scoreboard-array';
-import { StandardBoard } from 'src/app/scoreboard/standard-board';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsContext } from 'src/app/settings/settings-context';
@@ -11,8 +8,8 @@ import { TimerService } from '../services/timer-service';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { CountdownMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
-import { ObserverBoard } from 'src/app/scoreboard/observer-board';
 import { ActivePlayer } from 'src/app/player/types/active-player';
+import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
@@ -31,32 +28,24 @@ export class MetaGame implements GameState {
 	public start(): void {
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-			const observers: player[] = [...PlayerManager.getInstance().observers.keys()];
-
-			SettingsContext.getInstance().applyStrategy('Fog');
-			Scoreboards.push(new StandardBoard(players));
-			const mbFrame: framehandle = BlzGetFrameByName('Multiboard', 0);
-			Scoreboards.push(new MiniBoard(players));
-			Scoreboards[0].setVisibility(true);
-
-			if (observers.length >= 1) {
-				Scoreboards.push(new ObserverBoard(players));
-
-				observers.forEach((handle) => {
-					if (GetLocalPlayer() == handle) {
-						Scoreboards[0].setVisibility(false);
-						Scoreboards[2].setVisibility(true);
-					}
-				});
-			}
 
 			players.forEach((player) => {
 				SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
 				player.status.set(PLAYER_STATUS.ALIVE);
 				player.trackedData.bonus.showForPlayer(player.getPlayer());
-				player.trackedData.bonus.repositon(mbFrame);
+				player.trackedData.bonus.repositon();
 				VictoryManager.getInstance().addPlayer(player);
 			});
+
+			const scoreboardManager: ScoreboardManager = ScoreboardManager.getInstance();
+
+			if (SettingsContext.getInstance().isFFA()) {
+				scoreboardManager.FFASetup(players);
+			} else {
+				scoreboardManager.TeamSetup(players);
+			}
+
+			scoreboardManager.ObsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
 
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 
@@ -88,19 +77,14 @@ export class MetaGame implements GameState {
 	}
 
 	public end(): void {
-		Scoreboards.forEach((board) => {
-			board.destory();
-		});
-
-		Scoreboards.length = 0;
+		ScoreboardManager.getInstance().destroyBoards();
 
 		PlayerManager.getInstance().players.forEach((player) => {
-			player.trackedData.bonus.hideUI();
-
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
 			} else {
 				NameManager.getInstance().setName(player.getPlayer(), 'btag');
+				player.trackedData.bonus.hideUI();
 			}
 		});
 
