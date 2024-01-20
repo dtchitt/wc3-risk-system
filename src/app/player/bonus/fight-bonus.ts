@@ -37,7 +37,6 @@ export class FightBonus implements Bonus {
 
 	public hideUI() {
 		if (!this.enabled) return;
-
 		BlzFrameSetVisible(this.ui, false);
 	}
 
@@ -68,15 +67,14 @@ export class FightBonus implements Bonus {
 		return bonusAmount;
 	}
 
-	public repositon(reletiveFrame: framehandle) {
+	public repositon() {
 		if (!this.enabled) return;
 
-		BlzFrameSetPoint(this.ui, FRAMEPOINT_BOTTOMRIGHT, reletiveFrame, FRAMEPOINT_TOPRIGHT, -0.025, 0);
+		BlzFrameSetAbsPoint(this.ui, FRAMEPOINT_TOPRIGHT, ((0.6 * BlzGetLocalClientWidth()) / BlzGetLocalClientHeight() + 0.793) / 2, 0.573);
 	}
 
 	public disable() {
 		this.enabled = false;
-		this.hideUI();
 	}
 
 	private processBonus(): number {
