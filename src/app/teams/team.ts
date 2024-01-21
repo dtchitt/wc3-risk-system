@@ -17,6 +17,9 @@ export class Team {
 		});
 
 		this.income = players.length * STARTING_INCOME;
+		this.cities = 0;
+		this.kills = 0;
+		this.deaths = 0;
 	}
 
 	public getNumber() {

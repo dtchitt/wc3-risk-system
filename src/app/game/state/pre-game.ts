@@ -7,6 +7,8 @@ import { RegionToCity } from 'src/app/city/city-map';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SlavePlayer } from 'src/app/player/types/slave-player';
 import { DistributionService } from '../services/distribution-service';
+import { TeamManager } from 'src/app/teams/team-manager';
+import { SettingsContext } from 'src/app/settings/settings-context';
 
 export class PreGame implements GameState {
 	private manager: GameManager;
@@ -54,6 +56,8 @@ export class PreGame implements GameState {
 	}
 
 	public end(): void {
+		const playerManager: PlayerManager = PlayerManager.getInstance();
+
 		this.distributionService = new DistributionService();
 		this.distributionService.runDistro(() => {
 			RegionToCity.forEach((city) => {
@@ -61,9 +65,15 @@ export class PreGame implements GameState {
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
 			});
+
+			if (!SettingsContext.getInstance().isFFA()) {
+				playerManager.players.forEach((player, handle) => {
+					TeamManager.getInstance().getTeamFromPlayer(handle)?.updateCityCount(player.trackedData.cities.cities.length);
+				});
+			}
 
 			this.manager.updateState(this.nextState);
 		});
