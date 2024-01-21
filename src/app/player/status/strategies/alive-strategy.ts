@@ -1,3 +1,4 @@
+import { STARTING_INCOME } from 'src/configs/game-settings';
 import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
@@ -7,10 +8,10 @@ export class AliveStrategy implements StatusStrategy {
 		if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) return gamePlayer.status.set(PLAYER_STATUS.LEFT);
 
 		gamePlayer.status.status = PLAYER_STATUS.ALIVE;
-		gamePlayer.trackedData.income.income = 4;
+		gamePlayer.trackedData.income.income = STARTING_INCOME;
 
 		if (gamePlayer.trackedData.income.max == 0) {
-			gamePlayer.trackedData.income.max = 4;
+			gamePlayer.trackedData.income.max = STARTING_INCOME;
 		}
 	}
 }
