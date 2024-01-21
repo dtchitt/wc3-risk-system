@@ -13,6 +13,8 @@ import { GameManager } from '../game/game-manager';
 import { CountryToRegion } from '../region/region-map';
 import { Region } from '../region/region';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
+import { SettingsContext } from '../settings/settings-context';
+import { TeamManager } from '../teams/team-manager';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -57,6 +59,10 @@ export function OwnershipChangeEvent() {
 				if (prevOwnerData.cities.cities.length == 0) {
 					prevOwner.status.set(PLAYER_STATUS.NOMAD);
 				}
+
+				if (!SettingsContext.getInstance().isFFA()) {
+					TeamManager.getInstance().getTeamFromPlayer(prevOwner.getPlayer())?.updateCityCount(-1);
+				}
 			}
 
 			if (owner) {
@@ -94,6 +100,10 @@ export function OwnershipChangeEvent() {
 					}
 
 					ScoreboardManager.getInstance().setAlert(owner.getPlayer(), country.getName());
+				}
+
+				if (!SettingsContext.getInstance().isFFA()) {
+					TeamManager.getInstance().getTeamFromPlayer(prevOwner.getPlayer())?.updateCityCount(1);
 				}
 
 				ScoreboardManager.getInstance().setTitle(

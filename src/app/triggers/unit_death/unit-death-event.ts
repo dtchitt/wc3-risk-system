@@ -1,3 +1,4 @@
+import { SettingsContext } from 'src/app/settings/settings-context';
 import { GameManager } from '../../game/game-manager';
 import { TransportManager } from '../../managers/transport-manager';
 import { PlayerManager } from '../../player/player-manager';
@@ -5,6 +6,7 @@ import { GamePlayer } from '../../player/types/game-player';
 import { SPANWER_UNITS } from '../../spawner/spawner';
 import { UNIT_TYPE } from '../../utils/unit-types';
 import { HandleGuardDeath } from './handle-guard-death';
+import { TeamManager } from 'src/app/teams/team-manager';
 
 export function UnitDeathEvent() {
 	const t: trigger = CreateTrigger();
@@ -25,6 +27,12 @@ export function UnitDeathEvent() {
 
 			if (killingUnitOwner) killingUnitOwner.onKill(GetOwningPlayer(dyingUnit), dyingUnit);
 			if (dyingUnitOwner) dyingUnitOwner.onDeath(GetOwningPlayer(killingUnit), dyingUnit);
+
+			if (!SettingsContext.getInstance().isFFA() && IsPlayerAlly(killingUnitOwner.getPlayer(), dyingUnitOwner.getPlayer())) {
+				TeamManager.getInstance().getTeamFromPlayer(killingUnitOwner.getPlayer())?.updateKillCount(GetUnitPointValue(dyingUnit));
+				TeamManager.getInstance().getTeamFromPlayer(dyingUnitOwner.getPlayer())?.updateDeathCount(GetUnitPointValue(dyingUnit));
+			}
+
 			if (IsUnitType(dyingUnit, UNIT_TYPE.GUARD)) HandleGuardDeath(dyingUnit, killingUnit);
 
 			TransportManager.getInstance().onDeath(killingUnit, dyingUnit);
