@@ -34,39 +34,50 @@ export function OwnershipChangeEvent() {
 			const region: Region = CountryToRegion.get(country);
 			const prevOwner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(GetChangingUnitPrevOwner());
 			const owner: ActivePlayer | undefined = PlayerManager.getInstance().players.get(city.getOwner());
+			const teamManager: TeamManager = SettingsContext.getInstance().isFFA() ? null : TeamManager.getInstance();
 
 			if (prevOwner) {
 				const prevOwnerData: TrackedData = prevOwner.trackedData;
+				const prevOwnerHandle: player = prevOwner.getPlayer();
 
 				prevOwnerData.cities.cities.splice(prevOwnerData.cities.cities.indexOf(city), 1);
 				prevOwnerData.countries.set(country, prevOwnerData.countries.get(country) - 1);
 
-				if (country.getOwner() == prevOwner.getPlayer()) {
+				if (country.getOwner() == prevOwnerHandle) {
 					country.setOwner(null);
 
 					if (prevOwner.status.isAlive()) {
 						prevOwner.trackedData.income.income -= country.getCities().length;
 						prevOwner.trackedData.income.delta -= country.getCities().length;
 					}
+
+					if (teamManager) {
+						teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateIncome(-country.getCities().length);
+					}
 				}
 
-				if (region && region.owner == prevOwner.getPlayer()) {
+				if (region && region.owner == prevOwnerHandle) {
 					region.setOwner(null);
 					prevOwner.trackedData.income.income -= region.goldBonus;
 					prevOwner.trackedData.income.delta -= region.goldBonus;
+
+					if (teamManager) {
+						teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateIncome(-region.goldBonus);
+					}
 				}
 
 				if (prevOwnerData.cities.cities.length == 0) {
 					prevOwner.status.set(PLAYER_STATUS.NOMAD);
 				}
 
-				if (!SettingsContext.getInstance().isFFA()) {
-					TeamManager.getInstance().getTeamFromPlayer(prevOwner.getPlayer())?.updateCityCount(-1);
+				if (teamManager) {
+					teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateCityCount(-1);
 				}
 			}
 
 			if (owner) {
 				const ownerData: TrackedData = owner.trackedData;
+				const ownerHandle: player = owner.getPlayer();
 
 				ownerData.cities.cities.push(city);
 				ownerData.cities.max = Math.max(ownerData.cities.max, ownerData.cities.cities.length);
@@ -82,28 +93,36 @@ export function OwnershipChangeEvent() {
 				}
 
 				if (ownerData.countries.get(country) == country.getCities().length) {
-					country.setOwner(owner.getPlayer());
+					country.setOwner(ownerHandle);
 
 					if (owner.status.isAlive()) {
 						ownerData.income.income += country.getCities().length;
 						ownerData.income.delta += country.getCities().length;
 
-						if (ownerData.income.income > ownerData.income.max) {
-							ownerData.income.max = ownerData.income.income;
-						}
-
-						if (region && region.isOwnedByPlayer(owner.getPlayer())) {
-							region.setOwner(owner.getPlayer());
+						if (region && region.isOwnedByPlayer(ownerHandle)) {
+							region.setOwner(ownerHandle);
 							ownerData.income.income += region.goldBonus;
 							ownerData.income.delta += region.goldBonus;
 						}
 					}
 
-					ScoreboardManager.getInstance().setAlert(owner.getPlayer(), country.getName());
+					if (ownerData.income.income > ownerData.income.max) {
+						ownerData.income.max = ownerData.income.income;
+					}
+
+					if (teamManager) {
+						teamManager.getTeamFromPlayer(ownerHandle)?.updateIncome(country.getCities().length);
+
+						if (region && region.isOwnedByPlayer(ownerHandle)) {
+							teamManager.getTeamFromPlayer(ownerHandle)?.updateIncome(region.goldBonus);
+						}
+					}
+
+					ScoreboardManager.getInstance().setAlert(ownerHandle, country.getName());
 				}
 
-				if (!SettingsContext.getInstance().isFFA()) {
-					TeamManager.getInstance().getTeamFromPlayer(prevOwner.getPlayer())?.updateCityCount(1);
+				if (teamManager) {
+					teamManager.getTeamFromPlayer(ownerHandle)?.updateCityCount(1);
 				}
 
 				ScoreboardManager.getInstance().setTitle(
