@@ -1,3 +1,5 @@
+import { PlayerManager } from '../player/player-manager';
+import { ActivePlayer } from '../player/types/active-player';
 import { PLAYER_SLOTS } from '../utils/utils';
 import { Team } from './team';
 
@@ -7,16 +9,20 @@ export class TeamManager {
 
 	private constructor() {
 		this.teams = new Map<number, Team>();
-		const teams: Map<number, player[]> = new Map<number, player[]>();
+		const teams: Map<number, ActivePlayer[]> = new Map<number, ActivePlayer[]>();
 
 		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = Player(i);
+			const player = PlayerManager.getInstance().players.get(Player(i));
 
-			if (!IsPlayerSlotState(player, PLAYER_SLOT_STATE_PLAYING) || IsPlayerObserver(player)) {
+			if (!player) continue;
+
+			const playerHandle: player = player.getPlayer();
+
+			if (!IsPlayerSlotState(playerHandle, PLAYER_SLOT_STATE_PLAYING) || IsPlayerObserver(playerHandle)) {
 				continue;
 			}
 
-			const teamNumber = GetPlayerTeam(player) + 1;
+			const teamNumber = GetPlayerTeam(playerHandle) + 1;
 
 			if (!teams.has(teamNumber)) {
 				teams.set(teamNumber, [player]);

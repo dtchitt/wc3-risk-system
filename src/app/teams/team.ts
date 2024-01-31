@@ -1,15 +1,16 @@
 import { STARTING_INCOME } from 'src/configs/game-settings';
+import { ActivePlayer } from '../player/types/active-player';
 
 export class Team {
 	private teamNumber: number;
-	private teamMembers: player[];
+	private teamMembers: ActivePlayer[];
 	private income: number;
 	private cities: number;
 	private kills: number;
 	private deaths: number;
 
-	public constructor(players: player[]) {
-		this.teamNumber = GetPlayerTeam(players[0]) + 1;
+	public constructor(players: ActivePlayer[]) {
+		this.teamNumber = GetPlayerTeam(players[0].getPlayer()) + 1;
 		this.teamMembers = [];
 
 		players.forEach((player) => {
@@ -60,5 +61,17 @@ export class Team {
 
 	public getDeaths() {
 		return this.deaths;
+	}
+
+	public sortPlayersByIncome() {
+		this.teamMembers.sort((pA, pB) => {
+			const playerAIncome: number = pA.trackedData.income.income;
+			const playerBIncome: number = pB.trackedData.income.income;
+
+			if (playerAIncome < playerBIncome) return 1;
+			if (playerAIncome > playerBIncome) return -1;
+
+			return 0;
+		});
 	}
 }
