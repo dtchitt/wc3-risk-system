@@ -2,7 +2,7 @@ import { PlayerManager } from 'src/app/player/player-manager';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
-import { TreeService } from '../services/tree-service';
+import { TreeManager } from '../services/tree-service';
 import { RegionToCity } from 'src/app/city/city-map';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SlavePlayer } from 'src/app/player/types/slave-player';
@@ -13,12 +13,11 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 export class PreGame implements GameState {
 	private manager: GameManager;
 	private nextState: GameState;
-	private treeService: TreeService;
 	private distributionService: DistributionService;
 
 	public constructor(nextState: GameState) {
 		this.nextState = nextState;
-		this.treeService = new TreeService();
+		TreeManager.getInstance();
 	}
 
 	public setObserver(observer: GameManager) {
@@ -26,8 +25,6 @@ export class PreGame implements GameState {
 	}
 
 	public start(): void {
-		this.treeService.reset();
-
 		PlayerManager.getInstance().players.forEach((val) => {
 			val.trackedData.setKDMaps();
 

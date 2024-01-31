@@ -8,6 +8,7 @@ import { VictoryManager } from 'src/app/managers/victory-manager';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { CountryToRegion } from 'src/app/region/region-map';
 import { SettingsContext } from 'src/app/settings/settings-context';
+import { TreeManager } from '../services/tree-service';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -43,6 +44,7 @@ export class PostGame implements GameState {
 		this.removeUnits();
 		this.resetCountries();
 		this.resetRegions();
+		TreeManager.getInstance().reset();
 
 		VictoryManager.getInstance().reset();
 
