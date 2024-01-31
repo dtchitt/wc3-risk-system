@@ -59,14 +59,19 @@ const ASHENV_CANOPY_DEFAULT_COLOR = FourCC('B00B');
  * It handles the setup, and resetting of tree states.
  * It implements the Resetable interface.
  */
-export class TreeService implements Resetable {
+export class TreeManager implements Resetable {
 	private treeArray: destructable[] = [];
+	private static instance: TreeManager;
 
 	/**
 	 * Constructor initializes the tree setup.
 	 */
-	constructor() {
+	private constructor() {
 		this.treeSetup();
+	}
+
+	public static getInstance(): TreeManager {
+		return this.instance || (this.instance = new this());
 	}
 
 	/**
@@ -76,7 +81,19 @@ export class TreeService implements Resetable {
 		this.treeArray.forEach((tree) => {
 			if (GetDestructableLife(tree) < GetDestructableMaxLife(tree)) {
 				DestructableRestoreLife(tree, GetDestructableMaxLife(tree), false);
+				SetUnitInvulnerable(tree.__widget, true);
 			}
+		});
+
+		const treeTimer: timer = CreateTimer();
+
+		TimerStart(treeTimer, 3.0, false, () => {
+			this.treeArray.forEach((tree) => {
+				SetUnitInvulnerable(tree.__widget, false);
+			});
+
+			PauseTimer(treeTimer);
+			DestroyTimer(treeTimer);
 		});
 	}
 
