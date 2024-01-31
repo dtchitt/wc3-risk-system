@@ -62,5 +62,6 @@ export class Barracks implements Resetable {
 	 */
 	public reset(): void {
 		SetUnitOwner(this._unit, NEUTRAL_HOSTILE, true);
+		SetUnitRallyUnit(this._unit, this._unit);
 	}
 }
