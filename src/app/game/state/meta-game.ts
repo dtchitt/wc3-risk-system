@@ -38,12 +38,15 @@ export class MetaGame implements GameState {
 			});
 
 			const scoreboardManager: ScoreboardManager = ScoreboardManager.getInstance();
+			const settingsContext: SettingsContext = SettingsContext.getInstance();
 
-			if (SettingsContext.getInstance().isFFA()) {
+			if (settingsContext.isFFA() && players.length > 2) {
 				scoreboardManager.FFASetup(players);
 			} else {
 				scoreboardManager.TeamSetup(players);
 			}
+
+			settingsContext.applyStrategy('Fog');
 
 			scoreboardManager.ObsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
 
