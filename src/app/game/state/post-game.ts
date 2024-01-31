@@ -45,7 +45,6 @@ export class PostGame implements GameState {
 		this.resetCountries();
 		this.resetRegions();
 		TreeManager.getInstance().reset();
-
 		VictoryManager.getInstance().reset();
 
 		if (!SettingsContext.getInstance().isPromode()) {
