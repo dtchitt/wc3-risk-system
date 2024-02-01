@@ -60,6 +60,12 @@ export class TeamManager {
 		return this.teams.get(GetPlayerTeam(player) + 1);
 	}
 
+	public allowFullSharedControl() {
+		this.teams.forEach((team) => {
+			team.giveTeamFullControl();
+		});
+	}
+
 	public static breakTeams() {
 		for (let i = 0; i < PLAYER_SLOTS; i++) {
 			const playerA: player = Player(i);

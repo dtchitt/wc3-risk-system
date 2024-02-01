@@ -42,6 +42,7 @@ export class DiplomacyStrategy implements SettingsStrategy {
 
 	private handleLobbyTeams(): void {
 		TeamManager.getInstance();
+		TeamManager.getInstance().allowFullSharedControl();
 	}
 
 	private handleRandomTeams(): void {
