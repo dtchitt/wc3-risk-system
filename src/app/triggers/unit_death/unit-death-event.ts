@@ -18,32 +18,28 @@ export function UnitDeathEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			try {
-				if (!GameManager.getInstance().isStateMetaGame()) return false;
+			if (!GameManager.getInstance().isStateMetaGame()) return false;
 
-				const dyingUnit: unit = GetTriggerUnit();
-				const killingUnit: unit = GetKillingUnit();
-				const dyingUnitOwnerHandle: player = GetOwningPlayer(dyingUnit);
-				const killingUnitOwnerHandle: player = GetOwningPlayer(killingUnit);
-				const dyingUnitOwner: GamePlayer = PlayerManager.getInstance().players.get(dyingUnitOwnerHandle);
-				const killingUnitOwner: GamePlayer = PlayerManager.getInstance().players.get(killingUnitOwnerHandle);
+			const dyingUnit: unit = GetTriggerUnit();
+			const killingUnit: unit = GetKillingUnit();
+			const dyingUnitOwnerHandle: player = GetOwningPlayer(dyingUnit);
+			const killingUnitOwnerHandle: player = GetOwningPlayer(killingUnit);
+			const dyingUnitOwner: GamePlayer = PlayerManager.getInstance().players.get(dyingUnitOwnerHandle);
+			const killingUnitOwner: GamePlayer = PlayerManager.getInstance().players.get(killingUnitOwnerHandle);
 
-				if (killingUnitOwner) killingUnitOwner.onKill(dyingUnitOwnerHandle, dyingUnit);
-				if (dyingUnitOwner) dyingUnitOwner.onDeath(killingUnitOwnerHandle, dyingUnit);
+			if (killingUnitOwner) killingUnitOwner.onKill(dyingUnitOwnerHandle, dyingUnit);
+			if (dyingUnitOwner) dyingUnitOwner.onDeath(killingUnitOwnerHandle, dyingUnit);
 
-				if (!SettingsContext.getInstance().isFFA() && IsPlayerAlly(killingUnitOwnerHandle, dyingUnitOwnerHandle)) {
-					TeamManager.getInstance().getTeamFromPlayer(killingUnitOwnerHandle)?.updateKillCount(GetUnitPointValue(dyingUnit));
-					TeamManager.getInstance().getTeamFromPlayer(dyingUnitOwnerHandle)?.updateDeathCount(GetUnitPointValue(dyingUnit));
-				}
-
-				if (IsUnitType(dyingUnit, UNIT_TYPE.GUARD)) HandleGuardDeath(dyingUnit, killingUnit);
-
-				TransportManager.getInstance().onDeath(killingUnit, dyingUnit);
-
-				if (SPANWER_UNITS.has(dyingUnit)) SPANWER_UNITS.get(dyingUnit).onDeath(dyingUnitOwnerHandle, dyingUnit);
-			} catch (error) {
-				print(error);
+			if (!SettingsContext.getInstance().isFFA() && IsPlayerAlly(killingUnitOwnerHandle, dyingUnitOwnerHandle)) {
+				TeamManager.getInstance().getTeamFromPlayer(killingUnitOwnerHandle)?.updateKillCount(GetUnitPointValue(dyingUnit));
+				TeamManager.getInstance().getTeamFromPlayer(dyingUnitOwnerHandle)?.updateDeathCount(GetUnitPointValue(dyingUnit));
 			}
+
+			if (IsUnitType(dyingUnit, UNIT_TYPE.GUARD)) HandleGuardDeath(dyingUnit, killingUnit);
+
+			TransportManager.getInstance().onDeath(killingUnit, dyingUnit);
+
+			if (SPANWER_UNITS.has(dyingUnit)) SPANWER_UNITS.get(dyingUnit).onDeath(dyingUnitOwnerHandle, dyingUnit);
 
 			return false;
 		})
