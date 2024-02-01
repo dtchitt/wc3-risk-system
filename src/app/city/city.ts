@@ -123,5 +123,11 @@ export abstract class City implements Resetable, Ownable {
 		UnitToCity.set(this.guard.unit, this);
 		SetUnitPosition(oldGuard, x, y);
 		this.guard.reposition();
+
+		const newOwner: player = GetOwningPlayer(this.guard.unit);
+
+		if (this.owner != newOwner) {
+			this.setOwner(newOwner);
+		}
 	}
 }
