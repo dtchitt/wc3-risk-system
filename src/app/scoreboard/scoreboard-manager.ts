@@ -21,21 +21,20 @@ export class ScoreboardManager {
 		return this.instance || (this.instance = new this());
 	}
 
-	public FFASetup(players: ActivePlayer[]) {
+	public ffaSetup(players: ActivePlayer[]) {
 		this.scoreboards.standard = new StandardBoard(players);
 	}
 
-	public TeamSetup(players: ActivePlayer[]) {
+	public teamSetup(players: ActivePlayer[]) {
 		this.scoreboards.standard = new TeamBoard(players);
 	}
 
-	public ObsSetup(players: ActivePlayer[], observers: player[]) {
+	public obsSetup(players: ActivePlayer[], observers: player[]) {
 		if (observers.length >= 1) {
 			this.scoreboards.obs = new ObserverBoard(players);
 
 			observers.forEach((handle) => {
 				if (GetLocalPlayer() == handle) {
-					//this.iterateBoards((board) => board.setVisibility(false));
 					if (this.scoreboards.standard) this.scoreboards.standard.setVisibility(false);
 					if (this.scoreboards.obs) this.scoreboards.obs.setVisibility(true);
 				}

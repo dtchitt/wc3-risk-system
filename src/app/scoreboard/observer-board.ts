@@ -2,9 +2,11 @@ import { NameManager } from '../managers/names/name-manager';
 import { TrackedData } from '../player/data/tracked-data';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
+import { ShuffleArray } from '../utils/utils';
 import { Scoreboard } from './scoreboard';
 
 export class ObserverBoard extends Scoreboard {
+	private players: ActivePlayer[];
 	private readonly PLAYER_COL: number = 1;
 	private readonly INCOME_COL: number = 2;
 	private readonly GOLD_COL: number = 3;
@@ -13,11 +15,12 @@ export class ObserverBoard extends Scoreboard {
 	private readonly DEATHS_COL: number = 6;
 	private readonly STATUS_COL: number = 7;
 
-	public constructor(aPlayers: ActivePlayer[]) {
-		super(aPlayers);
+	public constructor(players: ActivePlayer[]) {
+		super();
 
+		this.players = players;
 		this.size = this.players.length + 3;
-
+		ShuffleArray(this.players);
 		MultiboardSetColumnCount(this.board, 7);
 
 		for (let i = 1; i <= this.size; i++) {
@@ -107,6 +110,12 @@ export class ObserverBoard extends Scoreboard {
 	 */
 	public setAlert(player: player, countryName: string): void {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player)} claimed ${HexColors.TANGERINE}${countryName}|r`, this.size, 1);
+	}
+
+	public destroy() {
+		this.players = null;
+		DestroyMultiboard(this.board);
+		this.board = null;
 	}
 
 	private setColumns(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {

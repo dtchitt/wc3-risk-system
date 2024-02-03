@@ -1,38 +1,25 @@
 import { MAP_NAME } from 'src/app/utils/map-info';
-import { ActivePlayer } from '../player/types/active-player';
-import { ShuffleArray } from '../utils/utils';
 
 export abstract class Scoreboard {
 	protected board: multiboard;
-	protected players: ActivePlayer[];
 	protected size: number;
 
-	public constructor(aPlayers: ActivePlayer[]) {
-		this.build(aPlayers);
+	public constructor() {
+		this.build();
 	}
 
 	abstract updateFull(): void;
 	abstract updatePartial(): void;
 	abstract setAlert(player: player, countryName: string): void;
+	abstract destroy(): void;
 
 	/**
 	 * Builds the scoreboard.
 	 * @param {ActivePlayer[]} aPlayers - An array of active players.
 	 */
-	public build(aPlayers: ActivePlayer[]) {
+	public build() {
 		this.board = CreateMultiboard();
-		this.players = aPlayers;
 		this.setTitle(`${MAP_NAME}`);
-		ShuffleArray(this.players);
-	}
-
-	/**
-	 * Destroys the scoreboard.
-	 */
-	public destroy() {
-		this.players = [];
-		DestroyMultiboard(this.board);
-		this.board = null;
 	}
 
 	/**

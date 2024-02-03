@@ -41,14 +41,14 @@ export class MetaGame implements GameState {
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
 
 			if (settingsContext.isFFA() && players.length > 2) {
-				scoreboardManager.FFASetup(players);
+				scoreboardManager.ffaSetup(players);
 			} else {
-				scoreboardManager.TeamSetup(players);
+				scoreboardManager.teamSetup(players);
 			}
 
 			settingsContext.applyStrategy('Fog');
 
-			scoreboardManager.ObsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
+			scoreboardManager.obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
 
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 
