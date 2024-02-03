@@ -11,6 +11,7 @@ export class GameManager {
 	private preGameState: PreGame;
 	private metaGameState: MetaGame;
 	private postGameState: PostGame;
+	private restartEnabled: boolean;
 
 	private static instance: GameManager;
 
@@ -45,6 +46,14 @@ export class GameManager {
 
 	public isStatePostGame() {
 		return this._state instanceof PostGame;
+	}
+
+	public isRestartEnabled() {
+		return this.restartEnabled;
+	}
+
+	public setRestartEnabled(bool: boolean) {
+		this.restartEnabled = bool;
 	}
 
 	public fastRestart() {

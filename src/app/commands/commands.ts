@@ -53,6 +53,7 @@ function muteCommand(chatManager: ChatManager, gameManager: GameManager, nameMan
 function restartCommand(chatManager: ChatManager, gameManager: GameManager) {
 	chatManager.addCmd(['-ng'], () => {
 		if (!gameManager.isStatePostGame()) return;
+		if (!gameManager.isRestartEnabled()) return;
 
 		//TODO player feedback via a message.
 		gameManager.state.end();

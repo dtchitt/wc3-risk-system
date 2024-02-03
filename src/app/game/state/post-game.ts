@@ -36,6 +36,8 @@ export class PostGame implements GameState {
 		}
 
 		FogEnable(false);
+
+		this.manager.setRestartEnabled(true);
 	}
 
 	public end(): void {
@@ -56,6 +58,7 @@ export class PostGame implements GameState {
 		});
 
 		this.isOver = false;
+		this.manager.setRestartEnabled(false);
 	}
 
 	private removeUnits() {
