@@ -1,12 +1,15 @@
 import { NameManager } from '../managers/names/name-manager';
 import { TrackedData } from '../player/data/tracked-data';
 import { ActivePlayer } from '../player/types/active-player';
+import { Team } from '../teams/team';
+import { TeamManager } from '../teams/team-manager';
 import { HexColors } from '../utils/hex-colors';
 import { ShuffleArray } from '../utils/utils';
 import { Scoreboard } from './scoreboard';
 
-export class StandardBoard extends Scoreboard {
-	private players: ActivePlayer[];
+export class TeamBoard extends Scoreboard {
+	private teams: Team[];
+	private showTeamTotals: boolean;
 	private readonly PLAYER_COL: number = 1;
 	private readonly INCOME_COL: number = 2;
 	private readonly CITIES_COL: number = 3;
@@ -14,13 +17,23 @@ export class StandardBoard extends Scoreboard {
 	private readonly DEATHS_COL: number = 5;
 	private readonly STATUS_COL: number = 6;
 
-	public constructor(players: ActivePlayer[]) {
+	public constructor() {
 		super();
 
-		this.players = players;
-		this.size = this.players.length + 3;
+		this.teams = [...TeamManager.getInstance().getTeams()];
+		this.size = 3;
+		this.teams.forEach((team) => {
+			this.size += team.getMembers().length;
+		});
 
-		ShuffleArray(this.players);
+		if (this.size + this.teams.length <= 26) {
+			this.size += this.teams.length;
+			this.showTeamTotals = true;
+		} else {
+			this.showTeamTotals = false;
+		}
+
+		ShuffleArray(this.teams);
 		MultiboardSetColumnCount(this.board, 6);
 
 		for (let i = 1; i <= this.size; i++) {
@@ -58,33 +71,38 @@ export class StandardBoard extends Scoreboard {
 	 * Updates every column on the scoreboard.
 	 */
 	public updateFull(): void {
-		this.players.sort((pA, pB) => {
-			const playerAIncome: number = pA.trackedData.income.income;
-			const playerBIncome: number = pB.trackedData.income.income;
+		this.teams.forEach((team) => {
+			team.sortPlayersByIncome();
+		});
 
-			if (playerAIncome < playerBIncome) return 1;
-			if (playerAIncome > playerBIncome) return -1;
-
+		this.teams.sort((teamA, teamB) => {
+			if (teamA.getIncome() < teamB.getIncome()) return 1;
+			if (teamA.getIncome() > teamB.getIncome()) return -1;
 			return 0;
 		});
 
 		let row: number = 2;
 
-		this.players.forEach((player) => {
-			const data: TrackedData = player.trackedData;
+		for (let i = 0; i < this.teams.length; i++) {
+			const team = this.teams[i];
 
-			let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
-
-			if (player.status.isAlive() || player.status.isNomad()) {
-				this.setItemValue(`${textColor}${data.income.income}`, row, this.INCOME_COL);
-			} else {
-				this.setItemValue(`${textColor}-`, row, 2);
+			if (this.showTeamTotals) {
+				this.setItemValue(`${HexColors.ORANGE}${team.getIncome()}`, row, this.INCOME_COL);
+				this.updateTeamData(team, row);
+				row++;
 			}
 
-			this.updatePlayerData(player, row, textColor, data);
+			for (let j = 0; j < team.getMembers().length; j++) {
+				const player = team.getMembers()[j];
+				const playerHandle: player = player.getPlayer();
+				const incomeString: string = player.status.isAlive() || player.status.isNomad() ? `${player.trackedData.income.income}` : '-';
 
-			row++;
-		});
+				this.setItemValue(`${this.getStringColor(playerHandle)}${incomeString}`, row, this.INCOME_COL);
+				this.updatePlayerData(player, row, this.getStringColor(playerHandle), player.trackedData);
+
+				row++;
+			}
+		}
 	}
 
 	/**
@@ -93,13 +111,28 @@ export class StandardBoard extends Scoreboard {
 	public updatePartial(): void {
 		let row: number = 2;
 
-		this.players.forEach((player) => {
-			let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
+		for (let i = 0; i < this.teams.length; i++) {
+			const team = this.teams[i];
 
-			this.updatePlayerData(player, row, textColor, player.trackedData);
+			if (this.showTeamTotals) {
+				this.updateTeamData(team, row);
+				row++;
+			}
 
-			row++;
-		});
+			for (let j = 0; j < team.getMembers().length; j++) {
+				const player = team.getMembers()[j];
+
+				this.updatePlayerData(player, row, this.getStringColor(player.getPlayer()), player.trackedData);
+
+				row++;
+			}
+		}
+	}
+
+	private getStringColor(player: player): string {
+		if (GetLocalPlayer() == player) return HexColors.TANGERINE;
+		if (IsPlayerAlly(GetLocalPlayer(), player)) return HexColors.GREEN;
+		return HexColors.WHITE;
 	}
 
 	/**
@@ -112,9 +145,16 @@ export class StandardBoard extends Scoreboard {
 	}
 
 	public destroy() {
-		this.players = null;
+		this.teams = null;
 		DestroyMultiboard(this.board);
 		this.board = null;
+	}
+
+	private updateTeamData(team: Team, row: number) {
+		this.setItemValue(`${HexColors.WHITE}Team #${team.getNumber()}|r`, row, this.PLAYER_COL);
+		this.setItemValue(`${HexColors.ORANGE}${team.getCities()}`, row, this.CITIES_COL);
+		this.setItemValue(`${HexColors.ORANGE}${team.getKills()}`, row, this.KILLS_COL);
+		this.setItemValue(`${HexColors.ORANGE}${team.getDeaths()}`, row, this.DEATHS_COL);
 	}
 
 	/**
@@ -125,10 +165,18 @@ export class StandardBoard extends Scoreboard {
 	 * @param {TrackedData} data - The tracked data for the player.
 	 */
 	private updatePlayerData(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
-		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
+		const playerHandle: player = player.getPlayer();
+
+		let teamPrefix: string = '';
+
+		if (!this.showTeamTotals) {
+			teamPrefix = `${HexColors.TANGERINE}[${GetPlayerTeam(playerHandle) + 1}]|r`;
+		}
+
+		this.setItemValue(`${teamPrefix}${NameManager.getInstance().getDisplayName(playerHandle)}`, row, this.PLAYER_COL);
 		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
+		this.setItemValue(`${textColor}${data.killsDeaths.get(playerHandle).killValue}`, row, this.KILLS_COL);
+		this.setItemValue(`${textColor}${data.killsDeaths.get(playerHandle).deathValue}`, row, this.DEATHS_COL);
 
 		if (player.status.isNomad() || player.status.isSTFU()) {
 			this.setItemValue(`${player.status.status} ${player.status.statusDuration}`, row, this.STATUS_COL);

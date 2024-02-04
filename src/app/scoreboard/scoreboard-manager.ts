@@ -25,8 +25,8 @@ export class ScoreboardManager {
 		this.scoreboards.standard = new StandardBoard(players);
 	}
 
-	public teamSetup(players: ActivePlayer[]) {
-		this.scoreboards.standard = new TeamBoard(players);
+	public teamSetup() {
+		this.scoreboards.standard = new TeamBoard();
 	}
 
 	public obsSetup(players: ActivePlayer[], observers: player[]) {

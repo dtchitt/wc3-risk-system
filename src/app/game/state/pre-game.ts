@@ -66,12 +66,6 @@ export class PreGame implements GameState {
 				}
 			});
 
-			if (!SettingsContext.getInstance().isFFA()) {
-				playerManager.players.forEach((player, handle) => {
-					TeamManager.getInstance().getTeamFromPlayer(handle)?.updateCityCount(player.trackedData.cities.cities.length);
-				});
-			}
-
 			this.manager.updateState(this.nextState);
 		});
 	}

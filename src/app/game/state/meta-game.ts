@@ -40,10 +40,10 @@ export class MetaGame implements GameState {
 			const scoreboardManager: ScoreboardManager = ScoreboardManager.getInstance();
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
 
-			if (settingsContext.isFFA() && players.length > 2) {
+			if (settingsContext.isFFA() || players.length <= 2) {
 				scoreboardManager.ffaSetup(players);
 			} else {
-				scoreboardManager.teamSetup(players);
+				scoreboardManager.teamSetup();
 			}
 
 			settingsContext.applyStrategy('Fog');
@@ -75,7 +75,7 @@ export class MetaGame implements GameState {
 				duration--;
 			});
 		} catch (error) {
-			print('Error in Metagame' + error);
+			print('Error in Metagame ' + error);
 		}
 	}
 
