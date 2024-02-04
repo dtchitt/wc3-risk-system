@@ -55,7 +55,7 @@ function restartCommand(chatManager: ChatManager, gameManager: GameManager) {
 		if (!gameManager.isStatePostGame()) return;
 		if (!gameManager.isRestartEnabled()) return;
 
-		//TODO player feedback via a message.
+		print('Restarting...');
 		gameManager.state.end();
 
 		const resetTimer: timer = CreateTimer();
