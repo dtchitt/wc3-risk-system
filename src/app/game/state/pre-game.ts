@@ -7,8 +7,6 @@ import { RegionToCity } from 'src/app/city/city-map';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SlavePlayer } from 'src/app/player/types/slave-player';
 import { DistributionService } from '../services/distribution-service';
-import { TeamManager } from 'src/app/teams/team-manager';
-import { SettingsContext } from 'src/app/settings/settings-context';
 
 export class PreGame implements GameState {
 	private manager: GameManager;
