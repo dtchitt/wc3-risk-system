@@ -99,7 +99,7 @@ function tsMain() {
 		KeyEvents();
 
 		//Create Quests
-		Quests.Credits();
+		Quests.Create();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
