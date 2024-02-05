@@ -77,21 +77,6 @@ STRING 3051
  
 }
 
-STRING 3052
-{
- 
-}
-
-STRING 3053
-{
- 
-}
-
-STRING 3054
-{
- 
-}
-
 STRING 3066
 {
 Country Spawns (|Cfffed312F8|R)
@@ -282,26 +267,6 @@ Player 1
 STRING 5914
 {
 Type: |Cffffcc00Explosive|R
-}
-
-STRING 5922
-{
-Explosive attack grants additional damage against ships.
-}
-
-STRING 5923
-{
-Explosive attack grants additional damage against ships.
-}
-
-STRING 5924
-{
-Explosive attack grants additional damage against ships.
-}
-
-STRING 7117
-{
-Main Quests
 }
 
 STRING 7124
@@ -719,11 +684,6 @@ STRING 7252
 Produces every round spawns.
 }
 
-STRING 7258
-{
-This value represent how many kills remain before your next gold bonus.
-}
-
 STRING 7259
 {
 Artillery
@@ -767,11 +727,6 @@ Unable to target Defenders.
 STRING 7292
 {
 Unable to target Transport Ships.
-}
-
-STRING 7293
-{
-Gold Bonus:
 }
 
 STRING 7294
@@ -1440,5 +1395,25 @@ STRING 7499
 |cffff8000Movespeed:|r 280
 
 |cff3BA0CBAbilties:|r Berserk
+}
+
+STRING 7500
+{
+Information (|Cfffed312F9|R)
+}
+
+STRING 7503
+{
+   
+}
+
+STRING 7504
+{
+    
+}
+
+STRING 7505
+{
+   
 }
 
