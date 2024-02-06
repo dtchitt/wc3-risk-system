@@ -81,7 +81,7 @@ export class TreeManager implements Resetable {
 		this.treeArray.forEach((tree) => {
 			if (GetDestructableLife(tree) < GetDestructableMaxLife(tree)) {
 				DestructableRestoreLife(tree, GetDestructableMaxLife(tree), false);
-				SetUnitInvulnerable(tree.__widget, true);
+				SetDestructableInvulnerable(tree, true);
 			}
 		});
 
@@ -89,7 +89,7 @@ export class TreeManager implements Resetable {
 
 		TimerStart(treeTimer, 3.0, false, () => {
 			this.treeArray.forEach((tree) => {
-				SetUnitInvulnerable(tree.__widget, false);
+				SetDestructableInvulnerable(tree, false);
 			});
 
 			PauseTimer(treeTimer);
@@ -108,8 +108,8 @@ export class TreeManager implements Resetable {
 			let objectY: number = enumObject.y;
 			let terrainType: number = GetTerrainType(objectX, objectY);
 			let newTree: destructable;
-
 			let newType: number;
+
 			switch (treeTypeID) {
 				case BARRENS_TREE:
 					newType = this.getTreeColor(BARRENS_TREE_COLORS, terrainType, BARRENS_TREE_DEFAULT_COLOR);
