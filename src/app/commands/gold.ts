@@ -2,6 +2,7 @@ import { GameManager } from '../game/game-manager';
 import { ChatManager } from '../managers/chat-manager';
 import { NameManager } from '../managers/names/name-manager';
 import { SettingsContext } from '../settings/settings-context';
+import { HexColors } from '../utils/hex-colors';
 import { ErrorMsg } from '../utils/messages';
 import { isNonEmptySubstring } from '../utils/utils';
 
@@ -36,6 +37,13 @@ export function GoldCommand(chatManager: ChatManager, gameManager: GameManager, 
 
 		SetPlayerState(player, PLAYER_STATE_RESOURCE_GOLD, sendersGold - goldQty);
 		SetPlayerState(players[0], PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(players[0], PLAYER_STATE_RESOURCE_GOLD) + goldQty);
+		DisplayTextToPlayer(player, 0, 0, `You sent ${HexColors.TANGERINE}${goldQty}|r gold to ${nameManager.getDisplayName(players[0])}|r!`);
+		DisplayTextToPlayer(
+			players[0],
+			0,
+			0,
+			`You received ${HexColors.TANGERINE}${goldQty}|r gold from ${nameManager.getDisplayName(player)}|r!`
+		);
 	});
 }
 
