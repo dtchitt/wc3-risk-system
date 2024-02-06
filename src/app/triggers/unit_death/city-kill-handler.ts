@@ -2,6 +2,7 @@ import { SmallSearchRadius } from './search-radii';
 import { City } from 'src/app/city/city';
 import { ReplaceGuard } from './replace-guard';
 import { UNIT_ID } from 'src/configs/unit-id';
+import { UnitToCity } from 'src/app/city/city-map';
 
 export function CityKillHandler(city: City, dyingUnit: unit, killingUnit: unit): boolean {
 	if (!IsUnitType(killingUnit, UNIT_TYPE_STRUCTURE)) return null;
@@ -22,7 +23,11 @@ export function CityKillHandler(city: City, dyingUnit: unit, killingUnit: unit):
 
 	//Could not find valid units within small radius of guard
 	if (BlzGroupGetSize(searchGroup) <= 0) {
-		CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+		const newGuard: unit = CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+		UnitToCity.delete(city.guard.unit);
+		city.guard.replace(newGuard);
+		UnitToCity.set(newGuard, city);
+		return true;
 	}
 
 	//Found valid guard units, set unit as guard
