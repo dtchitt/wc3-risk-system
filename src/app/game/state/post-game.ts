@@ -9,6 +9,7 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { CountryToRegion } from 'src/app/region/region-map';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { TreeManager } from '../services/tree-service';
+import { TeamManager } from 'src/app/teams/team-manager';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -51,6 +52,14 @@ export class PostGame implements GameState {
 
 		if (!SettingsContext.getInstance().isPromode()) {
 			StatisticsController.getInstance().setViewVisibility(false);
+		}
+
+		if (!SettingsContext.getInstance().isFFA()) {
+			TeamManager.getInstance()
+				.getTeams()
+				.forEach((team) => {
+					team.reset();
+				});
 		}
 
 		PlayerManager.getInstance().players.forEach((player) => {

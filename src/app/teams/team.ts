@@ -95,4 +95,11 @@ export class Team {
 			}
 		}
 	}
+
+	public reset() {
+		this.income = this.teamMembers.length * STARTING_INCOME;
+		this.cities = 0;
+		this.kills = 0;
+		this.deaths = 0;
+	}
 }
