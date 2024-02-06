@@ -7,7 +7,7 @@ import { UNIT_ID } from 'src/configs/unit-id';
 export function InvalidGuardHandler(city: LandCity | PortCity, killingUnit: unit) {
 	let newGuard: unit;
 
-	if ((IsUnitType(killingUnit, UNIT_TYPE.SHIP) && !city.isPort()) || IsUnitType(killingUnit, UNIT_TYPE.CITY)) {
+	if (IsUnitType(killingUnit, UNIT_TYPE.SHIP) && !city.isPort()) {
 		newGuard = CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
 	} else {
 		newGuard = CreateUnit(GetOwningPlayer(killingUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);

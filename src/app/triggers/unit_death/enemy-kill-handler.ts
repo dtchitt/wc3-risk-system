@@ -5,6 +5,7 @@ import { ReplaceGuard } from './replace-guard';
 
 export function EnemyKillHandler(city: City, dyingUnit: unit, killingUnit: unit): boolean {
 	if (!IsUnitEnemy(killingUnit, city.getOwner())) return null;
+
 	const searchGroup: group = CreateGroup();
 
 	//Search for city owned units within CoP of city

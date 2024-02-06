@@ -52,7 +52,7 @@ export function OwnershipChangeEvent() {
 					}
 
 					if (teamManager) {
-						teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateIncome(-country.getCities().length);
+						teamManager.getTeamFromPlayer(prevOwnerHandle).updateIncome(-country.getCities().length);
 					}
 				}
 
@@ -62,7 +62,7 @@ export function OwnershipChangeEvent() {
 					prevOwner.trackedData.income.delta -= region.goldBonus;
 
 					if (teamManager) {
-						teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateIncome(-region.goldBonus);
+						teamManager.getTeamFromPlayer(prevOwnerHandle).updateIncome(-region.goldBonus);
 					}
 				}
 
@@ -71,7 +71,7 @@ export function OwnershipChangeEvent() {
 				}
 
 				if (teamManager) {
-					teamManager.getTeamFromPlayer(prevOwnerHandle)?.updateCityCount(-1);
+					teamManager.getTeamFromPlayer(prevOwnerHandle).updateCityCount(-1);
 				}
 			}
 
@@ -111,10 +111,10 @@ export function OwnershipChangeEvent() {
 					}
 
 					if (teamManager) {
-						teamManager.getTeamFromPlayer(ownerHandle)?.updateIncome(country.getCities().length);
+						teamManager.getTeamFromPlayer(ownerHandle).updateIncome(country.getCities().length);
 
 						if (region && region.isOwnedByPlayer(ownerHandle)) {
-							teamManager.getTeamFromPlayer(ownerHandle)?.updateIncome(region.goldBonus);
+							teamManager.getTeamFromPlayer(ownerHandle).updateIncome(region.goldBonus);
 						}
 					}
 
@@ -122,7 +122,7 @@ export function OwnershipChangeEvent() {
 				}
 
 				if (teamManager) {
-					teamManager.getTeamFromPlayer(ownerHandle)?.updateCityCount(1);
+					teamManager.getTeamFromPlayer(ownerHandle).updateCityCount(1);
 				}
 
 				ScoreboardManager.getInstance().setTitle(

@@ -1,4 +1,4 @@
-import { GetUnitsInRangeByAllegiance } from 'src/app/utils/guard-filters';
+import { GetUnitsInRangeByAllegiance, GetUnitsInRangeOfUnitByAllegiance } from 'src/app/utils/guard-filters';
 import { LargeSearchRadius, SmallSearchRadius } from './search-radii';
 import { City } from 'src/app/city/city';
 import { ReplaceGuard } from './replace-guard';
@@ -9,8 +9,8 @@ export function AlliedKillHandler(city: City, dyingUnit: unit, killingUnit: unit
 
 	const searchGroup: group = CreateGroup();
 
-	//Search for allied units in large radius of dying guard
-	GetUnitsInRangeByAllegiance(searchGroup, city, LargeSearchRadius, IsUnitAlly, dyingUnit);
+	//Search for allied units of dying unit in small radius
+	GetUnitsInRangeOfUnitByAllegiance(searchGroup, city, SmallSearchRadius, IsUnitAlly, dyingUnit, killingUnit);
 
 	//Could not find valid units within large radius of guard, so we search in small radius by killer
 	if (BlzGroupGetSize(searchGroup) <= 0) {
