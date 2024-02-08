@@ -19,7 +19,7 @@ export function GoldCommand(chatManager: ChatManager, gameManager: GameManager, 
 		const splitStr: string[] = GetEventPlayerChatString()
 			.split(' ')
 			.filter((str) => str.trim() !== '');
-		const players: player[] = GetAllyByAnyName(splitStr[1], player, nameManager);
+
 		let goldQty: number;
 
 		if (splitStr.length === 3) {
@@ -31,6 +31,9 @@ export function GoldCommand(chatManager: ChatManager, gameManager: GameManager, 
 		}
 
 		if (!goldQty) return ErrorMsg(player, 'Invalid gold quantity!');
+
+		const players: player[] = GetAllyByAnyName(splitStr[1], player, nameManager);
+
 		if (players.length >= 2) return ErrorMsg(player, 'Multiple players found, be more specific!');
 		if (players.length <= 0) return ErrorMsg(player, 'Player not found!');
 		if (players[0] == player) return ErrorMsg(player, "You can't send gold to yourself!");
@@ -48,7 +51,7 @@ export function GoldCommand(chatManager: ChatManager, gameManager: GameManager, 
 }
 
 function GetAllyByAnyName(string: string, sender: player, nameManager: NameManager): player[] {
-	const foundPlayers: player[] = [];
+	const foundPlayers: Set<player> = new Set<player>();
 
 	for (let i = 0; i < bj_MAX_PLAYERS; i++) {
 		const player = Player(i);
@@ -57,13 +60,13 @@ function GetAllyByAnyName(string: string, sender: player, nameManager: NameManag
 		if (GetPlayerSlotState(player) != PLAYER_SLOT_STATE_PLAYING) continue;
 
 		if (isNonEmptySubstring(string, nameManager.getColor(player))) {
-			foundPlayers.push(player);
+			foundPlayers.add(player);
 		}
 
 		if (isNonEmptySubstring(string, nameManager.getBtag(player))) {
-			foundPlayers.push(player);
+			foundPlayers.add(player);
 		}
 	}
 
-	return foundPlayers;
+	return [...foundPlayers];
 }

@@ -61,11 +61,3 @@ export class ChatManager {
 		});
 	}
 }
-
-// 			case "-restart":
-// 			case "-g":
-// 			case "-gold":
-// 			case "-ally":
-// 			case "-peace":
-// 			case "-unally":
-// 			case "-war":
