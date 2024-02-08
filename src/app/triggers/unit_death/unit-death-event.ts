@@ -31,8 +31,9 @@ export function UnitDeathEvent() {
 			if (dyingUnitOwner) dyingUnitOwner.onDeath(killingUnitOwnerHandle, dyingUnit);
 
 			if (!SettingsContext.getInstance().isFFA() && !IsPlayerAlly(killingUnitOwnerHandle, dyingUnitOwnerHandle)) {
-				TeamManager.getInstance().getTeamFromPlayer(killingUnitOwnerHandle)?.updateKillCount(GetUnitPointValue(dyingUnit));
-				TeamManager.getInstance().getTeamFromPlayer(dyingUnitOwnerHandle)?.updateDeathCount(GetUnitPointValue(dyingUnit));
+				const teamManager: TeamManager = TeamManager.getInstance();
+				if (killingUnitOwner) teamManager.getTeamFromPlayer(killingUnitOwnerHandle).updateKillCount(GetUnitPointValue(dyingUnit));
+				if (dyingUnitOwner) teamManager.getTeamFromPlayer(dyingUnitOwnerHandle).updateDeathCount(GetUnitPointValue(dyingUnit));
 			}
 
 			if (IsUnitType(dyingUnit, UNIT_TYPE.GUARD)) HandleGuardDeath(dyingUnit, killingUnit);

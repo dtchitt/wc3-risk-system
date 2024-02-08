@@ -5,18 +5,14 @@ import { SelfKillHandler as SelfKillHandler } from './self-kill-handler';
 import { InvalidGuardHandler } from './invalid-guard-handler';
 import { AlliedKillHandler } from './allied-kill-handler';
 import { EnemyKillHandler } from './enemy-kill-handler';
-import { CityKillHandler } from './city-kill-handler';
 
 export function HandleGuardDeath(dyingUnit: unit, killingUnit: unit) {
 	const city: LandCity | PortCity = UnitToCity.get(dyingUnit);
 
 	if (!city) return;
 
-	//Check if killing unit is city
-	let guardChoice: boolean = CityKillHandler(city, dyingUnit, killingUnit);
-
 	//Check if killing unit is owned
-	if (!guardChoice) guardChoice = SelfKillHandler(city, dyingUnit, killingUnit);
+	let guardChoice: boolean = SelfKillHandler(city, dyingUnit, killingUnit);
 
 	//Check if killing unit is ally
 	if (!guardChoice) guardChoice = AlliedKillHandler(city, dyingUnit, killingUnit);

@@ -1,9 +1,8 @@
 import { GetUnitsInRangeByAllegiance, GetUnitsInRangeOfUnitByAllegiance } from 'src/app/utils/guard-filters';
-import { LargeSearchRadius, SmallSearchRadius } from './search-radii';
+import { SmallSearchRadius } from './search-radii';
 import { City } from 'src/app/city/city';
 import { ReplaceGuard } from './replace-guard';
 
-//TODO clean this and SelfKillHandler, I could make them have a function to call which just passes in IsUnitAlly and IsUnitOwnedByPlayer
 export function AlliedKillHandler(city: City, dyingUnit: unit, killingUnit: unit): boolean {
 	if (!IsUnitAlly(killingUnit, city.getOwner())) return null;
 
