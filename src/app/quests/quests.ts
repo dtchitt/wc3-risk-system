@@ -16,19 +16,19 @@ export class Quests {
 		description += '\nSS Ship Model: ??, please let ForLolz know if you know the author';
 		description += '\nSpecial Thanks: The Risk Community, Priwin, PsycoMarauder, RodOfNod, goble-r1sk, Saran, and all the devs before me!';
 
-		Quests.BuildQuest('Credits', description, 'ReplaceableTexturesCommandButtonsBTNBansheeMaster.blp', false);
+		Quests.BuildQuest('Credits', description, 'ReplaceableTextures\\CommandButtons\\BTNTome.blp', false);
 	}
 
 	private static Tutorial() {
 		let description: string = 'The goal of the game is to conquer 135 cities and hold them until the end of the turn.';
-		description += '\nTo gain income you need to control a whole country when the turn ends.';
-		description += '\nIt is best to start with smaller countries to gain income quickly.';
-		description += '\nTry to expand in a way that will keep your countries connected.';
-		description += '\nMake sure to use your spawns, they are free units you get each turn form countries you own.';
-		description += '\nChat is essential in Risk, make sure to use it and read it. Diplomacy is key.';
-		description += '\nMake sure to peace other players, but also be ready to be backstabbed when your are vulnerable.';
+		description += ' To gain income you need to control a whole country when the turn ends.';
+		description += ' It is best to start with smaller countries to gain income quickly.';
+		description += ' Try to expand in a way that will keep your countries connected.';
+		description += ' Make sure to use your spawns, they are free units you get each turn form countries you own.';
+		description += ' Chat is essential in Risk, make sure to use it and read it. Diplomacy is key.';
+		description += ' Make sure to peace other players, but also be ready to be backstabbed when your are vulnerable.';
 
-		Quests.BuildQuest('How to play', description, 'ReplaceableTexturesWorldEditUIEditor-Random-Unit.blp', true);
+		Quests.BuildQuest('How to play', description, 'ReplaceableTextures\\WorldEditUI\\Editor-Random-Unit.blp', true);
 	}
 
 	private static ArmyComposition() {
@@ -45,7 +45,7 @@ export class Quests {
 		description += ' Warship A is an early game unit.';
 		description += ' It should only really be used the first couple of turns in fights on specific coastlines.';
 
-		Quests.BuildQuest('Army Composition', description, 'ReplaceableTexturesWorldEditUIEditor-MultipleUnits.blp', true);
+		Quests.BuildQuest('Army Composition', description, 'ReplaceableTextures\\WorldEditUI\\Editor-MultipleUnits.blp', true);
 	}
 
 	private static BuildQuest(title: string, description: string, icon: string, required: boolean) {
