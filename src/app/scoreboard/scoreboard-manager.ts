@@ -32,6 +32,8 @@ export class ScoreboardManager {
 	public obsSetup(players: ActivePlayer[], observers: player[]) {
 		if (observers.length >= 1) {
 			this.scoreboards.obs = new ObserverBoard(players);
+			this.scoreboards.obs.setVisibility(false);
+			this.scoreboards.standard.setVisibility(true);
 
 			observers.forEach((handle) => {
 				if (GetLocalPlayer() == handle) {
