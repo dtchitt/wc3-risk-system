@@ -3,9 +3,6 @@ import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { Resetable } from 'src/app/interfaces/resetable';
 
-/**
- * Represents a Guard entity in the game, implementing the `Resetable` interface.
- */
 export class Guard implements Resetable {
 	private _unit: unit;
 	private readonly unitType: number;

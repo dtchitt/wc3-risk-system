@@ -1,10 +1,8 @@
+import { Ownable } from 'src/app/interfaces/ownable';
 import { Resetable } from 'src/app/interfaces/resetable';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 
-/**
- * Represents a Barracks entity in the game, implementing the `Resetable` interface.
- */
-export class Barracks implements Resetable {
+export class Barracks implements Resetable, Ownable {
 	private _unit: unit;
 	private readonly _unitType: number;
 	private readonly _defaultX: number;
@@ -42,6 +40,14 @@ export class Barracks implements Resetable {
 	}
 
 	/**
+	 * Resets the unit owner to NEUTRAL_HOSTILE.
+	 */
+	public reset(): void {
+		SetUnitOwner(this._unit, NEUTRAL_HOSTILE, true);
+		SetUnitRallyUnit(this._unit, this._unit);
+	}
+
+	/**
 	 * Sets the owner of the unit.
 	 * @param player - The player object that will become the new owner.
 	 */
@@ -55,13 +61,5 @@ export class Barracks implements Resetable {
 	 */
 	public getOwner(): player {
 		return GetOwningPlayer(this._unit);
-	}
-
-	/**
-	 * Resets the unit owner to NEUTRAL_HOSTILE.
-	 */
-	public reset(): void {
-		SetUnitOwner(this._unit, NEUTRAL_HOSTILE, true);
-		SetUnitRallyUnit(this._unit, this._unit);
 	}
 }
