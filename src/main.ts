@@ -33,8 +33,6 @@ import { SetCommands } from './app/commands/commands';
 
 function tsMain() {
 	try {
-		//DoNotSaveReplay();
-
 		if (!BlzLoadTOCFile('war3mapimported\\Risk.toc')) {
 			print('Failed to load TOC file!');
 			return;

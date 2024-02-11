@@ -1,4 +1,4 @@
-import { ActivePlayer } from '../types/active-player';
+import { GamePlayer } from '../game-player';
 import { PLAYER_STATUS } from './status-enum';
 import { AliveStrategy } from './strategies/alive-strategy';
 import { DeadStrategy } from './strategies/dead-strategy';
@@ -8,7 +8,7 @@ import { StatusStrategy } from './strategies/status-strategy';
 import { STFUStrategy } from './strategies/stfu-strategy';
 
 export class Status {
-	private player: ActivePlayer;
+	private player: GamePlayer;
 	private _status: string;
 	private _statusDuration: number;
 
@@ -20,7 +20,7 @@ export class Status {
 		[PLAYER_STATUS.STFU, new STFUStrategy()],
 	]);
 
-	constructor(player: ActivePlayer) {
+	constructor(player: GamePlayer) {
 		this.player = player;
 		this.statusDuration = -1;
 	}

@@ -7,7 +7,7 @@ export class FightBonus implements Bonus {
 	private static readonly CAP: number = 60;
 	private static readonly INTERVAL: number = 200;
 
-	private goldEarned: number;
+	private total: number;
 	private delta: number;
 	private totalBonusVal: number;
 	private ui: framehandle;
@@ -15,28 +15,12 @@ export class FightBonus implements Bonus {
 	private enabled: boolean;
 
 	constructor(player: player) {
-		this.goldEarned = 0;
+		this.total = 0;
 		this.player = player;
 		this.enabled = true;
 		this.ui = BlzCreateSimpleFrame('MyBarEx', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), GetPlayerId(player));
+		BlzFrameSetAbsPoint(this.ui, FRAMEPOINT_TOPRIGHT, ((0.6 * BlzGetLocalClientWidth()) / BlzGetLocalClientHeight() + 0.793) / 2, 0.573);
 		this.reset();
-		BlzFrameSetVisible(this.ui, false);
-	}
-
-	public get earned(): number {
-		return this.goldEarned;
-	}
-
-	public showForPlayer(player: player) {
-		if (!this.enabled) return;
-
-		if (player == GetLocalPlayer()) {
-			BlzFrameSetVisible(this.ui, true);
-		}
-	}
-
-	public hideUI() {
-		if (!this.enabled) return;
 		BlzFrameSetVisible(this.ui, false);
 	}
 
@@ -67,10 +51,21 @@ export class FightBonus implements Bonus {
 		return bonusAmount;
 	}
 
-	public repositon() {
+	public getTotal(): number {
+		return this.total;
+	}
+
+	public showForPlayer(player: player) {
 		if (!this.enabled) return;
 
-		BlzFrameSetAbsPoint(this.ui, FRAMEPOINT_TOPRIGHT, ((0.6 * BlzGetLocalClientWidth()) / BlzGetLocalClientHeight() + 0.793) / 2, 0.573);
+		if (player == GetLocalPlayer()) {
+			BlzFrameSetVisible(this.ui, true);
+		}
+	}
+
+	public hideUI() {
+		if (!this.enabled) return;
+		BlzFrameSetVisible(this.ui, false);
 	}
 
 	public disable() {
@@ -86,7 +81,7 @@ export class FightBonus implements Bonus {
 
 		bonusAmount += FightBonus.BASE;
 		bonusAmount = Math.min(bonusAmount, FightBonus.CAP);
-		this.goldEarned += bonusAmount;
+		this.total += bonusAmount;
 
 		LocalMessage(
 			this.player,

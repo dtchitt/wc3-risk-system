@@ -26,9 +26,6 @@ export enum CamSettings {
 	DEFAULT_ROTATION = 90.0,
 }
 
-/**
- * Manages camera settings for each player.
- */
 export default class CameraManager {
 	private static instance: CameraManager;
 	private pathFolderName: string = 'risk';

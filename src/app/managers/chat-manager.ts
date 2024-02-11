@@ -1,6 +1,3 @@
-/**
- * Manages chat commands and their associated actions.
- */
 export class ChatManager {
 	private static _instance: ChatManager;
 	private _chatActions: Map<string, Function> = new Map<string, Function>();
