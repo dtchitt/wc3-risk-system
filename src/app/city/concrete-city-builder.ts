@@ -20,9 +20,6 @@ const GetRaxXOffSet = (rax: unit) => GetUnitX(rax) - CityGuardXOffSet;
 // Calculate the Y offset for a barrack unit
 const GetRaxYOffSet = (rax: unit) => GetUnitY(rax) - CityGuardYOffSet;
 
-/**
- * Class implementing the CityBuilder interface, providing methods to build a City.
- */
 export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	private _barracks: Barracks;
 	private _guard: Guard;

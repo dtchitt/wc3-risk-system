@@ -7,10 +7,6 @@ import { UnitToCity } from './city-map';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { UNIT_ID } from 'src/configs/unit-id';
 
-/**
- * Abstract class for a City.
- * A City can be reset and owned, and has methods for dealing with units.
- */
 export abstract class City implements Resetable, Ownable {
 	private owner: player;
 	private _barrack: Barracks;

@@ -3,10 +3,6 @@ import { UnitData } from '../interfaces/unit-data';
 import { City } from './city';
 import { CityType } from './city-type';
 
-/**
- * Interface for a builder class for a city entity, extends from `Resetable`.
- * After properties have been set, the `build` method is called to create and return a `City` instance.
- */
 export interface CityBuilder extends Resetable {
 	/**
 	 * Sets the barracks for the city.

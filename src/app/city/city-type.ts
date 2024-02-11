@@ -16,7 +16,7 @@ export type CityType = 'land' | 'port';
 type CityConstructor = new (barracks: Barracks, guard: Guard, cop: unit) => City;
 
 /**
- * A Record (an object with string keys and specific value type) that associates each `CityType` to a corresponding `CityConstructor`.
+ * A Record that associates each `CityType` to a corresponding `CityConstructor`.
  */
 export const CityTypes: Record<CityType, CityConstructor> = {
 	land: LandCity,

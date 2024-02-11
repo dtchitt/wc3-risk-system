@@ -6,9 +6,6 @@ import { Guard } from './components/guard';
 import { IsUnitMelee } from '../utils/utils';
 import { DefaultGuardType } from 'src/configs/country-settings';
 
-/**
- * LandCity is a variant of City for land based terrain.
- */
 export class LandCity extends City {
 	/**
 	 * LandCity constructor.

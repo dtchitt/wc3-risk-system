@@ -1,9 +1,6 @@
 import { UnitData } from '../interfaces/unit-data';
 import { CityType } from './city-type';
 
-/**
- * Interface for the data structure representing a city entity.
- */
 export interface CityData {
 	/**
 	 * The name of the city.
