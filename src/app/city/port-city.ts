@@ -7,9 +7,6 @@ import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
 import { IsUnitMelee } from '../utils/utils';
 
-/**
- * PortCity is a variant of City for port terrain.
- */
 export class PortCity extends City {
 	/**
 	 * SeaCity constructor.
