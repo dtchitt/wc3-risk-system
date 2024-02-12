@@ -1,12 +1,12 @@
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerData } from '../entity/player/player-data';
 import { NameManager } from '../managers/names/name-manager';
-import { TrackedData } from '../player/data/tracked-data';
-import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { ShuffleArray } from '../utils/utils';
 import { Scoreboard } from './scoreboard';
 
 export class ObserverBoard extends Scoreboard {
-	private players: ActivePlayer[];
+	private players: GamePlayer[];
 	private readonly PLAYER_COL: number = 1;
 	private readonly INCOME_COL: number = 2;
 	private readonly GOLD_COL: number = 3;
@@ -15,7 +15,7 @@ export class ObserverBoard extends Scoreboard {
 	private readonly DEATHS_COL: number = 6;
 	private readonly STATUS_COL: number = 7;
 
-	public constructor(players: ActivePlayer[]) {
+	public constructor(players: GamePlayer[]) {
 		super();
 
 		this.players = players;
@@ -59,8 +59,8 @@ export class ObserverBoard extends Scoreboard {
 
 	public updateFull(): void {
 		this.players.sort((pA, pB) => {
-			const playerAIncome: number = pA.trackedData.income.income;
-			const playerBIncome: number = pB.trackedData.income.income;
+			const playerAIncome: number = pA.getData().getIncome().income;
+			const playerBIncome: number = pB.getData().getIncome().income;
 
 			if (playerAIncome < playerBIncome) return 1;
 			if (playerAIncome > playerBIncome) return -1;
@@ -71,15 +71,13 @@ export class ObserverBoard extends Scoreboard {
 		let row: number = 2;
 
 		this.players.forEach((player) => {
-			player.trackedData.income.delta = 0;
-			const data: TrackedData = player.trackedData;
+			player.getData().getIncome().delta = 0;
+			const data: PlayerData = player.getData();
 			const textColor: string = HexColors.WHITE;
 
-			if (player.status.isAlive() || player.status.isNomad()) {
+			if (player.getStatus().isAlive() || player.getStatus().isNomad()) {
 				this.setItemValue(
-					`${textColor}${player.trackedData.income.income - player.trackedData.income.delta}(${this.getIncomeDelta(
-						player.trackedData.income.delta
-					)})`,
+					`${textColor}${player.getData().getIncome().income - player.getData().getIncome().delta}(${player.getData().getIncome().delta})`,
 					row,
 					this.INCOME_COL
 				);
@@ -96,7 +94,7 @@ export class ObserverBoard extends Scoreboard {
 		let row: number = 2;
 
 		this.players.forEach((player) => {
-			const data: TrackedData = player.trackedData;
+			const data: PlayerData = player.getData();
 			let textColor: string = HexColors.WHITE;
 			this.setColumns(player, row, textColor, data);
 			row++;
@@ -118,13 +116,13 @@ export class ObserverBoard extends Scoreboard {
 		this.board = null;
 	}
 
-	private setColumns(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
+	private setColumns(player: GamePlayer, row: number, textColor: string, data: PlayerData) {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
 
-		if (player.status.isAlive() || player.status.isNomad()) {
+		if (player.getStatus().isAlive() || player.getStatus().isNomad()) {
 			this.setItemValue(
-				`${textColor}${player.trackedData.income.income - player.trackedData.income.delta}(${this.getIncomeDelta(
-					player.trackedData.income.delta
+				`${textColor}${player.getData().getIncome().income - player.getData().getIncome().delta}(${this.getIncomeDelta(
+					player.getData().getIncome().delta
 				)})`,
 				row,
 				this.INCOME_COL
@@ -134,14 +132,14 @@ export class ObserverBoard extends Scoreboard {
 		}
 
 		this.setItemValue(`${textColor}${GetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD)}`, row, this.GOLD_COL);
-		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
+		this.setItemValue(`${textColor}${data.getCities().cities.length}`, row, this.CITIES_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
 
-		if (player.status.isNomad() || player.status.isSTFU()) {
-			this.setItemValue(`${player.status.status} ${player.status.statusDuration}`, row, this.STATUS_COL);
+		if (player.getStatus().isNomad() || player.getStatus().isSTFU()) {
+			this.setItemValue(`${player.getStatus().status} ${player.getStatus().statusDuration}`, row, this.STATUS_COL);
 		} else {
-			this.setItemValue(`${player.status.status}`, row, this.STATUS_COL);
+			this.setItemValue(`${player.getStatus().status}`, row, this.STATUS_COL);
 		}
 	}
 

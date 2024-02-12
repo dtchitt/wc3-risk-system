@@ -56,12 +56,12 @@ export class TimerService implements Resetable {
 						country.getSpawn().step();
 					});
 
-					if (this.victoryManager.leader.trackedData.cities.cities.length >= Math.floor(VictoryManager.CITIES_TO_WIN * 0.7)) {
+					if (this.victoryManager.leader.getData().getCities().cities.length >= Math.floor(VictoryManager.CITIES_TO_WIN * 0.7)) {
 						GlobalMessage(
 							`${NameManager.getInstance().getDisplayName(this.victoryManager.leader.getPlayer())} owns ${HexColors.RED}${
-								this.victoryManager.leader.trackedData.cities.cities.length
+								this.victoryManager.leader.getData().getCities().cities.length
 							}|r cities and needs ${HexColors.RED}${
-								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
+								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.getData().getCities().cities.length
 							}|r more to win!`,
 							'Sound\\Interface\\ItemReceived.flac',
 							4

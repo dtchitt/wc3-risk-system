@@ -1,12 +1,12 @@
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerData } from '../entity/player/player-data';
 import { NameManager } from '../managers/names/name-manager';
-import { TrackedData } from '../player/data/tracked-data';
-import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { ShuffleArray } from '../utils/utils';
 import { Scoreboard } from './scoreboard';
 
 export class StandardBoard extends Scoreboard {
-	private players: ActivePlayer[];
+	private players: GamePlayer[];
 	private readonly PLAYER_COL: number = 1;
 	private readonly INCOME_COL: number = 2;
 	private readonly CITIES_COL: number = 3;
@@ -14,7 +14,7 @@ export class StandardBoard extends Scoreboard {
 	private readonly DEATHS_COL: number = 5;
 	private readonly STATUS_COL: number = 6;
 
-	public constructor(players: ActivePlayer[]) {
+	public constructor(players: GamePlayer[]) {
 		super();
 
 		this.players = players;
@@ -59,8 +59,8 @@ export class StandardBoard extends Scoreboard {
 	 */
 	public updateFull(): void {
 		this.players.sort((pA, pB) => {
-			const playerAIncome: number = pA.trackedData.income.income;
-			const playerBIncome: number = pB.trackedData.income.income;
+			const playerAIncome: number = pA.getData().getIncome().income;
+			const playerBIncome: number = pB.getData().getIncome().income;
 
 			if (playerAIncome < playerBIncome) return 1;
 			if (playerAIncome > playerBIncome) return -1;
@@ -71,12 +71,12 @@ export class StandardBoard extends Scoreboard {
 		let row: number = 2;
 
 		this.players.forEach((player) => {
-			const data: TrackedData = player.trackedData;
+			const data: PlayerData = player.getData();
 
 			let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
 
-			if (player.status.isAlive() || player.status.isNomad()) {
-				this.setItemValue(`${textColor}${data.income.income}`, row, this.INCOME_COL);
+			if (player.getStatus().isAlive() || player.getStatus().isNomad()) {
+				this.setItemValue(`${textColor}${data.getIncome().income}`, row, this.INCOME_COL);
 			} else {
 				this.setItemValue(`${textColor}-`, row, 2);
 			}
@@ -96,7 +96,7 @@ export class StandardBoard extends Scoreboard {
 		this.players.forEach((player) => {
 			let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
 
-			this.updatePlayerData(player, row, textColor, player.trackedData);
+			this.updatePlayerData(player, row, textColor, player.getData());
 
 			row++;
 		});
@@ -122,18 +122,18 @@ export class StandardBoard extends Scoreboard {
 	 * @param {ActivePlayer} player - The player object.
 	 * @param {number} row - The row index.
 	 * @param {string} textColor - The text color code.
-	 * @param {TrackedData} data - The tracked data for the player.
+	 * @param {getData()} data - The tracked data for the player.
 	 */
-	private updatePlayerData(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
+	private updatePlayerData(player: GamePlayer, row: number, textColor: string, data: PlayerData) {
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
-		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
+		this.setItemValue(`${textColor}${data.getCities().cities.length}`, row, this.CITIES_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
 
-		if (player.status.isNomad() || player.status.isSTFU()) {
-			this.setItemValue(`${player.status.status} ${player.status.statusDuration}`, row, this.STATUS_COL);
+		if (player.getStatus().isNomad() || player.getStatus().isSTFU()) {
+			this.setItemValue(`${player.getStatus().status} ${player.getStatus().statusDuration}`, row, this.STATUS_COL);
 		} else {
-			this.setItemValue(`${player.status.status}`, row, this.STATUS_COL);
+			this.setItemValue(`${player.getStatus().status}`, row, this.STATUS_COL);
 		}
 	}
 }

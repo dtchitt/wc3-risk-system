@@ -1,6 +1,6 @@
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerData } from '../entity/player/player-data';
 import { NameManager } from '../managers/names/name-manager';
-import { TrackedData } from '../player/data/tracked-data';
-import { ActivePlayer } from '../player/types/active-player';
 import { Team } from '../teams/team';
 import { TeamManager } from '../teams/team-manager';
 import { HexColors } from '../utils/hex-colors';
@@ -95,10 +95,11 @@ export class TeamBoard extends Scoreboard {
 			for (let j = 0; j < team.getMembers().length; j++) {
 				const player = team.getMembers()[j];
 				const playerHandle: player = player.getPlayer();
-				const incomeString: string = player.status.isAlive() || player.status.isNomad() ? `${player.trackedData.income.income}` : '-';
+				const incomeString: string =
+					player.getStatus().isAlive() || player.getStatus().isNomad() ? `${player.getData().getIncome().income}` : '-';
 
 				this.setItemValue(`${this.getStringColor(playerHandle)}${incomeString}`, row, this.INCOME_COL);
-				this.updatePlayerData(player, row, this.getStringColor(playerHandle), player.trackedData);
+				this.updatePlayerData(player, row, this.getStringColor(playerHandle), player.getData());
 
 				row++;
 			}
@@ -122,7 +123,7 @@ export class TeamBoard extends Scoreboard {
 			for (let j = 0; j < team.getMembers().length; j++) {
 				const player = team.getMembers()[j];
 
-				this.updatePlayerData(player, row, this.getStringColor(player.getPlayer()), player.trackedData);
+				this.updatePlayerData(player, row, this.getStringColor(player.getPlayer()), player.getData());
 
 				row++;
 			}
@@ -162,9 +163,9 @@ export class TeamBoard extends Scoreboard {
 	 * @param {ActivePlayer} player - The player object.
 	 * @param {number} row - The row index.
 	 * @param {string} textColor - The text color code.
-	 * @param {TrackedData} data - The tracked data for the player.
+	 * @param {getData()} data - The tracked data for the player.
 	 */
-	private updatePlayerData(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
+	private updatePlayerData(player: GamePlayer, row: number, textColor: string, data: PlayerData) {
 		const playerHandle: player = player.getPlayer();
 
 		let teamPrefix: string = '';
@@ -174,14 +175,14 @@ export class TeamBoard extends Scoreboard {
 		}
 
 		this.setItemValue(`${teamPrefix}${NameManager.getInstance().getDisplayName(playerHandle)}`, row, this.PLAYER_COL);
-		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(playerHandle).killValue}`, row, this.KILLS_COL);
-		this.setItemValue(`${textColor}${data.killsDeaths.get(playerHandle).deathValue}`, row, this.DEATHS_COL);
+		this.setItemValue(`${textColor}${data.getCities().cities.length}`, row, this.CITIES_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(playerHandle).killValue}`, row, this.KILLS_COL);
+		this.setItemValue(`${textColor}${data.getKillsDeaths().get(playerHandle).deathValue}`, row, this.DEATHS_COL);
 
-		if (player.status.isNomad() || player.status.isSTFU()) {
-			this.setItemValue(`${player.status.status} ${player.status.statusDuration}`, row, this.STATUS_COL);
+		if (player.getStatus().isNomad() || player.getStatus().isSTFU()) {
+			this.setItemValue(`${player.getStatus().status} ${player.getStatus().statusDuration}`, row, this.STATUS_COL);
 		} else {
-			this.setItemValue(`${player.status.status}`, row, this.STATUS_COL);
+			this.setItemValue(`${player.getStatus().status}`, row, this.STATUS_COL);
 		}
 	}
 }

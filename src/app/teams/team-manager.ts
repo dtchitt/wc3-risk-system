@@ -1,5 +1,5 @@
-import { PlayerManager } from '../player/player-manager';
-import { ActivePlayer } from '../player/types/active-player';
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerManager } from '../entity/player/player-manager';
 import { PLAYER_SLOTS } from '../utils/utils';
 import { Team } from './team';
 
@@ -9,10 +9,10 @@ export class TeamManager {
 
 	private constructor() {
 		this.teams = new Map<number, Team>();
-		const teams: Map<number, ActivePlayer[]> = new Map<number, ActivePlayer[]>();
+		const teams: Map<number, GamePlayer[]> = new Map<number, GamePlayer[]>();
 
 		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = PlayerManager.getInstance().players.get(Player(i));
+			const player = PlayerManager.getInstance().getPlayerMap().get(Player(i));
 
 			if (!player) continue;
 

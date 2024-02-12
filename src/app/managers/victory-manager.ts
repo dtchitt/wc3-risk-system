@@ -1,15 +1,15 @@
-import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
+import { GamePlayer } from '../entity/player/game-player';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
 	public static CITIES_TO_WIN: number;
 
-	private _leader: ActivePlayer;
-	private players: ActivePlayer[];
+	private _leader: GamePlayer;
+	private players: GamePlayer[];
 	private gameTimer: TimerService;
 	private winTracker: WinTracker;
 
@@ -27,7 +27,7 @@ export class VictoryManager {
 		return this.instance;
 	}
 
-	public addPlayer(player: ActivePlayer) {
+	public addPlayer(player: GamePlayer) {
 		this.players.push(player);
 
 		if (!this._leader) {
@@ -35,7 +35,7 @@ export class VictoryManager {
 		}
 	}
 
-	public removePlayer(player: ActivePlayer) {
+	public removePlayer(player: GamePlayer) {
 		const index: number = this.players.indexOf(player);
 
 		if (index > -1) {
@@ -45,19 +45,19 @@ export class VictoryManager {
 		this.checkKnockOutVictory();
 	}
 
-	public setLeader(player: ActivePlayer) {
-		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
+	public setLeader(player: GamePlayer) {
+		if (player.getData().getCities().cities.length > this.leader.getData().getCities().cities.length) {
 			this._leader = player;
 		}
 	}
 
-	public get leader(): ActivePlayer {
+	public get leader(): GamePlayer {
 		return this._leader;
 	}
 
 	public checkCityVictory(): boolean {
 		this.players.forEach((player) => {
-			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
+			if (player.getData().getCities().cities.length >= VictoryManager.CITIES_TO_WIN) {
 				this._leader = player;
 				this.endGame();
 				return true;
@@ -94,7 +94,7 @@ export class VictoryManager {
 
 	private endGame() {
 		this.players.forEach((player) => {
-			if (player.trackedData.turnDied == -1) {
+			if (player.getData().getTurnDied() == -1) {
 				player.setEndData();
 			}
 		});

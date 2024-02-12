@@ -1,4 +1,4 @@
-import { ActivePlayer } from '../player/types/active-player';
+import { GamePlayer } from '../entity/player/game-player';
 import { ObserverBoard } from './observer-board';
 import { Scoreboard } from './scoreboard';
 import { StandardBoard } from './standard-board';
@@ -21,7 +21,7 @@ export class ScoreboardManager {
 		return this.instance || (this.instance = new this());
 	}
 
-	public ffaSetup(players: ActivePlayer[]) {
+	public ffaSetup(players: GamePlayer[]) {
 		this.scoreboards.standard = new StandardBoard(players);
 	}
 
@@ -29,7 +29,7 @@ export class ScoreboardManager {
 		this.scoreboards.standard = new TeamBoard();
 	}
 
-	public obsSetup(players: ActivePlayer[], observers: player[]) {
+	public obsSetup(players: GamePlayer[], observers: player[]) {
 		if (observers.length >= 1) {
 			this.scoreboards.obs = new ObserverBoard(players);
 			this.scoreboards.obs.setVisibility(false);
