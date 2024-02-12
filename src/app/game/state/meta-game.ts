@@ -1,15 +1,15 @@
-import { VictoryManager } from 'src/app/managers/victory-manager';
-import { PlayerManager } from 'src/app/player/player-manager';
-import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
-import { GameManager } from '../game-manager';
-import { GameState } from './game-state';
-import { SettingsContext } from 'src/app/settings/settings-context';
-import { TimerService } from '../services/timer-service';
+import { PlayerManager } from 'src/app/entity/player/player-manager';
+import { PLAYER_STATUS } from 'src/app/entity/player/status/status-enum';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { VictoryManager } from 'src/app/managers/victory-manager';
+import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
+import { SettingsContext } from 'src/app/settings/settings-context';
 import { CountdownMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
-import { ActivePlayer } from 'src/app/player/types/active-player';
-import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
+import { GameManager } from '../game-manager';
+import { TimerService } from '../services/timer-service';
+import { GameState } from './game-state';
+import { GamePlayer } from 'src/app/entity/player/game-player';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
@@ -27,13 +27,12 @@ export class MetaGame implements GameState {
 
 	public start(): void {
 		try {
-			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
+			const players: GamePlayer[] = [...PlayerManager.getInstance().getPlayerMap().values()];
 
 			players.forEach((player) => {
 				SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-				player.status.set(PLAYER_STATUS.ALIVE);
-				player.trackedData.bonus.showForPlayer(player.getPlayer());
-				player.trackedData.bonus.repositon();
+				player.getStatus().set(PLAYER_STATUS.ALIVE);
+				player.getData().getBonus().showForPlayer(player.getPlayer());
 				VictoryManager.getInstance().addPlayer(player);
 			});
 
@@ -46,7 +45,7 @@ export class MetaGame implements GameState {
 				scoreboardManager.teamSetup();
 			}
 
-			scoreboardManager.obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
+			scoreboardManager.obsSetup(players, [...PlayerManager.getInstance().getObservers()]);
 
 			settingsContext.applyStrategy('Fog');
 
@@ -82,14 +81,16 @@ export class MetaGame implements GameState {
 	public end(): void {
 		ScoreboardManager.getInstance().destroyBoards();
 
-		PlayerManager.getInstance().players.forEach((player) => {
-			if (SettingsContext.getInstance().isPromode()) {
-				NameManager.getInstance().setName(player.getPlayer(), 'acct');
-			} else {
-				NameManager.getInstance().setName(player.getPlayer(), 'btag');
-				player.trackedData.bonus.hideUI();
-			}
-		});
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((player) => {
+				if (SettingsContext.getInstance().isPromode()) {
+					NameManager.getInstance().setName(player.getPlayer(), 'acct');
+				} else {
+					NameManager.getInstance().setName(player.getPlayer(), 'btag');
+					player.getData().getBonus().hideUI();
+				}
+			});
 
 		this.timer.reset();
 

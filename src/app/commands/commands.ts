@@ -1,7 +1,7 @@
+import { PlayerManager } from '../entity/player/player-manager';
 import { GameManager } from '../game/game-manager';
 import { ChatManager } from '../managers/chat-manager';
 import { NameManager } from '../managers/names/name-manager';
-import { PlayerManager } from '../player/player-manager';
 import { CamCommand } from './cam';
 import { ForfeitCommand } from './forfeit';
 import { GoldCommand } from './gold';

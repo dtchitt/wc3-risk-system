@@ -1,9 +1,9 @@
+import { GamePlayer } from '../entity/player/game-player';
 import { NameManager } from '../managers/names/name-manager';
-import { ActivePlayer } from '../player/types/active-player';
 import { ComputeRatio } from '../utils/utils';
 import { StatisticsModel } from './statistics-model';
 
-type TextFunction = (player: ActivePlayer) => string;
+type TextFunction = (player: GamePlayer) => string;
 
 export interface ColumnConfig {
 	size: number;
@@ -31,89 +31,51 @@ export function GetStatisticsColumns(model: StatisticsModel): ColumnConfig[] {
 		{
 			size: 0.06,
 			header: 'Last Turn',
-			textFunction: (player) => `${player.trackedData.turnDied}`,
+			textFunction: (player) => `${player.getData().getTurnDied()}`,
 		},
 		{
 			size: 0.06,
 			header: 'Cities\nMax/End',
-			textFunction: (player) => `${player.trackedData.cities.max}/${player.trackedData.cities.end}`,
+			textFunction: (player) => `${player.getData().getCities().max}/${player.getData().getCities().end}`,
 		},
 		{
 			size: 0.06,
 			header: 'Income\nMax/End',
-			textFunction: (player) => `${player.trackedData.income.max}/${player.trackedData.income.end}`,
+			textFunction: (player) => `${player.getData().getIncome().max}/${player.getData().getIncome().end}`,
 		},
 		{
 			size: 0.05,
 			header: 'Bounty',
-			textFunction: (player) => `${player.trackedData.bounty.earned}`,
+			textFunction: (player) => `${player.getData().getBounty().getTotal()}`,
 		},
 		{
 			size: 0.05,
 			header: 'Bonus',
-			textFunction: (player) => `${player.trackedData.bonus.earned}`,
+			textFunction: (player) => `${player.getData().getBonus().getTotal()}`,
 		},
 		{
 			size: 0.09,
 			header: 'Gold Earned/\nMax/End',
-			textFunction: (player) => `${player.trackedData.gold.earned}/${player.trackedData.gold.max}/${player.trackedData.gold.end}`,
+			textFunction: (player) => `${player.getData().getGold().earned}/${player.getData().getGold().max}/${player.getData().getGold().end}`,
 		},
 		{
 			size: 0.06,
 			header: 'Kills\n(Value)',
-			textFunction: (player) => `${player.trackedData.killsDeaths.get(player.getPlayer()).killValue}`,
+			textFunction: (player) => `${player.getData().getKillsDeaths().get(player.getPlayer()).killValue}`,
 		},
 		{
 			size: 0.06,
 			header: 'Deaths\n(Value)',
-			textFunction: (player) => `${player.trackedData.killsDeaths.get(player.getPlayer()).deathValue}`,
+			textFunction: (player) => `${player.getData().getKillsDeaths().get(player.getPlayer()).deathValue}`,
 		},
 		{
 			size: 0.06,
 			header: 'KD Ratio\n(Value)',
 			textFunction: (player) =>
 				ComputeRatio(
-					player.trackedData.killsDeaths.get(player.getPlayer()).killValue,
-					player.trackedData.killsDeaths.get(player.getPlayer()).deathValue
+					player.getData().getKillsDeaths().get(player.getPlayer()).killValue,
+					player.getData().getKillsDeaths().get(player.getPlayer()).deathValue
 				),
 		},
-		// {
-		// 	size: 0.06,
-		// 	header: 'SS Kills\n(Raw)',
-		// 	textFunction: (player) => `${player.trackedData.killsDeaths.get(`${UNIT_ID.BATTLESHIP_SS}`).kills}`,
-		// },
-		// {
-		// 	size: 0.06,
-		// 	header: 'SS Deaths\n(Raw)',
-		// 	textFunction: (player) => `${player.trackedData.killsDeaths.get(`${UNIT_ID.BATTLESHIP_SS}`).deaths}`,
-		// },
-		// {
-		// 	size: 0.06,
-		// 	header: 'SS KD Ratio\n(Raw)',
-		// 	textFunction: (player) =>
-		// 		ComputeRatio(
-		// 			player.trackedData.killsDeaths.get(`${UNIT_ID.BATTLESHIP_SS}`).kills,
-		// 			player.trackedData.killsDeaths.get(`${UNIT_ID.BATTLESHIP_SS}`).deaths
-		// 		),
-		// },
-		// {
-		// 	size: 0.06,
-		// 	header: 'Tank Kills\n(Raw)',
-		// 	textFunction: (player) => `${player.trackedData.killsDeaths.get(`${UNIT_ID.TANK}`).kills}`,
-		// },
-		// {
-		// 	size: 0.06,
-		// 	header: 'Tank Deaths\n(Raw)',
-		// 	textFunction: (player) => `${player.trackedData.killsDeaths.get(`${UNIT_ID.TANK}`).deaths}`,
-		// },
-		// {
-		// 	size: 0.06,
-		// 	header: 'Tank KD Ratio\n(Raw)',
-		// 	textFunction: (player) =>
-		// 		ComputeRatio(
-		// 			player.trackedData.killsDeaths.get(`${UNIT_ID.TANK}`).kills,
-		// 			player.trackedData.killsDeaths.get(`${UNIT_ID.TANK}`).deaths
-		// 		),
-		// },
 	];
 }

@@ -1,6 +1,6 @@
 import { UnitToCity } from '../city/city-map';
-import { PlayerManager } from '../player/player-manager';
-import { ActivePlayer } from '../player/types/active-player';
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerManager } from '../entity/player/player-manager';
 import { UNIT_TYPE } from '../utils/unit-types';
 
 export const UnitTrainedTrigger: trigger = CreateTrigger();
@@ -13,10 +13,10 @@ export function UnitTrainedEvent() {
 
 			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainedUnit);
 
-			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetOwningPlayer(trainedUnit));
+			const player: GamePlayer = PlayerManager.getInstance().getPlayerMap().get(GetOwningPlayer(trainedUnit));
 
 			if (!IsUnitType(trainedUnit, UNIT_TYPE.TRANSPORT)) {
-				player.trackedData.units.add(trainedUnit);
+				player.getData().getUnits().add(trainedUnit);
 			}
 
 			return false;

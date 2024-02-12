@@ -1,6 +1,3 @@
-/**
- * Responsible for storing and managing a player's names.
- */
 export class PlayerNames {
 	private readonly _btag: string;
 	private readonly _acct: string;

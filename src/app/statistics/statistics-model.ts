@@ -1,15 +1,15 @@
+import { GamePlayer } from '../entity/player/game-player';
+import { PlayerManager } from '../entity/player/player-manager';
 import { NameManager } from '../managers/names/name-manager';
 import { VictoryManager } from '../managers/victory-manager';
-import { PlayerManager } from '../player/player-manager';
-import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
 
 export class StatisticsModel {
 	private timePlayed: string;
-	private ranks: ActivePlayer[];
-	private winner: ActivePlayer;
+	private ranks: GamePlayer[];
+	private winner: GamePlayer;
 	private columns: ColumnConfig[];
 
 	constructor() {
@@ -19,7 +19,7 @@ export class StatisticsModel {
 	public setData() {
 		this.setGameTime();
 		this.winner = VictoryManager.getInstance().leader;
-		this.ranks = [...PlayerManager.getInstance().players.values()];
+		this.ranks = [...PlayerManager.getInstance().getPlayerMap().values()];
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);
 	}
@@ -28,11 +28,11 @@ export class StatisticsModel {
 		return this.timePlayed;
 	}
 
-	public getRanks(): ActivePlayer[] {
+	public getRanks(): GamePlayer[] {
 		return this.ranks;
 	}
 
-	public getWinner(): ActivePlayer {
+	public getWinner(): GamePlayer {
 		return this.winner;
 	}
 
@@ -40,20 +40,22 @@ export class StatisticsModel {
 		return this.columns;
 	}
 
-	public getRival(player: ActivePlayer): string {
-		let rival: ActivePlayer | null = null;
+	public getRival(player: GamePlayer): string {
+		let rival: GamePlayer | null = null;
 		let maxKills = 0;
 
-		PlayerManager.getInstance().players.forEach((p) => {
-			if (p === player) return;
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((p) => {
+				if (p === player) return;
 
-			const killsOnPlayer = p.trackedData.killsDeaths.get(player.getPlayer()).kills;
+				const killsOnPlayer = p.getData().getKillsDeaths().get(player.getPlayer()).kills;
 
-			if (killsOnPlayer > maxKills) {
-				maxKills = killsOnPlayer;
-				rival = p;
-			}
-		});
+				if (killsOnPlayer > maxKills) {
+					maxKills = killsOnPlayer;
+					rival = p;
+				}
+			});
 
 		if (rival !== null) {
 			return NameManager.getInstance().getDisplayName(rival.getPlayer()).split('#')[0];
@@ -74,16 +76,16 @@ export class StatisticsModel {
 		this.timePlayed = `${HexColors.TANGERINE}Game Time:|r ${formattedTime}\n${HexColors.TANGERINE}Total Turns:|r ${totalTurns.toFixed(2)}`;
 	}
 
-	private sortPlayersByRank(players: ActivePlayer[], winner: ActivePlayer) {
+	private sortPlayersByRank(players: GamePlayer[], winner: GamePlayer) {
 		return players.sort((playerA, playerB) => {
 			if (playerA === winner) return -1;
 			if (playerB === winner) return 1;
 
-			if (playerA.trackedData.turnDied !== playerB.trackedData.turnDied) {
-				return playerB.trackedData.turnDied - playerA.trackedData.turnDied;
+			if (playerA.getData().getTurnDied() !== playerB.getData().getTurnDied()) {
+				return playerB.getData().getTurnDied() - playerA.getData().getTurnDied();
 			}
 
-			return playerB.trackedData.cities.cities.length - playerA.trackedData.cities.cities.length;
+			return playerB.getData().getCities().cities.length - playerA.getData().getCities().cities.length;
 		});
 	}
 }

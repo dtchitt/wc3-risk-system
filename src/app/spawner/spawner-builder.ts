@@ -2,11 +2,6 @@ import { Coordinates } from '../interfaces/coordinates';
 import { Resetable } from '../interfaces/resetable';
 import { Spawner } from './spawner';
 
-/**
- * Interface for a SpawnerBuilder.
- * This interface extends the Resetable interface and provides a series of setter methods for defining a Spawner.
- * Each setter method returns a SpawnerBuilder to allow for method chaining, and a build method to create the Spawner when done.
- */
 export interface SpawnerBuilder extends Resetable {
 	/**
 	 * Sets the unit or coordinates for the Spawner.

@@ -1,8 +1,5 @@
 import { Coordinates } from '../interfaces/coordinates';
 
-/**
- * Interface for defining spawner data.
- */
 export interface SpawnerData {
 	/** The unit or coordinates for the spawner. */
 	unitData: unit | Coordinates;

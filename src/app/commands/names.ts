@@ -1,7 +1,7 @@
+import { PlayerManager } from '../entity/player/player-manager';
 import { GameManager } from '../game/game-manager';
 import { ChatManager } from '../managers/chat-manager';
 import { NameManager } from '../managers/names/name-manager';
-import { PlayerManager } from '../player/player-manager';
 import { ShuffleArray } from '../utils/utils';
 
 export function NamesCommand(chatManager: ChatManager, gameManager: GameManager, playerManager: PlayerManager, nameManager: NameManager) {
@@ -11,8 +11,8 @@ export function NamesCommand(chatManager: ChatManager, gameManager: GameManager,
 		const player: player = GetTriggerPlayer();
 		const nameList: player[] = [];
 
-		playerManager.players.forEach((player) => {
-			if (player.status.isAlive() || player.status.isNomad()) {
+		playerManager.getPlayerMap().forEach((player) => {
+			if (player.getStatus().isAlive() || player.getStatus().isNomad()) {
 				nameList.push(player.getPlayer());
 			}
 		});

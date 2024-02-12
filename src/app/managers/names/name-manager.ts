@@ -4,9 +4,6 @@ import { isNonEmptySubstring } from 'src/app/utils/utils';
 
 type Names = 'btag' | 'acct' | 'color';
 
-/**
- * Singleton class responsible for managing player names.
- */
 export class NameManager {
 	private static instance: NameManager;
 

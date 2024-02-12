@@ -1,10 +1,10 @@
 import { City } from 'src/app/city/city';
 import { Country } from 'src/app/country/country';
 import { CityToCountry } from 'src/app/country/country-map';
-import { PlayerManager } from 'src/app/player/player-manager';
-import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
 import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
+import { GamePlayer } from 'src/app/entity/player/game-player';
+import { PlayerManager } from 'src/app/entity/player/player-manager';
 
 /**
  * Handles the distribution of cities among active players.
@@ -13,18 +13,20 @@ export class DistributionService {
 	private citiesPerPlayerUpperBound: number = 20;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
-	private players: DoublyLinkedList<ActivePlayer>;
+	private players: DoublyLinkedList<GamePlayer>;
 
 	/**
 	 * Initializes city pool and player list.
 	 */
 	constructor() {
 		this.cities = this.buildCityPool();
-		this.players = new DoublyLinkedList<ActivePlayer>();
+		this.players = new DoublyLinkedList<GamePlayer>();
 
-		PlayerManager.getInstance().players.forEach((player) => {
-			this.players.addFirst(player);
-		});
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((player) => {
+				this.players.addFirst(player);
+			});
 
 		this.maxCitiesPerPlayer = Math.min(Math.floor(this.cities.length / this.players.length()), this.citiesPerPlayerUpperBound);
 	}
@@ -51,7 +53,7 @@ export class DistributionService {
 
 			for (let i = 0; i < numOfCities; i++) {
 				const city: City = GetRandomElementFromArray(this.cities);
-				const player: ActivePlayer = this.getValidPlayerForCity(city);
+				const player: GamePlayer = this.getValidPlayerForCity(city);
 
 				if (player) {
 					this.changeCityOwner(city, player);
@@ -99,12 +101,12 @@ export class DistributionService {
 	 * @param city - The city for which a player is needed.
 	 * @returns An ActivePlayer object if found, otherwise null.
 	 */
-	private getValidPlayerForCity(city: City): ActivePlayer | null {
+	private getValidPlayerForCity(city: City): GamePlayer | null {
 		const maxIterations: number = this.players.length();
 		const country: Country = CityToCountry.get(city);
 
 		for (let i = 0; i < maxIterations; i++) {
-			const player: ActivePlayer = this.players.removeFirst();
+			const player: GamePlayer = this.players.removeFirst();
 
 			if (this.isCityValidForPlayer(player, country)) {
 				return player;
@@ -122,12 +124,12 @@ export class DistributionService {
 	 * @param country - The country where the city is located.
 	 * @returns A boolean indicating if the city is valid for the player.
 	 */
-	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
-		if (!player.trackedData.countries.has(country)) {
-			player.trackedData.countries.set(country, 0);
+	private isCityValidForPlayer(player: GamePlayer, country: Country) {
+		if (!player.getData().getCountries().has(country)) {
+			player.getData().getCountries().set(country, 0);
 		}
 
-		return player.trackedData.countries.get(country) < Math.floor(country.getCities().length / 2);
+		return player.getData().getCountries().get(country) < Math.floor(country.getCities().length / 2);
 	}
 
 	/**
@@ -135,8 +137,8 @@ export class DistributionService {
 	 * @param player - The player in question.
 	 * @returns A boolean indicating if the player is full.
 	 */
-	private isPlayerFull(player: ActivePlayer): boolean {
-		return player.trackedData.cities.cities.length >= this.maxCitiesPerPlayer;
+	private isPlayerFull(player: GamePlayer): boolean {
+		return player.getData().getCities().cities.length >= this.maxCitiesPerPlayer;
 	}
 
 	/**
@@ -144,7 +146,7 @@ export class DistributionService {
 	 * @param city - The city for which the ownership is to be changed.
 	 * @param player - The new owner of the city.
 	 */
-	private changeCityOwner(city: City, player: ActivePlayer) {
+	private changeCityOwner(city: City, player: GamePlayer) {
 		city.setOwner(player.getPlayer());
 		SetUnitOwner(city.guard.unit, player.getPlayer(), true);
 	}

@@ -1,12 +1,11 @@
-import { PlayerManager } from 'src/app/player/player-manager';
-import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
-import { GameManager } from '../game-manager';
-import { GameState } from './game-state';
-import { TreeManager } from '../services/tree-service';
 import { RegionToCity } from 'src/app/city/city-map';
+import { PlayerManager } from 'src/app/entity/player/player-manager';
+import { PLAYER_STATUS } from 'src/app/entity/player/status/status-enum';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
-import { SlavePlayer } from 'src/app/player/types/slave-player';
+import { GameManager } from '../game-manager';
 import { DistributionService } from '../services/distribution-service';
+import { TreeManager } from '../services/tree-service';
+import { GameState } from './game-state';
 
 export class PreGame implements GameState {
 	private manager: GameManager;
@@ -23,18 +22,19 @@ export class PreGame implements GameState {
 	}
 
 	public start(): void {
-		PlayerManager.getInstance().players.forEach((val) => {
-			val.trackedData.setKDMaps();
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((val) => {
+				val.getData().setKDMaps();
 
-			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
-				val.status.set(PLAYER_STATUS.ALIVE);
-			} else {
-				val.status.set(PLAYER_STATUS.LEFT);
+				if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
+					val.getStatus().set(PLAYER_STATUS.ALIVE);
+				} else {
+					val.getStatus().set(PLAYER_STATUS.LEFT);
 
-				PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
-				PlayerManager.getInstance().players.delete(val.getPlayer());
-			}
-		});
+					PlayerManager.getInstance().getPlayerMap().delete(val.getPlayer());
+				}
+			});
 
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);
@@ -60,7 +60,7 @@ export class PreGame implements GameState {
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					playerManager.getPlayerMap().get(GetOwningPlayer(city.guard.unit)).getData().getUnits().add(city.guard.unit);
 				}
 			});
 

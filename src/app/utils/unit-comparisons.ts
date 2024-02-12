@@ -1,5 +1,5 @@
-import { Options } from '../player/options';
-import { PlayerManager } from '../player/player-manager';
+import { GuardPreferences } from '../entity/player/guard-preferences';
+import { PlayerManager } from '../entity/player/player-manager';
 
 /**
  * Compares two units based on their point value.
@@ -15,7 +15,10 @@ export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
 
 	const initialUnitValue: number = GetUnitPointValue(initialUnit);
 	const compareUnitValue: number = GetUnitPointValue(compareUnit);
-	const playerSettings: Options = PlayerManager.getInstance().players.get(GetOwningPlayer(compareUnit)).options;
+	const playerSettings: GuardPreferences = PlayerManager.getInstance()
+		.getPlayerMap()
+		.get(GetOwningPlayer(compareUnit))
+		.getGuardPreferences();
 
 	if (!playerSettings.value && compareUnitValue < initialUnitValue) {
 		return compareUnit;
@@ -40,7 +43,7 @@ export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
  * @param playerSettings The settings of the player who owns the unit.
  * @returns The unit that fits the player's settings.
  */
-export function CompareUnitByHealth(compareUnit: unit, initialUnit: unit, playerSettings: Options): unit {
+export function CompareUnitByHealth(compareUnit: unit, initialUnit: unit, playerSettings: GuardPreferences): unit {
 	if (compareUnit == initialUnit) return initialUnit;
 
 	const initialUnitValue: number = GetUnitState(initialUnit, UNIT_STATE_LIFE);

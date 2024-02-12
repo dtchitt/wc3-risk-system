@@ -3,13 +3,13 @@ import { GameState } from './game-state';
 import { PLAYER_SLOTS } from 'src/app/utils/utils';
 import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { StringToCountry } from 'src/app/country/country-map';
-import { PlayerManager } from 'src/app/player/player-manager';
 import { VictoryManager } from 'src/app/managers/victory-manager';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { CountryToRegion } from 'src/app/region/region-map';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { TreeManager } from '../services/tree-service';
 import { TeamManager } from 'src/app/teams/team-manager';
+import { PlayerManager } from 'src/app/entity/player/player-manager';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -62,9 +62,11 @@ export class PostGame implements GameState {
 				});
 		}
 
-		PlayerManager.getInstance().players.forEach((player) => {
-			player.reset();
-		});
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((player) => {
+				player.reset();
+			});
 
 		this.isOver = false;
 		this.manager.setRestartEnabled(false);

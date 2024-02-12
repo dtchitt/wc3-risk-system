@@ -1,8 +1,6 @@
 import { StringToCountry } from 'src/app/country/country-map';
 import { Resetable } from 'src/app/interfaces/resetable';
 import { VictoryManager } from 'src/app/managers/victory-manager';
-import { TrackedData } from 'src/app/player/data/tracked-data';
-import { PlayerManager } from 'src/app/player/player-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { GameState } from '../state/game-state';
 import { NameManager } from 'src/app/managers/names/name-manager';
@@ -10,6 +8,8 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { File } from 'w3ts';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
+import { PlayerManager } from 'src/app/entity/player/player-manager';
+import { PlayerData } from 'src/app/entity/player/player-data';
 
 /**
  * TimerService is a class responsible for managing the main game timer.
@@ -46,9 +46,11 @@ export class TimerService implements Resetable {
 				if (this._tick == this._duration) {
 					if (this.victoryManager.checkCityVictory()) return false;
 
-					PlayerManager.getInstance().players.forEach((player) => {
-						player.giveGold();
-					});
+					PlayerManager.getInstance()
+						.getPlayerMap()
+						.forEach((player) => {
+							player.giveGold();
+						});
 
 					StringToCountry.forEach((country) => {
 						country.getSpawn().step();
@@ -90,11 +92,13 @@ export class TimerService implements Resetable {
 	 * Stops the timer and finalizes player and game data.
 	 */
 	public stop() {
-		PlayerManager.getInstance().players.forEach((val, key) => {
-			const data: TrackedData = val.trackedData;
-			if (data.turnDied == -1) data.turnDied = this._turn;
-			if (data.cities.end == 0) data.cities.end = data.cities.cities.length;
-		});
+		PlayerManager.getInstance()
+			.getPlayerMap()
+			.forEach((val, key) => {
+				const data: PlayerData = val.getData();
+				if (data.getTurnDied() == -1) data.setTurnDied(this._turn);
+				if (data.getCities().end == 0) data.getCities().end = data.getCities().cities.length;
+			});
 
 		PauseTimer(this._timer);
 		this.gameState.end();
