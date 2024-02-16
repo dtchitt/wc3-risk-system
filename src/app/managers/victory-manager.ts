@@ -1,6 +1,6 @@
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
-import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
+import { FFA_CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 import { GamePlayer } from '../entity/player/game-player';
 
@@ -16,7 +16,7 @@ export class VictoryManager {
 	private constructor() {
 		this.players = [];
 		this.winTracker = new WinTracker();
-		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
+		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * FFA_CITIES_TO_WIN_MULTIPLIER);
 	}
 
 	public static getInstance(): VictoryManager {

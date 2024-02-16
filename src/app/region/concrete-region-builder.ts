@@ -25,7 +25,7 @@ export class ConcreteRegionBuilder implements RegionBuilder {
 
 		const region = new Region(this.countries, this.goldBonus);
 
-		region.countries.forEach((country) => {
+		region.getCountries().forEach((country) => {
 			CountryToRegion.set(country, region);
 		});
 

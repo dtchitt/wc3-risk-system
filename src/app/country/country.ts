@@ -1,4 +1,5 @@
 import { City } from '../city/city';
+import { Ownable } from '../interfaces/ownable';
 import { Resetable } from '../interfaces/resetable';
 import { Spawner } from '../spawner/spawner';
 import { HexColors } from '../utils/hex-colors';
@@ -9,7 +10,7 @@ import { NEUTRAL_HOSTILE } from '../utils/utils';
  * Country is a class that represents a country within the game.
  * It implements the Resetable interface.
  */
-export class Country implements Resetable {
+export class Country implements Resetable, Ownable {
 	private readonly name: string;
 	private readonly cities: City[];
 	private readonly spawn: Spawner;
@@ -50,6 +51,23 @@ export class Country implements Resetable {
 		this.owner = NEUTRAL_HOSTILE;
 	}
 
+	/**
+	 * Sets the owner of the country.
+	 * @param player - The player object representing the new owner.
+	 */
+	public setOwner(player: player): void {
+		if (player == null) player = NEUTRAL_HOSTILE;
+
+		this.owner = player;
+		this.spawn.setOwner(player);
+		this.onOwnerChange();
+	}
+
+	/** @returns The player who currently owns this country. */
+	public getOwner(): player {
+		return this.owner;
+	}
+
 	/** @returns The name of the country. */
 	public getName(): string {
 		return this.name;
@@ -63,23 +81,6 @@ export class Country implements Resetable {
 	/** @returns The Spawner object for this country. */
 	public getSpawn(): Spawner {
 		return this.spawn;
-	}
-
-	/** @returns The player who currently owns this country. */
-	public getOwner(): player {
-		return this.owner;
-	}
-
-	/**
-	 * Sets the owner of the country.
-	 * @param player - The player object representing the new owner.
-	 */
-	public setOwner(player: player): void {
-		if (player == null) player = NEUTRAL_HOSTILE;
-
-		this.owner = player;
-		this.spawn.setOwner(player);
-		this.onOwnerChange();
 	}
 
 	/**
