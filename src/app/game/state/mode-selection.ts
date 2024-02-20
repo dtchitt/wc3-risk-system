@@ -1,7 +1,8 @@
-import { SettingsContext } from 'src/app/settings/settings-context';
 import { GameManager } from '../game-manager';
 import { GameState } from './game-state';
 import { SettingsView } from 'src/app/settings/settings-view';
+import { NameManager } from 'src/app/managers/names/name-manager';
+import { SettingsContext } from 'src/app/settings/settings-context';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
@@ -18,23 +19,32 @@ export class ModeSelection implements GameState {
 	}
 
 	public start(): void {
-		const modeTimer: timer = CreateTimer();
-		const tick: number = 1;
-		let time: number = 15;
-		this.ui.update(time);
-
-		TimerStart(modeTimer, tick, true, () => {
+		if (NameManager.getInstance().getAcct(Player(23)) == 'RiskBot') {
+			const settingsContext: SettingsContext = SettingsContext.getInstance();
+			settingsContext.getSettings().Promode = 1;
+			settingsContext.getSettings().Fog = 1;
+			settingsContext.getSettings().Diplomacy.option = 1;
+			this.ui.hide();
+			this.end();
+		} else {
+			const modeTimer: timer = CreateTimer();
+			const tick: number = 1;
+			let time: number = 15;
 			this.ui.update(time);
 
-			if (time <= 0 || !this.ui.isVisible()) {
-				PauseTimer(modeTimer);
-				DestroyTimer(modeTimer);
-				this.ui.hide();
-				this.end();
-			}
+			TimerStart(modeTimer, tick, true, () => {
+				this.ui.update(time);
 
-			time -= tick;
-		});
+				if (time <= 0 || !this.ui.isVisible()) {
+					PauseTimer(modeTimer);
+					DestroyTimer(modeTimer);
+					this.ui.hide();
+					this.end();
+				}
+
+				time -= tick;
+			});
+		}
 	}
 
 	public end(): void {
