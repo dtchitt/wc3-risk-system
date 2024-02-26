@@ -24,6 +24,8 @@ const banList: string[] = [
 	'sajbakaman#2613',
 	'kimiko#11661',
 	'kaiser#15109',
+	'redblood3#11273',
+	'taptheslap#1594',
 ];
 
 export class PlayerManager {
