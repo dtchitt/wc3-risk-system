@@ -121,7 +121,14 @@ export abstract class City implements Resetable, Ownable {
 		UnitToCity.delete(this.guard.unit);
 		this.guard.replace(targUnit);
 		UnitToCity.set(this.guard.unit, this);
-		SetUnitPosition(oldGuard, x, y);
+
+		//IsTerrainPathable Returns negated results for some reason. Gj Blizzard
+		if (!IsUnitType(oldGuard, UNIT_TYPE_GIANT) && IsTerrainPathable(x, y, PATHING_TYPE_WALKABILITY)) {
+			SetUnitPosition(oldGuard, this._barrack.defaultX, this._barrack.defaultY);
+		} else {
+			SetUnitPosition(oldGuard, x, y);
+		}
+
 		this.guard.reposition();
 
 		const newOwner: player = GetOwningPlayer(this.guard.unit);
