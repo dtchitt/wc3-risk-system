@@ -65,6 +65,7 @@ Frame "SIMPLESTATUSBAR" "MyBarEx" {
 	}
 }
 
+//Statistic Frames
 Frame "TEXT" "ColumnHeaderText" {
 	FontColor 0.99 0.827 0.0705 1.0,
 	DecorateFileNames,
@@ -137,6 +138,7 @@ Frame "BACKDROP" "StatisticsBoard" INHERITS "QuestButtonBaseTemplate" {
 	}
 }
 
+//Settings Frames
 Frame "POPUPMENU" "MyPopupTemplate" {
     Width 0.13,
     Height 0.03,
@@ -161,7 +163,7 @@ Frame "POPUPMENU" "MyPopupTemplate" {
 
 Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 	Width 0.25f,
-    Height 0.31f,
+    Height 0.37f,
 	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.05,
 
 	Frame "TEXT" "SettingsTitle" {
@@ -220,10 +222,67 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			}
 		}
 
+		Frame "SLIDER" "DiplomacySlider" {
+			Height 0.012,
+			Width 0.114,
+			SliderLayoutHorizontal,
+			SliderMinValue 2,
+            SliderMaxValue 6,
+            SliderInitialValue 2,
+            SliderStepSize 1,
+			SetPoint TOP,"PopupMenus",TOP,0.006,-0.158,
+
+			ControlBackdrop "EscMenuScrollBarBackdropTemplate",
+			Frame "BACKDROP" "EscMenuScrollBarBackdropTemplate" {
+				DecorateFileNames,
+				BackdropTileBackground,
+				BackdropBackground  "EscMenuSliderBackground",
+				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
+				BackdropCornerSize  0.006,
+				BackdropBackgroundSize 0.006,
+				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
+				BackdropEdgeFile  "EscMenuSliderBorder",
+				BackdropBlendAll,
+			}
+
+			ControlDisabledBackdrop "EscMenuScrollBarDisabledBackdrop",
+			Frame "BACKDROP" "EscMenuScrollBarDisabledBackdrop" {
+				DecorateFileNames,
+				BackdropTileBackground,
+				BackdropBackground  "EscMenuSliderBackground",
+				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
+				BackdropCornerSize  0.006,
+				BackdropBackgroundSize 0.006,
+				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
+				BackdropEdgeFile  "EscMenuSliderDisabledBorder",
+				BackdropBlendAll,
+			}
+
+			SliderThumbButtonFrame "EscMenuThumbButtonTemplate",
+			Frame "BUTTON" "EscMenuThumbButtonTemplate" {
+				Width 0.016,
+				Height 0.016,
+
+				ControlBackdrop "EscMenuThumbButtonBackdropTemplate",
+				Frame "BACKDROP" "EscMenuThumbButtonBackdropTemplate" {
+					DecorateFileNames,
+					BackdropBlendAll,
+					BackdropBackground  "EscMenuSliderThumbButton",
+				}
+
+				ControlDisabledBackdrop "EscMenuThumbButtonDisabledBackdrop",
+				Frame "BACKDROP" "EscMenuThumbButtonDisabledBackdrop" {
+					DecorateFileNames,
+					BackdropBlendAll,
+					BackdropBackground  "EscMenuSliderDisabledThumbButton",
+				}
+			}
+		}
+
 		Frame "GLUECHECKBOX" "PromodeCheckbox" {
 		Width 0.024,
 		Height 0.024,
-		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.15,
+		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.20,
 
 		ControlBackdrop "EscMenuCheckBoxBackdrop",
 			Frame "BACKDROP" "EscMenuCheckBoxBackdrop" {
@@ -302,19 +361,30 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "Diplomacy:",
 		}
 
-		// Frame "TEXT" "DiplomacySliderLabel" {
-		// 	SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
+		Frame "TEXT" "DiplomacySliderLabel" {
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Team Size:",
+		}
+
+		Frame "TEXT" "DiplomacySubOptionLabel" {
+			SetPoint LEFT,"DiplomacySliderLabel",RIGHT, 0.01, 0,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "2",
+		}
 
 		Frame "TEXT" "PromodeLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.20,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -363,19 +433,19 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "FFA",
 		}
 
-		// Frame "TEXT" "DiplomacySliderOption" {
-		// 	SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
+		Frame "TEXT" "DiplomacySubOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "2",
+		}
 
 		Frame "TEXT" "PromodeOption" {
-			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.20,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -385,4 +455,6 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "Off",
 		}
 	}
+
+	
 }
