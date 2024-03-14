@@ -36,36 +36,6 @@ export class GamePlayer implements GameEntity {
 		return this.data;
 	}
 
-	public getPlayer(): player {
-		return this.player;
-	}
-
-	public getStatus(): Status {
-		return this.status;
-	}
-
-	public getGuardPreferences(): GuardPreferences {
-		return this.guardPreferences;
-	}
-
-	public isAdmin(): boolean {
-		return this.admin;
-	}
-
-	public giveGold(val?: number): void {
-		if (!val) val = this.data.getIncome().income;
-
-		SetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD) + val);
-
-		if (val >= 1) this.data.getGold().earned += val;
-
-		const goldAmount: number = GetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD);
-
-		if (goldAmount > this.data.getGold().max) {
-			this.data.getGold().max = goldAmount;
-		}
-	}
-
 	public onKill(victom: player, unit: unit): void {
 		const killer: player = this.getPlayer();
 
@@ -123,5 +93,35 @@ export class GamePlayer implements GameEntity {
 
 		SetPlayerState(handle, PLAYER_STATE_RESOURCE_GOLD, 0);
 		NameManager.getInstance().setName(handle, 'btag');
+	}
+
+	public giveGold(val?: number): void {
+		if (!val) val = this.data.getIncome().income;
+
+		SetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD) + val);
+
+		if (val >= 1) this.data.getGold().earned += val;
+
+		const goldAmount: number = GetPlayerState(this.player, PLAYER_STATE_RESOURCE_GOLD);
+
+		if (goldAmount > this.data.getGold().max) {
+			this.data.getGold().max = goldAmount;
+		}
+	}
+
+	public getPlayer(): player {
+		return this.player;
+	}
+
+	public getStatus(): Status {
+		return this.status;
+	}
+
+	public getGuardPreferences(): GuardPreferences {
+		return this.guardPreferences;
+	}
+
+	public isAdmin(): boolean {
+		return this.admin;
 	}
 }

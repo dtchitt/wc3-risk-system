@@ -93,8 +93,8 @@ export class Country implements Resetable, Ownable {
 		this.cities.forEach((city) => {
 			const effect = AddSpecialEffect(
 				'Abilities\\Spells\\Human\\Resurrect\\ResurrectCaster.mdl',
-				city.barrack.defaultX,
-				city.barrack.defaultY
+				city.getBarrack().getDefaultX(),
+				city.getBarrack().getDefaultY()
 			);
 			BlzSetSpecialEffectScale(effect, 1.1);
 			DestroyEffect(effect);

@@ -16,8 +16,8 @@ export function GetUnitsInRangeByAllegiance(
 	allegianceCheck: (filterUnit: unit, player: player) => boolean,
 	unit?: unit
 ) {
-	const x: number = !unit ? city.guard.defaultX : GetUnitX(unit);
-	const y: number = !unit ? city.guard.defaultY : GetUnitY(unit);
+	const x: number = !unit ? city.getGuard().getDefaultX() : GetUnitX(unit);
+	const y: number = !unit ? city.getGuard().getDefaultY() : GetUnitY(unit);
 
 	GroupEnumUnitsInRange(
 		g,

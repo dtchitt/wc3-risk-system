@@ -1,5 +1,4 @@
 import { UNIT_ID } from 'src/configs/unit-id';
-import { TransportManager } from '../managers/transport-manager';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { City } from './city';
 import { UnitToCity } from './city-map';
@@ -38,19 +37,20 @@ export class PortCity extends City {
 	 * @param unit - The trained unit.
 	 */
 	public onUnitTrain(unit: unit): void {
-		if (IsUnitType(unit, UNIT_TYPE.TRANSPORT)) {
-			TransportManager.getInstance().add(unit);
-		}
+		//TODO
+		// if (IsUnitType(unit, UNIT_TYPE.TRANSPORT)) {
+		// 	TransportManager.getInstance().add(unit);
+		// }
 
 		if (
-			(IsUnitType(this.guard.unit, UNIT_TYPE.SHIP) && !IsUnitType(unit, UNIT_TYPE.SHIP)) ||
-			(IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == UNIT_ID.MARINE)
+			(IsUnitType(this.getGuard().getUnit(), UNIT_TYPE.SHIP) && !IsUnitType(unit, UNIT_TYPE.SHIP)) ||
+			(IsUnitMelee(this.getGuard().getUnit()) && GetUnitTypeId(unit) == UNIT_ID.MARINE)
 		) {
-			SetUnitPosition(unit, this.guard.defaultX, this.guard.defaultY);
-			UnitToCity.delete(this.guard.unit);
-			this.guard.replace(unit);
-			UnitToCity.set(this.guard.unit, this);
-			this.guard.reposition();
+			SetUnitPosition(unit, this.getGuard().getDefaultX(), this.getGuard().getDefaultY());
+			UnitToCity.delete(this.getGuard().getUnit());
+			this.getGuard().replace(unit);
+			UnitToCity.set(this.getGuard().getUnit(), this);
+			this.getGuard().reposition();
 		}
 	}
 

@@ -9,9 +9,9 @@ import { UNIT_ID } from 'src/configs/unit-id';
 
 export abstract class City implements Resetable, Ownable {
 	private owner: player;
-	private _barrack: Barracks;
-	private _guard: Guard;
-	private _cop: unit;
+	private barrack: Barracks;
+	private guard: Guard;
+	private cop: unit;
 
 	/**
 	 * @param rax The barracks for the city
@@ -20,9 +20,9 @@ export abstract class City implements Resetable, Ownable {
 	 */
 	constructor(rax: Barracks, guard: Guard, cop: unit) {
 		this.owner = NEUTRAL_HOSTILE;
-		this._barrack = rax;
-		this._guard = guard;
-		this._cop = cop;
+		this.barrack = rax;
+		this.guard = guard;
+		this.cop = cop;
 	}
 
 	public abstract isValidGuard(unit: unit): boolean;
@@ -32,12 +32,12 @@ export abstract class City implements Resetable, Ownable {
 
 	/** Resets the city, returning it to its default state */
 	public reset(): void {
-		UnitToCity.delete(this.guard.unit);
-		SetUnitOwner(this._cop, NEUTRAL_HOSTILE, true);
+		UnitToCity.delete(this.guard.getUnit());
+		SetUnitOwner(this.cop, NEUTRAL_HOSTILE, true);
 		this.owner = NEUTRAL_HOSTILE;
-		this._barrack.reset();
-		this._guard.reset();
-		UnitToCity.set(this.guard.unit, this);
+		this.barrack.reset();
+		this.guard.reset();
+		UnitToCity.set(this.guard.getUnit(), this);
 	}
 
 	/**
@@ -45,8 +45,8 @@ export abstract class City implements Resetable, Ownable {
 	 */
 	public setOwner(player: player): void {
 		this.owner = player;
-		this._barrack.setOwner(player);
-		SetUnitOwner(this._cop, player, true);
+		this.barrack.setOwner(player);
+		SetUnitOwner(this.cop, player, true);
 	}
 
 	/**
@@ -54,7 +54,7 @@ export abstract class City implements Resetable, Ownable {
 	 */
 	public changeOwner(newOwner: player): void {
 		this.setOwner(newOwner);
-		IssuePointOrder(this._barrack.unit, 'setrally', this._barrack.defaultX - 70, this._barrack.defaultY - 155);
+		IssuePointOrder(this.barrack.getUnit(), 'setrally', this.barrack.getDefaultX() - 70, this.barrack.getDefaultY() - 155);
 	}
 
 	/** @returns The current owner of the city */
@@ -63,25 +63,25 @@ export abstract class City implements Resetable, Ownable {
 	}
 
 	/** @returns The Barracks object of the city */
-	public get barrack(): Barracks {
-		return this._barrack;
+	public getBarrack(): Barracks {
+		return this.barrack;
 	}
 
 	/** @returns The Circle of Power of the city */
-	public get cop(): unit {
-		return this._cop;
+	public getCop(): unit {
+		return this.cop;
 	}
 
 	/** @returns The Guard object of the city */
-	public get guard(): Guard {
-		return this._guard;
+	public getGuard(): Guard {
+		return this.guard;
 	}
 
 	/**
 	 * @param value The new guard for the city
 	 */
-	public set guard(value: Guard) {
-		this._guard = value;
+	public setGuard(value: Guard) {
+		this.guard = value;
 	}
 
 	/**
@@ -98,7 +98,7 @@ export abstract class City implements Resetable, Ownable {
 		if (IsUnitType(unit, UNIT_TYPE.TRANSPORT)) return false;
 		if (GetUnitTypeId(unit) == UNIT_ID.DUMMY_GUARD) return false;
 		if (unit == null || unit == undefined) return false;
-		if (IsUnitType(unit, UNIT_TYPE.GUARD) && unit != this.guard.unit) return false;
+		if (IsUnitType(unit, UNIT_TYPE.GUARD) && unit != this.guard.getUnit()) return false;
 
 		return true;
 	}
@@ -112,15 +112,15 @@ export abstract class City implements Resetable, Ownable {
 		const targUnit: unit = GetSpellTargetUnit();
 		const x: number = GetUnitX(targUnit);
 		const y: number = GetUnitY(targUnit);
-		const oldGuard: unit = this.guard.unit;
+		const oldGuard: unit = this.guard.getUnit();
 
-		UnitToCity.delete(this.guard.unit);
+		UnitToCity.delete(this.guard.getUnit());
 		this.guard.replace(targUnit);
-		UnitToCity.set(this.guard.unit, this);
+		UnitToCity.set(this.guard.getUnit(), this);
 		SetUnitPosition(oldGuard, x, y);
 		this.guard.reposition();
 
-		const newOwner: player = GetOwningPlayer(this.guard.unit);
+		const newOwner: player = GetOwningPlayer(this.guard.getUnit());
 
 		if (this.owner != newOwner) {
 			this.setOwner(newOwner);

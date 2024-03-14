@@ -17,7 +17,7 @@ export function EnterRegionEvent() {
 			const city: City = RegionToCity.get(GetTriggeringRegion());
 
 			//Validate current guard
-			if (IsUnitInRegion(GetTriggeringRegion(), city.guard.unit) && city.isValidGuard(city.guard.unit)) {
+			if (IsUnitInRegion(GetTriggeringRegion(), city.getGuard().getUnit()) && city.isValidGuard(city.getGuard().getUnit())) {
 				return true;
 			}
 
@@ -37,7 +37,13 @@ export function EnterRegionEvent() {
 			let guardChoice: unit = IsUnitType(trigUnit, UNIT_TYPE.TRANSPORT) ? null : getGuardChoice(g, trigUnit, city);
 
 			if (!guardChoice) {
-				guardChoice = CreateUnit(GetOwningPlayer(trigUnit), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+				guardChoice = CreateUnit(
+					GetOwningPlayer(trigUnit),
+					UNIT_ID.DUMMY_GUARD,
+					city.getGuard().getDefaultX(),
+					city.getGuard().getDefaultY(),
+					270
+				);
 			}
 
 			//Change owner if guardChoice is an enemy of the city.
@@ -45,8 +51,8 @@ export function EnterRegionEvent() {
 				city.setOwner(GetOwningPlayer(guardChoice));
 			}
 
-			UnitToCity.delete(city.guard.unit);
-			city.guard.replace(guardChoice);
+			UnitToCity.delete(city.getGuard().getUnit());
+			city.getGuard().replace(guardChoice);
 			UnitToCity.set(guardChoice, city);
 			DestroyGroup(g);
 			g = null;

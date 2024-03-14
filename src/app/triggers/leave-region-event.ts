@@ -16,7 +16,7 @@ export function LeaveRegionEvent() {
 
 			const city: City = RegionToCity.get(GetTriggeringRegion());
 			let g: group = CreateGroup();
-			let guardChoice: unit = city.guard.unit;
+			let guardChoice: unit = city.getGuard().getUnit();
 
 			//Filter for owned guards
 			GetUnitsInRangeByAllegiance(g, city, CityRegionSize, IsUnitOwnedByPlayer);
@@ -26,15 +26,15 @@ export function LeaveRegionEvent() {
 
 			//No valid owned or allied guards found, create a dummy for city owner.
 			if (BlzGroupGetSize(g) == 0 && !city.isValidGuard(guardChoice)) {
-				guardChoice = CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.guard.defaultX, city.guard.defaultY, 270);
+				guardChoice = CreateUnit(city.getOwner(), UNIT_ID.DUMMY_GUARD, city.getGuard().getDefaultX(), city.getGuard().getDefaultY(), 270);
 			} else {
 				ForGroup(g, () => {
 					guardChoice = CompareUnitByValue(GetEnumUnit(), guardChoice);
 				});
 			}
 
-			UnitToCity.delete(city.guard.unit);
-			city.guard.replace(guardChoice);
+			UnitToCity.delete(city.getGuard().getUnit());
+			city.getGuard().replace(guardChoice);
 			UnitToCity.set(guardChoice, city);
 			DestroyGroup(g);
 			g = null;

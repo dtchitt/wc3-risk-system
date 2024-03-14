@@ -9,10 +9,10 @@ import { CityType, CityTypes } from './city-type';
 import { Barracks } from './components/barracks';
 import { Guard } from './components/guard';
 import { UnitData } from '../interfaces/unit-data';
+import { Resetable } from '../interfaces/resetable';
 import { EnterRegionTrigger } from '../triggers/enter-region-event';
 import { LeaveRegionTrigger } from '../triggers/leave-region-event';
 import { UnitTrainedTrigger } from '../triggers/unit-trained-event';
-import { Resetable } from '../interfaces/resetable';
 
 // Calculate the X offset for a barrack unit
 const GetRaxXOffSet = (rax: unit) => GetUnitX(rax) - CityGuardXOffSet;
@@ -52,7 +52,7 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 */
 	public setName(name?: string): CityBuilder {
 		if (name) {
-			BlzSetUnitName(this._barracks.unit, name);
+			BlzSetUnitName(this._barracks.getUnit(), name);
 		}
 
 		return this;
@@ -63,8 +63,8 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 * @returns The instance of ConcreteCityBuilder for method chaining
 	 */
 	public setGuard(guard: number): CityBuilder {
-		const x: number = GetRaxXOffSet(this._barracks.unit);
-		const y: number = GetRaxYOffSet(this._barracks.unit);
+		const x: number = GetRaxXOffSet(this._barracks.getUnit());
+		const y: number = GetRaxYOffSet(this._barracks.getUnit());
 
 		if (!guard) {
 			guard = DefaultGuardType;
@@ -83,8 +83,8 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 		if (cop) {
 			this._cop = cop;
 		} else {
-			const x: number = GetRaxXOffSet(this._barracks.unit);
-			const y: number = GetRaxYOffSet(this._barracks.unit);
+			const x: number = GetRaxXOffSet(this._barracks.getUnit());
+			const y: number = GetRaxYOffSet(this._barracks.getUnit());
 
 			this._cop = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.CONTROL_POINT, x, y, 270);
 		}
@@ -125,9 +125,9 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 		const city = new CityConstructor(this._barracks, this._guard, this._cop);
 
 		this.setRegion(city);
-		TriggerRegisterUnitEvent(UnitTrainedTrigger, city.barrack.unit, EVENT_UNIT_TRAIN_FINISH);
-		UnitToCity.set(this._barracks.unit, city);
-		UnitToCity.set(this._guard.unit, city);
+		TriggerRegisterUnitEvent(UnitTrainedTrigger, city.getBarrack().getUnit(), EVENT_UNIT_TRAIN_FINISH);
+		UnitToCity.set(this._barracks.getUnit(), city);
+		UnitToCity.set(this._guard.getUnit(), city);
 		city.setOwner(NEUTRAL_HOSTILE);
 
 		this.reset();
@@ -150,10 +150,10 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 */
 	private setRegion(city: City): void {
 		const rect = Rect(
-			city.guard.defaultX - CityRegionSize / 2,
-			city.guard.defaultY - CityRegionSize / 2,
-			city.guard.defaultX + CityRegionSize / 2,
-			city.guard.defaultY + CityRegionSize / 2
+			city.getGuard().getDefaultX() - CityRegionSize / 2,
+			city.getGuard().getDefaultY() - CityRegionSize / 2,
+			city.getGuard().getDefaultX() + CityRegionSize / 2,
+			city.getGuard().getDefaultY() + CityRegionSize / 2
 		);
 
 		const region = CreateRegion();

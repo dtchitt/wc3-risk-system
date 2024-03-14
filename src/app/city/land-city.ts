@@ -37,12 +37,12 @@ export class LandCity extends City {
 	 * @param unit - The trained unit.
 	 */
 	public onUnitTrain(unit: unit): void {
-		if (IsUnitMelee(this.guard.unit) && GetUnitTypeId(unit) == DefaultGuardType) {
-			SetUnitPosition(unit, this.guard.defaultX, this.guard.defaultY);
-			UnitToCity.delete(this.guard.unit);
-			this.guard.replace(unit);
-			UnitToCity.set(this.guard.unit, this);
-			this.guard.reposition();
+		if (IsUnitMelee(this.getGuard().getUnit()) && GetUnitTypeId(unit) == DefaultGuardType) {
+			SetUnitPosition(unit, this.getGuard().getDefaultX(), this.getGuard().getDefaultY());
+			UnitToCity.delete(this.getGuard().getUnit());
+			this.getGuard().replace(unit);
+			UnitToCity.set(this.getGuard().getUnit(), this);
+			this.getGuard().reposition();
 		}
 	}
 

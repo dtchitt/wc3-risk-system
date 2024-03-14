@@ -7,27 +7,15 @@ import { ConcreteSpawnerBuilder } from './app/spawner/concrete-spawn-builder';
 import { SetCountries } from './configs/city-country-setup';
 import { NameManager } from './app/managers/names/name-manager';
 import { ChatManager } from './app/managers/chat-manager';
-import { TransportManager } from './app/managers/transport-manager';
 import { SetConsoleUI } from './app/ui/console';
-import { GameManager } from './app/game/game-manager';
-import { OwnershipChangeEvent } from './app/triggers/ownership-change-event';
-import { EnterRegionEvent } from './app/triggers/enter-region-event';
-import { LeaveRegionEvent } from './app/triggers/leave-region-event';
-import { SpellEffectEvent } from './app/triggers/spell-effect-event';
-import { PlayerLeaveEvent } from './app/triggers/player-leave-event';
-import { UnitDeathEvent } from './app/triggers/unit_death/unit-death-event';
-import { UnitTrainedEvent } from './app/triggers/unit-trained-event';
-import { KeyEvents } from './app/triggers/key-events';
-import { AntiCheat } from './app/libs/anti-cheat';
 import { Quests } from './app/quests/quests';
 import CameraManager from './app/managers/camera-manager';
-import { TimedEventManager } from './app/libs/timer/timed-event-manager';
-import { AntiSpam } from './app/triggers/anti-spam';
+import { TimedEventManager } from './app/timer/timed-event-manager';
 import { SetRegions } from './configs/region-setup';
 import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
 import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
-import { SetCommands } from './app/commands/commands';
+import { SettingsView } from './app/settings/settings-view';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -45,7 +33,6 @@ function tsMain() {
 
 		SetGameSpeed(MAP_SPEED_FASTEST);
 		SetMapFlag(MAP_LOCK_SPEED, true);
-		SetMapFlag(MAP_USE_HANDICAPS, false);
 		SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, false);
 		SetTimeOfDay(12.0);
 		SetTimeOfDayScale(0.0);
@@ -85,16 +72,6 @@ function tsMain() {
 		}
 
 		//Set up triggers
-		EnterRegionEvent();
-		LeaveRegionEvent();
-		UnitDeathEvent();
-		UnitTrainedEvent();
-		//UnitUpgradeEvent();
-		OwnershipChangeEvent();
-		PlayerLeaveEvent();
-		SpellEffectEvent();
-		AntiSpam();
-		KeyEvents();
 
 		//Create Quests
 		Quests.Create();
@@ -107,15 +84,12 @@ function tsMain() {
 			FogMaskEnable(false);
 			SetConsoleUI();
 
-			AntiCheat.checkMultiAccounts(() => {
-				PauseTimer(onLoadTimer);
-				DestroyTimer(onLoadTimer);
-				CameraManager.getInstance();
-				ChatManager.getInstance();
-				TransportManager.getInstance();
-				TimedEventManager.getInstance();
-				SetCommands(GameManager.getInstance());
-			});
+			PauseTimer(onLoadTimer);
+			DestroyTimer(onLoadTimer);
+			CameraManager.getInstance();
+			ChatManager.getInstance();
+			TimedEventManager.getInstance();
+			new SettingsView();
 		});
 	} catch (e) {
 		print(e);

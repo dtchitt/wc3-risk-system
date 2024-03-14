@@ -3,48 +3,48 @@ import { Resetable } from 'src/app/interfaces/resetable';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 
 export class Barracks implements Resetable, Ownable {
-	private _unit: unit;
-	private readonly _unitType: number;
-	private readonly _defaultX: number;
-	private readonly _defaultY: number;
+	private unit: unit;
+	private readonly unitType: number;
+	private readonly defaultX: number;
+	private readonly defaultY: number;
 
 	/**
 	 * Constructs a new Barracks object.
 	 * @param unit - The unit to base the barracks on.
 	 */
 	constructor(unit: unit) {
-		this._unit = unit;
-		this._unitType = GetUnitTypeId(unit);
-		this._defaultX = GetUnitX(unit);
-		this._defaultY = GetUnitY(unit);
+		this.unit = unit;
+		this.unitType = GetUnitTypeId(unit);
+		this.defaultX = GetUnitX(unit);
+		this.defaultY = GetUnitY(unit);
 	}
 
 	/** @returns The unit object that represents the barracks. */
-	public get unit(): unit {
-		return this._unit;
+	public getUnit(): unit {
+		return this.unit;
 	}
 
 	/** @returns The identifier of the unit type for the barracks. */
-	public get unitType(): number {
-		return this._unitType;
+	public getUnitType(): number {
+		return this.unitType;
 	}
 
 	/** @returns The default X coordinate of the barracks on the map. */
-	public get defaultX(): number {
-		return this._defaultX;
+	public getDefaultX(): number {
+		return this.defaultX;
 	}
 
 	/** @returns The default Y coordinate of the barracks on the map. */
-	public get defaultY(): number {
-		return this._defaultY;
+	public getDefaultY(): number {
+		return this.defaultY;
 	}
 
 	/**
 	 * Resets the unit owner to NEUTRAL_HOSTILE.
 	 */
 	public reset(): void {
-		SetUnitOwner(this._unit, NEUTRAL_HOSTILE, true);
-		SetUnitRallyUnit(this._unit, this._unit);
+		SetUnitOwner(this.unit, NEUTRAL_HOSTILE, true);
+		SetUnitRallyUnit(this.unit, this.unit);
 	}
 
 	/**
@@ -52,7 +52,7 @@ export class Barracks implements Resetable, Ownable {
 	 * @param player - The player object that will become the new owner.
 	 */
 	public setOwner(player: player): void {
-		SetUnitOwner(this._unit, player, true);
+		SetUnitOwner(this.unit, player, true);
 	}
 
 	/**
@@ -60,6 +60,6 @@ export class Barracks implements Resetable, Ownable {
 	 * @returns The player object representing the owner.
 	 */
 	public getOwner(): player {
-		return GetOwningPlayer(this._unit);
+		return GetOwningPlayer(this.unit);
 	}
 }
