@@ -1,0 +1,55 @@
+// IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
+// IncludeFile "UI\FrameDef\UI\UpperButtonBar.fdf",
+// IncludeFile "UI\FrameDef\UI\ScriptDialog.fdf",
+IncludeFile "UI\FrameDef\UI\QuestDialog.fdf",
+
+Frame "BACKDROP" "TeamSelectionBackdrop" INHERITS "QuestButtonBaseTemplate" {
+	Width 1.0f,
+    Height 0.56f,
+	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.0,
+
+	Frame "FRAME" "TeamSelectionFrame" {
+		Width  1.0f,
+		Height 0.05f,
+		SetPoint TOPLEFT,"TeamSelectionBackdrop",TOPLEFT,0.0,0.0,
+
+		Frame "TEXT" "PlayedTime" {
+			SetPoint TOPLEFT,"StatisticsHeader",TOPLEFT,0.01,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "TEXT" "WinningPlayer" {
+			SetPoint TOP,"StatisticsHeader",TOP,0,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "TEXT" "MapName" {
+			SetPoint TOPRIGHT,"StatisticsHeader",TOPRIGHT,-0.085,-0.01,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.0115,"",
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+		}
+
+		Frame "GLUETEXTBUTTON" "HideButton" INHERITS WITHCHILDREN "EscMenuButtonTemplate" {
+			SetPoint TOPRIGHT,"StatisticsHeader",TOPRIGHT,0,0,
+			Width  0.08f,
+			Height 0.03f,
+			UseActiveContext,
+			ButtonText "ScriptDialogButtonText",
+
+			Frame "TEXT" "ScriptDialogButtonText" INHERITS "EscMenuButtonTextTemplate" {
+				Text "Hide Stats",
+			}
+		}  
+	}
+}
