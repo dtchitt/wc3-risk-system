@@ -19,9 +19,9 @@
     "plugins": [
       {
         "transform": "war3-transformer",
-        "mapDir": "D:/Programming/wc3-risk-system - Refactor/maps/risk_europe.w3x",
-        "entryFile": "D:/Programming/wc3-risk-system - Refactor/src/main.ts",
-        "outputDir": "D:/Programming/wc3-risk-system - Refactor/dist/risk_europe.w3x"
+        "mapDir": "D:/Projects/wc3-risk-system/maps/risk_europe.w3x",
+        "entryFile": "D:/Projects/wc3-risk-system/src/main.ts",
+        "outputDir": "D:/Projects/wc3-risk-system/dist/risk_europe.w3x"
       }
     ],
     "types": [
