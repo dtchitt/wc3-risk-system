@@ -2,6 +2,9 @@
  * Responsible for creating in-game quests.
  */
 export class Quests {
+	//TODO Fight bonus explanation
+	//TODO Bounty explanation
+	//TODO Settings explanation
 	public static Create() {
 		Quests.Credits();
 		Quests.Tutorial();
@@ -14,7 +17,8 @@ export class Quests {
 		description += '\nUnits: Saran, ForLolz#11696';
 		description += '\nIcons: High/Low Health Guard: Moy | High Value Guard: The Panda | Low Value Guard NemoVonFish';
 		description += '\nSS Ship Model: ??, please let ForLolz know if you know the author';
-		description += '\nSpecial Thanks: The Risk Community, Priwin, PsycoMarauder, RodOfNod, goble-r1sk, Saran, and all the devs before me!';
+		description +=
+			'\nSpecial Thanks: The Wc3 Risk Community, Priwin, PsycoMarauder, RodOfNod, goble-r1sk, Saran, and all the devs before me!';
 
 		Quests.BuildQuest('Credits', description, 'ReplaceableTextures\\CommandButtons\\BTNTome.blp', false);
 	}

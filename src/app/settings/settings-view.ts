@@ -77,16 +77,11 @@ export class SettingsView {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
 				SettingsContext.getInstance().getSettings().GameType = frameValue;
-				this.colorizeGameTypeText(frameValue);
+				this.colorizeText(`GameTypePopup`, GameTypeOptions);
 			})
 		);
 
-		this.colorizeGameTypeText(BlzFrameGetValue(BlzGetFrameByName('GameTypePopup', 0)));
-	}
-
-	private colorizeGameTypeText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('GameTypeOption', 0), `${GameTypeOptions[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('GameTypePopup', 0), 2), `${GameTypeOptions[value]}`);
+		this.colorizeText(`GameTypePopup`, GameTypeOptions);
 	}
 
 	private fogPopup() {
@@ -99,16 +94,11 @@ export class SettingsView {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
 				SettingsContext.getInstance().getSettings().Fog = frameValue;
-				this.colorizeFogText(frameValue);
+				this.colorizeText(`FogPopup`, FogOptions);
 			})
 		);
 
-		this.colorizeFogText(BlzFrameGetValue(BlzGetFrameByName('FogPopup', 0)));
-	}
-
-	private colorizeFogText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('FogOption', 0), `${FogOptions[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('FogPopup', 0), 2), `${FogOptions[value]}`);
+		this.colorizeText(`FogPopup`, FogOptions);
 	}
 
 	private diplomacyPopup() {
@@ -121,11 +111,22 @@ export class SettingsView {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
 				SettingsContext.getInstance().getSettings().Diplomacy.option = frameValue;
-				this.colorizeDiplomacyText(frameValue);
+				this.colorizeText(`DiplomacyPopup`, DiplomacyOptions);
+
+				if (frameValue > 0) {
+					BlzFrameSetVisible(BlzGetFrameByName('DiplomacySlider', 0), true);
+					BlzFrameSetText(
+						BlzGetFrameByName('DiplomacySubOptionLabel', 0),
+						`${R2I(BlzFrameGetValue(BlzGetFrameByName('DiplomacySlider', 0)))}`
+					);
+				} else {
+					BlzFrameSetVisible(BlzGetFrameByName('DiplomacySlider', 0), false);
+					BlzFrameSetText(BlzGetFrameByName('DiplomacySubOptionLabel', 0), `FFA`);
+				}
 			})
 		);
 
-		this.colorizeDiplomacyText(BlzFrameGetValue(BlzGetFrameByName('DiplomacyPopup', 0)));
+		this.colorizeText(`DiplomacyPopup`, DiplomacyOptions);
 	}
 
 	private diplomacyQuantitySlider() {
@@ -141,11 +142,9 @@ export class SettingsView {
 				BlzFrameSetText(BlzGetFrameByName('DiplomacySubOptionLabel', 0), `${frameValue}`);
 			})
 		);
-	}
 
-	private colorizeDiplomacyText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('DiplomacyOption', 0), `${DiplomacyOptions[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('DiplomacyPopup', 0), 2), `${DiplomacyOptions[value]}`);
+		BlzFrameSetVisible(BlzGetFrameByName('DiplomacySlider', 0), false);
+		BlzFrameSetText(BlzGetFrameByName('DiplomacySubOptionLabel', 0), `FFA`);
 	}
 
 	private promodeBox() {
@@ -159,6 +158,8 @@ export class SettingsView {
 			Condition(() => {
 				const fogFrame: framehandle = BlzGetFrameByName('FogPopup', 0);
 				const diploFrame: framehandle = BlzGetFrameByName('DiplomacyPopup', 0);
+				const sliderFrame: framehandle = BlzGetFrameByName('DiplomacySlider', 0);
+				const labelFrame: framehandle = BlzGetFrameByName('DiplomacySubOptionLabel', 0);
 
 				if (BlzGetTriggerFrameEvent() == FRAMEEVENT_CHECKBOX_CHECKED) {
 					SettingsContext.getInstance().getSettings().Promode = 1;
@@ -169,6 +170,8 @@ export class SettingsView {
 					BlzFrameSetEnable(fogFrame, false);
 					BlzFrameSetValue(diploFrame, 1);
 					BlzFrameSetEnable(diploFrame, false);
+					BlzFrameSetVisible(sliderFrame, true);
+					BlzFrameSetText(labelFrame, `${R2I(BlzFrameGetValue(sliderFrame))}`);
 				} else {
 					SettingsContext.getInstance().getSettings().Promode = 0;
 					SettingsContext.getInstance().getSettings().Fog = 0;
@@ -177,15 +180,25 @@ export class SettingsView {
 					BlzFrameSetEnable(fogFrame, true);
 					BlzFrameSetValue(diploFrame, 0);
 					BlzFrameSetEnable(diploFrame, true);
+					BlzFrameSetVisible(sliderFrame, false);
+					BlzFrameSetText(labelFrame, `FFA`);
 				}
 
-				this.colorizeFogText(BlzFrameGetValue(fogFrame));
-				this.colorizeDiplomacyText(BlzFrameGetValue(diploFrame));
+				this.colorizeText(`FogPopup`, FogOptions);
+				this.colorizeText(`DiplomacyPopup`, DiplomacyOptions);
 				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsContext.getInstance().getSettings().Promode]}`);
 			})
 		);
 
 		BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsContext.getInstance().getSettings().Promode]}`);
+	}
+
+	private colorizeText(frameName: string, optionsType: Record<number, string>) {
+		const frame = BlzGetFrameByName(frameName, 0);
+		const value = BlzFrameGetValue(frame);
+
+		BlzFrameSetText(frame, `${optionsType[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(frame, 2), `${optionsType[value]}`);
 	}
 
 	private hostSetup() {

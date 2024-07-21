@@ -197,8 +197,9 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		SetPoint TOP,"PopupMenus",TOP,0.0,0.00,
 		PopupMenuFrame "GameTypePopupMenu",
 			Frame "MENU" "GameTypePopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
-				MenuItem "Standard",     -2,
-				//MenuItem "Capitals",     -2,
+				MenuItem "Standard", -2,
+				MenuItem "Capitals", -2,
+				MenuItem "Tournament", -2
 			}
 		}
 
@@ -208,7 +209,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Frame "MENU" "FogPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "Off",     -2,
 				MenuItem "On",     -2,
-				//MenuItem "Night",     -2,
+				MenuItem "Night",     -2,
 			}
 		}
 
@@ -217,8 +218,8 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
     	PopupMenuFrame "DiplomacyPopupMenu",
 			Frame "MENU" "DiplomacyPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "FFA",     -2,
-				MenuItem "Lobby Teams",     -2,
-				//MenuItem "Random Teams of: ",     -2,
+				MenuItem "Team Pick",     -2,
+				MenuItem "Random Teams",     -2,
 			}
 		}
 

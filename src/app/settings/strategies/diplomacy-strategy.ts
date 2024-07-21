@@ -9,9 +9,8 @@ export interface DiplomacySubOptions {
 
 export const DiplomacyOptions: Record<number, string> = {
 	0: `${HexColors.GREEN}FFA`,
-	1: `${HexColors.RED}Lobby Teams`,
+	1: `${HexColors.RED}Team Pick`,
 	2: `${HexColors.RED}Random Teams`,
-	3: `${HexColors.RED}Free Ally`,
 };
 
 export class DiplomacyStrategy implements SettingsStrategy {
@@ -20,7 +19,6 @@ export class DiplomacyStrategy implements SettingsStrategy {
 		[0, this.handleFFA],
 		[1, this.handleLobbyTeams],
 		[2, this.handleRandomTeams],
-		[3, this.handleFreeAlly],
 	]);
 
 	public constructor(diplomacy: DiplomacySubOptions) {
@@ -46,11 +44,5 @@ export class DiplomacyStrategy implements SettingsStrategy {
 
 	private handleRandomTeams(): void {
 		//TODO Generate teams and allow full control
-	}
-
-	private handleFreeAlly(): void {
-		//TODO Break teams
-
-		SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, false);
 	}
 }

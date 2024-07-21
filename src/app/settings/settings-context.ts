@@ -10,12 +10,12 @@ export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'Promode';
 export class SettingsContext {
 	private static instance: SettingsContext;
 
-	private strategies: Map<string, SettingsStrategy>;
+	private strategies: Map<SettingsKey, SettingsStrategy>;
 	private settings: Settings;
 
 	private constructor(settings: Settings) {
 		this.settings = settings;
-		this.strategies = new Map<string, SettingsStrategy>();
+		this.strategies = new Map<SettingsKey, SettingsStrategy>();
 		this.strategies.set('GameType', new GameTypeStrategy(this.settings.GameType));
 		this.strategies.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
 		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
