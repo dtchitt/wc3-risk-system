@@ -21,10 +21,10 @@ const GetRaxXOffSet = (rax: unit) => GetUnitX(rax) - CityGuardXOffSet;
 const GetRaxYOffSet = (rax: unit) => GetUnitY(rax) - CityGuardYOffSet;
 
 export class ConcreteCityBuilder implements CityBuilder, Resetable {
-	private _barracks: Barracks;
-	private _guard: Guard;
-	private _cop: unit;
-	private _cityType: CityType;
+	private barracks: Barracks;
+	private guard: Guard;
+	private cop: unit;
+	private cityType: CityType;
 
 	/**
 	 * @param building Unit or unit data to set as barracks
@@ -38,9 +38,9 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 				rax.typeId = DefaultBarrackType;
 			}
 
-			this._barracks = new Barracks(CreateUnit(NEUTRAL_HOSTILE, rax.typeId, rax.x, rax.y, 270));
+			this.barracks = new Barracks(CreateUnit(NEUTRAL_HOSTILE, rax.typeId, rax.x, rax.y, 270));
 		} else {
-			this._barracks = new Barracks(building);
+			this.barracks = new Barracks(building);
 		}
 
 		return this;
@@ -52,7 +52,7 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 */
 	public setName(name?: string): CityBuilder {
 		if (name) {
-			BlzSetUnitName(this._barracks.getUnit(), name);
+			BlzSetUnitName(this.barracks.getUnit(), name);
 		}
 
 		return this;
@@ -63,14 +63,14 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 * @returns The instance of ConcreteCityBuilder for method chaining
 	 */
 	public setGuard(guard: number): CityBuilder {
-		const x: number = GetRaxXOffSet(this._barracks.getUnit());
-		const y: number = GetRaxYOffSet(this._barracks.getUnit());
+		const x: number = GetRaxXOffSet(this.barracks.getUnit());
+		const y: number = GetRaxYOffSet(this.barracks.getUnit());
 
 		if (!guard) {
 			guard = DefaultGuardType;
 		}
 
-		this._guard = new Guard(guard, x, y);
+		this.guard = new Guard(guard, x, y);
 
 		return this;
 	}
@@ -81,12 +81,12 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 */
 	public setCOP(cop?: unit): CityBuilder {
 		if (cop) {
-			this._cop = cop;
+			this.cop = cop;
 		} else {
-			const x: number = GetRaxXOffSet(this._barracks.getUnit());
-			const y: number = GetRaxYOffSet(this._barracks.getUnit());
+			const x: number = GetRaxXOffSet(this.barracks.getUnit());
+			const y: number = GetRaxYOffSet(this.barracks.getUnit());
 
-			this._cop = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.CONTROL_POINT, x, y, 270);
+			this.cop = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.CONTROL_POINT, x, y, 270);
 		}
 
 		return this;
@@ -98,9 +98,9 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 */
 	public setCityType(cityType?: CityType): CityBuilder {
 		if (cityType) {
-			this._cityType = cityType;
+			this.cityType = cityType;
 		} else {
-			this._cityType = DefaultCityType;
+			this.cityType = DefaultCityType;
 		}
 
 		return this;
@@ -112,22 +112,22 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 * @returns The created City
 	 */
 	public build(): City {
-		if (!this._barracks || !this._guard || !this._cop || !this._cityType) {
+		if (!this.barracks || !this.guard || !this.cop || !this.cityType) {
 			print('City builder is missing required components.');
 		}
 
-		const CityConstructor = CityTypes[this._cityType];
+		const CityConstructor = CityTypes[this.cityType];
 
 		if (!CityConstructor) {
-			print(`No city terrain type of "${this._cityType}" found`);
+			print(`No city terrain type of "${this.cityType}" found`);
 		}
 
-		const city = new CityConstructor(this._barracks, this._guard, this._cop);
+		const city = new CityConstructor(this.barracks, this.guard, this.cop);
 
 		this.setRegion(city);
 		TriggerRegisterUnitEvent(UnitTrainedTrigger, city.getBarrack().getUnit(), EVENT_UNIT_TRAIN_FINISH);
-		UnitToCity.set(this._barracks.getUnit(), city);
-		UnitToCity.set(this._guard.getUnit(), city);
+		UnitToCity.set(this.barracks.getUnit(), city);
+		UnitToCity.set(this.guard.getUnit(), city);
 		city.setOwner(NEUTRAL_HOSTILE);
 
 		this.reset();
@@ -139,10 +139,10 @@ export class ConcreteCityBuilder implements CityBuilder, Resetable {
 	 * Resets the builder, clearing all set properties.
 	 */
 	public reset(): void {
-		this._barracks = null;
-		this._guard = null;
-		this._cop = null;
-		this._cityType = null;
+		this.barracks = null;
+		this.guard = null;
+		this.cop = null;
+		this.cityType = null;
 	}
 
 	/**
