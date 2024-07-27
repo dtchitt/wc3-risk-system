@@ -10,6 +10,10 @@ export class EventTimer {
 	private constructor(tickInterval: number = 1.0) {
 		this.timer = CreateTimer();
 		this.tickInterval = tickInterval;
+
+		TimerStart(this.timer, this.tickInterval, true, () => {
+			this.update();
+		});
 	}
 
 	public static getInstance(): EventTimer {
@@ -18,12 +22,6 @@ export class EventTimer {
 		}
 
 		return EventTimer.instance;
-	}
-
-	public start(): void {
-		TimerStart(this.timer, this.tickInterval, true, () => {
-			this.update();
-		});
 	}
 
 	public stop(): void {
