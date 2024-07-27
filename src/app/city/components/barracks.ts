@@ -3,7 +3,7 @@ import { Resetable } from 'src/app/interfaces/resetable';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 
 export class Barracks implements Resetable, Ownable {
-	private unit: unit;
+	private readonly unit: unit;
 	private readonly unitType: number;
 	private readonly defaultX: number;
 	private readonly defaultY: number;

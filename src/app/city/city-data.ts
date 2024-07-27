@@ -4,7 +4,7 @@ import { CityType } from './city-type';
 export interface CityData {
 	/**
 	 * The name of the city.
-	 * Optional, defaults to name set in world editors.
+	 * Optional, defaults to name set in world editor.
 	 */
 	name?: string;
 
