@@ -26,7 +26,7 @@ export enum CamSettings {
 	DEFAULT_ROTATION = 90.0,
 }
 
-export default class CameraManager {
+export class CameraManager {
 	private static instance: CameraManager;
 	private pathFolderName: string = 'risk';
 	private fileName: string = 'camera.pld';

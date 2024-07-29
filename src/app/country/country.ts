@@ -28,8 +28,8 @@ export class Country implements Resetable, Ownable {
 		this.cities = cities;
 		this.spawn = spawn;
 
-		const offsetX: number = GetUnitX(this.spawn.unit) - 100;
-		const offsetY: number = GetUnitY(this.spawn.unit) - 300;
+		const offsetX: number = GetUnitX(this.spawn.getUnit()) - 100;
+		const offsetY: number = GetUnitY(this.spawn.getUnit()) - 300;
 		const lengthCheck: number = this.name.length * 5.5 < 200 ? this.name.length * 5.5 : 200;
 
 		this.text = CreateTextTag();

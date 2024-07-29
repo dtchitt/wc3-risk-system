@@ -7,7 +7,7 @@ import { NEUTRAL_HOSTILE } from '../utils/utils';
 export const SPANWER_UNITS: Map<unit, Spawner> = new Map<unit, Spawner>();
 
 export class Spawner implements Resetable, Ownable {
-	private _unit: unit;
+	private unit: unit;
 	private country: string;
 	private spawnsPerStep: number;
 	private maxSpawnsPerPlayer: number;
@@ -23,7 +23,7 @@ export class Spawner implements Resetable, Ownable {
 	 * @param {number} spawnTypdID - The type ID of the spawn.
 	 */
 	public constructor(unit: unit, countryName: string, spawnsPerStep: number, spawnsPerPlayer: number, spawnTypdID: number) {
-		this._unit = unit;
+		this.unit = unit;
 		this.country = countryName;
 		this.spawnsPerStep = spawnsPerStep;
 		this.maxSpawnsPerPlayer = spawnsPerPlayer;
@@ -33,8 +33,8 @@ export class Spawner implements Resetable, Ownable {
 	}
 
 	/** @returns The unit associated with the spawner. */
-	public get unit(): unit {
-		return this._unit;
+	public getUnit(): unit {
+		return this.unit;
 	}
 
 	/**
@@ -76,7 +76,7 @@ export class Spawner implements Resetable, Ownable {
 
 		this.spawnMap.clear();
 		RemoveUnit(this.unit);
-		this._unit = null;
+		this.unit = null;
 
 		this.rebuild(x, y);
 		this.setName();
@@ -89,19 +89,19 @@ export class Spawner implements Resetable, Ownable {
 	public setOwner(player: player): void {
 		if (player == null) player = NEUTRAL_HOSTILE;
 
-		SetUnitOwner(this._unit, player, true);
+		SetUnitOwner(this.unit, player, true);
 
 		if (!this.spawnMap.has(this.getOwner())) {
 			this.spawnMap.set(this.getOwner(), []);
 		}
 
 		this.setName();
-		IssuePointOrder(this._unit, 'setrally', GetUnitX(this._unit), GetUnitY(this._unit));
+		IssuePointOrder(this.unit, 'setrally', GetUnitX(this.unit), GetUnitY(this.unit));
 	}
 
 	/** @returns The player that owns the spawner. */
 	public getOwner(): player {
-		return GetOwningPlayer(this._unit);
+		return GetOwningPlayer(this.unit);
 	}
 
 	/**
@@ -140,7 +140,7 @@ export class Spawner implements Resetable, Ownable {
 	 * @param {number} y - The y coordinate for the spawner.
 	 */
 	private rebuild(x: number, y: number) {
-		this._unit = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.SPAWNER, x, y, 270);
+		this.unit = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.SPAWNER, x, y, 270);
 		SetUnitPathing(this.unit, false);
 	}
 }

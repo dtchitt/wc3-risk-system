@@ -1,3 +1,4 @@
+import { EventTimer } from '../timer/EventTimer';
 import { HexColors } from '../utils/hex-colors';
 import { SettingsContext } from './settings-context';
 import { DiplomacyOptions } from './strategies/diplomacy-strategy';
@@ -8,8 +9,10 @@ import { PromodeOptions } from './strategies/promode-strategy';
 export class SettingsView {
 	private backdrop: framehandle;
 	private timer: framehandle;
+	private duration: number;
 
-	public constructor() {
+	public constructor(duration: number) {
+		this.duration = duration;
 		this.backdrop = BlzCreateFrame('SettingsView', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 		BlzFrameSetValue(BlzGetFrameByName('GameTypePopup', 0), 0);
 		BlzFrameSetValue(BlzGetFrameByName('FogPopup', 0), 0);
@@ -25,8 +28,10 @@ export class SettingsView {
 		this.playerSetup();
 	}
 
-	public update(time: number) {
-		BlzFrameSetText(this.timer, time.toString());
+	public update() {
+		const event = EventTimer.getInstance().getEvent('settingsTimer');
+
+		BlzFrameSetText(this.timer, I2S(event.remainingTime));
 	}
 
 	public hide() {
@@ -47,6 +52,7 @@ export class SettingsView {
 		this.timer = BlzCreateFrameByType('TEXT', 'SettingsHostTimer', this.backdrop, '', 0);
 		BlzFrameSetScale(this.timer, 1.2);
 		BlzFrameSetPoint(this.timer, FRAMEPOINT_LEFT, timerLabel, FRAMEPOINT_RIGHT, 0.0, 0.0);
+		BlzFrameSetText(this.timer, `${this.duration}`);
 	}
 
 	private buildStartButton() {
@@ -63,6 +69,7 @@ export class SettingsView {
 			t,
 			Condition(() => {
 				this.hide();
+				EventTimer.getInstance().stopEvent('settingsTimer');
 			})
 		);
 	}

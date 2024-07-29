@@ -9,13 +9,13 @@ import { NameManager } from './app/managers/names/name-manager';
 import { ChatManager } from './app/managers/chat-manager';
 import { SetConsoleUI } from './app/ui/console';
 import { Quests } from './app/quests/quests';
-import CameraManager from './app/managers/camera-manager';
-import { TimedEventManager } from './app/timer/timed-event-manager';
 import { SetRegions } from './configs/region-setup';
 import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
 import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
-import { SettingsView } from './app/settings/settings-view';
+import { EventTimer } from './app/timer/EventTimer';
+import { GameManager } from './app/game/game-manager';
+import { CameraManager } from './app/managers/camera-manager';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -88,8 +88,10 @@ function tsMain() {
 			DestroyTimer(onLoadTimer);
 			CameraManager.getInstance();
 			ChatManager.getInstance();
-			TimedEventManager.getInstance();
-			new SettingsView();
+			EventTimer.getInstance();
+			GameManager.getInstance();
+
+			GameManager.getInstance().start();
 		});
 	} catch (e) {
 		print(e);

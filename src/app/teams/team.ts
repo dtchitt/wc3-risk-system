@@ -2,8 +2,8 @@ import { STARTING_INCOME } from 'src/configs/game-settings';
 import { GamePlayer } from '../entity/player/game-player';
 
 export class Team {
-	private teamNumber: number;
-	private teamMembers: GamePlayer[];
+	private readonly teamNumber: number;
+	private readonly teamMembers: GamePlayer[];
 	private income: number;
 	private cities: number;
 	private kills: number;

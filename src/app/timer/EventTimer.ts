@@ -24,18 +24,22 @@ export class EventTimer {
 		return EventTimer.instance;
 	}
 
-	public stop(): void {
-		this.events.forEach((event) => this.stopEvent(event.id));
-	}
-
-	public addEvent(id: TimerEventType, interval: number, callback: () => void, repeating: boolean = false): void {
+	public addEvent(id: TimerEventType, interval: number, repeating: boolean, callback: () => void): void {
 		this.events.set(id, {
 			id: id,
 			interval: interval,
 			remainingTime: interval,
-			callback: callback,
 			repeating: repeating,
+			callback: callback,
 		});
+	}
+
+	public getEvent(eventId: TimerEventType): TimerEvent {
+		return this.events.get(eventId);
+	}
+
+	public stop(): void {
+		this.events.forEach((event) => this.stopEvent(event.id));
 	}
 
 	public stopEvent(id: TimerEventType): void {
@@ -44,9 +48,11 @@ export class EventTimer {
 
 	private update(): void {
 		this.events.forEach((event) => {
+			event.callback();
+
 			event.remainingTime -= this.tickInterval;
+
 			if (event.remainingTime <= 0) {
-				event.callback();
 				if (event.repeating) {
 					event.remainingTime = event.interval;
 				} else {

@@ -1,3 +1,4 @@
+IncludeFile "UI\FrameDef\Glue\BattleNetTemplates.fdf",
 IncludeFile "UI\FrameDef\UI\EscMenuTemplates.fdf",
 IncludeFile "UI\FrameDef\UI\UpperButtonBar.fdf",
 IncludeFile "UI\FrameDef\UI\ScriptDialog.fdf",

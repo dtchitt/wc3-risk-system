@@ -4,6 +4,8 @@ import { SettingsStrategy } from './settings-strategy';
 export const GameTypeOptions: Record<number, string> = {
 	0: `${HexColors.GREEN}Standard`,
 	1: `${HexColors.GREEN}Capitals`,
+	2: `${HexColors.GREEN}Tournament`,
+	3: `${HexColors.GREEN}Promode`,
 };
 
 export class GameTypeStrategy implements SettingsStrategy {
