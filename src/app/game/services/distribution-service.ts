@@ -10,7 +10,7 @@ import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
  * Handles the distribution of cities among active players.
  */
 export class DistributionService {
-	private citiesPerPlayerUpperBound: number = 20;
+	private citiesPerPlayerUpperBound: number = 22;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
 	private players: DoublyLinkedList<ActivePlayer>;
