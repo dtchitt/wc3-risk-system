@@ -316,9 +316,9 @@ export function SetCountries() {
 	CountrySettings.push({
 		name: 'Southern Italy',
 		spawnerData: {
-			unitData: { x: 1853.0, y: -8774.0 },
+			unitData: { x: 1728.0, y: -8507.0 },
 		},
-		cities: [{ barrack: { x: 1329.0, y: -7928.0 } }, { barrack: { x: 2299.0, y: -9863.0 } }],
+		cities: [{ barrack: { x: 1329.0, y: -7928.0 } }, { barrack: { x: 1923.0, y: -9244.0 } }],
 	});
 	CountrySettings.push({
 		name: 'Belgium',
