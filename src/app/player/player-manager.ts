@@ -4,27 +4,14 @@ import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
-import { File } from 'w3ts';
 
 const banList: string[] = [
-	'nappa#11822',
-	'keen13#2151',
-	'aelexandros#1239',
-	'macaocao#1725',
-	'asinus#11956',
-	'avontos#1977',
-	'baka#12640',
-	'shazii#11109',
-	'arfan#11830',
-	'selinace#1683',
-	'serenity#13183',
-	'boris#1897',
-	'asmodan#11552',
-	'rhaekyr#1231',
-	'sajbakaman#2613',
-	'kimiko#11661',
-	'kaiser#15109',
-	'zippyr#2817',
+	'nappa#11822', //Full screen spam
+	'keen13#2151', //Map saboteur
+	'arfan#11830', //Fake account
+	'selinace#1683', //Multi accounter - serenity
+	'serenity#13183', //Multi accounter - selinace
+	'zippyr#2817', //pedo like remarks / doxing people
 ];
 
 export class PlayerManager {
@@ -49,16 +36,15 @@ export class PlayerManager {
 				this._slavesFromHandle.set(player, new SlavePlayer(player));
 				continue;
 			} else {
-				if (GetLocalPlayer() == player) {
-					const contents: string = File.read('risk/configs.pld');
-
-					if (contents && contents == 'Test Config') {
-						CustomVictoryBJ(player, false, false);
-						ClearTextMessages();
-						this._slavesFromHandle.set(player, new SlavePlayer(player));
-						continue;
-					}
-				}
+				// if (GetLocalPlayer() == player) {
+				// const contents: string = File.read('risk/me.pld');
+				// if (contents && contents == 'unknown') {
+				// 	CustomVictoryBJ(player, false, false);
+				// 	ClearTextMessages();
+				// this._slavesFromHandle.set(player, new SlavePlayer(player));
+				// 	continue;
+				// }
+				// }
 			}
 
 			banList.forEach((name) => {
@@ -67,9 +53,9 @@ export class PlayerManager {
 					ClearTextMessages();
 					this._slavesFromHandle.set(player, new SlavePlayer(player));
 
-					if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
-						File.write('risk/configs.pld', 'Test Config');
-					}
+					// if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_PLAYING && GetLocalPlayer() == player) {
+					// 	File.write('risk/me.pld', 'unknown');
+					// }
 				}
 			});
 
