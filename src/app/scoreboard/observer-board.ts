@@ -84,7 +84,7 @@ export class ObserverBoard extends Scoreboard {
 					this.INCOME_COL
 				);
 			} else {
-				this.setItemValue(`${textColor}-`, row, 2);
+				this.setItemValue(`${textColor}`, row, 2);
 			}
 
 			this.setColumns(player, row, textColor, data);
