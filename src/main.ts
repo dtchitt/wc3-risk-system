@@ -109,15 +109,15 @@ function tsMain() {
 			FogMaskEnable(false);
 			SetConsoleUI();
 
-			AntiCheat.checkMultiAccounts(() => {
-				PauseTimer(onLoadTimer);
-				DestroyTimer(onLoadTimer);
-				CameraManager.getInstance();
-				ChatManager.getInstance();
-				TransportManager.getInstance();
-				TimedEventManager.getInstance();
-				SetCommands(GameManager.getInstance());
-			});
+			//AntiCheat.checkMultiAccounts(() => {
+			PauseTimer(onLoadTimer);
+			DestroyTimer(onLoadTimer);
+			CameraManager.getInstance();
+			ChatManager.getInstance();
+			TransportManager.getInstance();
+			TimedEventManager.getInstance();
+			SetCommands(GameManager.getInstance());
+			//});
 		});
 	} catch (e) {
 		print(e);

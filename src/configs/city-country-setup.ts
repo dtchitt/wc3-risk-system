@@ -600,7 +600,7 @@ export function SetCountries() {
 		spawnerData: {
 			unitData: { x: 17984.0, y: -4288.0 },
 		},
-		cities: [{ barrack: { x: 18432.0, y: -3584.0 } }, { barrack: { x: 17472.0, y: -4352.0 } }],
+		cities: [{ barrack: { x: 18332.0, y: -3484.0 } }, { barrack: { x: 17472.0, y: -4352.0 } }],
 	});
 	CountrySettings.push({
 		name: 'Armenia',
