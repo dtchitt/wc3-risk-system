@@ -1,7 +1,7 @@
 import { SettingsView } from 'src/app/settings/settings-view';
 import { GameManager } from '../game-manager';
 import { GameState } from '../game-state';
-import { SettingsContext } from 'src/app/settings/settings-context';
+import { SettingsController } from 'src/app/settings/settings-context';
 import { EventTimer } from 'src/app/timer/EventTimer';
 
 export class ModeSelection implements GameState {
@@ -16,16 +16,16 @@ export class ModeSelection implements GameState {
 	}
 
 	public start(): void {
-		EventTimer.getInstance().addEvent('settingsTimer', 15, false, () => {
+		EventTimer.getInstance().addEvent('settingsTimer', this.duration, false, () => {
 			this.settingsView.update();
 			this.checkTimer();
 		});
 	}
 
 	public end(): void {
-		const settings: SettingsContext = SettingsContext.getInstance();
+		const settings: SettingsController = SettingsController.getInstance();
 
-		settings.applyStrategies();
+		settings.applySettings();
 
 		this.manager.updateState();
 	}

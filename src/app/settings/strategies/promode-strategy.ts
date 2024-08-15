@@ -3,7 +3,7 @@ import { PLAYER_COLORS } from 'src/app/utils/player-colors';
 import { PLAYER_SLOTS, ShuffleArray } from 'src/app/utils/utils';
 import { SettingsStrategy } from './settings-strategy';
 import { HexColors } from 'src/app/utils/hex-colors';
-import { SettingsContext } from '../settings-context';
+import { SettingsController } from '../settings-context';
 import { Settings } from '../settings';
 
 export const PromodeOptions: Record<number, string> = {
@@ -17,9 +17,9 @@ export class PromodeStrategy implements SettingsStrategy {
 		[0, this.handleOff],
 		[1, this.handleOn],
 	]);
-	private readonly settingsContext: SettingsContext;
+	private readonly settingsContext: SettingsController;
 
-	public constructor(promode: number, settings: SettingsContext) {
+	public constructor(promode: number, settings: SettingsController) {
 		this.promode = promode;
 		this.settingsContext = settings;
 	}

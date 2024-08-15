@@ -3,16 +3,18 @@ import { SettingsStrategy } from './settings-strategy';
 
 export const GameTypeOptions: Record<number, string> = {
 	0: `${HexColors.GREEN}Standard`,
-	1: `${HexColors.GREEN}Capitals`,
-	2: `${HexColors.GREEN}Tournament`,
-	3: `${HexColors.GREEN}Promode`,
+	1: `${HexColors.GREEN}Tournament`,
+	2: `${HexColors.GREEN}Promode`,
+	3: `${HexColors.GREEN}Capitals`,
 };
 
 export class GameTypeStrategy implements SettingsStrategy {
 	private readonly gameType: number;
 	private readonly strategyMap: Map<number, () => void> = new Map([
-		[0, this.handleConquest],
-		[1, this.handleCapitals],
+		[0, this.handleStandard],
+		[1, this.handleTournament],
+		[2, this.handlePromode],
+		[3, this.handleCapitals],
 	]);
 
 	public constructor(gameType: number) {
@@ -26,7 +28,15 @@ export class GameTypeStrategy implements SettingsStrategy {
 		}
 	}
 
-	private handleConquest(): void {
+	private handleStandard(): void {
+		//TODO
+	}
+
+	private handlePromode(): void {
+		//TODO
+	}
+
+	private handleTournament(): void {
 		//TODO
 	}
 

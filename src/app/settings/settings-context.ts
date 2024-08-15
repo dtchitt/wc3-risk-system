@@ -5,33 +5,30 @@ import { GameTypeStrategy } from './strategies/game-type-strategy';
 import { PromodeStrategy } from './strategies/promode-strategy';
 import { Settings } from './settings';
 
-export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'Promode';
+export type SettingsKey = 'GameType' | 'Diplomacy' | 'PlayersPerTeam' | 'EqualizeTeams' | 'Fog';
 
-export class SettingsContext {
-	private static instance: SettingsContext;
-
-	private strategies: Map<SettingsKey, SettingsStrategy>;
+export class SettingsController {
+	private static instance: SettingsController;
+	private handlers: Map<SettingsKey, SettingsStrategy>;
 	private settings: Settings;
 
 	private constructor(settings: Settings) {
 		this.settings = settings;
-		this.strategies = new Map<SettingsKey, SettingsStrategy>();
-		this.strategies.set('GameType', new GameTypeStrategy(this.settings.GameType));
-		this.strategies.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
-		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
-		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode, this));
+		this.handlers = new Map<SettingsKey, SettingsStrategy>();
+		this.handlers.set('GameType', new GameTypeStrategy(this.settings.GameType));
+		this.handlers.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
+		this.handlers.set('Fog', new FogStrategy(this.settings.Fog));
+		this.handlers.set('Promode', new PromodeStrategy(this.settings.Promode, this));
 	}
 
-	public static getInstance(): SettingsContext {
-		if (this.instance == null) {
-			this.instance = new SettingsContext(<Settings>{
+	public static getInstance(): SettingsController {
+		if (!this.instance) {
+			this.instance = new SettingsController(<Settings>{
 				GameType: 0,
-				Diplomacy: {
-					option: 0,
-					allyLimit: 0,
-				},
+				Diplomacy: 0,
+				PlayersPerTeam: 0,
+				EqualizeTeams: false,
 				Fog: 0,
-				Promode: 0,
 			});
 		}
 
@@ -42,46 +39,15 @@ export class SettingsContext {
 	 * Apply a strategy
 	 * @param key string to identify which strategy to apply
 	 */
-	public applyStrategies() {
-		//Always apply promode first because it can change other strategies
-		this.strategies.get('Promode').apply();
-
-		this.strategies.forEach((strategy, key) => {
-			if (key != 'Promode') {
-				strategy.apply();
-			}
-		});
+	public applySettings() {
+		this.handlers.get('GameType').apply();
 	}
 
-	/**
-	 * Gets the current settings object
-	 * @returns The current settings.
-	 */
 	public getSettings(): Settings {
 		return this.settings;
 	}
 
-	/**
-	 * Checks if the game setting promode is on or off
-	 * @returns true if game is "promode"
-	 */
-	public isPromode(): boolean {
-		return this.settings.Promode == 1;
-	}
-
-	/**
-	 * Checks if the game setting for Fog is on or off
-	 * @returns true if fog is on
-	 */
-	public isFogOn(): boolean {
-		return this.settings.Fog == 1;
-	}
-
-	/**
-	 * Checks if the game setting for Diplomancy is set to FFA
-	 * @returns true if FFA
-	 */
 	public isFFA(): boolean {
-		return this.settings.Diplomacy.option == 0;
+		return this.settings.Diplomacy === 0;
 	}
 }
