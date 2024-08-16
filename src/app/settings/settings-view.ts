@@ -1,10 +1,9 @@
 import { EventTimer } from '../timer/EventTimer';
 import { HexColors } from '../utils/hex-colors';
-import { SettingsController } from './settings-context';
-import { DiplomacyOptions } from './strategies/diplomacy-strategy';
-import { FogOptions } from './strategies/fog-strategy';
-import { GameTypeOptions } from './strategies/game-type-strategy';
-import { PromodeOptions } from './strategies/promode-strategy';
+import { GameTypeOptions } from './handlers/game-type-handler';
+import { SettingsController } from './settings-controller';
+import { DiplomacyOptions } from './strategies/diplomacy';
+import { FogOptions } from './strategies/fog';
 
 export class SettingsView {
 	private backdrop: framehandle;
@@ -83,7 +82,7 @@ export class SettingsView {
 			Condition(() => {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
-				SettingsController.getInstance().getSettings().GameType = frameValue;
+				SettingsController.getInstance().setGameType(frameValue);
 				this.colorizeText(`GameTypePopup`, GameTypeOptions);
 			})
 		);
@@ -100,7 +99,7 @@ export class SettingsView {
 			Condition(() => {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
-				SettingsController.getInstance().getSettings().Fog = frameValue;
+				SettingsController.getInstance().setFog(frameValue);
 				this.colorizeText(`FogPopup`, FogOptions);
 			})
 		);
@@ -117,7 +116,7 @@ export class SettingsView {
 			Condition(() => {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
-				SettingsController.getInstance().getSettings().Diplomacy.option = frameValue;
+				SettingsController.getInstance().setDiplomacy(frameValue);
 				this.colorizeText(`DiplomacyPopup`, DiplomacyOptions);
 
 				if (frameValue > 0) {
@@ -145,7 +144,7 @@ export class SettingsView {
 			Condition(() => {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
-				SettingsController.getInstance().getSettings().Diplomacy.allyLimit = frameValue;
+				SettingsController.getInstance().setPlayersPetTeam(frameValue);
 				BlzFrameSetText(BlzGetFrameByName('DiplomacySubOptionLabel', 0), `${frameValue}`);
 			})
 		);
@@ -169,9 +168,9 @@ export class SettingsView {
 				const labelFrame: framehandle = BlzGetFrameByName('DiplomacySubOptionLabel', 0);
 
 				if (BlzGetTriggerFrameEvent() == FRAMEEVENT_CHECKBOX_CHECKED) {
-					SettingsController.getInstance().getSettings().Promode = 1;
-					SettingsController.getInstance().getSettings().Fog = 1;
-					SettingsController.getInstance().getSettings().Diplomacy.option = 1;
+					//SettingsController.getInstance().getSettings().Promode = 1;
+					SettingsController.getInstance().setFog(1);
+					SettingsController.getInstance().setDiplomacy(1);
 
 					BlzFrameSetValue(fogFrame, 1);
 					BlzFrameSetEnable(fogFrame, false);
@@ -180,9 +179,9 @@ export class SettingsView {
 					BlzFrameSetVisible(sliderFrame, true);
 					BlzFrameSetText(labelFrame, `${R2I(BlzFrameGetValue(sliderFrame))}`);
 				} else {
-					SettingsController.getInstance().getSettings().Promode = 0;
-					SettingsController.getInstance().getSettings().Fog = 0;
-					SettingsController.getInstance().getSettings().Diplomacy.option = 0;
+					//SettingsController.getInstance().getSettings().Promode = 0;
+					SettingsController.getInstance().setFog(0);
+					SettingsController.getInstance().setDiplomacy(0);
 					BlzFrameSetValue(fogFrame, 0);
 					BlzFrameSetEnable(fogFrame, true);
 					BlzFrameSetValue(diploFrame, 0);
@@ -193,11 +192,11 @@ export class SettingsView {
 
 				this.colorizeText(`FogPopup`, FogOptions);
 				this.colorizeText(`DiplomacyPopup`, DiplomacyOptions);
-				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsController.getInstance().getSettings().Promode]}`);
+				//BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsController.getInstance().getSettings().Promode]}`);
 			})
 		);
 
-		BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsController.getInstance().getSettings().Promode]}`);
+		//BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsController.getInstance().getSettings().Promode]}`);
 	}
 
 	private colorizeText(frameName: string, optionsType: Record<number, string>) {

@@ -1,8 +1,8 @@
 import { SettingsView } from 'src/app/settings/settings-view';
 import { GameManager } from '../game-manager';
 import { GameState } from '../game-state';
-import { SettingsController } from 'src/app/settings/settings-context';
 import { EventTimer } from 'src/app/timer/EventTimer';
+import { SettingsController } from 'src/app/settings/settings-controller';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;

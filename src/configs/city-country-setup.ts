@@ -303,16 +303,22 @@ export function SetCountries() {
 		cities: [{ barrack: { x: -2432.0, y: -4160.0 } }, { barrack: { x: -1280.0, y: -4352.0 } }],
 	});
 	CountrySettings.push({
-		name: 'Italy',
+		name: 'Northern Italy',
 		spawnerData: {
-			unitData: { x: -1088.0, y: -5568.0 },
+			unitData: { x: -1086.0, y: -5567.0 },
 		},
 		cities: [
 			{ barrack: { x: -1856.0, y: -5440.0 } },
-			{ barrack: { x: -448.0, y: -6272.0 } },
-			{ barrack: { x: 448.0, y: -7296.0 } },
-			{ barrack: { x: 1408.0, y: -8256.0 } },
+			{ barrack: { x: -272.0, y: -6752.0 } },
+			{ barrack: { typeId: UNIT_ID.PORT, x: -109.0, y: -5507.0 }, cityType: 'port' },
 		],
+	});
+	CountrySettings.push({
+		name: 'Southern Italy',
+		spawnerData: {
+			unitData: { x: 1728.0, y: -8507.0 },
+		},
+		cities: [{ barrack: { x: 1329.0, y: -7928.0 } }, { barrack: { x: 1923.0, y: -9244.0 } }],
 	});
 	CountrySettings.push({
 		name: 'Belgium',
@@ -594,7 +600,7 @@ export function SetCountries() {
 		spawnerData: {
 			unitData: { x: 17984.0, y: -4288.0 },
 		},
-		cities: [{ barrack: { x: 18432.0, y: -3584.0 } }, { barrack: { x: 17472.0, y: -4352.0 } }],
+		cities: [{ barrack: { x: 18332.0, y: -3484.0 } }, { barrack: { x: 17472.0, y: -4352.0 } }],
 	});
 	CountrySettings.push({
 		name: 'Armenia',
@@ -672,14 +678,18 @@ export function SetCountries() {
 		cities: [{ barrack: { x: -8000.0, y: 2304.0 } }, { barrack: { x: -8512.0, y: 1216.0 } }],
 	});
 	CountrySettings.push({
+		name: 'Corse',
+		spawnerData: {
+			unitData: { x: -1857.0, y: -8135.0 },
+		},
+		cities: [{ barrack: { x: -2117.0, y: -7724.0 } }, { barrack: { typeId: UNIT_ID.PORT, x: -1250.0, y: -8326.0 }, cityType: 'port' }],
+	});
+	CountrySettings.push({
 		name: 'Sardinia',
 		spawnerData: {
-			unitData: { x: -1856.0, y: -8512.0 },
+			unitData: { x: -1987.0, y: -9927.0 },
 		},
-		cities: [
-			{ barrack: { typeId: UNIT_ID.PORT, x: -2208.0, y: -9440.0 }, cityType: 'port' },
-			{ barrack: { typeId: UNIT_ID.PORT, x: -1888.0, y: -7456.0 }, cityType: 'port' },
-		],
+		cities: [{ barrack: { x: -2305.0, y: -9428.0 } }, { barrack: { typeId: UNIT_ID.PORT, x: -1758.0, y: -10512.0 }, cityType: 'port' }],
 	});
 	CountrySettings.push({
 		name: 'Crete',
