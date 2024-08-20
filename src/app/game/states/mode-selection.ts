@@ -11,7 +11,7 @@ export class ModeSelection implements GameState {
 
 	public constructor(manager: GameManager) {
 		this.manager = manager;
-		this.duration = 15;
+		this.duration = 20;
 		this.settingsView = new SettingsView(this.duration);
 	}
 

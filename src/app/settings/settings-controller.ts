@@ -17,7 +17,6 @@ export class SettingsController {
 				GameType: 0,
 				Diplomacy: 0,
 				PlayersPerTeam: 0,
-				EqualizeTeams: false,
 				Fog: 0,
 			});
 		}
@@ -43,12 +42,8 @@ export class SettingsController {
 		this.settings.Diplomacy = num;
 	}
 
-	public setPlayersPetTeam(num: number) {
+	public setPlayersPerTeam(num: number) {
 		this.settings.PlayersPerTeam = num;
-	}
-
-	public setEqualizeTeams(bool: boolean) {
-		this.settings.EqualizeTeams = bool;
 	}
 
 	public setFog(num: number) {
@@ -65,10 +60,6 @@ export class SettingsController {
 
 	public getPlayersPetTeam(): number {
 		return this.settings.PlayersPerTeam;
-	}
-
-	public getEqualizeTeams(): boolean {
-		return this.settings.EqualizeTeams;
 	}
 
 	public getFog(): number {
