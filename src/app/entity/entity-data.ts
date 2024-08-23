@@ -1,9 +1,10 @@
 import { Cities } from './data/cities';
+import { Gold } from './data/gold';
 import { Income } from './data/income';
-import { KillsDeaths } from './data/kills-death';
 
-export interface EntityData {
+export interface EntityData<T> {
 	getIncome(): Income;
 	getCities(): Cities;
-	getKillsDeaths(): Map<string | player, KillsDeaths>;
+	getGold(): Gold;
+	getKillsDeaths(): T;
 }

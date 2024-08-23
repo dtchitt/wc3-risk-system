@@ -15,10 +15,7 @@ export function CompareUnitByValue(compareUnit: unit, initialUnit: unit): unit {
 
 	const initialUnitValue: number = GetUnitPointValue(initialUnit);
 	const compareUnitValue: number = GetUnitPointValue(compareUnit);
-	const playerSettings: GuardPreferences = PlayerManager.getInstance()
-		.getPlayerMap()
-		.get(GetOwningPlayer(compareUnit))
-		.getGuardPreferences();
+	const playerSettings: GuardPreferences = PlayerManager.getInstance().getPlayers().get(GetOwningPlayer(compareUnit)).getGuardPreferences();
 
 	if (!playerSettings.value && compareUnitValue < initialUnitValue) {
 		return compareUnit;

@@ -4,13 +4,17 @@ import { PlayerData } from './player-data';
 import { Status } from './status/status';
 import { PLAYER_STATUS } from './status/status-enum';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { Team } from '../team/team';
+import { EntityID } from '../entity-id';
+import { KillsDeaths } from '../data/kills-death';
 
-export class GamePlayer implements GameEntity {
+export class GamePlayer implements GameEntity<Map<EntityID, KillsDeaths>> {
 	private player: player;
 	private status: Status;
 	private guardPreferences: GuardPreferences;
 	private admin: boolean;
 	private data: PlayerData;
+	private team: Team | null;
 
 	constructor(player: player) {
 		this.player = player;
@@ -21,6 +25,7 @@ export class GamePlayer implements GameEntity {
 		};
 		this.admin = false;
 		this.data = new PlayerData(player);
+		this.team = null;
 	}
 
 	public reset(): void {
@@ -36,21 +41,21 @@ export class GamePlayer implements GameEntity {
 		return this.data;
 	}
 
-	public onKill(victom: player, unit: unit): void {
+	public onKill(victim: player, unit: unit): void {
 		const killer: player = this.getPlayer();
 
 		if (!this.status.isAlive() && !this.status.isNomad()) return;
-		if (victom == killer) return;
-		if (IsPlayerAlly(victom, killer)) return;
+		if (victim == killer) return;
+		if (IsPlayerAlly(victim, killer)) return;
 
 		const val: number = GetUnitPointValue(unit);
 		const kdData = this.data.getKillsDeaths();
 
 		kdData.get(killer).killValue += val;
-		kdData.get(victom).killValue += val;
+		kdData.get(victim).killValue += val;
 		kdData.get(`${GetUnitTypeId(unit)}`).killValue += val;
 		kdData.get(killer).kills++;
-		kdData.get(victom).kills++;
+		kdData.get(victim).kills++;
 		kdData.get(`${GetUnitTypeId(unit)}`).kills++;
 
 		this.giveGold(this.data.getBounty().add(val));
@@ -62,19 +67,19 @@ export class GamePlayer implements GameEntity {
 
 		if (!this.status.isAlive() && !this.status.isNomad()) return;
 
-		const victom: player = this.getPlayer();
+		const victim: player = this.getPlayer();
 
-		if (victom == killer) return;
-		if (IsPlayerAlly(victom, killer)) return;
+		if (victim == killer) return;
+		if (IsPlayerAlly(victim, killer)) return;
 
 		const val: number = GetUnitPointValue(unit);
 		const kdData = this.data.getKillsDeaths();
 
 		kdData.get(killer).deathValue += val;
-		kdData.get(victom).deathValue += val;
+		kdData.get(victim).deathValue += val;
 		kdData.get(`${GetUnitTypeId(unit)}`).deathValue += val;
 		kdData.get(killer).deaths++;
-		kdData.get(victom).deaths++;
+		kdData.get(victim).deaths++;
 		kdData.get(`${GetUnitTypeId(unit)}`).deaths++;
 	}
 
@@ -123,5 +128,14 @@ export class GamePlayer implements GameEntity {
 
 	public isAdmin(): boolean {
 		return this.admin;
+	}
+
+	public setTeam(team: Team): void {
+		this.team = team;
+		team.addMember(this);
+	}
+
+	public getTeam(): Team | null {
+		return this.team;
 	}
 }

@@ -13,7 +13,7 @@ export function UnitTrainedEvent() {
 
 			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainedUnit);
 
-			const player: GamePlayer = PlayerManager.getInstance().getPlayerMap().get(GetOwningPlayer(trainedUnit));
+			const player: GamePlayer = PlayerManager.getInstance().getPlayers().get(GetOwningPlayer(trainedUnit));
 
 			if (!IsUnitType(trainedUnit, UNIT_TYPE.TRANSPORT)) {
 				player.getData().getUnits().add(trainedUnit);

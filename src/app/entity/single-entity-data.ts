@@ -1,11 +1,11 @@
 import { Country } from '../country/country';
-import { Bounty } from './data/bonus/bounty';
-import { FightBonus } from './data/bonus/fight-bonus';
-import { Gold } from './data/gold';
+import { Bounty } from '../bonus/bounty';
+import { FightBonus } from '../bonus/fight-bonus';
 import { EntityData } from './entity-data';
+import { KillsDeaths } from './data/kills-death';
+import { EntityID } from './entity-id';
 
-export interface SingleEntityData extends EntityData {
-	getGold(): Gold;
+export interface SingleEntityData extends EntityData<Map<EntityID, KillsDeaths>> {
 	getBounty(): Bounty;
 	getBonus(): FightBonus;
 	getCountries(): Map<Country, number>;

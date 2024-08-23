@@ -12,7 +12,7 @@ export class TeamManager {
 		const teams: Map<number, GamePlayer[]> = new Map<number, GamePlayer[]>();
 
 		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = PlayerManager.getInstance().getPlayerMap().get(Player(i));
+			const player = PlayerManager.getInstance().getPlayers().get(Player(i));
 
 			if (!player) continue;
 

@@ -1,19 +1,20 @@
 import { Country } from 'src/app/country/country';
 import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { TRACKED_UNITS } from 'src/configs/tracked-units';
-import { Bounty } from '../data/bonus/bounty';
-import { FightBonus } from '../data/bonus/fight-bonus';
+import { Bounty } from '../../bonus/bounty';
+import { FightBonus } from '../../bonus/fight-bonus';
 import { Cities } from '../data/cities';
 import { Gold } from '../data/gold';
 import { Income } from '../data/income';
 import { KillsDeaths } from '../data/kills-death';
 import { SingleEntityData } from '../single-entity-data';
 import { Resetable } from 'src/app/interfaces/resetable';
+import { EntityID } from '../entity-id';
 
 export class PlayerData implements Resetable, SingleEntityData {
 	private income: Income;
 	private cities: Cities;
-	private killsDeaths: Map<string | player, KillsDeaths>;
+	private killsDeaths: Map<EntityID, KillsDeaths>;
 	private gold: Gold;
 	private bounty: Bounty;
 	private bonus: FightBonus;
@@ -34,12 +35,12 @@ export class PlayerData implements Resetable, SingleEntityData {
 			max: 0,
 			end: 0,
 		};
-		this.killsDeaths = new Map<string | player, KillsDeaths>();
 		this.gold = {
 			earned: 0,
 			max: 0,
 			end: 0,
 		};
+		this.killsDeaths = new Map<EntityID, KillsDeaths>();
 		this.bounty = new Bounty();
 		this.bonus = new FightBonus(player);
 		this.countries = new Map<Country, number>();
@@ -56,13 +57,13 @@ export class PlayerData implements Resetable, SingleEntityData {
 		this.gold.earned = 0;
 		this.gold.max = 0;
 		this.gold.end = 0;
-		this.bounty.reset();
-		this.bonus.reset();
 		this.cities.cities = [];
 		this.cities.max = 0;
 		this.cities.end = 0;
-		this.countries.clear();
 		this.killsDeaths.clear();
+		this.bounty.reset();
+		this.bonus.reset();
+		this.countries.clear();
 		this.units.clear();
 		this.trainedUnits.clear();
 		this.turnDied = 0;
@@ -76,12 +77,12 @@ export class PlayerData implements Resetable, SingleEntityData {
 		return this.cities;
 	}
 
-	public getKillsDeaths(): Map<string | player, KillsDeaths> {
-		return this.killsDeaths;
-	}
-
 	public getGold(): Gold {
 		return this.gold;
+	}
+
+	public getKillsDeaths(): Map<EntityID, KillsDeaths> {
+		return this.killsDeaths;
 	}
 
 	public getBounty(): Bounty {
