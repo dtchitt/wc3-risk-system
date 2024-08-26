@@ -16,7 +16,7 @@ export class SettingsController {
 			this.instance = new SettingsController(<Settings>{
 				GameType: 0,
 				Diplomacy: 0,
-				PlayersPerTeam: 0,
+				PlayersPerTeam: 2,
 				Fog: 0,
 			});
 		}
@@ -42,7 +42,7 @@ export class SettingsController {
 		this.settings.Diplomacy = num;
 	}
 
-	public setPlayersPerTeam(num: number) {
+	public setTeamSize(num: number) {
 		this.settings.PlayersPerTeam = num;
 	}
 
@@ -58,7 +58,7 @@ export class SettingsController {
 		return this.settings.Diplomacy;
 	}
 
-	public getPlayersPetTeam(): number {
+	public getTeamSize(): number {
 		return this.settings.PlayersPerTeam;
 	}
 

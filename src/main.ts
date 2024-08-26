@@ -10,12 +10,12 @@ import { ChatManager } from './app/managers/chat-manager';
 import { SetConsoleUI } from './app/ui/console';
 import { Quests } from './app/quests/quests';
 import { SetRegions } from './configs/region-setup';
-import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
-import { RegionSettings } from './app/region/regions';
 import { StringToCountry } from './app/country/country-map';
 import { EventTimer } from './app/timer/EventTimer';
 import { GameManager } from './app/game/game-manager';
 import { CameraManager } from './app/managers/camera-manager';
+import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
+import { RegionSettings } from './app/region/regions';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -80,17 +80,14 @@ function tsMain() {
 		const onLoadTimer: timer = CreateTimer();
 
 		TimerStart(onLoadTimer, 0.0, false, () => {
+			PauseTimer(onLoadTimer);
+			DestroyTimer(onLoadTimer);
 			FogEnable(false);
 			FogMaskEnable(false);
 			SetConsoleUI();
-
-			PauseTimer(onLoadTimer);
-			DestroyTimer(onLoadTimer);
 			CameraManager.getInstance();
 			ChatManager.getInstance();
 			EventTimer.getInstance();
-			GameManager.getInstance();
-
 			GameManager.getInstance().start();
 		});
 	} catch (e) {

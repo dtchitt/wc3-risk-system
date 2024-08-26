@@ -230,10 +230,10 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Width 0.114,
 			SliderLayoutHorizontal,
 			SliderMinValue 2,
-            SliderMaxValue 6,
+            SliderMaxValue 11,
             SliderInitialValue 2,
             SliderStepSize 1,
-			SetPoint TOP,"PopupMenus",TOP,0.006,-0.158,
+			SetPoint TOP,"PopupMenus",TOP,0.005,-0.158,
 
 			ControlBackdrop "EscMenuScrollBarBackdropTemplate",
 			Frame "BACKDROP" "EscMenuScrollBarBackdropTemplate" {
@@ -333,7 +333,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "DiplomacySubOptionLabel" {
-			SetPoint LEFT,"DiplomacySliderLabel",RIGHT, 0.01, 0,
+			SetPoint LEFT,"DiplomacySliderLabel",RIGHT, 0.005, 0,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,

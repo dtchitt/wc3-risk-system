@@ -16,10 +16,7 @@ export class PlayerManager {
 
 			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_LEFT) continue;
 			if (GetPlayerSlotState(player) == PLAYER_SLOT_STATE_EMPTY) continue;
-			if (IsPlayerObserver(player)) {
-				this.observers.add(player);
-				continue;
-			}
+			if (GetPlayerController(player) == MAP_CONTROL_COMPUTER) continue;
 
 			this.gamePlayers.set(player, new GamePlayer(player));
 

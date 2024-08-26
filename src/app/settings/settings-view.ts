@@ -1,3 +1,4 @@
+import { GameState } from '../game/game-state';
 import { EventTimer } from '../timer/EventTimer';
 import { HexColors } from '../utils/hex-colors';
 import { GameTypeOptions } from './handlers/game-type-handler';
@@ -9,8 +10,10 @@ export class SettingsView {
 	private backdrop: framehandle;
 	private timer: framehandle;
 	private duration: number;
+	private gameState: GameState;
 
-	public constructor(duration: number) {
+	public constructor(duration: number, gameState: GameState) {
+		this.gameState = gameState;
 		this.duration = duration;
 		this.backdrop = BlzCreateFrame('SettingsView', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0);
 		BlzFrameSetValue(BlzGetFrameByName('GameTypePopup', 0), 0);
@@ -27,7 +30,7 @@ export class SettingsView {
 	}
 
 	public update() {
-		const event = EventTimer.getInstance().getEvent('settingsTimer');
+		const event = EventTimer.getInstance().getEvent('uiTimer');
 
 		BlzFrameSetText(this.timer, I2S(event.remainingTime));
 	}
@@ -67,7 +70,8 @@ export class SettingsView {
 			t,
 			Condition(() => {
 				this.hide();
-				EventTimer.getInstance().stopEvent('settingsTimer');
+				EventTimer.getInstance().stopEvent('uiTimer');
+				this.gameState.end();
 			})
 		);
 	}
@@ -90,7 +94,7 @@ export class SettingsView {
 					case 1: //Tournament
 						SettingsController.getInstance().setFog(1);
 						SettingsController.getInstance().setDiplomacy(0);
-						SettingsController.getInstance().setPlayersPerTeam(0);
+						SettingsController.getInstance().setTeamSize(0);
 
 						BlzFrameSetEnable(fogFrame, true);
 						BlzFrameSetEnable(diploFrame, true);
@@ -103,7 +107,7 @@ export class SettingsView {
 					case 2: //Promode
 						SettingsController.getInstance().setFog(1);
 						SettingsController.getInstance().setDiplomacy(1);
-						SettingsController.getInstance().setPlayersPerTeam(2);
+						SettingsController.getInstance().setTeamSize(2);
 
 						BlzFrameSetValue(fogFrame, 1);
 						BlzFrameSetValue(diploFrame, 1);
@@ -116,7 +120,7 @@ export class SettingsView {
 					case 3: //Capitals
 						SettingsController.getInstance().setFog(2);
 						SettingsController.getInstance().setDiplomacy(1);
-						SettingsController.getInstance().setPlayersPerTeam(2);
+						SettingsController.getInstance().setTeamSize(2);
 
 						BlzFrameSetEnable(fogFrame, true);
 						BlzFrameSetEnable(diploFrame, true);
@@ -129,7 +133,7 @@ export class SettingsView {
 					default: //Standard
 						SettingsController.getInstance().setFog(0);
 						SettingsController.getInstance().setDiplomacy(0);
-						SettingsController.getInstance().setPlayersPerTeam(0);
+						SettingsController.getInstance().setTeamSize(0);
 						BlzFrameSetEnable(fogFrame, true);
 						BlzFrameSetEnable(diploFrame, true);
 						BlzFrameSetValue(fogFrame, 0);
@@ -202,7 +206,7 @@ export class SettingsView {
 			Condition(() => {
 				const frameValue: number = R2I(BlzGetTriggerFrameValue());
 
-				SettingsController.getInstance().setPlayersPerTeam(frameValue);
+				SettingsController.getInstance().setTeamSize(frameValue);
 
 				if (BlzFrameIsVisible(BlzGetFrameByName('DiplomacySlider', 0))) {
 					BlzFrameSetText(BlzGetFrameByName('DiplomacySubOptionLabel', 0), `${frameValue}`);

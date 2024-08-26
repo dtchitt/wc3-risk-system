@@ -1,1 +1,1 @@
-export type TimerEventType = 'settingsTimer' | 'turnTimer' | 'delay' | number;
+export type TimerEventType = 'uiTimer' | 'turnTimer' | 'delay' | number;
