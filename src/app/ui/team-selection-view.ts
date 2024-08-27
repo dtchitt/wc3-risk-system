@@ -11,12 +11,16 @@ interface playerData {
 	slot: number;
 }
 
+interface TeamData {
+	players: Set<player>;
+	slots: boolean[];
+}
+
 export class TeamSelectionView {
 	private static backdrop: framehandle;
 	private static bench: Set<player> = new Set<player>();
-	private static playerPosition: Map<player, playerData> = new Map<player, playerData>();
-	private static team: Map<number, Set<player>> = new Map<number, Set<player>>();
-	private static teamSlots: Map<number, boolean[]> = new Map<number, boolean[]>();
+	private static playerData: Map<player, playerData> = new Map<player, playerData>();
+	private static teams: Map<number, TeamData> = new Map<number, TeamData>(); // Refactored to encapsulate team data
 	private static teamColumnPositions: Record<number, { x: number; y: number }> = {
 		0: { x: 0.038, y: -0.06 },
 		1: { x: 0.158, y: -0.06 },
@@ -74,15 +78,15 @@ export class TeamSelectionView {
 			benchTrig,
 			Condition(() => {
 				const triggerPlayer: player = GetTriggerPlayer();
-				const playerData = TeamSelectionView.playerPosition.get(triggerPlayer);
+				const playerData = TeamSelectionView.playerData.get(triggerPlayer);
 
 				if (playerData.team != -1) {
 					const playerName = NameManager.getInstance().getAcct(triggerPlayer);
 
 					BlzFrameSetText(BlzGetFrameByName(`TeamSlot`, playerData.slot), `-`);
-					TeamSelectionView.teamSlots.get(playerData.team)[playerData.slot] = false;
+					TeamSelectionView.teams.get(playerData.team).slots[playerData.slot] = false;
 					BlzFrameSetText(BlzGetFrameByName('PlayerList', playerData.bench), `${playerName}`);
-					TeamSelectionView.team.get(playerData.team).delete(triggerPlayer);
+					TeamSelectionView.teams.get(playerData.team)?.players.delete(triggerPlayer);
 					playerData.slot = -1;
 					playerData.team = -1;
 				}
@@ -97,7 +101,7 @@ export class TeamSelectionView {
 			const playerList: framehandle = BlzCreateFrameByType('TEXT', 'PlayerList', TeamSelectionView.backdrop, '', x);
 			BlzFrameSetPoint(playerList, FRAMEPOINT_TOP, benchButton, FRAMEPOINT_BOTTOM, 0, initialOffset);
 			BlzFrameSetText(playerList, `${NameManager.getInstance().getAcct(player)}`);
-			TeamSelectionView.playerPosition.set(player, { bench: x, team: -1, slot: -1 });
+			TeamSelectionView.playerData.set(player, { bench: x, team: -1, slot: -1 });
 			x++;
 			initialOffset += offSetModifier;
 		});
@@ -165,14 +169,14 @@ export class TeamSelectionView {
 			buttonTrig,
 			Condition(() => {
 				const triggerPlayer: player = GetTriggerPlayer();
-				const playerData = TeamSelectionView.playerPosition.get(triggerPlayer);
+				const playerData = TeamSelectionView.playerData.get(triggerPlayer);
 
 				if (playerData.team != num) {
 					const playerName = NameManager.getInstance().getAcct(triggerPlayer);
 
 					if (playerData.team != -1) {
 						BlzFrameSetText(BlzGetFrameByName(`TeamSlot`, playerData.slot), `-`);
-						TeamSelectionView.teamSlots.get(playerData.team)[playerData.slot] = false;
+						TeamSelectionView.teams.get(playerData.team).slots[playerData.slot] = false;
 					}
 
 					const availableSlot = TeamSelectionView.findFirstAvailableSlot(num);
@@ -181,13 +185,16 @@ export class TeamSelectionView {
 						BlzFrameSetText(BlzGetFrameByName(`TeamSlot`, availableSlot), playerName);
 						playerData.slot = availableSlot;
 						playerData.team = num;
-						TeamSelectionView.teamSlots.get(num)[availableSlot] = true;
+						TeamSelectionView.teams.get(num).slots[availableSlot] = true;
 
-						if (!TeamSelectionView.team.has(num)) {
-							TeamSelectionView.team.set(num, new Set<player>());
+						if (!TeamSelectionView.teams.has(num)) {
+							TeamSelectionView.teams.set(num, {
+								players: new Set<player>(),
+								slots: [],
+							});
 						}
 
-						TeamSelectionView.team.get(num).add(triggerPlayer);
+						TeamSelectionView.teams.get(num)?.players.add(triggerPlayer);
 						BlzFrameSetText(BlzGetFrameByName('PlayerList', playerData.bench), `-`);
 						TeamSelectionView.bench.delete(triggerPlayer);
 					} else {
@@ -200,13 +207,17 @@ export class TeamSelectionView {
 		const teamsize: number = SettingsController.getInstance().getTeamSize();
 		let initialOffset: number = -0.002;
 		const offSetModifier: number = -0.015;
-		const slots = [];
 
+		const slots = [];
 		for (let i = 0; i < teamsize; i++) {
 			slots.push(false);
 		}
 
-		TeamSelectionView.teamSlots.set(num, slots);
+		// Store the team data
+		TeamSelectionView.teams.set(num, {
+			players: new Set<player>(),
+			slots: slots,
+		});
 
 		for (let i = 0; i < teamsize; i++) {
 			const slotNumber: number = i * 100 + num;
@@ -220,11 +231,11 @@ export class TeamSelectionView {
 	}
 
 	private static findFirstAvailableSlot(teamNumber: number): number {
-		const slots = TeamSelectionView.teamSlots.get(teamNumber);
+		const teamData = TeamSelectionView.teams.get(teamNumber);
 
-		if (slots) {
-			for (let i = 0; i < slots.length; i++) {
-				if (!slots[i]) {
+		if (teamData?.slots) {
+			for (let i = 0; i < teamData.slots.length; i++) {
+				if (!teamData.slots[i]) {
 					return i * 100 + teamNumber;
 				}
 			}
