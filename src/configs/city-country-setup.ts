@@ -678,7 +678,7 @@ export function SetCountries() {
 		cities: [{ barrack: { x: -8000.0, y: 2304.0 } }, { barrack: { x: -8512.0, y: 1216.0 } }],
 	});
 	CountrySettings.push({
-		name: 'Corse',
+		name: 'Corsica',
 		spawnerData: {
 			unitData: { x: -1857.0, y: -8135.0 },
 		},

@@ -53,6 +53,8 @@ export class PromodeStrategy implements SettingsStrategy {
 			val.trackedData.bonus.disable();
 		});
 
+		SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, true);
+
 		//TODO Handle teams
 	}
 }

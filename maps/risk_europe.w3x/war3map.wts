@@ -1417,3 +1417,9 @@ STRING 7522
 |cff3BA0CBAbilties:|r Splash Damage (170 Range), Attack Ground
 }
 
+STRING 7523
+// Abilities: a002 (Dispel Magic), Ubertip (Tooltip - Normal - Extended)
+{
+Removes all buffs from units in a target area.
+}
+

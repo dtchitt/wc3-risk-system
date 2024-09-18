@@ -11,6 +11,7 @@ type Transport = {
 	effect: effect | null;
 	duration: number;
 	autoloadStatus: boolean;
+	event: TimedEvent;
 };
 
 const AUTO_LOAD_DISTANCE: number = 350;
@@ -66,6 +67,7 @@ export class TransportManager {
 			effect: null,
 			duration: 0,
 			autoloadStatus: false,
+			event: null,
 		};
 
 		this.transports.set(unit, transport);
@@ -93,13 +95,7 @@ export class TransportManager {
 		const transportData: Transport = this.transports.get(unit);
 
 		transportData.cargo = null;
-
-		if (transportData.effect != null) {
-			DestroyEffect(transportData.effect);
-		}
-
-		transportData.autoloadStatus = false;
-
+		this.handleAutoLoadOff(transportData);
 		this.transports.delete(unit);
 	}
 
@@ -149,6 +145,8 @@ export class TransportManager {
 					const transport: Transport = this.transports.get(GetTriggerUnit());
 
 					if (!transport) return false;
+
+					this.handleAutoLoadOff(transport);
 
 					if (this.isTerrainInvalid(transport.unit)) {
 						BlzPauseUnitEx(transport.unit, true);
@@ -242,6 +240,7 @@ export class TransportManager {
 
 				if (GetSpellAbilityId() == ABILITY_ID.UNLOAD) {
 					transport.cargo = transport.cargo.filter((unit) => IsUnitInTransport(unit, transport.unit));
+					this.handleAutoLoadOff(transport);
 				}
 
 				return false;
@@ -263,6 +262,10 @@ export class TransportManager {
 	 * @param transport - The transport unit with the Auto-Load ability activated.
 	 */
 	private handleAutoLoadOn(transport: Transport) {
+		if (transport.cargo.length >= 10) {
+			return;
+		}
+
 		transport.autoloadStatus = true;
 
 		transport.effect = AddSpecialEffectTarget(
@@ -295,11 +298,17 @@ export class TransportManager {
 			DestroyGroup(group);
 			group = null;
 
-			if (transport.cargo.length >= 10 || !transport.autoloadStatus || this.isTerrainInvalid(transport.unit)) {
+			if (
+				transport.cargo.length >= 10 ||
+				!transport.autoloadStatus ||
+				this.isTerrainInvalid(transport.unit) ||
+				!IsUnitAliveBJ(transport.unit)
+			) {
 				this.handleAutoLoadOff(transport);
-				timedEventManager.removeTimedEvent(event);
 			}
 		});
+
+		transport.event = event;
 	}
 
 	/**
@@ -309,5 +318,7 @@ export class TransportManager {
 	private handleAutoLoadOff(transport: Transport) {
 		transport.autoloadStatus = false;
 		DestroyEffect(transport.effect);
+		TimedEventManager.getInstance().removeTimedEvent(transport.event);
+		transport.event = null;
 	}
 }

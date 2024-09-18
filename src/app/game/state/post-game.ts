@@ -10,6 +10,7 @@ import { CountryToRegion } from 'src/app/region/region-map';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { TreeManager } from '../services/tree-service';
 import { TeamManager } from 'src/app/teams/team-manager';
+import { Wait } from 'src/app/utils/wait';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -41,13 +42,24 @@ export class PostGame implements GameState {
 		this.manager.setRestartEnabled(true);
 	}
 
-	public end(): void {
+	public async end() {
 		if (!this.isOver) return;
 
-		this.removeUnits();
-		this.resetCountries();
-		this.resetRegions();
-		TreeManager.getInstance().reset();
+		print('Removing units...');
+		await this.removeUnits();
+		await Wait.forSeconds(2);
+		print('Resetting countries...');
+		await this.resetCountries();
+		await Wait.forSeconds(2);
+		print('Resetting regions...');
+		await this.resetRegions();
+		await Wait.forSeconds(2);
+		print('Resetting trees...');
+		await Wait.forSeconds(2);
+		await TreeManager.getInstance().reset();
+		await Wait.forSeconds(2);
+		print('Resetting game data...');
+
 		VictoryManager.getInstance().reset();
 
 		if (!SettingsContext.getInstance().isPromode()) {
@@ -66,43 +78,57 @@ export class PostGame implements GameState {
 			player.reset();
 		});
 
+		await Wait.forSeconds(2);
+		print('Preparing next round...');
 		this.isOver = false;
 		this.manager.setRestartEnabled(false);
+		FogEnable(true);
+		this.manager.fastRestart();
 	}
 
-	private removeUnits() {
-		const group: group = CreateGroup();
+	private removeUnits(): Promise<void> {
+		return new Promise((resolve) => {
+			const group: group = CreateGroup();
 
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = Player(i);
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player = Player(i);
 
-			GroupEnumUnitsOfPlayer(
-				group,
-				player,
-				Filter(() => {
-					const unit: unit = GetFilterUnit();
+				GroupEnumUnitsOfPlayer(
+					group,
+					player,
+					Filter(() => {
+						const unit: unit = GetFilterUnit();
 
-					if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
-						RemoveUnit(unit);
-					}
-				})
-			);
+						if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
+							RemoveUnit(unit);
+						}
+					})
+				);
 
-			GroupClear(group);
-		}
+				GroupClear(group);
+			}
 
-		DestroyGroup(group);
-	}
+			DestroyGroup(group);
 
-	private resetCountries() {
-		StringToCountry.forEach((country) => {
-			country.reset();
+			resolve();
 		});
 	}
 
-	private resetRegions() {
-		CountryToRegion.forEach((region) => {
-			region.reset();
+	private resetCountries(): Promise<void> {
+		return new Promise((resolve) => {
+			StringToCountry.forEach((country) => {
+				country.reset();
+			});
+			resolve();
+		});
+	}
+
+	private resetRegions(): Promise<void> {
+		return new Promise((resolve) => {
+			CountryToRegion.forEach((region) => {
+				region.reset();
+			});
+			resolve();
 		});
 	}
 }

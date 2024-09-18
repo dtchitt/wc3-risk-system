@@ -7,9 +7,11 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 import { TimerService } from '../services/timer-service';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { CountdownMessage } from 'src/app/utils/messages';
-import { PlayGlobalSound } from 'src/app/utils/utils';
+import { NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
+import { CityToCountry } from 'src/app/country/country-map';
+import { Wait } from 'src/app/utils/wait';
 
 export class MetaGame implements GameState {
 	private manager: GameManager;
@@ -25,7 +27,7 @@ export class MetaGame implements GameState {
 		this.manager = observer;
 	}
 
-	public start(): void {
+	public async start() {
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
 
@@ -49,6 +51,8 @@ export class MetaGame implements GameState {
 			scoreboardManager.obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
 
 			settingsContext.applyStrategy('Fog');
+
+			await this.setTempVision([...PlayerManager.getInstance().players.values()]);
 
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 
@@ -94,5 +98,31 @@ export class MetaGame implements GameState {
 		this.timer.reset();
 
 		this.manager.updateState(this.nextState);
+	}
+
+	private async setTempVision(players: ActivePlayer[]) {
+		for (const player of players) {
+			DisplayTextToForce(bj_FORCE_ALL_PLAYERS, `Revealing cities for ${NameManager.getInstance().getAcct(player.getPlayer())}`);
+			player.trackedData.cities.cities.forEach((city) => {
+				CityToCountry.get(city)
+					.getCities()
+					.forEach((city) => {
+						if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
+							SetUnitInvulnerable(city.guard.unit, true);
+							SetUnitOwner(city.guard.unit, player.getPlayer(), false);
+						}
+					});
+			});
+
+			await Wait.forSeconds(3);
+			ClearTextMessages();
+		}
+
+		await Wait.forSeconds(2);
+		ClearTextMessages();
+		CityToCountry.forEach((country, city) => {
+			SetUnitOwner(city.guard.unit, city.getOwner(), false);
+			SetUnitInvulnerable(city.guard.unit, false);
+		});
 	}
 }

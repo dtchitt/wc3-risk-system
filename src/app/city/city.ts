@@ -6,6 +6,7 @@ import { Guard } from './components/guard';
 import { UnitToCity } from './city-map';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { UNIT_ID } from 'src/configs/unit-id';
+import { ABILITY_ID } from 'src/configs/ability-id';
 
 /**
  * Abstract class for a City.
@@ -134,7 +135,13 @@ export abstract class City implements Resetable, Ownable {
 		const newOwner: player = GetOwningPlayer(this.guard.unit);
 
 		if (this.owner != newOwner) {
+			const currOwner = this.owner;
+
 			this.setOwner(newOwner);
+
+			if (IsPlayerAlly(currOwner, this.owner)) {
+				BlzStartUnitAbilityCooldown(this._barrack.unit, ABILITY_ID.SWAP, BlzGetAbilityCooldown(ABILITY_ID.SWAP, 0));
+			}
 		}
 	}
 }

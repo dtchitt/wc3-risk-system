@@ -77,23 +77,27 @@ export class TreeManager implements Resetable {
 	/**
 	 * Resets the trees to their maximum life if they are damaged.
 	 */
-	public reset() {
-		this.treeArray.forEach((tree) => {
-			if (GetDestructableLife(tree) < GetDestructableMaxLife(tree)) {
-				DestructableRestoreLife(tree, GetDestructableMaxLife(tree), false);
-				SetDestructableInvulnerable(tree, true);
-			}
-		});
-
-		const treeTimer: timer = CreateTimer();
-
-		TimerStart(treeTimer, 3.0, false, () => {
+	public reset(): Promise<void> {
+		return new Promise((resolve) => {
 			this.treeArray.forEach((tree) => {
-				SetDestructableInvulnerable(tree, false);
+				if (GetDestructableLife(tree) < GetDestructableMaxLife(tree)) {
+					DestructableRestoreLife(tree, GetDestructableMaxLife(tree), false);
+					SetDestructableInvulnerable(tree, true);
+				}
 			});
 
-			PauseTimer(treeTimer);
-			DestroyTimer(treeTimer);
+			const treeTimer: timer = CreateTimer();
+
+			TimerStart(treeTimer, 3.0, false, () => {
+				this.treeArray.forEach((tree) => {
+					SetDestructableInvulnerable(tree, false);
+				});
+
+				PauseTimer(treeTimer);
+				DestroyTimer(treeTimer);
+			});
+
+			resolve();
 		});
 	}
 
