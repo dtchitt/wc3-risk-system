@@ -47,17 +47,13 @@ export class PostGame implements GameState {
 
 		print('Removing units...');
 		await this.removeUnits();
-		await Wait.forSeconds(2);
 		print('Resetting countries...');
 		await this.resetCountries();
-		await Wait.forSeconds(2);
+		await Wait.forSeconds(1);
 		print('Resetting regions...');
 		await this.resetRegions();
-		await Wait.forSeconds(2);
 		print('Resetting trees...');
-		await Wait.forSeconds(2);
 		await TreeManager.getInstance().reset();
-		await Wait.forSeconds(2);
 		print('Resetting game data...');
 
 		VictoryManager.getInstance().reset();
@@ -78,8 +74,8 @@ export class PostGame implements GameState {
 			player.reset();
 		});
 
-		await Wait.forSeconds(2);
 		print('Preparing next round...');
+		await Wait.forSeconds(1);
 		this.isOver = false;
 		this.manager.setRestartEnabled(false);
 		FogEnable(true);

@@ -52,7 +52,9 @@ export class MetaGame implements GameState {
 
 			settingsContext.applyStrategy('Fog');
 
-			await this.setTempVision([...PlayerManager.getInstance().players.values()]);
+			if (settingsContext.isPromode()) {
+				await this.setTempVision(PlayerManager.getInstance().players);
+			}
 
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 
@@ -100,29 +102,46 @@ export class MetaGame implements GameState {
 		this.manager.updateState(this.nextState);
 	}
 
-	private async setTempVision(players: ActivePlayer[]) {
-		for (const player of players) {
-			DisplayTextToForce(bj_FORCE_ALL_PLAYERS, `Revealing cities for ${NameManager.getInstance().getAcct(player.getPlayer())}`);
+	private async setTempVision(players: Map<player, ActivePlayer>) {
+		let defaultSightRange = 1400;
+		const visionMap: Map<unit, player[]> = new Map<unit, player[]>();
+
+		DisplayTextToForce(bj_FORCE_ALL_PLAYERS, `Revealing blocks`);
+
+		for (const player of players.values()) {
+			const playerHandle: player = player.getPlayer();
+
 			player.trackedData.cities.cities.forEach((city) => {
 				CityToCountry.get(city)
 					.getCities()
 					.forEach((city) => {
-						if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-							SetUnitInvulnerable(city.guard.unit, true);
-							SetUnitOwner(city.guard.unit, player.getPlayer(), false);
+						const unit: unit = city.guard.unit;
+
+						defaultSightRange = BlzGetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS);
+						BlzSetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS, 300);
+
+						if (GetOwningPlayer(unit) != NEUTRAL_HOSTILE) {
+							UnitShareVision(unit, playerHandle, true);
+
+							if (!visionMap.has(unit)) {
+								visionMap.set(unit, []);
+							}
+
+							visionMap.get(unit).push(playerHandle);
 						}
 					});
 			});
-
-			await Wait.forSeconds(3);
-			ClearTextMessages();
 		}
 
-		await Wait.forSeconds(2);
+		await Wait.forSeconds(4);
+
+		for (const unit of visionMap.keys()) {
+			visionMap.get(unit).forEach((player) => {
+				UnitShareVision(unit, player, false);
+				BlzSetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS, defaultSightRange);
+			});
+		}
+
 		ClearTextMessages();
-		CityToCountry.forEach((country, city) => {
-			SetUnitOwner(city.guard.unit, city.getOwner(), false);
-			SetUnitInvulnerable(city.guard.unit, false);
-		});
 	}
 }
