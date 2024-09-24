@@ -103,42 +103,50 @@ export class MetaGame implements GameState {
 	}
 
 	private async setTempVision(players: Map<player, ActivePlayer>) {
-		let defaultSightRange = 1400;
-		const visionMap: Map<unit, player[]> = new Map<unit, player[]>();
+		const visionMap = new Map<unit, player[]>();
 
 		DisplayTextToForce(bj_FORCE_ALL_PLAYERS, `Revealing blocks`);
 
-		for (const player of players.values()) {
-			const playerHandle: player = player.getPlayer();
+		for (const activePlayer of players.values()) {
+			const playerHandle: player = activePlayer.getPlayer();
 
-			player.trackedData.cities.cities.forEach((city) => {
-				CityToCountry.get(city)
-					.getCities()
-					.forEach((city) => {
-						const unit: unit = city.guard.unit;
+			const allies: player[] = [];
+			for (const otherPlayer of players.values()) {
+				const otherPlayerHandle: player = otherPlayer.getPlayer();
+				if (IsPlayerAlly(playerHandle, otherPlayerHandle)) {
+					allies.push(otherPlayerHandle);
+				}
+			}
 
-						defaultSightRange = BlzGetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS);
-						BlzSetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS, 300);
+			activePlayer.trackedData.cities.cities.forEach((playerCity) => {
+				const country = CityToCountry.get(playerCity);
 
-						if (GetOwningPlayer(unit) != NEUTRAL_HOSTILE) {
-							UnitShareVision(unit, playerHandle, true);
+				country.getCities().forEach((countryCity) => {
+					const unit: unit = countryCity.cop;
 
-							if (!visionMap.has(unit)) {
-								visionMap.set(unit, []);
-							}
+					if (GetOwningPlayer(unit) !== NEUTRAL_HOSTILE) {
+						UnitShareVision(unit, playerHandle, true);
 
-							visionMap.get(unit).push(playerHandle);
-						}
-					});
+						const playersWithVision = visionMap.get(unit) || [];
+
+						playersWithVision.push(playerHandle);
+
+						allies.forEach((ally) => {
+							UnitShareVision(unit, ally, true);
+							playersWithVision.push(ally);
+						});
+
+						visionMap.set(unit, playersWithVision);
+					}
+				});
 			});
 		}
 
 		await Wait.forSeconds(4);
 
-		for (const unit of visionMap.keys()) {
-			visionMap.get(unit).forEach((player) => {
-				UnitShareVision(unit, player, false);
-				BlzSetUnitRealField(unit, UNIT_RF_SIGHT_RADIUS, defaultSightRange);
+		for (const [unit, players] of visionMap.entries()) {
+			players.forEach((playerHandle) => {
+				UnitShareVision(unit, playerHandle, false);
 			});
 		}
 
