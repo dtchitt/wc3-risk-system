@@ -22,10 +22,6 @@ import { Quests } from './app/quests/quests';
 import CameraManager from './app/managers/camera-manager';
 import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
-import { SetRegions } from './configs/region-setup';
-import { ConcreteRegionBuilder } from './app/region/concrete-region-builder';
-import { RegionSettings } from './app/region/regions';
-import { StringToCountry } from './app/country/country-map';
 import { SetCommands } from './app/commands/commands';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
@@ -55,7 +51,7 @@ function tsMain() {
 
 		//Set up countries
 		SetCountries();
-		SetRegions();
+		// SetRegions();
 		//Build countries, spawners, and cities
 		const countryBuilder = new ConcreteCountryBuilder();
 		const cityBuilder = new ConcreteCityBuilder();
@@ -71,17 +67,17 @@ function tsMain() {
 			countryBuilder.build();
 		}
 		//Build regions
-		const regionBuilder = new ConcreteRegionBuilder();
+		// const regionBuilder = new ConcreteRegionBuilder();
 
-		for (const region of RegionSettings) {
-			region.countryNames.forEach((countryName) => {
-				const country = StringToCountry.get(countryName);
-				regionBuilder.addCountry(country);
-			});
+		// for (const region of RegionSettings) {
+		// 	region.countryNames.forEach((countryName) => {
+		// 		const country = StringToCountry.get(countryName);
+		// 		regionBuilder.addCountry(country);
+		// 	});
 
-			regionBuilder.setGoldBonus(region.goldBonus);
-			regionBuilder.build();
-		}
+		// 	regionBuilder.setGoldBonus(region.goldBonus);
+		// 	regionBuilder.build();
+		// }
 
 		//Set up triggers
 		EnterRegionEvent();

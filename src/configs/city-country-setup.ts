@@ -290,7 +290,7 @@ export function SetCountries() {
 			{ barrack: { x: -3584.0, y: -5568.0 } },
 			{ barrack: { x: -3520.0, y: -3776.0 } },
 			{ barrack: { x: -4800.0, y: -3136.0 } },
-			{ barrack: { x: -6336.0, y: -3456.0 } },
+			// { barrack: { x: -6336.0, y: -3456.0 } },
 			{ barrack: { typeId: UNIT_ID.PORT, x: -6944.0, y: -4704.0 }, cityType: 'port' },
 			{ barrack: { typeId: UNIT_ID.PORT, x: -4384.0, y: -7008.0 }, cityType: 'port' },
 		],
@@ -710,5 +710,19 @@ export function SetCountries() {
 			{ barrack: { typeId: UNIT_ID.PORT, x: 13408.0, y: -10272.0 }, cityType: 'port' },
 			{ barrack: { typeId: UNIT_ID.PORT, x: 12576.0, y: -11808.0 }, cityType: 'port' },
 		],
+	});
+	CountrySettings.push({
+		name: 'Isle of Man',
+		spawnerData: {
+			unitData: { x: -9282.0, y: 2752.0 },
+		},
+		cities: [{ barrack: { x: -9000.0, y: 3265.0 } }],
+	});
+	CountrySettings.push({
+		name: 'Normandy',
+		spawnerData: {
+			unitData: { x: -5312.0, y: -2490.0 },
+		},
+		cities: [{ barrack: { x: -6050.0, y: -2800.0 } }, { barrack: { typeId: UNIT_ID.PORT, x: -5440.0, y: -1730.0 }, cityType: 'port' }],
 	});
 }

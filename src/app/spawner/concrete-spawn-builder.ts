@@ -5,10 +5,6 @@ import { SpawnerBuilder } from './spawner-builder';
 import { UNIT_ID } from '../../configs/unit-id';
 import { Coordinates } from '../interfaces/coordinates';
 
-/**
- * Implementation of the SpawnerBuilder interface.
- * This class represents a concrete Spawner builder.
- */
 export class ConcreteSpawnerBuilder implements SpawnerBuilder {
 	private unit: unit;
 	private country: string;
