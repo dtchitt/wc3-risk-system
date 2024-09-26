@@ -1,9 +1,9 @@
-import { ABILITY_ID } from 'src/configs/ability-id';
 import { ActivePlayer } from './types/active-player';
 import { HumanPlayer } from './types/human-player';
 import { SlavePlayer } from './types/slave-player';
-import { UNIT_ID } from 'src/configs/unit-id';
 import { NameManager } from '../managers/names/name-manager';
+import { buildGuardHealthButton, buildGuardValueButton } from '../ui/player-preference-buttons';
+import { File } from 'w3ts';
 
 const banList: string[] = [
 	'nappa#11822', //Full screen spam
@@ -66,11 +66,18 @@ export class PlayerManager {
 					this._playerFromHandle.set(player, new HumanPlayer(player));
 				}
 
-				const tools: unit = CreateUnit(player, UNIT_ID.PLAYER_TOOLS, 18750.0, -16200.0, 270);
+				const healthButton = buildGuardHealthButton(this._playerFromHandle.get(player));
+				const valueButton = buildGuardValueButton(this._playerFromHandle.get(player));
+				let contents: string = '';
 
-				SetUnitPathing(tools, false);
-				UnitRemoveAbility(tools, ABILITY_ID.LOW_HEALTH_DEFENDER);
-				UnitRemoveAbility(tools, ABILITY_ID.LOW_VALUE_DEFENDER);
+				if (player == GetLocalPlayer()) {
+					contents = File.read('risk/ui.pld');
+
+					if (contents == 'false') {
+						BlzFrameSetVisible(healthButton, false);
+						BlzFrameSetVisible(valueButton, false);
+					}
+				}
 			}
 		}
 	}

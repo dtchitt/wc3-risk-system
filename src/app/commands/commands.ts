@@ -9,6 +9,7 @@ import { HelpCommand } from './help';
 import { MuteCommand } from './mute';
 import { NamesCommand } from './names';
 import { RestartCommand } from './restart';
+import { UICommand } from './ui';
 
 export function SetCommands(gameManager: GameManager) {
 	const chatManager: ChatManager = ChatManager.getInstance();
@@ -22,4 +23,5 @@ export function SetCommands(gameManager: GameManager) {
 	NamesCommand(chatManager, gameManager, playerManager, nameManager);
 	GoldCommand(chatManager, gameManager, nameManager);
 	HelpCommand(chatManager);
+	UICommand(chatManager);
 }

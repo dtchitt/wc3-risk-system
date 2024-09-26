@@ -22,22 +22,22 @@ export function SpellEffectEvent() {
 				case ABILITY_ID.SWAP:
 					UnitToCity.get(GetTriggerUnit()).onCast();
 					break;
-				case ABILITY_ID.LOW_HEALTH_DEFENDER:
-					player.options.health = false;
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_HEALTH_DEFENDER, ABILITY_ID.HIGH_HEALTH_DEFENDER);
-					break;
-				case ABILITY_ID.HIGH_HEALTH_DEFENDER:
-					player.options.health = true;
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_HEALTH_DEFENDER, ABILITY_ID.LOW_HEALTH_DEFENDER);
-					break;
-				case ABILITY_ID.LOW_VALUE_DEFENDER:
-					player.options.value = false;
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_VALUE_DEFENDER, ABILITY_ID.HIGH_VALUE_DEFENDER);
-					break;
-				case ABILITY_ID.HIGH_VALUE_DEFENDER:
-					player.options.value = true;
-					swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_VALUE_DEFENDER, ABILITY_ID.LOW_VALUE_DEFENDER);
-					break;
+				// case ABILITY_ID.LOW_HEALTH_DEFENDER:
+				// 	player.options.health = false;
+				// 	swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_HEALTH_DEFENDER, ABILITY_ID.HIGH_HEALTH_DEFENDER);
+				// 	break;
+				// case ABILITY_ID.HIGH_HEALTH_DEFENDER:
+				// 	player.options.health = true;
+				// 	swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_HEALTH_DEFENDER, ABILITY_ID.LOW_HEALTH_DEFENDER);
+				// 	break;
+				// case ABILITY_ID.LOW_VALUE_DEFENDER:
+				// 	player.options.value = false;
+				// 	swapAbilities(GetTriggerUnit(), ABILITY_ID.LOW_VALUE_DEFENDER, ABILITY_ID.HIGH_VALUE_DEFENDER);
+				// 	break;
+				// case ABILITY_ID.HIGH_VALUE_DEFENDER:
+				// 	player.options.value = true;
+				// 	swapAbilities(GetTriggerUnit(), ABILITY_ID.HIGH_VALUE_DEFENDER, ABILITY_ID.LOW_VALUE_DEFENDER);
+				// 	break;
 				case ABILITY_ID.SPWN_3000:
 				case ABILITY_ID.SPWN_6000:
 					const radius: number = GetSpellAbilityId() == ABILITY_ID.SPWN_3000 ? 3000 : 6000;
@@ -84,8 +84,8 @@ export function SpellEffectEvent() {
 	);
 }
 
-function swapAbilities(castingUnit: unit, castedAbility: number, swapAbility: number) {
-	UnitRemoveAbility(castingUnit, castedAbility);
-	UnitAddAbility(castingUnit, swapAbility);
-	BlzStartUnitAbilityCooldown(castingUnit, castedAbility, 1);
-}
+// function swapAbilities(castingUnit: unit, castedAbility: number, swapAbility: number) {
+// 	UnitRemoveAbility(castingUnit, castedAbility);
+// 	UnitAddAbility(castingUnit, swapAbility);
+// 	BlzStartUnitAbilityCooldown(castingUnit, castedAbility, 1);
+// }
