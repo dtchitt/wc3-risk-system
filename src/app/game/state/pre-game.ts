@@ -62,6 +62,8 @@ export class PreGame implements GameState {
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
 					playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
+
+				SetUnitInvulnerable(city.guard.unit, false);
 			});
 
 			this.manager.updateState(this.nextState);

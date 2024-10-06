@@ -105,6 +105,8 @@ export class Guard implements Resetable {
 	 * Builds the guard unit by creating it with the specified type and default coordinates.
 	 */
 	private build(): void {
-		this.set(CreateUnit(NEUTRAL_HOSTILE, this.unitType, this._defaultX, this._defaultY, 270));
+		const unit = CreateUnit(NEUTRAL_HOSTILE, this.unitType, this._defaultX, this._defaultY, 270);
+		this.set(unit);
+		SetUnitInvulnerable(unit, true);
 	}
 }
