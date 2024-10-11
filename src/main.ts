@@ -23,6 +23,7 @@ import CameraManager from './app/managers/camera-manager';
 import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { SetCommands } from './app/commands/commands';
+import { File } from 'w3ts';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 

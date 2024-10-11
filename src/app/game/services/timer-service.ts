@@ -47,7 +47,9 @@ export class TimerService implements Resetable {
 					if (this.victoryManager.checkCityVictory()) return false;
 
 					PlayerManager.getInstance().players.forEach((player) => {
-						player.giveGold();
+						if (!player.status.isDead()) {
+							player.giveGold();
+						}
 					});
 
 					StringToCountry.forEach((country) => {

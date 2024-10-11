@@ -56,6 +56,7 @@ export class PreGame implements GameState {
 		this.distributionService = new DistributionService();
 		this.distributionService.runDistro(() => {
 			RegionToCity.forEach((city) => {
+				city.guard.reposition();
 				//Prevent guards from moving and update unit counts
 				IssueImmediateOrder(city.guard.unit, 'stop');
 

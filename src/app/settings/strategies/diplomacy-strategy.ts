@@ -43,6 +43,8 @@ export class DiplomacyStrategy implements SettingsStrategy {
 	private handleLobbyTeams(): void {
 		TeamManager.getInstance();
 		TeamManager.getInstance().allowFullSharedControl();
+
+		SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, true);
 	}
 
 	private handleRandomTeams(): void {

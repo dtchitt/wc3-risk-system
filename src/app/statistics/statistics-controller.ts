@@ -1,4 +1,6 @@
 import { NameManager } from '../managers/names/name-manager';
+import { GameDataWriter } from '../utils/game-data-writer';
+import { ComputeRatio } from '../utils/utils';
 import { StatisticsModel } from './statistics-model';
 import { StatisticsView } from './statistics-view';
 
@@ -56,5 +58,24 @@ export class StatisticsController {
 
 	public getModel() {
 		return this.model;
+	}
+
+	public writeStatisticsData() {
+		const ranks = this.model.getRanks();
+
+		const data = ranks.map((player) => ({
+			Player: NameManager.getInstance().getBtag(player.getPlayer()),
+			Rank: (ranks.indexOf(player) + 1).toString(),
+			LastTurn: player.trackedData.turnDied.toString(),
+			Kills: player.trackedData.killsDeaths.get(player.getPlayer()).kills.toString(),
+			Deaths: player.trackedData.killsDeaths.get(player.getPlayer()).deaths.toString(),
+			KD: ComputeRatio(
+				player.trackedData.killsDeaths.get(player.getPlayer()).kills,
+				player.trackedData.killsDeaths.get(player.getPlayer()).deaths
+			).toString(),
+			BiggestRival: this.model.getRival(player) === 'None' ? 'null' : this.model.getRival(player),
+		}));
+
+		GameDataWriter.write(data);
 	}
 }

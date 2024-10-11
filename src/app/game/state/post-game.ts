@@ -11,6 +11,7 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 import { TreeManager } from '../services/tree-service';
 import { TeamManager } from 'src/app/teams/team-manager';
 import { Wait } from 'src/app/utils/wait';
+import { GameDataWriter } from 'src/app/utils/game-data-writer';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
@@ -29,15 +30,16 @@ export class PostGame implements GameState {
 		if (this.isOver) return;
 		this.isOver = true;
 
+		FogEnable(false);
+
 		if (SettingsContext.getInstance().isPromode()) {
 			VictoryManager.getInstance().updateWinTracker();
 		} else {
 			const statsController: StatisticsController = StatisticsController.getInstance();
 			statsController.refreshView();
 			statsController.setViewVisibility(true);
+			statsController.writeStatisticsData();
 		}
-
-		FogEnable(false);
 
 		this.manager.setRestartEnabled(true);
 	}
