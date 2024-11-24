@@ -1,12 +1,17 @@
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
-import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
+import {
+	CITIES_TO_WIN_MULTIPLIER,
+	THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN,
+	THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_MODIFIER,
+} from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
 	public static CITIES_TO_WIN: number;
+	public static PASSED_THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT: boolean;
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -16,6 +21,8 @@ export class VictoryManager {
 	private constructor() {
 		this.players = [];
 		this.winTracker = new WinTracker();
+
+		// since gameTimer is not set yet and CalculateCitiesToWin relies on the gameTimer, we need to manually set the cities to win
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
@@ -56,6 +63,8 @@ export class VictoryManager {
 	}
 
 	public checkCityVictory(): boolean {
+		this.updateCityToWin();
+
 		this.players.forEach((player) => {
 			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
 				this._leader = player;
@@ -65,6 +74,22 @@ export class VictoryManager {
 		});
 
 		return false;
+	}
+
+	public updateCityToWin() {
+		VictoryManager.CITIES_TO_WIN = this.calculateCitiesToWin();
+	}
+
+	private calculateCitiesToWin(): number {
+		if (this.gameTimer.getTurns() >= THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN) {
+			VictoryManager.PASSED_THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT = true;
+			let turnsSinceThreshold = this.gameTimer.getTurns() - THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN;
+			return Math.ceil(
+				RegionToCity.size * (CITIES_TO_WIN_MULTIPLIER - turnsSinceThreshold * THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_MODIFIER)
+			);
+		}
+
+		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
 	public checkKnockOutVictory(): boolean {
