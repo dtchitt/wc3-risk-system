@@ -201,7 +201,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "POPUPMENU" "FogPopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
-		SetPoint TOP,"PopupMenus",TOP,0.0,-0.05,
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.04,
 		PopupMenuFrame "FogPopupMenu",
 			Frame "MENU" "FogPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "Off",     -2,
@@ -211,7 +211,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "POPUPMENU" "DiplomacyPopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
-		SetPoint TOP,"PopupMenus",TOP,0.0,-0.1,
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.08,
     	PopupMenuFrame "DiplomacyPopupMenu",
 			Frame "MENU" "DiplomacyPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "FFA",     -2,
@@ -223,7 +223,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		Frame "GLUECHECKBOX" "PromodeCheckbox" {
 		Width 0.024,
 		Height 0.024,
-		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.15,
+		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.16,
 
 		ControlBackdrop "EscMenuCheckBoxBackdrop",
 			Frame "BACKDROP" "EscMenuCheckBoxBackdrop" {
@@ -262,6 +262,64 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 				HighlightAlphaMode "BLEND",
 			}
 		}
+
+		Frame "SLIDER" "EscMenuSliderTemplate" {
+			Height 0.012,
+			Width 0.13,
+			SliderLayoutHorizontal,
+			SetPoint TOPLEFT,"PopupMenus",TOPLEFT, 0.005, -0.128,
+			
+			SliderInitialValue 90,
+			SliderMinValue 60,
+			SliderMaxValue 120,
+			SliderStepSize 10,
+
+			ControlBackdrop "EscMenuScrollBarBackdropTemplate",
+			Frame "BACKDROP" "EscMenuScrollBarBackdropTemplate" {
+				DecorateFileNames,
+				BackdropTileBackground,
+				BackdropBackground  "EscMenuSliderBackground",
+				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
+				BackdropCornerSize  0.006,
+				BackdropBackgroundSize 0.006,
+				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
+				BackdropEdgeFile  "EscMenuSliderBorder",
+				BackdropBlendAll,
+			}
+
+			ControlDisabledBackdrop "EscMenuScrollBarDisabledBackdrop",
+			Frame "BACKDROP" "EscMenuScrollBarDisabledBackdrop" {
+				DecorateFileNames,
+				BackdropTileBackground,
+				BackdropBackground  "EscMenuSliderBackground",
+				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
+				BackdropCornerSize  0.006,
+				BackdropBackgroundSize 0.006,
+				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
+				BackdropEdgeFile  "EscMenuSliderDisabledBorder",
+				BackdropBlendAll,
+			}
+
+			SliderThumbButtonFrame "EscMenuThumbButtonTemplate",
+			Frame "BUTTON" "EscMenuThumbButtonTemplate" {
+				Width 0.016,
+				Height 0.016,
+
+				ControlBackdrop "EscMenuThumbButtonBackdropTemplate",
+				Frame "BACKDROP" "EscMenuThumbButtonBackdropTemplate" {
+					DecorateFileNames,
+					BackdropBlendAll,
+					BackdropBackground  "EscMenuSliderThumbButton",
+				}
+
+				ControlDisabledBackdrop "EscMenuThumbButtonDisabledBackdrop",
+				Frame "BACKDROP" "EscMenuThumbButtonDisabledBackdrop" {
+					DecorateFileNames,
+					BackdropBlendAll,
+					BackdropBackground  "EscMenuSliderDisabledThumbButton",
+				}
+			}
+		}
 	}
 
 	Frame "FRAME" "PopupLabels" {
@@ -281,7 +339,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "FogLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.05,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.04,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -292,7 +350,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "DiplomacyLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.1,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.08,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -313,8 +371,19 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		// 	Text "Team Size:",
 		// }
 
+		Frame "TEXT" "OvertimeLabel" {
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.12,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS",
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Overtime:",
+		}
+
 		Frame "TEXT" "PromodeLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.16,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
