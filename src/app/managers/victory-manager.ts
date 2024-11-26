@@ -1,17 +1,15 @@
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
-import {
-	CITIES_TO_WIN_MULTIPLIER,
-	THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN,
-	THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_MODIFIER,
-} from 'src/configs/game-settings';
+import { CITIES_TO_WIN_MULTIPLIER, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
 	public static CITIES_TO_WIN: number;
-	public static PASSED_THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT: boolean;
+	public static OVERTIME_ACTIVE: boolean;
+	public static OVERTIME_MODE: boolean;
+	public static THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN: number;
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -24,6 +22,9 @@ export class VictoryManager {
 
 		// since gameTimer is not set yet and CalculateCitiesToWin relies on the gameTimer, we need to manually set the cities to win
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
+
+		VictoryManager.OVERTIME_ACTIVE = false;
+		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 0;
 	}
 
 	public static getInstance(): VictoryManager {
@@ -81,12 +82,10 @@ export class VictoryManager {
 	}
 
 	private calculateCitiesToWin(): number {
-		if (this.gameTimer.getTurns() >= THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN) {
-			VictoryManager.PASSED_THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT = true;
-			let turnsSinceThreshold = this.gameTimer.getTurns() - THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN;
-			return Math.ceil(
-				RegionToCity.size * (CITIES_TO_WIN_MULTIPLIER - turnsSinceThreshold * THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_MODIFIER)
-			);
+		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN) {
+			VictoryManager.OVERTIME_ACTIVE = true;
+			let turnsSinceThreshold = this.gameTimer.getTurns() - VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN;
+			return Math.ceil(RegionToCity.size * (CITIES_TO_WIN_MULTIPLIER - turnsSinceThreshold * OVERTIME_MODIFIER));
 		}
 
 		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);

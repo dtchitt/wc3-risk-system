@@ -3,6 +3,7 @@ import { SettingsContext } from './settings-context';
 import { DiplomacyStrings } from './strategies/diplomacy-strategy';
 import { FogOptions } from './strategies/fog-strategy';
 import { GameTypeOptions } from './strategies/game-type-strategy';
+import { OvertimeStrings } from './strategies/overtime-strategy';
 import { PromodeOptions } from './strategies/promode-strategy';
 
 export class SettingsView {
@@ -14,11 +15,13 @@ export class SettingsView {
 		BlzFrameSetValue(BlzGetFrameByName('GameTypePopup', 0), 0);
 		BlzFrameSetValue(BlzGetFrameByName('FogPopup', 0), 0);
 		BlzFrameSetValue(BlzGetFrameByName('DiplomacyPopup', 0), 0);
+		BlzFrameSetValue(BlzGetFrameByName('OvertimePopup', 0), 0);
 		this.buildStartButton();
 		this.buildTimer();
 		this.gameTypePopup();
 		this.fogPopup();
 		this.diplomacyPopup();
+		this.overtimePopup();
 		this.promodeBox();
 		this.hostSetup();
 		this.playerSetup();
@@ -132,6 +135,28 @@ export class SettingsView {
 		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('DiplomacyPopup', 0), 2), `${DiplomacyStrings[value]}`);
 	}
 
+	private overtimePopup() {
+		const t: trigger = CreateTrigger();
+
+		BlzTriggerRegisterFrameEvent(t, BlzGetFrameByName('OvertimePopup', 0), FRAMEEVENT_POPUPMENU_ITEM_CHANGED);
+		TriggerAddCondition(
+			t,
+			Condition(() => {
+				const frameValue: number = R2I(BlzGetTriggerFrameValue());
+
+				SettingsContext.getInstance().getSettings().Overtime.option = frameValue;
+				this.colorizeOvertimeText(frameValue);
+			})
+		);
+
+		this.colorizeOvertimeText(BlzFrameGetValue(BlzGetFrameByName('OvertimePopup', 0)));
+	}
+
+	private colorizeOvertimeText(value: number) {
+		BlzFrameSetText(BlzGetFrameByName('OvertimeOption', 0), `${OvertimeStrings[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('OvertimePopup', 0), 3), `${OvertimeStrings[value]}`);
+	}
+
 	private promodeBox() {
 		const frame: framehandle = BlzGetFrameByName('PromodeCheckbox', 0);
 		const t: trigger = CreateTrigger();
@@ -143,28 +168,36 @@ export class SettingsView {
 			Condition(() => {
 				const fogFrame: framehandle = BlzGetFrameByName('FogPopup', 0);
 				const diploFrame: framehandle = BlzGetFrameByName('DiplomacyPopup', 0);
+				const overtimeFrame: framehandle = BlzGetFrameByName('OvertimePopup', 0);
 
 				if (BlzGetTriggerFrameEvent() == FRAMEEVENT_CHECKBOX_CHECKED) {
 					SettingsContext.getInstance().getSettings().Promode = 1;
 					SettingsContext.getInstance().getSettings().Fog = 1;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 1;
+					SettingsContext.getInstance().getSettings().Overtime.option = 1;
 
 					BlzFrameSetValue(fogFrame, 1);
 					BlzFrameSetEnable(fogFrame, false);
 					BlzFrameSetValue(diploFrame, 1);
 					BlzFrameSetEnable(diploFrame, false);
+					BlzFrameSetValue(overtimeFrame, 1);
+					BlzFrameSetEnable(overtimeFrame, false);
 				} else {
 					SettingsContext.getInstance().getSettings().Promode = 0;
 					SettingsContext.getInstance().getSettings().Fog = 0;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 0;
+					SettingsContext.getInstance().getSettings().Overtime.option = 0;
 					BlzFrameSetValue(fogFrame, 0);
 					BlzFrameSetEnable(fogFrame, true);
 					BlzFrameSetValue(diploFrame, 0);
 					BlzFrameSetEnable(diploFrame, true);
+					BlzFrameSetValue(overtimeFrame, 0);
+					BlzFrameSetEnable(overtimeFrame, true);
 				}
 
 				this.colorizeFogText(BlzFrameGetValue(fogFrame));
 				this.colorizeDiplomacyText(BlzFrameGetValue(diploFrame));
+				this.colorizeOvertimeText(BlzFrameGetValue(overtimeFrame));
 				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsContext.getInstance().getSettings().Promode]}`);
 			})
 		);

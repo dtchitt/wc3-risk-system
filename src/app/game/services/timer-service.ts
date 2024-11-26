@@ -63,7 +63,7 @@ export class TimerService implements Resetable {
 								this.victoryManager.leader.trackedData.cities.cities.length
 							}|r cities and needs ${HexColors.RED}${
 								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
-							}|r more to win!${VictoryManager.PASSED_THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT ? ' (Overtime, win condition lowered)' : ''}`,
+							}|r more to win! ${VictoryManager.OVERTIME_ACTIVE ? ' (Overtime, win condition lowered)' : ''}`,
 							'Sound\\Interface\\ItemReceived.flac',
 							4
 						);

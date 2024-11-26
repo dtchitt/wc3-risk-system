@@ -161,7 +161,7 @@ Frame "POPUPMENU" "MyPopupTemplate" {
 
 Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 	Width 0.25f,
-    Height 0.31f,
+    Height 0.33f,
 	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.05,
 
 	Frame "TEXT" "SettingsTitle" {
@@ -220,10 +220,21 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			}
 		}
 
+		Frame "POPUPMENU" "OvertimePopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.12,
+    	PopupMenuFrame "OvertimePopupMenu",
+			Frame "MENU" "OvertimePopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
+				MenuItem "Off",     -2,
+				MenuItem "Turn 30",     -2,
+				MenuItem "Turn 60",     -2,
+				MenuItem "Turn 90",     -2,
+			}
+		}
+
 		Frame "GLUECHECKBOX" "PromodeCheckbox" {
 		Width 0.024,
 		Height 0.024,
-		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.16,
+		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.17,
 
 		ControlBackdrop "EscMenuCheckBoxBackdrop",
 			Frame "BACKDROP" "EscMenuCheckBoxBackdrop" {
@@ -260,64 +271,6 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 				HighlightType "FILETEXTURE",
 				HighlightAlphaFile "EscMenuDisabledCheckHighlight",
 				HighlightAlphaMode "BLEND",
-			}
-		}
-
-		Frame "SLIDER" "EscMenuSliderTemplate" {
-			Height 0.012,
-			Width 0.13,
-			SliderLayoutHorizontal,
-			SetPoint TOPLEFT,"PopupMenus",TOPLEFT, 0.005, -0.128,
-			
-			SliderInitialValue 90,
-			SliderMinValue 60,
-			SliderMaxValue 120,
-			SliderStepSize 10,
-
-			ControlBackdrop "EscMenuScrollBarBackdropTemplate",
-			Frame "BACKDROP" "EscMenuScrollBarBackdropTemplate" {
-				DecorateFileNames,
-				BackdropTileBackground,
-				BackdropBackground  "EscMenuSliderBackground",
-				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
-				BackdropCornerSize  0.006,
-				BackdropBackgroundSize 0.006,
-				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
-				BackdropEdgeFile  "EscMenuSliderBorder",
-				BackdropBlendAll,
-			}
-
-			ControlDisabledBackdrop "EscMenuScrollBarDisabledBackdrop",
-			Frame "BACKDROP" "EscMenuScrollBarDisabledBackdrop" {
-				DecorateFileNames,
-				BackdropTileBackground,
-				BackdropBackground  "EscMenuSliderBackground",
-				BackdropCornerFlags "UL|UR|BL|BR|T|L|B|R",
-				BackdropCornerSize  0.006,
-				BackdropBackgroundSize 0.006,
-				BackdropBackgroundInsets 0.0025 0.0025 0.0025 0.0025,
-				BackdropEdgeFile  "EscMenuSliderDisabledBorder",
-				BackdropBlendAll,
-			}
-
-			SliderThumbButtonFrame "EscMenuThumbButtonTemplate",
-			Frame "BUTTON" "EscMenuThumbButtonTemplate" {
-				Width 0.016,
-				Height 0.016,
-
-				ControlBackdrop "EscMenuThumbButtonBackdropTemplate",
-				Frame "BACKDROP" "EscMenuThumbButtonBackdropTemplate" {
-					DecorateFileNames,
-					BackdropBlendAll,
-					BackdropBackground  "EscMenuSliderThumbButton",
-				}
-
-				ControlDisabledBackdrop "EscMenuThumbButtonDisabledBackdrop",
-				Frame "BACKDROP" "EscMenuThumbButtonDisabledBackdrop" {
-					DecorateFileNames,
-					BackdropBlendAll,
-					BackdropBackground  "EscMenuSliderDisabledThumbButton",
-				}
 			}
 		}
 	}
@@ -360,17 +313,6 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "Diplomacy:",
 		}
 
-		// Frame "TEXT" "DiplomacySliderLabel" {
-		// 	SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
-
 		Frame "TEXT" "OvertimeLabel" {
 			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.12,
 			DecorateFileNames,
@@ -383,7 +325,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "PromodeLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.16,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.17,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -432,16 +374,16 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "FFA",
 		}
 
-		// Frame "TEXT" "DiplomacySliderOption" {
-		// 	SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
+		Frame "TEXT" "OvertimeOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.1,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Off",
+		}
 
 		Frame "TEXT" "PromodeOption" {
 			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
