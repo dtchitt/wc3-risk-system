@@ -8,18 +8,18 @@ export interface OvertimeOptions {
 
 export const OvertimeStrings: Record<number, string> = {
 	0: `${HexColors.GREEN}Off`,
-	1: `${HexColors.RED}Turn 30`,
-	2: `${HexColors.RED}Turn 60`,
-	3: `${HexColors.RED}Turn 90`,
+	1: `${HexColors.RED}Turn 60`,
+	2: `${HexColors.RED}Turn 90`,
+	3: `${HexColors.RED}Turn 120`,
 };
 
 export class OvertimeStrategy implements SettingsStrategy {
 	private readonly overtime: OvertimeOptions;
 	private readonly strategyMap: Map<number, () => void> = new Map([
 		[0, this.handleOff],
-		[1, this.handleTurn30],
-		[2, this.handleTurn60],
-		[3, this.handleTurn90],
+		[1, this.handleOption1],
+		[2, this.handleOption2],
+		[3, this.handleOption3],
 	]);
 
 	constructor(overtime: OvertimeOptions) {
@@ -38,18 +38,18 @@ export class OvertimeStrategy implements SettingsStrategy {
 		VictoryManager.OVERTIME_MODE = false;
 	}
 
-	private handleTurn30(): void {
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 30;
-		VictoryManager.OVERTIME_MODE = true;
-	}
-
-	private handleTurn60(): void {
+	private handleOption1(): void {
 		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 60;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 
-	private handleTurn90(): void {
+	private handleOption2(): void {
 		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 90;
+		VictoryManager.OVERTIME_MODE = true;
+	}
+
+	private handleOption3(): void {
+		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 120;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 }

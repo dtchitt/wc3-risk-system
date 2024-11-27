@@ -85,7 +85,7 @@ export class VictoryManager {
 		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN) {
 			VictoryManager.OVERTIME_ACTIVE = true;
 			let turnsSinceThreshold = this.gameTimer.getTurns() - VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN;
-			return Math.ceil(RegionToCity.size * (CITIES_TO_WIN_MULTIPLIER - turnsSinceThreshold * OVERTIME_MODIFIER));
+			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER) - OVERTIME_MODIFIER * turnsSinceThreshold;
 		}
 
 		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);

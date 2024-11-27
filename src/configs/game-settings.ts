@@ -8,5 +8,5 @@ export const STARTING_INCOME: number = 4;
 //This is the duration of a turn in seconds. 60 by default.
 export const TURN_DURATION_SECONDS: number = 60;
 
-//This is the modifier for the reduced win requirement. 0.01 is approximately 2 cities.
-export const OVERTIME_MODIFIER: number = 0.01;
+//This represents the drop in required cities to win each turn. Default is 1.
+export const OVERTIME_MODIFIER: number = 1;
