@@ -34,22 +34,22 @@ export class OvertimeStrategy implements SettingsStrategy {
 	}
 
 	private handleOff(): void {
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 0;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
 		VictoryManager.OVERTIME_MODE = false;
 	}
 
 	private handleOption1(): void {
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 60;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 60;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 
 	private handleOption2(): void {
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 90;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 90;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 
 	private handleOption3(): void {
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 120;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 120;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 }
