@@ -47,6 +47,8 @@ export class TimerService implements Resetable {
 				if (this._tick == this._duration) {
 					if (this.victoryManager.checkCityVictory()) return false;
 
+					ScoreboardManager.updateScoreboardTitle();
+
 					PlayerManager.getInstance().players.forEach((player) => {
 						if (!player.status.isDead()) {
 							player.giveGold();
@@ -63,7 +65,7 @@ export class TimerService implements Resetable {
 								this.victoryManager.leader.trackedData.cities.cities.length
 							}|r cities and needs ${HexColors.RED}${
 								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
-							}|r more to win! ${VictoryManager.OVERTIME_ACTIVE ? ' (Overtime! Win condition dropped by 1)' : ''}`,
+							}|r more to win! ${VictoryManager.OVERTIME_ACTIVE ? ` ${HexColors.RED}(Overtime is active!)|r` : ''}`,
 							'Sound\\Interface\\ItemReceived.flac',
 							4
 						);

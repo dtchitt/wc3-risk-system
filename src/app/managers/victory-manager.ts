@@ -7,9 +7,11 @@ import { WinTracker } from '../game/services/win-tracker';
 export class VictoryManager {
 	private static instance: VictoryManager;
 	public static CITIES_TO_WIN: number;
-	public static OVERTIME_ACTIVE: boolean;
+	public static OVERTIME_ACTIVE: boolean = false;
 	public static OVERTIME_MODE: boolean;
-	public static THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN: number;
+	public static OVERTIME_ACTIVE_AT_TURN: number;
+	public static OVERTIME_TOTAL_TURNS: number = 0;
+	public static OVERTIME_TURNS_UNTIL_ACTIVE: number = 0;
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -24,7 +26,7 @@ export class VictoryManager {
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 
 		VictoryManager.OVERTIME_ACTIVE = false;
-		VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN = 0;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
 	}
 
 	public static getInstance(): VictoryManager {
@@ -82,10 +84,14 @@ export class VictoryManager {
 	}
 
 	private calculateCitiesToWin(): number {
-		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN) {
+		if (VictoryManager.OVERTIME_MODE) {
+			VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE = VictoryManager.OVERTIME_ACTIVE_AT_TURN - this.gameTimer.getTurns();
+			VictoryManager.OVERTIME_TOTAL_TURNS = this.gameTimer.getTurns() - VictoryManager.OVERTIME_ACTIVE_AT_TURN;
+		}
+
+		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.OVERTIME_ACTIVE_AT_TURN) {
 			VictoryManager.OVERTIME_ACTIVE = true;
-			let turnsSinceThreshold = this.gameTimer.getTurns() - VictoryManager.THRESHOLD_FOR_REDUCED_WIN_REQUIREMENT_TURN;
-			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER) - OVERTIME_MODIFIER * turnsSinceThreshold;
+			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER) - OVERTIME_MODIFIER * VictoryManager.OVERTIME_TOTAL_TURNS;
 		}
 
 		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
