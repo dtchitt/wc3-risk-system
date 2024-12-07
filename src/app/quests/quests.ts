@@ -6,6 +6,7 @@ export class Quests {
 		Quests.Credits();
 		Quests.Tutorial();
 		Quests.ArmyComposition();
+		Quests.OvertimeDescription();
 	}
 
 	private static Credits() {
@@ -21,12 +22,12 @@ export class Quests {
 
 	private static Tutorial() {
 		let description: string = 'The goal of the game is to conquer 135 cities and hold them until the end of the turn.';
-		description += ' To gain income you need to control a whole country when the turn ends.';
-		description += ' It is best to start with smaller countries to gain income quickly.';
-		description += ' Try to expand in a way that will keep your countries connected.';
-		description += ' Make sure to use your spawns, they are free units you get each turn form countries you own.';
-		description += ' Chat is essential in Risk, make sure to use it and read it. Diplomacy is key.';
-		description += ' Make sure to peace other players, but also be ready to be backstabbed when your are vulnerable.';
+		description += 'To gain income you need to control a whole country when the turn ends.';
+		description += 'It is best to start with smaller countries to gain income quickly.';
+		description += 'Try to expand in a way that will keep your countries connected.';
+		description += 'Make sure to use your spawns, they are free units you get each turn form countries you own.';
+		description += 'Chat is essential in Risk, make sure to use it and read it. Diplomacy is key.';
+		description += 'Make sure to peace other players, but also be ready to be backstabbed when your are vulnerable.';
 
 		Quests.BuildQuest('How to play', description, 'ReplaceableTextures\\WorldEditUI\\Editor-Random-Unit.blp', true);
 	}
@@ -46,6 +47,18 @@ export class Quests {
 		description += ' It should only really be used the first couple of turns in fights on specific coastlines.';
 
 		Quests.BuildQuest('Army Composition', description, 'ReplaceableTextures\\WorldEditUI\\Editor-MultipleUnits.blp', true);
+	}
+
+	private static OvertimeDescription() {
+		let description: string =
+			'Overtime is a feature designed to help conclude games more efficiently by gradually reducing the number of cities required for victory. Once activated, each turn decreases the victory threshold by one city until a player wins.';
+		description += '\nThere are three Overtime settings:';
+		description += '\n1. Turbo Mode: Overtime begins at turn 30, accelerating the game pace early on.';
+		description += '\n2. Long Form Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
+		description += '\n3. Off: Overtime is disabled, keeping the default victory conditions.';
+		description += '\nThis system ensures flexibility and adaptability based on player preferences.';
+
+		Quests.BuildQuest('Overtime Explained', description, 'ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp', true);
 	}
 
 	private static BuildQuest(title: string, description: string, icon: string, required: boolean) {
