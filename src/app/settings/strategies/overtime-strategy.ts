@@ -7,19 +7,17 @@ export interface OvertimeOptions {
 }
 
 export const OvertimeStrings: Record<number, string> = {
-	0: `${HexColors.GREEN}Off`,
-	1: `${HexColors.RED}Turn 60`,
-	2: `${HexColors.RED}Turn 90`,
-	3: `${HexColors.RED}Turn 120`,
+	0: `${HexColors.GREEN}Turbo (Turn 30)`,
+	1: `${HexColors.RED}Long (Turn 120)`,
+	2: `${HexColors.RED}Off`,
 };
 
 export class OvertimeStrategy implements SettingsStrategy {
 	private readonly overtime: OvertimeOptions;
 	private readonly strategyMap: Map<number, () => void> = new Map([
-		[0, this.handleOff],
-		[1, this.handleOption1],
-		[2, this.handleOption2],
-		[3, this.handleOption3],
+		[0, this.handleTurboOption],
+		[1, this.handleLongOption],
+		[2, this.handleOff],
 	]);
 
 	constructor(overtime: OvertimeOptions) {
@@ -33,23 +31,18 @@ export class OvertimeStrategy implements SettingsStrategy {
 		}
 	}
 
+	private handleTurboOption(): void {
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 30;
+		VictoryManager.OVERTIME_MODE = true;
+	}
+
+	private handleLongOption(): void {
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 120;
+		VictoryManager.OVERTIME_MODE = true;
+	}
+
 	private handleOff(): void {
 		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
 		VictoryManager.OVERTIME_MODE = false;
-	}
-
-	private handleOption1(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 60;
-		VictoryManager.OVERTIME_MODE = true;
-	}
-
-	private handleOption2(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 90;
-		VictoryManager.OVERTIME_MODE = true;
-	}
-
-	private handleOption3(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 120;
-		VictoryManager.OVERTIME_MODE = true;
 	}
 }

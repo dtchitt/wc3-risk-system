@@ -174,13 +174,13 @@ export class SettingsView {
 					SettingsContext.getInstance().getSettings().Promode = 1;
 					SettingsContext.getInstance().getSettings().Fog = 1;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 1;
-					SettingsContext.getInstance().getSettings().Overtime.option = 0;
+					SettingsContext.getInstance().getSettings().Overtime.option = 2;
 
 					BlzFrameSetValue(fogFrame, 1);
 					BlzFrameSetEnable(fogFrame, false);
 					BlzFrameSetValue(diploFrame, 1);
 					BlzFrameSetEnable(diploFrame, false);
-					BlzFrameSetValue(overtimeFrame, 0);
+					BlzFrameSetValue(overtimeFrame, 2);
 					BlzFrameSetEnable(overtimeFrame, false);
 				} else {
 					SettingsContext.getInstance().getSettings().Promode = 0;
