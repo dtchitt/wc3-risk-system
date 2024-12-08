@@ -51,7 +51,7 @@ export function createGuardButton(config: ButtonConfig): framehandle {
 
 	BlzFrameSetText(
 		tooltipText,
-		`Guard ${str} Preference ${HexColors.TANGERINE}(F6)|r\nSets your preference for unit ${str} when taking possession of a city.\nCurrent preference: ` +
+		`Guard ${str} Preference ${HexColors.TANGERINE}(F${str === 'Health' ? `6` : `7`})|r\nSets your preference for unit ${str} when taking possession of a city.\nCurrent preference: ` +
 			`${str === 'Health' ? `${HexColors.RED}Highest` : `${HexColors.GREEN}Lowest`}`
 	);
 
