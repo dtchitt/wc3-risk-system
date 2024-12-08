@@ -4,8 +4,9 @@ import { FogStrategy } from './strategies/fog-strategy';
 import { GameTypeStrategy } from './strategies/game-type-strategy';
 import { PromodeStrategy } from './strategies/promode-strategy';
 import { Settings } from './settings';
+import { OvertimeStrategy } from './strategies/overtime-strategy';
 
-export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'Promode';
+export type SettingsKey = 'GameType' | 'Diplomacy' | 'Fog' | 'Promode' | 'Overtime';
 
 export class SettingsContext {
 	private static instance: SettingsContext;
@@ -27,6 +28,9 @@ export class SettingsContext {
 				},
 				Fog: 0,
 				Promode: 0,
+				Overtime: {
+					option: 0,
+				},
 			});
 		}
 
@@ -38,6 +42,7 @@ export class SettingsContext {
 		this.strategies.set('Diplomacy', new DiplomacyStrategy(this.settings.Diplomacy));
 		this.strategies.set('Fog', new FogStrategy(this.settings.Fog));
 		this.strategies.set('Promode', new PromodeStrategy(this.settings.Promode));
+		this.strategies.set('Overtime', new OvertimeStrategy(this.settings.Overtime));
 	}
 
 	/**

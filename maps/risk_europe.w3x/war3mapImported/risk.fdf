@@ -161,7 +161,7 @@ Frame "POPUPMENU" "MyPopupTemplate" {
 
 Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 	Width 0.25f,
-    Height 0.31f,
+    Height 0.33f,
 	SetPoint CENTER, "ConsoleUI", CENTER, 0.0,0.05,
 
 	Frame "TEXT" "SettingsTitle" {
@@ -201,7 +201,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "POPUPMENU" "FogPopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
-		SetPoint TOP,"PopupMenus",TOP,0.0,-0.05,
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.04,
 		PopupMenuFrame "FogPopupMenu",
 			Frame "MENU" "FogPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "Off",     -2,
@@ -211,7 +211,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "POPUPMENU" "DiplomacyPopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
-		SetPoint TOP,"PopupMenus",TOP,0.0,-0.1,
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.08,
     	PopupMenuFrame "DiplomacyPopupMenu",
 			Frame "MENU" "DiplomacyPopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
 				MenuItem "FFA",     -2,
@@ -220,10 +220,20 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			}
 		}
 
+		Frame "POPUPMENU" "OvertimePopup" INHERITS WITHCHILDREN "MyPopupTemplate" {
+		SetPoint TOP,"PopupMenus",TOP,0.0,-0.12,
+    	PopupMenuFrame "OvertimePopupMenu",
+			Frame "MENU" "OvertimePopupMenu" INHERITS WITHCHILDREN "EscMenuPopupMenuMenuTemplate" {
+				MenuItem "Turbo (Turn 30)",     -2,
+				MenuItem "Long (Turn 120)",     -2,
+				MenuItem "Off",     -2,
+			}
+		}
+
 		Frame "GLUECHECKBOX" "PromodeCheckbox" {
 		Width 0.024,
 		Height 0.024,
-		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.15,
+		SetPoint TOP,"PopupMenus",TOP,-0.053,-0.17,
 
 		ControlBackdrop "EscMenuCheckBoxBackdrop",
 			Frame "BACKDROP" "EscMenuCheckBoxBackdrop" {
@@ -281,7 +291,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "FogLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.05,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.04,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -292,7 +302,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "DiplomacyLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.1,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.08,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -302,19 +312,19 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "Diplomacy:",
 		}
 
-		// Frame "TEXT" "DiplomacySliderLabel" {
-		// 	SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
+		Frame "TEXT" "OvertimeLabel" {
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.12,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS",
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Overtime:",
+		}
 
 		Frame "TEXT" "PromodeLabel" {
-			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.15,
+			SetPoint TOPLEFT,"PopupLabels",TOPLEFT, 0, -0.17,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -342,7 +352,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "FogOption" {
-			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.05,
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.04,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -353,7 +363,7 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 		}
 
 		Frame "TEXT" "DiplomacyOption" {
-			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.1,
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.08,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,
@@ -363,19 +373,19 @@ Frame "BACKDROP" "SettingsView" INHERITS "QuestButtonBaseTemplate" {
 			Text "FFA",
 		}
 
-		// Frame "TEXT" "DiplomacySliderOption" {
-		// 	SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
-		// 	DecorateFileNames,
-		// 	FrameFont "MasterFont", 0.012,"",
-		// 	FontColor 1.0 0.8 0.0 1.0,
-		// 	LayerStyle "IGNORETRACKEVENTS", 
-		// 	FontJustificationH JUSTIFYLEFT,
-		// 	FontJustificationV JUSTIFYMIDDLE,
-		// 	Text "Team Size:",
-		// }
+		Frame "TEXT" "OvertimeOption" {
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.12,
+			DecorateFileNames,
+			FrameFont "MasterFont", 0.012,"",
+			FontColor 1.0 0.8 0.0 1.0,
+			LayerStyle "IGNORETRACKEVENTS", 
+			FontJustificationH JUSTIFYLEFT,
+			FontJustificationV JUSTIFYMIDDLE,
+			Text "Turbo (Turn 30)",
+		}
 
 		Frame "TEXT" "PromodeOption" {
-			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.15,
+			SetPoint TOPLEFT,"PopupMenuOptions",TOPLEFT, 0, -0.17,
 			DecorateFileNames,
 			FrameFont "MasterFont", 0.012,"",
 			FontColor 1.0 0.8 0.0 1.0,

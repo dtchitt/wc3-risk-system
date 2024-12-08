@@ -1,4 +1,7 @@
+import { NameManager } from '../managers/names/name-manager';
+import { VictoryManager } from '../managers/victory-manager';
 import { ActivePlayer } from '../player/types/active-player';
+import { HexColors } from '../utils/hex-colors';
 import { ObserverBoard } from './observer-board';
 import { Scoreboard } from './scoreboard';
 import { StandardBoard } from './standard-board';
@@ -71,5 +74,21 @@ export class ScoreboardManager {
 				callback(board);
 			}
 		});
+	}
+
+	public static updateScoreboardTitle() {
+		if (VictoryManager.OVERTIME_ACTIVE) {
+			ScoreboardManager.getInstance().setTitle(
+				`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+					VictoryManager.getInstance().leader.trackedData.cities.cities.length
+				}/${HexColors.RED}${VictoryManager.CITIES_TO_WIN}|r ${HexColors.RED}(Overtime)|r`
+			);
+		} else {
+			ScoreboardManager.getInstance().setTitle(
+				`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
+					VictoryManager.getInstance().leader.trackedData.cities.cities.length
+				}/${VictoryManager.CITIES_TO_WIN}${VictoryManager.OVERTIME_MODE ? ` (Turns until overtime: ${VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE})` : ''}`
+			);
+		}
 	}
 }

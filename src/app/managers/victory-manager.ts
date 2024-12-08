@@ -1,12 +1,17 @@
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
-import { CITIES_TO_WIN_MULTIPLIER } from 'src/configs/game-settings';
+import { CITIES_TO_WIN_MULTIPLIER, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
 	public static CITIES_TO_WIN: number;
+	public static OVERTIME_ACTIVE: boolean = false;
+	public static OVERTIME_MODE: boolean;
+	public static OVERTIME_ACTIVE_AT_TURN: number;
+	public static OVERTIME_TOTAL_TURNS: number = 0;
+	public static OVERTIME_TURNS_UNTIL_ACTIVE: number = 0;
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -16,7 +21,12 @@ export class VictoryManager {
 	private constructor() {
 		this.players = [];
 		this.winTracker = new WinTracker();
+
+		// since gameTimer is not set yet and CalculateCitiesToWin relies on the gameTimer, we need to manually set the cities to win
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
+
+		VictoryManager.OVERTIME_ACTIVE = false;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
 	}
 
 	public static getInstance(): VictoryManager {
@@ -56,6 +66,8 @@ export class VictoryManager {
 	}
 
 	public checkCityVictory(): boolean {
+		this.updateCityToWin();
+
 		this.players.forEach((player) => {
 			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
 				this._leader = player;
@@ -65,6 +77,24 @@ export class VictoryManager {
 		});
 
 		return false;
+	}
+
+	public updateCityToWin() {
+		VictoryManager.CITIES_TO_WIN = this.calculateCitiesToWin();
+	}
+
+	private calculateCitiesToWin(): number {
+		if (VictoryManager.OVERTIME_MODE) {
+			VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE = VictoryManager.OVERTIME_ACTIVE_AT_TURN - this.gameTimer.getTurns();
+			VictoryManager.OVERTIME_TOTAL_TURNS = this.gameTimer.getTurns() - VictoryManager.OVERTIME_ACTIVE_AT_TURN;
+		}
+
+		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.OVERTIME_ACTIVE_AT_TURN) {
+			VictoryManager.OVERTIME_ACTIVE = true;
+			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER) - OVERTIME_MODIFIER * VictoryManager.OVERTIME_TOTAL_TURNS;
+		}
+
+		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
 	}
 
 	public checkKnockOutVictory(): boolean {

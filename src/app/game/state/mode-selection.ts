@@ -24,6 +24,7 @@ export class ModeSelection implements GameState {
 			settingsContext.getSettings().Promode = 0;
 			settingsContext.getSettings().Fog = 0;
 			settingsContext.getSettings().Diplomacy.option = 0;
+      settingsContext.getSettings().Overtime.option = 0;
 			this.ui.hide();
 			this.end();
 		} else {
@@ -52,6 +53,7 @@ export class ModeSelection implements GameState {
 		settings.initStrategies();
 		settings.applyStrategy('Diplomacy');
 		settings.applyStrategy('Promode');
+		settings.applyStrategy('Overtime');
 		this.manager.updateState(this.nextState);
 	}
 }

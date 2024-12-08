@@ -2,7 +2,6 @@ import { City } from '../city/city';
 import { UnitToCity } from '../city/city-map';
 import { Country } from '../country/country';
 import { CityToCountry } from '../country/country-map';
-import { NameManager } from '../managers/names/name-manager';
 import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
@@ -125,11 +124,7 @@ export function OwnershipChangeEvent() {
 					teamManager.getTeamFromPlayer(ownerHandle).updateCityCount(1);
 				}
 
-				ScoreboardManager.getInstance().setTitle(
-					`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
-						VictoryManager.getInstance().leader.trackedData.cities.cities.length
-					}/${VictoryManager.CITIES_TO_WIN} `
-				);
+				ScoreboardManager.updateScoreboardTitle();
 			}
 
 			return false;
