@@ -154,7 +154,7 @@ export class SettingsView {
 
 	private colorizeOvertimeText(value: number) {
 		BlzFrameSetText(BlzGetFrameByName('OvertimeOption', 0), `${OvertimeStrings[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('OvertimePopup', 0), 3), `${OvertimeStrings[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('OvertimePopup', 0), 2), `${OvertimeStrings[value]}`);
 	}
 
 	private promodeBox() {
@@ -174,24 +174,22 @@ export class SettingsView {
 					SettingsContext.getInstance().getSettings().Promode = 1;
 					SettingsContext.getInstance().getSettings().Fog = 1;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 1;
-					SettingsContext.getInstance().getSettings().Overtime.option = 2;
+					SettingsContext.getInstance().getSettings().Overtime.option = 0;
 
 					BlzFrameSetValue(fogFrame, 1);
 					BlzFrameSetEnable(fogFrame, false);
 					BlzFrameSetValue(diploFrame, 1);
 					BlzFrameSetEnable(diploFrame, false);
-					BlzFrameSetValue(overtimeFrame, 2);
+					BlzFrameSetValue(overtimeFrame, 0);
 					BlzFrameSetEnable(overtimeFrame, false);
 				} else {
 					SettingsContext.getInstance().getSettings().Promode = 0;
 					SettingsContext.getInstance().getSettings().Fog = 0;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 0;
-					SettingsContext.getInstance().getSettings().Overtime.option = 0;
 					BlzFrameSetValue(fogFrame, 0);
 					BlzFrameSetEnable(fogFrame, true);
 					BlzFrameSetValue(diploFrame, 0);
 					BlzFrameSetEnable(diploFrame, true);
-					BlzFrameSetValue(overtimeFrame, 0);
 					BlzFrameSetEnable(overtimeFrame, true);
 				}
 

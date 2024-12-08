@@ -47,11 +47,12 @@ export function createGuardButton(config: ButtonConfig): framehandle {
 	BlzFrameSetPoint(tooltipText, FRAMEPOINT_TOPLEFT, button, FRAMEPOINT_BOTTOMLEFT, 0, -0.01);
 	BlzFrameSetEnable(tooltipText, false);
 
-	const str = config.key == OSKEY_F6 ? 'health' : 'value';
+	const str = config.key == OSKEY_F6 ? 'Health' : 'Value';
 
 	BlzFrameSetText(
 		tooltipText,
-		`Sets your preference for unit ${str} when taking possession of a city.` + '\nCurrent preference: ' + `${HexColors.GREEN}` + 'Lowest'
+		`Guard ${str} Preference ${HexColors.TANGERINE}(F6)|r\nSets your preference for unit ${str} when taking possession of a city.\nCurrent preference: ` +
+			`${str === 'Health' ? `${HexColors.RED}Highest` : `${HexColors.GREEN}Lowest`}`
 	);
 
 	const hotkeyTrigger = CreateTrigger();

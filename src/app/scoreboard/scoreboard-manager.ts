@@ -87,7 +87,7 @@ export class ScoreboardManager {
 			ScoreboardManager.getInstance().setTitle(
 				`${NameManager.getInstance().getDisplayName(VictoryManager.getInstance().leader.getPlayer())} ${
 					VictoryManager.getInstance().leader.trackedData.cities.cities.length
-				}/${VictoryManager.CITIES_TO_WIN}${VictoryManager.OVERTIME_MODE ? ` (Turns until overtime: ${VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE})` : ''}`
+				}/${VictoryManager.CITIES_TO_WIN}${VictoryManager.OVERTIME_MODE ? ` (Overtime in: ${VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE})` : ''}`
 			);
 		}
 	}
