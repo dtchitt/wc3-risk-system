@@ -100,6 +100,22 @@ export class VictoryManager {
 		});
 
 		BlzEnableSelections(false, false);
+
+		this.pauseAllUnits();
+
 		this.gameTimer.stop();
+	}
+
+	private pauseAllUnits() {
+		this.players.forEach((player) => {
+			let group: group = CreateGroup();
+			GroupEnumUnitsOfPlayer(group, player.getPlayer(), null);
+			ForGroup(group, () => {
+				const unit = GetEnumUnit();
+				BlzPauseUnitEx(unit, true);
+			});
+			DestroyGroup(group);
+			group = null;
+		});
 	}
 }
