@@ -9,10 +9,10 @@ export interface DiplomacyOptions {
 }
 
 export const DiplomacyStrings: Record<number, string> = {
-	0: `${HexColors.GREEN}FFA`,
-	1: `${HexColors.RED}Lobby Teams`,
-	2: `${HexColors.RED}Random Teams`,
-	3: `${HexColors.RED}Free Ally`,
+	0: `${HexColors.GREEN}FFA|r`,
+	1: `${HexColors.RED}Lobby Teams|r`,
+	2: `${HexColors.RED}Random Teams|r`,
+	3: `${HexColors.RED}Free Ally|r`,
 };
 
 export class DiplomacyStrategy implements SettingsStrategy {

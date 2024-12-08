@@ -1,3 +1,10 @@
+import { SettingsContext } from '../settings/settings-context';
+import { DiplomacyStrings } from '../settings/strategies/diplomacy-strategy';
+import { FogOptions } from '../settings/strategies/fog-strategy';
+import { GameTypeOptions } from '../settings/strategies/game-type-strategy';
+import { OvertimeStrings } from '../settings/strategies/overtime-strategy';
+import { PromodeOptions } from '../settings/strategies/promode-strategy';
+
 /**
  * Responsible for creating in-game quests.
  */
@@ -69,5 +76,20 @@ export class Quests {
 		QuestSetRequired(quest, required);
 		QuestSetDiscovered(quest, true);
 		QuestSetCompleted(quest, false);
+	}
+
+	private static AddQuest(title: string, description: string, icon: string, required: boolean) {
+		Quests.BuildQuest(title, description, icon, required);
+	}
+
+	public static AddSettingsQuest(settings: SettingsContext): void {
+		let description: string = 'Game Settings:';
+		description += `\nDiplomacy: ${DiplomacyStrings[settings.getSettings().Diplomacy.option]}`;
+		description += `\nFog: ${FogOptions[settings.getSettings().Fog]}`;
+		description += `\nGame Type: ${GameTypeOptions[settings.getSettings().GameType]}`;
+		description += `\nOvertime: ${OvertimeStrings[settings.getSettings().Overtime.option]}`;
+		description += `\nPromode: ${PromodeOptions[settings.getSettings().Promode]}`;
+
+		Quests.AddQuest('Settings', description, 'ReplaceableTextures\\CommandButtons\\BTNEngineeringUpgrade.blp', false);
 	}
 }
