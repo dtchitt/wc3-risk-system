@@ -1,4 +1,3 @@
-import { NameManager } from '../managers/names/name-manager';
 import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
@@ -40,7 +39,7 @@ export class StatisticsModel {
 		return this.columns;
 	}
 
-	public getRival(player: ActivePlayer): string {
+	public getRival(player: ActivePlayer): ActivePlayer | null {
 		let rival: ActivePlayer | null = null;
 		let maxKills = 0;
 
@@ -55,11 +54,7 @@ export class StatisticsModel {
 			}
 		});
 
-		if (rival !== null) {
-			return NameManager.getInstance().getDisplayName(rival.getPlayer()).split('#')[0];
-		} else {
-			return 'None';
-		}
+		return rival;
 	}
 
 	private setGameTime() {

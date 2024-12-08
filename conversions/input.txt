@@ -1,0 +1,32 @@
+function PreloadFiles takes nothing returns nothing
+
+	call PreloadStart()
+	call Preload( "#START
+Pikachu#1742,1,100,2160,1488,1.45,Goku#19261
+Orange#14318,2,100,2275,3608,0.63,Goku#19261
+KingofHearts#1691,3,100,1247,755,1.65,LukasCz#21116
+Goku#19261,4,99,7510,7588,0.99,Djinn#2268
+Nordic91#1871,5,99,707,1057,0.67,Orange#14318
+Jamaljunior#1274,6,99," )
+	call Preload( "3125,2570,1.22,SilverHawk#220182
+Djinn#2268,7,98,8070,4828,1.67,Goku#19261
+Prince#13986,8,79,1064,1503,0.71,Pikachu#1742
+SilverHawk#220182,9,68,1688,3226,0.52,Jamaljunior#1274
+LukasCz#21116,10,37,468,660,0.71,KingofHearts#1691
+Cubagua#1203,11,26,319,543,0.59," )
+	call Preload( "Orange#14318
+Ray#24727,12,15,116,138,0.84,Djinn#2268
+Deathwing23#1387,13,12,38,160,0.24,Goku#19261
+razorstrike#21725,14,8,54,114,0.47,Nordic91#1871
+Tramby#21795,15,5,26,35,0.74,Prince#13986
+Extrahammer#219635,16,5,5,11,0.45,KingofHearts#1691
+three6joshua#1477" )
+	call Preload( ",17,4,22,33,0.67,LukasCz#21116
+TheBigHig#2657,18,1,0,0,0.00,Jamaljunior#1274
+Poomonky#1939,19,0,0,0,0.00,KingofHearts#1691
+#END" )
+	call PreloadEnd( 0.0 )
+
+endfunction
+
+

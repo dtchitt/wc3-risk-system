@@ -21,10 +21,10 @@ export class ModeSelection implements GameState {
 	public start(): void {
 		if (NameManager.getInstance().getAcct(Player(23)) == 'RiskBot') {
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
-			settingsContext.getSettings().Promode = 1;
-			settingsContext.getSettings().Fog = 1;
-			settingsContext.getSettings().Diplomacy.option = 1;
-			settingsContext.getSettings().Overtime.option = 1;
+			settingsContext.getSettings().Promode = 0;
+			settingsContext.getSettings().Fog = 0;
+			settingsContext.getSettings().Diplomacy.option = 0;
+      settingsContext.getSettings().Overtime.option = 0;
 			this.ui.hide();
 			this.end();
 		} else {

@@ -23,7 +23,7 @@ export function buildGuardHealthButton(player: ActivePlayer): framehandle {
 			const buttonTooltip = BlzGetFrameByName('GuardButtonToolTip', context);
 			BlzFrameSetText(
 				buttonTooltip,
-				'Sets your preference for unit health when taking possession of a city.\nCurrent preference: ' +
+				`Guard Health Preference ${HexColors.TANGERINE}(F6)\nSets your preference for unit health when taking possession of a city.\nCurrent preference: ` +
 					`${player.options.health ? `${HexColors.RED}Highest` : `${HexColors.GREEN}Lowest`}`
 			);
 		},
@@ -51,7 +51,7 @@ export function buildGuardValueButton(player: ActivePlayer): framehandle {
 			const buttonTooltip = BlzGetFrameByName('GuardButtonToolTip', context);
 			BlzFrameSetText(
 				buttonTooltip,
-				'Sets your preference for unit value when taking possession of a city.\nCurrent preference: ' +
+				`Guard Value Preference ${HexColors.TANGERINE}(F7)\nSets your preference for unit value when taking possession of a city.\nCurrent preference: ` +
 					`${player.options.value ? `${HexColors.RED}Highest` : `${HexColors.GREEN}Lowest`}`
 			);
 		},
