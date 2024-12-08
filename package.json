@@ -12,7 +12,9 @@
     "build:defs": "ts-node scripts/dev"
   },
   "dependencies": {
-    "w3ts": "^3.0.2"
+    "dotenv": "^16.4.7",
+    "w3ts": "^3.0.2",
+    "wc3-ts-template": "file:"
   },
   "devDependencies": {
     "@types/fs-extra": "8.1.1",

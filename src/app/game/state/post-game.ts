@@ -11,7 +11,6 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 import { TreeManager } from '../services/tree-service';
 import { TeamManager } from 'src/app/teams/team-manager';
 import { Wait } from 'src/app/utils/wait';
-import { GameDataWriter } from 'src/app/utils/game-data-writer';
 
 export class PostGame implements GameState {
 	private manager: GameManager;
