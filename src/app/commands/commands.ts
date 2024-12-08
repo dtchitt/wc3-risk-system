@@ -9,6 +9,7 @@ import { HelpCommand } from './help';
 import { MuteCommand } from './mute';
 import { NamesCommand } from './names';
 import { RestartCommand } from './restart';
+import { HowTo } from './turorial';
 import { UICommand } from './ui';
 
 export function SetCommands(gameManager: GameManager) {
@@ -24,4 +25,5 @@ export function SetCommands(gameManager: GameManager) {
 	GoldCommand(chatManager, gameManager, nameManager);
 	HelpCommand(chatManager);
 	UICommand(chatManager);
+	HowTo(chatManager);
 }
