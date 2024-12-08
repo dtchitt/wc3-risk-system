@@ -26,7 +26,10 @@ export function GetStatisticsColumns(model: StatisticsModel): ColumnConfig[] {
 		{
 			size: 0.09,
 			header: 'Biggest Rival',
-			textFunction: (player) => model.getRival(player),
+			textFunction: (player) => {
+				const rival = model.getRival(player);
+				return rival ? NameManager.getInstance().getDisplayName(rival.getPlayer()) : 'null';
+			},
 		},
 		{
 			size: 0.06,

@@ -63,18 +63,30 @@ export class StatisticsController {
 	public writeStatisticsData() {
 		const ranks = this.model.getRanks();
 
-		const data = ranks.map((player) => ({
-			Player: NameManager.getInstance().getBtag(player.getPlayer()),
-			Rank: (ranks.indexOf(player) + 1).toString(),
-			LastTurn: player.trackedData.turnDied.toString(),
-			Kills: player.trackedData.killsDeaths.get(player.getPlayer()).kills.toString(),
-			Deaths: player.trackedData.killsDeaths.get(player.getPlayer()).deaths.toString(),
-			KD: ComputeRatio(
-				player.trackedData.killsDeaths.get(player.getPlayer()).kills,
-				player.trackedData.killsDeaths.get(player.getPlayer()).deaths
-			).toString(),
-			BiggestRival: this.model.getRival(player) === 'None' ? 'null' : this.model.getRival(player),
-		}));
+		const data = ranks.map((player) => {
+			const rivalPlayer = this.model.getRival(player);
+			const rivalBtag = rivalPlayer ? NameManager.getInstance().getBtag(rivalPlayer.getPlayer()) : 'null';
+
+			return {
+				Player: NameManager.getInstance().getBtag(player.getPlayer()),
+				Rank: (ranks.indexOf(player) + 1).toString(),
+				LastTurn: player.trackedData.turnDied.toString(),
+				CitiesEnd: player.trackedData.cities.end.toString(),
+				CitiesMax: player.trackedData.cities.max.toString(),
+				BountyEarned: player.trackedData.bounty.earned.toString(),
+				BonusEarned: player.trackedData.bonus.earned.toString(),
+				GoldEarned: player.trackedData.gold.earned.toString(),
+				GoldMax: player.trackedData.gold.max.toString(),
+				GoldEnd: player.trackedData.gold.end.toString(),
+				Kills: player.trackedData.killsDeaths.get(player.getPlayer()).killValue.toString(),
+				Deaths: player.trackedData.killsDeaths.get(player.getPlayer()).deathValue.toString(),
+				KD: ComputeRatio(
+					player.trackedData.killsDeaths.get(player.getPlayer()).killValue,
+					player.trackedData.killsDeaths.get(player.getPlayer()).deathValue
+				).toString(),
+				BiggestRival: rivalBtag,
+			};
+		});
 
 		GameDataWriter.write(data);
 	}
