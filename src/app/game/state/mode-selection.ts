@@ -3,6 +3,7 @@ import { GameState } from './game-state';
 import { SettingsView } from 'src/app/settings/settings-view';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
+import { Quests } from 'src/app/quests/quests';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
@@ -24,7 +25,7 @@ export class ModeSelection implements GameState {
 			settingsContext.getSettings().Promode = 0;
 			settingsContext.getSettings().Fog = 0;
 			settingsContext.getSettings().Diplomacy.option = 0;
-      settingsContext.getSettings().Overtime.option = 0;
+			settingsContext.getSettings().Overtime.option = 0;
 			this.ui.hide();
 			this.end();
 		} else {
@@ -54,6 +55,14 @@ export class ModeSelection implements GameState {
 		settings.applyStrategy('Diplomacy');
 		settings.applyStrategy('Promode');
 		settings.applyStrategy('Overtime');
+
+		this.setupSettingsQuest();
+
 		this.manager.updateState(this.nextState);
+	}
+
+	private setupSettingsQuest(): void {
+		const settings: SettingsContext = SettingsContext.getInstance();
+		Quests.AddSettingsQuest(settings);
 	}
 }

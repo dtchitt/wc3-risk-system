@@ -7,9 +7,9 @@ export interface OvertimeOptions {
 }
 
 export const OvertimeStrings: Record<number, string> = {
-	0: `${HexColors.GREEN}Off`,
-	1: `${HexColors.RED}Turbo (Turn 30)`,
-	2: `${HexColors.RED}Long (Turn 120)`,
+	0: `${HexColors.GREEN}Off|r`,
+	1: `${HexColors.RED}Turbo (Turn 30)|r`,
+	2: `${HexColors.RED}Long (Turn 120)|r`,
 };
 
 export class OvertimeStrategy implements SettingsStrategy {
