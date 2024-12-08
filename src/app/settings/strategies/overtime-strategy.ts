@@ -7,17 +7,17 @@ export interface OvertimeOptions {
 }
 
 export const OvertimeStrings: Record<number, string> = {
-	0: `${HexColors.GREEN}Turbo (Turn 30)`,
-	1: `${HexColors.RED}Long (Turn 120)`,
-	2: `${HexColors.RED}Off`,
+	0: `${HexColors.GREEN}Off`,
+	1: `${HexColors.RED}Turbo (Turn 30)`,
+	2: `${HexColors.RED}Long (Turn 120)`,
 };
 
 export class OvertimeStrategy implements SettingsStrategy {
 	private readonly overtime: OvertimeOptions;
 	private readonly strategyMap: Map<number, () => void> = new Map([
-		[0, this.handleTurboOption],
-		[1, this.handleLongOption],
-		[2, this.handleOff],
+		[0, this.handleOff],
+		[1, this.handleTurboOption],
+		[2, this.handleLongOption],
 	]);
 
 	constructor(overtime: OvertimeOptions) {
