@@ -10,6 +10,7 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { File } from 'w3ts';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
+import { TURN_DURATION_SECONDS } from 'src/configs/game-settings';
 
 /**
  * TimerService is a class responsible for managing the main game timer.
@@ -29,7 +30,7 @@ export class TimerService implements Resetable {
 	 */
 	public constructor(gameState: GameState) {
 		this._timer = CreateTimer();
-		this._duration = 60;
+		this._duration = TURN_DURATION_SECONDS;
 		this._tick = this._duration;
 		this._turn = 1;
 		this.gameState = gameState;
@@ -45,6 +46,8 @@ export class TimerService implements Resetable {
 			try {
 				if (this._tick == this._duration) {
 					if (this.victoryManager.checkCityVictory()) return false;
+
+					ScoreboardManager.updateScoreboardTitle();
 
 					PlayerManager.getInstance().players.forEach((player) => {
 						if (!player.status.isDead()) {
@@ -62,7 +65,7 @@ export class TimerService implements Resetable {
 								this.victoryManager.leader.trackedData.cities.cities.length
 							}|r cities and needs ${HexColors.RED}${
 								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
-							}|r more to win!`,
+							}|r more to win! ${VictoryManager.OVERTIME_ACTIVE ? ` ${HexColors.RED}(Overtime is active!)|r` : ''}`,
 							'Sound\\Interface\\ItemReceived.flac',
 							4
 						);
@@ -123,5 +126,9 @@ export class TimerService implements Resetable {
 
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${this._turn}`);
+	}
+
+	public getTurns(): number {
+		return this._turn;
 	}
 }
