@@ -46,6 +46,10 @@ export class PostGame implements GameState {
 	public async end() {
 		if (!this.isOver) return;
 
+		print('Resuming units...');
+		await this.unpauseUnits();
+		await Wait.forSeconds(1);
+
 		print('Resetting countries...');
 		await this.resetCountries();
 		await Wait.forSeconds(1);
@@ -82,6 +86,32 @@ export class PostGame implements GameState {
 		this.manager.setRestartEnabled(false);
 		FogEnable(true);
 		this.manager.fastRestart();
+	}
+
+	private unpauseUnits(): Promise<void> {
+		return new Promise((resolve) => {
+			const group: group = CreateGroup();
+
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player = Player(i);
+
+				GroupEnumUnitsOfPlayer(
+					group,
+					player,
+					Filter(() => {
+						const unit: unit = GetFilterUnit();
+						PauseUnit(unit, false);
+						SetUnitInvulnerable(unit, false);
+					})
+				);
+
+				GroupClear(group);
+			}
+
+			DestroyGroup(group);
+
+			resolve();
+		});
 	}
 
 	private removeUnits(): Promise<void> {

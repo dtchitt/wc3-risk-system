@@ -3,6 +3,8 @@ import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_MULTIPLIER, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
+import { PLAYER_SLOTS } from '../utils/utils';
+import { UNIT_TYPE } from '../utils/unit-types';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
@@ -116,6 +118,7 @@ export class VictoryManager {
 
 	public reset() {
 		this.players = [];
+		VictoryManager.OVERTIME_ACTIVE = false;
 	}
 
 	public updateWinTracker() {
@@ -131,5 +134,35 @@ export class VictoryManager {
 
 		BlzEnableSelections(false, false);
 		this.gameTimer.stop();
+
+		this.pauseAllUnits();
+	}
+
+	private pauseAllUnits() {
+		const group: group = CreateGroup();
+
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player = Player(i);
+
+			GroupEnumUnitsOfPlayer(
+				group,
+				player,
+				Filter(() => {
+					const unit: unit = GetFilterUnit();
+
+					// Cancels units in training by changing ownership
+					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
+						SetUnitOwner(unit, Player((i + 1) % PLAYER_SLOTS), false);
+						SetUnitOwner(unit, player, false);
+					}
+					PauseUnit(unit, true);
+
+					// Prevents neutral buildings from attacking post-game
+					SetUnitInvulnerable(unit, true);
+				})
+			);
+			DestroyGroup(group);
+		}
+		GroupClear(group);
 	}
 }
