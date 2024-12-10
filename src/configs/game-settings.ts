@@ -9,4 +9,4 @@ export const STARTING_INCOME: number = 4;
 export const TURN_DURATION_SECONDS: number = 60;
 
 //This represents the drop in required cities to win each turn. Default is 1.
-export const OVERTIME_MODIFIER: number = 1;
+export const OVERTIME_MODIFIER: number = 5;
