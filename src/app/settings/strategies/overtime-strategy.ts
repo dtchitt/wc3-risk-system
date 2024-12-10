@@ -10,7 +10,7 @@ export const OvertimeStrings: Record<number, string> = {
 	0: `${HexColors.GREEN}Off|r`,
 	1: `${HexColors.RED}Turbo (Turn 30)|r`,
 	2: `${HexColors.RED}Medium (Turn 60)|r`,
-	3: `${HexColors.RED}Long (Turn 120)|r`,
+	3: `${HexColors.RED}Extended (Turn 120)|r`,
 };
 
 export class OvertimeStrategy implements SettingsStrategy {
@@ -19,7 +19,7 @@ export class OvertimeStrategy implements SettingsStrategy {
 		[0, this.handleOff],
 		[1, this.handleTurboOption],
 		[2, this.handleMediumOption],
-		[3, this.handleLongOption],
+		[3, this.handleExtendedOption],
 	]);
 
 	constructor(overtime: OvertimeOptions) {
@@ -43,7 +43,7 @@ export class OvertimeStrategy implements SettingsStrategy {
 		VictoryManager.OVERTIME_MODE = true;
 	}
 
-	private handleLongOption(): void {
+	private handleExtendedOption(): void {
 		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 120;
 		VictoryManager.OVERTIME_MODE = true;
 	}

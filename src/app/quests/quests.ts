@@ -64,7 +64,7 @@ export class Quests {
 		description += '\n1. Off: Overtime is disabled, keeping the default victory conditions.';
 		description += '\n2. Turbo Mode: Overtime begins at turn 30, accelerating the game pace early on.';
 		description += '\n3. Medium Mode: Overtime starts at turn 60, allowing for a long gameplay before the mechanic activates.';
-		description += '\n4. Long Form Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
+		description += '\n4. Extended Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
 
 		description += '\nThis system ensures flexibility and adaptability based on player preferences.';
 
