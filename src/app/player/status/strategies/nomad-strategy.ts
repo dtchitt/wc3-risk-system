@@ -1,3 +1,4 @@
+import { TURN_DURATION_SECONDS } from 'src/configs/game-settings';
 import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
@@ -12,7 +13,7 @@ export class NomadStrategy implements StatusStrategy {
 
 		const tick: number = 1;
 		const nomadTimer: timer = CreateTimer();
-		gamePlayer.status.statusDuration = 60;
+		gamePlayer.status.statusDuration = TURN_DURATION_SECONDS;
 
 		TimerStart(nomadTimer, tick, true, () => {
 			if (!gamePlayer.status.isAlive() && gamePlayer.trackedData.cities.cities.length >= 1) {

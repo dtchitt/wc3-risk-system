@@ -1,3 +1,4 @@
+import { TURN_DURATION_SECONDS } from 'src/configs/game-settings';
 import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
@@ -58,7 +59,7 @@ export class StatisticsModel {
 	}
 
 	private setGameTime() {
-		const turnTime: number = 60;
+		const turnTime: number = TURN_DURATION_SECONDS;
 		const minutes: number = parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0))) - 1;
 		const seconds: number = turnTime - parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarUpkeepText', 0)));
 		const hours: number = Math.floor(minutes / turnTime);
