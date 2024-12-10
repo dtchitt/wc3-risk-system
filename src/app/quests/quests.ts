@@ -59,10 +59,10 @@ export class Quests {
 
 	private static OvertimeDescription() {
 		let description: string =
-			'Overtime is a feature designed to help conclude games more efficiently by gradually reducing the number of cities required for victory. Once activated, each turn decreases the victory threshold by one city until a player wins.';
+			'Overtime is a feature designed to help conclude games more efficiently by gradually reducing the number of cities required for victory. Once activated, each turn decreases the victory threshold by 5 city until a player wins.';
 		description += '\nThere are three Overtime settings:';
 		description += '\n1. Turbo Mode: Overtime begins at turn 30, accelerating the game pace early on.';
-		description += '\n2. Long Form Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
+		description += '\n2. Extended Form Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
 		description += '\n3. Off: Overtime is disabled, keeping the default victory conditions.';
 		description += '\nThis system ensures flexibility and adaptability based on player preferences.';
 
