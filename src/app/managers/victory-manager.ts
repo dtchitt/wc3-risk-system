@@ -116,6 +116,7 @@ export class VictoryManager {
 
 	public reset() {
 		this.players = [];
+		VictoryManager.OVERTIME_ACTIVE = false;
 	}
 
 	public updateWinTracker() {
