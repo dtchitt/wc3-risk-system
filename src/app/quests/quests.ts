@@ -60,10 +60,12 @@ export class Quests {
 	private static OvertimeDescription() {
 		let description: string =
 			'Overtime is a feature designed to help conclude games more efficiently by gradually reducing the number of cities required for victory. Once activated, each turn decreases the victory threshold by one city until a player wins.';
-		description += '\nThere are three Overtime settings:';
-		description += '\n1. Turbo Mode: Overtime begins at turn 30, accelerating the game pace early on.';
-		description += '\n2. Long Form Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
-		description += '\n3. Off: Overtime is disabled, keeping the default victory conditions.';
+		description += '\nThere are four Overtime settings:';
+		description += '\n1. Off: Overtime is disabled, keeping the default victory conditions.';
+		description += '\n2. Turbo Mode: Overtime begins at turn 30, accelerating the game pace early on.';
+		description += '\n3. Medium Mode: Overtime starts at turn 60, allowing for a long gameplay before the mechanic activates.';
+		description += '\n4. Extended Mode: Overtime starts at turn 120, allowing for extended gameplay before the mechanic activates.';
+
 		description += '\nThis system ensures flexibility and adaptability based on player preferences.';
 
 		Quests.BuildQuest('Overtime Explained', description, 'ReplaceableTextures\\CommandButtons\\BTNSorceressMaster.blp', true);
