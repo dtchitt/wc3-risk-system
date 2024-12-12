@@ -14,6 +14,7 @@ export class VictoryManager {
 	public static OVERTIME_ACTIVE_AT_TURN: number;
 	public static OVERTIME_TOTAL_TURNS: number = 0;
 	public static OVERTIME_TURNS_UNTIL_ACTIVE: number = 0;
+	public static GAME_ENDED = false;
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -119,6 +120,7 @@ export class VictoryManager {
 	public reset() {
 		this.players = [];
 		VictoryManager.OVERTIME_ACTIVE = false;
+		VictoryManager.GAME_ENDED = false;
 	}
 
 	public updateWinTracker() {
@@ -126,6 +128,7 @@ export class VictoryManager {
 	}
 
 	private endGame() {
+		VictoryManager.GAME_ENDED = true;
 		this.players.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();

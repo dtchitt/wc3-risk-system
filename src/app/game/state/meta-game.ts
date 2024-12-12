@@ -74,7 +74,6 @@ export class MetaGame implements GameState {
 					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), false);
 					EnableSelect(true, true);
 					EnableDragSelect(true, true);
-					this.timer.reset();
 					this.timer.start();
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 				}

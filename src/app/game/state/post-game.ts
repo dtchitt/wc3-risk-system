@@ -46,14 +46,14 @@ export class PostGame implements GameState {
 	public async end() {
 		if (!this.isOver) return;
 
-		print('Resetting countries...');
-		await this.resetCountries();
-		await Wait.forSeconds(1);
 		print('Removing units...');
 		await this.removeUnits();
 		await Wait.forSeconds(1);
 		print('Resuming units...');
 		await this.resumingUnits();
+		await Wait.forSeconds(1);
+		print('Resetting countries...');
+		await this.resetCountries();
 		await Wait.forSeconds(1);
 		// print('Resetting regions...');
 		// await this.resetRegions();
