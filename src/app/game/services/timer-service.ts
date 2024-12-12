@@ -42,6 +42,7 @@ export class TimerService implements Resetable {
 	 * Starts the timer and begins the game logic for each tick.
 	 */
 	public start(): void {
+		this.reset();
 		TimerStart(this._timer, 1, true, () => {
 			try {
 				if (this._tick == this._duration) {

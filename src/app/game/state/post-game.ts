@@ -46,11 +46,14 @@ export class PostGame implements GameState {
 	public async end() {
 		if (!this.isOver) return;
 
-		print('Resetting countries...');
-		await this.resetCountries();
-		await Wait.forSeconds(1);
 		print('Removing units...');
 		await this.removeUnits();
+		await Wait.forSeconds(1);
+		print('Resuming units...');
+		await this.resumingUnits();
+		await Wait.forSeconds(1);
+		print('Resetting countries...');
+		await this.resetCountries();
 		await Wait.forSeconds(1);
 		// print('Resetting regions...');
 		// await this.resetRegions();
@@ -82,6 +85,34 @@ export class PostGame implements GameState {
 		this.manager.setRestartEnabled(false);
 		FogEnable(true);
 		this.manager.fastRestart();
+	}
+
+	private resumingUnits(): Promise<void> {
+		return new Promise((resolve) => {
+			const group: group = CreateGroup();
+
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player = Player(i);
+
+				GroupEnumUnitsOfPlayer(
+					group,
+					player,
+					Filter(() => {
+						const unit: unit = GetFilterUnit();
+						PauseUnit(unit, false);
+						if (!IsUnitType(unit, UNIT_TYPE.BUILDING)) {
+							SetUnitInvulnerable(unit, false);
+						}
+					})
+				);
+
+				GroupClear(group);
+			}
+
+			DestroyGroup(group);
+
+			resolve();
+		});
 	}
 
 	private removeUnits(): Promise<void> {

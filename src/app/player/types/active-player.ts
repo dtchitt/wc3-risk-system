@@ -5,6 +5,7 @@ import { Status } from '../status/status';
 import { GamePlayer } from './game-player';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { PLAYER_STATUS } from '../status/status-enum';
+import { VictoryManager } from 'src/app/managers/victory-manager';
 
 //Use lowercase for simplicity here
 const adminList: string[] = ['forlolz#11696', 'poomonky#1939', 'theredbeard#11245', 'easterbunny#2707'];
@@ -55,6 +56,8 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 	}
 
 	public giveGold(val?: number): void {
+		if (VictoryManager.GAME_ENDED) return;
+
 		if (!val) val = this.trackedData.income.income;
 
 		SetPlayerState(this._player, PLAYER_STATE_RESOURCE_GOLD, GetPlayerState(this._player, PLAYER_STATE_RESOURCE_GOLD) + val);
