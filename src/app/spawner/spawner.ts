@@ -44,7 +44,7 @@ export class Spawner implements Resetable, Ownable {
 	public step() {
 		if (this.getOwner() == NEUTRAL_HOSTILE) return;
 		if (GetPlayerSlotState(this.getOwner()) != PLAYER_SLOT_STATE_PLAYING) return;
-		if (VictoryManager.GAME_ENDED) return;
+		if (VictoryManager.GAME_VICTORY_STATE == 'DECIDED') return;
 
 		const spawnCount: number = this.spawnMap.get(this.getOwner()).length;
 

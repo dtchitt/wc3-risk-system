@@ -56,7 +56,7 @@ export abstract class ActivePlayer implements GamePlayer, Resetable {
 	}
 
 	public giveGold(val?: number): void {
-		if (VictoryManager.GAME_ENDED) return;
+		if (VictoryManager.GAME_VICTORY_STATE == 'DECIDED') return;
 
 		if (!val) val = this.trackedData.income.income;
 

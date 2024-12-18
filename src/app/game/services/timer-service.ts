@@ -1,6 +1,6 @@
 import { StringToCountry } from 'src/app/country/country-map';
 import { Resetable } from 'src/app/interfaces/resetable';
-import { VictoryManager } from 'src/app/managers/victory-manager';
+import { VictoryManager, VictoryProgressState } from 'src/app/managers/victory-manager';
 import { TrackedData } from 'src/app/player/data/tracked-data';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
@@ -10,8 +10,8 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { File } from 'w3ts';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
-import { TURN_DURATION_SECONDS } from 'src/configs/game-settings';
-
+import { CITIES_TO_WIN_WARNING_RATIO, TURN_DURATION_SECONDS } from 'src/configs/game-settings';
+import { ActivePlayer } from 'src/app/player/types/active-player';
 /**
  * TimerService is a class responsible for managing the main game timer.
  * It implements the Resetable interface.
@@ -46,7 +46,12 @@ export class TimerService implements Resetable {
 		TimerStart(this._timer, 1, true, () => {
 			try {
 				if (this._tick == this._duration) {
-					if (this.victoryManager.checkCityVictory()) return false;
+					let state = this.victoryManager.updateAndGetGameState();
+
+					if (state == 'DECIDED') {
+						this.victoryManager.endGame();
+						return false;
+					}
 
 					ScoreboardManager.updateScoreboardTitle();
 
@@ -60,17 +65,7 @@ export class TimerService implements Resetable {
 						country.getSpawn().step();
 					});
 
-					if (this.victoryManager.leader.trackedData.cities.cities.length >= Math.floor(VictoryManager.CITIES_TO_WIN * 0.7)) {
-						GlobalMessage(
-							`${NameManager.getInstance().getDisplayName(this.victoryManager.leader.getPlayer())} owns ${HexColors.RED}${
-								this.victoryManager.leader.trackedData.cities.cities.length
-							}|r cities and needs ${HexColors.RED}${
-								VictoryManager.CITIES_TO_WIN - this.victoryManager.leader.trackedData.cities.cities.length
-							}|r more to win! ${VictoryManager.OVERTIME_ACTIVE ? ` ${HexColors.RED}(Overtime is active!)|r` : ''}`,
-							'Sound\\Interface\\ItemReceived.flac',
-							4
-						);
-					}
+					this.messageGameState(state);
 
 					ScoreboardManager.getInstance().updateFull();
 				} else {
@@ -90,6 +85,35 @@ export class TimerService implements Resetable {
 				print('Error in Timer ' + error);
 			}
 		});
+	}
+
+	private messageGameState(state: VictoryProgressState) {
+		let playersToAnnounce = this.victoryManager.getFrontRunnersByThreshold(VictoryManager.CITIES_TO_WIN * CITIES_TO_WIN_WARNING_RATIO);
+
+		if (playersToAnnounce.length == 0) return;
+
+		function cityCountDescription(candidate: ActivePlayer, state: VictoryProgressState) {
+			if (state == 'TIE' && candidate.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
+				return `is ${HexColors.RED}TIED|r to win!`;
+			} else {
+				return `needs ${HexColors.RED}${VictoryManager.CITIES_TO_WIN - candidate.trackedData.cities.cities.length}|r more to win!`;
+			}
+		}
+
+		function announceCandidate(candidate: ActivePlayer, state: VictoryProgressState): string {
+			let line = `${NameManager.getInstance().getDisplayName(candidate.getPlayer())} owns ${HexColors.RED}${
+				candidate.trackedData.cities.cities.length
+			}|r cities and ${cityCountDescription(candidate, state)}`;
+
+			return line;
+		}
+
+		const tiedMessage =
+			state == 'TIE' ? `${VictoryManager.OVERTIME_ACTIVE ? `${HexColors.RED}TIED!\nGAME EXTENDED BY ONE ROUND!|r` : ''}` : '';
+		const overtimeMessage = VictoryManager.OVERTIME_ACTIVE ? `${HexColors.RED}OVERTIME!|r` : '';
+		const playerMessages = playersToAnnounce.map((player) => announceCandidate(player, state)).join('\n');
+
+		GlobalMessage([tiedMessage, overtimeMessage, playerMessages].join('\n\n'), 'Sound\\Interface\\ItemReceived.flac', 4);
 	}
 
 	/**
