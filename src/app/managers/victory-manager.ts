@@ -157,8 +157,9 @@ export class VictoryManager {
 					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
 						SetUnitOwner(unit, Player((i + 1) % PLAYER_SLOTS), false);
 						SetUnitOwner(unit, player, false);
+					} else {
+						PauseUnit(unit, true);
 					}
-					PauseUnit(unit, true);
 
 					// Prevents neutral buildings from attacking post-game
 					SetUnitInvulnerable(unit, true);

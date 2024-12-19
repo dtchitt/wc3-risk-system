@@ -99,9 +99,8 @@ export class PostGame implements GameState {
 					player,
 					Filter(() => {
 						const unit: unit = GetFilterUnit();
-						PauseUnit(unit, false);
-						if (!IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-							SetUnitInvulnerable(unit, false);
+						if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
+							PauseUnit(unit, false);
 						}
 					})
 				);
