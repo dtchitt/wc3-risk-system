@@ -3,7 +3,7 @@ import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
-import { PLAYER_SLOTS } from '../utils/utils';
+import { NEUTRAL_HOSTILE, PLAYER_SLOTS } from '../utils/utils';
 import { UNIT_TYPE } from '../utils/unit-types';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
@@ -76,7 +76,8 @@ export class VictoryManager {
 	}
 
 	public victors(): ActivePlayer[] {
-		let potentialVictors = this.getFrontRunnersByThreshold(1);
+		let potentialVictors = this.players.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
+
 		if (potentialVictors.length == 0) {
 			return [];
 		}
