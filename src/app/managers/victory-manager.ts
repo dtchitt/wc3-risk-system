@@ -1,10 +1,12 @@
 import { ActivePlayer } from '../player/types/active-player';
 import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
-import { CITIES_TO_WIN_MULTIPLIER, OVERTIME_MODIFIER } from 'src/configs/game-settings';
+import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 import { NEUTRAL_HOSTILE, PLAYER_SLOTS } from '../utils/utils';
 import { UNIT_TYPE } from '../utils/unit-types';
+
+export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
 
 export class VictoryManager {
 	private static instance: VictoryManager;
@@ -14,7 +16,7 @@ export class VictoryManager {
 	public static OVERTIME_ACTIVE_AT_TURN: number;
 	public static OVERTIME_TOTAL_TURNS: number = 0;
 	public static OVERTIME_TURNS_UNTIL_ACTIVE: number = 0;
-	public static GAME_ENDED = false;
+	public static GAME_VICTORY_STATE: VictoryProgressState = 'UNDECIDED';
 
 	private _leader: ActivePlayer;
 	private players: ActivePlayer[];
@@ -26,7 +28,7 @@ export class VictoryManager {
 		this.winTracker = new WinTracker();
 
 		// since gameTimer is not set yet and CalculateCitiesToWin relies on the gameTimer, we need to manually set the cities to win
-		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
+		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_RATIO);
 
 		VictoryManager.OVERTIME_ACTIVE = false;
 		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
@@ -67,22 +69,40 @@ export class VictoryManager {
 	public get leader(): ActivePlayer {
 		return this._leader;
 	}
-
-	public checkCityVictory(): boolean {
-		this.updateCityToWin();
-
-		this.players.forEach((player) => {
-			if (player.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN) {
-				this._leader = player;
-				this.endGame();
-				return true;
-			}
-		});
-
-		return false;
+	public getFrontRunnersByThreshold(threshold: number): ActivePlayer[] {
+		return this.players
+			.filter((player) => player.trackedData.cities.cities.length >= threshold)
+			.sort((player) => player.trackedData.cities.cities.length);
 	}
 
-	public updateCityToWin() {
+	public victors(): ActivePlayer[] {
+		let potentialVictors = this.players.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
+
+		if (potentialVictors.length == 0) {
+			return [];
+		}
+
+		let max = potentialVictors.sort((x) => x.trackedData.cities.cities.length)[0].trackedData.cities.cities.length;
+		return potentialVictors.filter((x) => x.trackedData.cities.cities.length == max);
+	}
+
+	public updateAndGetGameState(): VictoryProgressState {
+		this.updateRequiredCityCount();
+
+		let playerWinCandidates = this.victors();
+
+		if (playerWinCandidates.length == 0) {
+			VictoryManager.GAME_VICTORY_STATE = 'UNDECIDED';
+		} else if (playerWinCandidates.length == 1) {
+			VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
+		} else {
+			VictoryManager.GAME_VICTORY_STATE = 'TIE';
+		}
+
+		return VictoryManager.GAME_VICTORY_STATE;
+	}
+
+	public updateRequiredCityCount() {
 		VictoryManager.CITIES_TO_WIN = this.calculateCitiesToWin();
 	}
 
@@ -94,10 +114,10 @@ export class VictoryManager {
 
 		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.OVERTIME_ACTIVE_AT_TURN) {
 			VictoryManager.OVERTIME_ACTIVE = true;
-			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER) - OVERTIME_MODIFIER * VictoryManager.OVERTIME_TOTAL_TURNS;
+			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_RATIO) - OVERTIME_MODIFIER * VictoryManager.OVERTIME_TOTAL_TURNS;
 		}
 
-		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_MULTIPLIER);
+		return Math.ceil(RegionToCity.size * CITIES_TO_WIN_RATIO);
 	}
 
 	public checkKnockOutVictory(): boolean {
@@ -119,16 +139,17 @@ export class VictoryManager {
 
 	public reset() {
 		this.players = [];
+		this._leader = null;
 		VictoryManager.OVERTIME_ACTIVE = false;
-		VictoryManager.GAME_ENDED = false;
+		VictoryManager.GAME_VICTORY_STATE = 'UNDECIDED';
 	}
 
 	public updateWinTracker() {
 		this.winTracker.addWinForEntity(this._leader.getPlayer());
 	}
 
-	private endGame() {
-		VictoryManager.GAME_ENDED = true;
+	public endGame() {
+		VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
 		this.players.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
