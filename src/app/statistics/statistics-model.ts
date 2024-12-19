@@ -5,6 +5,7 @@ import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
+import { MAP_VERSION } from '../utils/map-info';
 
 export class StatisticsModel {
 	private timePlayed: string;
@@ -67,7 +68,7 @@ export class StatisticsModel {
 		const formattedTime: string = `${AddLeadingZero(hours)}:${AddLeadingZero(remainingMinutes)}:${AddLeadingZero(seconds)}`;
 		const totalTurns: number = minutes + seconds / turnTime;
 
-		this.timePlayed = `${HexColors.TANGERINE}Game Time:|r ${formattedTime}\n${HexColors.TANGERINE}Total Turns:|r ${totalTurns.toFixed(2)}`;
+		this.timePlayed = `${HexColors.TANGERINE}Game Time:|r ${formattedTime}\n${HexColors.TANGERINE}Total Turns:|r ${totalTurns.toFixed(2)}\n${HexColors.TANGERINE}Version:|r v${MAP_VERSION}`;
 	}
 
 	private sortPlayersByRank(players: ActivePlayer[], winner: ActivePlayer) {
