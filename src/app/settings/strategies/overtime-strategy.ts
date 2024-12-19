@@ -34,7 +34,7 @@ export class OvertimeStrategy implements SettingsStrategy {
 	}
 
 	private handleTurboOption(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 30;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 10;
 		VictoryManager.OVERTIME_MODE = true;
 	}
 
