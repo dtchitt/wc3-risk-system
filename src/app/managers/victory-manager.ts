@@ -164,30 +164,29 @@ export class VictoryManager {
 
 	private pauseAllUnits() {
 		const group: group = CreateGroup();
-
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = Player(i);
+		this.players.forEach((player) => {
+			const activePlayer = player.getPlayer();
 
 			GroupEnumUnitsOfPlayer(
 				group,
-				player,
+				activePlayer,
 				Filter(() => {
 					const unit: unit = GetFilterUnit();
 
 					// Cancels units in training by changing ownership
 					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
 						SetUnitOwner(unit, NEUTRAL_HOSTILE, false);
-						SetUnitOwner(unit, player, false);
-					} else {
-						PauseUnit(unit, true);
+						SetUnitOwner(unit, activePlayer, false);
 					}
 
 					// Prevents neutral buildings from attacking post-game
+					IssueImmediateOrder(unit, 'holdposition');
 					SetUnitInvulnerable(unit, true);
 				})
 			);
 			DestroyGroup(group);
-		}
+		});
+
 		GroupClear(group);
 	}
 }
