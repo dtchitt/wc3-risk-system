@@ -1,5 +1,4 @@
 import { File } from 'w3ts';
-import { Wait } from '../wait';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { ShuffleArray } from '../utils';
