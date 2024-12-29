@@ -1,4 +1,5 @@
 import { NameManager } from '../managers/names/name-manager';
+import { ExportParticipantList } from '../utils/export-statistics/export-participant-list';
 import { GameDataWriter } from '../utils/game-data-writer';
 import { ComputeRatio } from '../utils/utils';
 import { StatisticsModel } from './statistics-model';
@@ -89,5 +90,9 @@ export class StatisticsController {
 		});
 
 		GameDataWriter.write(data);
+	}
+
+	public writeInit() {
+		ExportParticipantList.write();
 	}
 }
