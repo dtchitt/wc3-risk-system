@@ -7,8 +7,13 @@ import { SettingsStrategy } from './settings-strategy';
 import { HexColors } from 'src/app/utils/hex-colors';
 
 export const PromodeOptions: Record<number, string> = {
-	0: `${HexColors.GREEN}Off|r`,
-	1: `${HexColors.RED}On|r`,
+	0: `Off`,
+	1: `On`,
+};
+
+export const PromodeOptionsColorFormatted: Record<number, string> = {
+	0: `${HexColors.GREEN}${PromodeOptions[0]}|r`,
+	1: `${HexColors.RED}${PromodeOptions[1]}|r`,
 };
 
 export class PromodeStrategy implements SettingsStrategy {

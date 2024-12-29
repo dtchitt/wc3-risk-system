@@ -1,10 +1,10 @@
 import { HexColors } from '../utils/hex-colors';
 import { SettingsContext } from './settings-context';
-import { DiplomacyStrings } from './strategies/diplomacy-strategy';
-import { FogOptions } from './strategies/fog-strategy';
-import { GameTypeOptions } from './strategies/game-type-strategy';
-import { OvertimeStrings } from './strategies/overtime-strategy';
-import { PromodeOptions } from './strategies/promode-strategy';
+import { DiplomacyStringsColorFormatted } from './strategies/diplomacy-strategy';
+import { FogOptionsColorFormatted } from './strategies/fog-strategy';
+import { GameTypeOptionsColorFormatted } from './strategies/game-type-strategy';
+import { OvertimeStringsColorFormatted } from './strategies/overtime-strategy';
+import { PromodeOptionsColorFormatted } from './strategies/promode-strategy';
 
 export class SettingsView {
 	private backdrop: framehandle;
@@ -87,8 +87,8 @@ export class SettingsView {
 	}
 
 	private colorizeGameTypeText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('GameTypeOption', 0), `${GameTypeOptions[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('GameTypePopup', 0), 2), `${GameTypeOptions[value]}`);
+		BlzFrameSetText(BlzGetFrameByName('GameTypeOption', 0), `${GameTypeOptionsColorFormatted[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('GameTypePopup', 0), 2), `${GameTypeOptionsColorFormatted[value]}`);
 	}
 
 	private fogPopup() {
@@ -109,8 +109,8 @@ export class SettingsView {
 	}
 
 	private colorizeFogText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('FogOption', 0), `${FogOptions[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('FogPopup', 0), 2), `${FogOptions[value]}`);
+		BlzFrameSetText(BlzGetFrameByName('FogOption', 0), `${FogOptionsColorFormatted[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('FogPopup', 0), 2), `${FogOptionsColorFormatted[value]}`);
 	}
 
 	private diplomacyPopup() {
@@ -131,8 +131,8 @@ export class SettingsView {
 	}
 
 	private colorizeDiplomacyText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('DiplomacyOption', 0), `${DiplomacyStrings[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('DiplomacyPopup', 0), 2), `${DiplomacyStrings[value]}`);
+		BlzFrameSetText(BlzGetFrameByName('DiplomacyOption', 0), `${DiplomacyStringsColorFormatted[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('DiplomacyPopup', 0), 2), `${DiplomacyStringsColorFormatted[value]}`);
 	}
 
 	private overtimePopup() {
@@ -153,8 +153,8 @@ export class SettingsView {
 	}
 
 	private colorizeOvertimeText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('OvertimeOption', 0), `${OvertimeStrings[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('OvertimePopup', 0), 2), `${OvertimeStrings[value]}`);
+		BlzFrameSetText(BlzGetFrameByName('OvertimeOption', 0), `${OvertimeStringsColorFormatted[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('OvertimePopup', 0), 2), `${OvertimeStringsColorFormatted[value]}`);
 	}
 
 	private promodeBox() {
@@ -196,11 +196,11 @@ export class SettingsView {
 				this.colorizeFogText(BlzFrameGetValue(fogFrame));
 				this.colorizeDiplomacyText(BlzFrameGetValue(diploFrame));
 				this.colorizeOvertimeText(BlzFrameGetValue(overtimeFrame));
-				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsContext.getInstance().getSettings().Promode]}`);
+				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`);
 			})
 		);
 
-		BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptions[SettingsContext.getInstance().getSettings().Promode]}`);
+		BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`);
 	}
 
 	private hostSetup() {
