@@ -1,9 +1,9 @@
 import { SettingsContext } from '../settings/settings-context';
-import { DiplomacyStrings } from '../settings/strategies/diplomacy-strategy';
-import { FogOptions } from '../settings/strategies/fog-strategy';
-import { GameTypeOptions } from '../settings/strategies/game-type-strategy';
-import { OvertimeStrings } from '../settings/strategies/overtime-strategy';
-import { PromodeOptions } from '../settings/strategies/promode-strategy';
+import { DiplomacyStringsColorFormatted } from '../settings/strategies/diplomacy-strategy';
+import { FogOptionsColorFormatted } from '../settings/strategies/fog-strategy';
+import { GameTypeOptionsColorFormatted } from '../settings/strategies/game-type-strategy';
+import { OvertimeStringsColorFormatted } from '../settings/strategies/overtime-strategy';
+import { PromodeOptionsColorFormatted } from '../settings/strategies/promode-strategy';
 
 /**
  * Responsible for creating in-game quests.
@@ -104,11 +104,11 @@ export class Quests {
 
 	public static AddSettingsQuest(settings: SettingsContext): void {
 		let description: string = 'Game Settings:';
-		description += `\nDiplomacy: ${DiplomacyStrings[settings.getSettings().Diplomacy.option]}`;
-		description += `\nFog: ${FogOptions[settings.getSettings().Fog]}`;
-		description += `\nGame Type: ${GameTypeOptions[settings.getSettings().GameType]}`;
-		description += `\nOvertime: ${OvertimeStrings[settings.getSettings().Overtime.option]}`;
-		description += `\nPromode: ${PromodeOptions[settings.getSettings().Promode]}`;
+		description += `\nDiplomacy: ${DiplomacyStringsColorFormatted[settings.getSettings().Diplomacy.option]}`;
+		description += `\nFog: ${FogOptionsColorFormatted[settings.getSettings().Fog]}`;
+		description += `\nGame Type: ${GameTypeOptionsColorFormatted[settings.getSettings().GameType]}`;
+		description += `\nOvertime: ${OvertimeStringsColorFormatted[settings.getSettings().Overtime.option]}`;
+		description += `\nPromode: ${PromodeOptionsColorFormatted[settings.getSettings().Promode]}`;
 
 		Quests.AddQuest('Settings', description, 'ReplaceableTextures\\CommandButtons\\BTNEngineeringUpgrade.blp', false);
 	}

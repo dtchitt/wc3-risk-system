@@ -2,9 +2,15 @@ import { SettingsStrategy } from './settings-strategy';
 import { HexColors } from 'src/app/utils/hex-colors';
 
 export const FogOptions: Record<number, string> = {
-	0: `${HexColors.GREEN}Off|r`,
-	1: `${HexColors.RED}On|r`,
-	2: `${HexColors.RED}Night|r`,
+	0: `Off`,
+	1: `On`,
+	2: `Night`,
+};
+
+export const FogOptionsColorFormatted: Record<number, string> = {
+	0: `${HexColors.GREEN}${FogOptions[0]}|r`,
+	1: `${HexColors.RED}${FogOptions[1]}|r`,
+	2: `${HexColors.RED}${FogOptions[2]}|r`,
 };
 
 export class FogStrategy implements SettingsStrategy {

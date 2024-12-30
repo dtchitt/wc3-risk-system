@@ -9,10 +9,17 @@ export interface DiplomacyOptions {
 }
 
 export const DiplomacyStrings: Record<number, string> = {
-	0: `${HexColors.GREEN}FFA|r`,
-	1: `${HexColors.RED}Lobby Teams|r`,
-	2: `${HexColors.RED}Random Teams|r`,
-	3: `${HexColors.RED}Free Ally|r`,
+	0: `FFA`,
+	1: `Lobby Teams`,
+	2: `Random Teams`,
+	3: `Free Ally`,
+};
+
+export const DiplomacyStringsColorFormatted: Record<number, string> = {
+	0: `${HexColors.GREEN}${DiplomacyStrings[0]}|r`,
+	1: `${HexColors.RED}${DiplomacyStrings[1]}|r`,
+	2: `${HexColors.RED}${DiplomacyStrings[2]}|r`,
+	3: `${HexColors.RED}${DiplomacyStrings[3]}|r`,
 };
 
 export class DiplomacyStrategy implements SettingsStrategy {

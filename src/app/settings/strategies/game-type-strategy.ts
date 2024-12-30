@@ -2,8 +2,13 @@ import { HexColors } from 'src/app/utils/hex-colors';
 import { SettingsStrategy } from './settings-strategy';
 
 export const GameTypeOptions: Record<number, string> = {
-	0: `${HexColors.GREEN}Standard|r`,
-	1: `${HexColors.GREEN}Capitals|r`,
+	0: `Standard`,
+	1: `Capitals`,
+};
+
+export const GameTypeOptionsColorFormatted: Record<number, string> = {
+	0: `${HexColors.GREEN}${GameTypeOptions[0]}|r`,
+	1: `${HexColors.RED}${GameTypeOptions[1]}|r`,
 };
 
 export class GameTypeStrategy implements SettingsStrategy {
