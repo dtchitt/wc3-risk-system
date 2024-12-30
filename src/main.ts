@@ -23,6 +23,7 @@ import CameraManager from './app/managers/camera-manager';
 import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { SetCommands } from './app/commands/commands';
+import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-shuffled-player-list';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -93,6 +94,9 @@ function tsMain() {
 
 		//Create Quests
 		Quests.Create();
+
+		//Export statistics
+		ExportShuffledPlayerList.write();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
