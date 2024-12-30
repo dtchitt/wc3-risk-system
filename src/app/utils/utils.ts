@@ -4,6 +4,14 @@ export const NEUTRAL_HOSTILE: player = Player(PLAYER_NEUTRAL_AGGRESSIVE);
 /** The number of player slots in the game, excluding neutral players. */
 export const PLAYER_SLOTS: number = bj_MAX_PLAYERS - 1;
 
+export const CUSTOM_MAP_DATA_MINE_TYPE_TXT: string = 'txt';
+
+/** The root risk folder inside CustomMapData directory */
+export const CUSTOM_MAP_DATA_RISK_DIRECTORY: string = 'risk';
+
+/** The unique match name inside CustomMapData/risk directory */
+export const CUSTOM_MAP_DATA_MATCH_DIRECTORY: string = `${CUSTOM_MAP_DATA_RISK_DIRECTORY}/${os.date('%Y-%m-%d-%H-%M-%S', os.time())}`;
+
 /**
  * Play a local sound for a specific player.
  * @param soundPath - The path of the sound file to play.
