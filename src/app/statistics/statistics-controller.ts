@@ -1,5 +1,5 @@
 import { NameManager } from '../managers/names/name-manager';
-import { GameDataWriter } from '../utils/game-data-writer';
+import { ExportEndGameScore } from '../utils/export-statistics/export-end-game-score';
 import { ComputeRatio } from '../utils/utils';
 import { StatisticsModel } from './statistics-model';
 import { StatisticsView } from './statistics-view';
@@ -88,6 +88,6 @@ export class StatisticsController {
 			};
 		});
 
-		GameDataWriter.write(data);
+		ExportEndGameScore.write(data);
 	}
 }

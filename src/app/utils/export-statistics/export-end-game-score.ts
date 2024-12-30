@@ -1,8 +1,8 @@
 import { File } from 'w3ts';
-import { Wait } from './wait';
+import { CUSTOM_MAP_DATA_MATCH_DIRECTORY, CUSTOM_MAP_DATA_MINE_TYPE_TXT } from '../utils';
 
-export class GameDataWriter {
-	private static fileName: string = 'risk/gamedata.txt';
+export class ExportEndGameScore {
+	private static getFileName = (fileName: string) => `${CUSTOM_MAP_DATA_MATCH_DIRECTORY}/${fileName}.${CUSTOM_MAP_DATA_MINE_TYPE_TXT}`;
 
 	private constructor() {}
 
@@ -25,9 +25,7 @@ export class GameDataWriter {
 		}[]
 	): Promise<void> {
 		const content = this.formatData(data);
-		File.writeRaw(this.fileName, content, false);
-		await Wait.forSeconds(5);
-		File.write('wc3mt.txt', 'wc3mt-GameEnd');
+		File.writeRaw(this.getFileName('0_EndGameScore'), content, false);
 	}
 
 	private static formatData(
@@ -48,12 +46,30 @@ export class GameDataWriter {
 			BiggestRival: string;
 		}[]
 	): string {
+		const headers = [
+			'Player',
+			'Rank',
+			'Last Turn',
+			'Cities End',
+			'Cities Max',
+			'Bounty Earned',
+			'Bonus Earned',
+			'Gold Earned',
+			'Gold Max',
+			'Gold End',
+			'Kills',
+			'Deaths',
+			'KD',
+			'Biggest Rival',
+		];
 		const formattedEntries = data
 			.map(
 				(entry) =>
 					`${entry.Player},${entry.Rank},${entry.LastTurn},${entry.CitiesEnd},${entry.CitiesMax},${entry.BountyEarned},${entry.BonusEarned},${entry.GoldEarned},${entry.GoldMax},${entry.GoldEnd},${entry.Kills},${entry.Deaths},${entry.KD},${entry.BiggestRival}`
 			)
-			.join('\n');
-		return `#START\n${formattedEntries}\n#END`;
+		return [
+			headers.join(','), 
+			formattedEntries.join('\n')
+		].join('\n');
 	}
 }
