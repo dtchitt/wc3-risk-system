@@ -89,11 +89,10 @@ export class PostGame implements GameState {
 
 	private resumingUnits(): Promise<void> {
 		return new Promise((resolve) => {
-			const group: group = CreateGroup();
-
 			for (let i = 0; i < PLAYER_SLOTS; i++) {
 				const player = Player(i);
 
+				const group: group = CreateGroup();
 				GroupEnumUnitsOfPlayer(
 					group,
 					player,
@@ -106,9 +105,8 @@ export class PostGame implements GameState {
 				);
 
 				GroupClear(group);
+				DestroyGroup(group);
 			}
-
-			DestroyGroup(group);
 
 			resolve();
 		});
@@ -116,11 +114,10 @@ export class PostGame implements GameState {
 
 	private removeUnits(): Promise<void> {
 		return new Promise((resolve) => {
-			const group: group = CreateGroup();
-
 			for (let i = 0; i < PLAYER_SLOTS; i++) {
 				const player = Player(i);
 
+				const group: group = CreateGroup();
 				GroupEnumUnitsOfPlayer(
 					group,
 					player,
@@ -134,9 +131,8 @@ export class PostGame implements GameState {
 				);
 
 				GroupClear(group);
+				DestroyGroup(group);
 			}
-
-			DestroyGroup(group);
 
 			resolve();
 		});
