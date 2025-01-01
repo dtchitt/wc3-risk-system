@@ -1,4 +1,4 @@
-import { NOMAD_DURATION, TURN_DURATION_SECONDS } from 'src/configs/game-settings';
+import { NOMAD_DURATION, TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
