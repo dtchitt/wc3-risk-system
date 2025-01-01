@@ -1,6 +1,7 @@
 import { TICK_DURATION_IN_SECONDS, TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { GameMode } from './game-mode/game-mode';
 import { File } from 'w3ts';
+import { OwnershipChangeEvent } from '../triggers/ownership-change-event';
 
 export class GameLoop {
 	private _gameMode: GameMode;
@@ -11,6 +12,12 @@ export class GameLoop {
 	public GameLoop(gameMode: GameMode) {
 		this._gameMode = gameMode;
 		this._timer = CreateTimer();
+
+		this.registerEvents();
+	}
+
+	private registerEvents() {
+		OwnershipChangeEvent(this._gameMode.OnCityCapture);
 	}
 
 	public run() {

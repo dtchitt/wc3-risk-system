@@ -15,7 +15,7 @@ import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
 
-export function OwnershipChangeEvent() {
+export function OwnershipChangeEvent(onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => void) {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {
@@ -126,6 +126,8 @@ export function OwnershipChangeEvent() {
 
 				ScoreboardManager.updateScoreboardTitle();
 			}
+
+			onCityCapture(city, prevOwner, owner);
 
 			return false;
 		})
