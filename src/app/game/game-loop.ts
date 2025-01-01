@@ -14,7 +14,6 @@ export class GameLoop {
 	}
 
 	public run() {
-		this._gameMode.StartMatch();
 		this._gameMode.OnStartMatch();
 		this._tickCounter = TURN_DURATION_IN_SECONDS;
 		this._turnCount = 0;
@@ -25,16 +24,13 @@ export class GameLoop {
 				if (this._gameMode.IsMatchOver()) {
 					PauseTimer(this._timer);
 					this._gameMode.OnEndMatch();
-					this._gameMode.EndMatch();
 					return;
 				}
 
 				// Check if a turn has ended
 				if (this._tickCounter == 0) {
 					this._gameMode.OnEndTurn(this._turnCount);
-					this._gameMode.EndTurn(this._turnCount);
 				} else {
-					this._gameMode.Tick(this._tickCounter);
 					this._gameMode.OnTick(this._tickCounter);
 				}
 
@@ -49,7 +45,6 @@ export class GameLoop {
 				if (this._tickCounter <= 0) {
 					this._tickCounter = TURN_DURATION_IN_SECONDS;
 					this._turnCount++;
-					this._gameMode.StartTurn(this._turnCount);
 					this._gameMode.OnStartTurn(this._turnCount);
 				}
 			} catch (error) {
