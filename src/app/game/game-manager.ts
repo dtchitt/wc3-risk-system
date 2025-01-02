@@ -1,3 +1,5 @@
+import { GameLoop } from './game-loop';
+import { GameModeStandard } from './game-mode/game-mode-standard';
 import { GameState } from './state/game-state';
 import { MetaGame } from './state/meta-game';
 import { ModeSelection } from './state/mode-selection';
@@ -13,17 +15,20 @@ export class GameManager {
 	private postGameState: PostGame;
 	private restartEnabled: boolean;
 
+	private _gameLoop: GameLoop;
+
 	private static instance: GameManager;
 
 	private constructor() {
 		this._round = 1;
+		this._gameLoop = new GameLoop(new GameModeStandard());
+		// this._gameLoop.preMatchCountdown();
+		// this.postGameState = new PostGame();
+		// this.metaGameState = new MetaGame(this.postGameState);
+		// this.preGameState = new PreGame(this.metaGameState);
+		// this.modeSelectionState = new ModeSelection(this.preGameState);
 
-		this.postGameState = new PostGame();
-		this.metaGameState = new MetaGame(this.postGameState);
-		this.preGameState = new PreGame(this.metaGameState);
-		this.modeSelectionState = new ModeSelection(this.preGameState);
-
-		this.updateState(this.modeSelectionState);
+		// this.updateState(this.modeSelectionState);
 	}
 
 	public static getInstance() {

@@ -9,6 +9,7 @@ import { PlayerManager } from 'src/app/player/player-manager';
 import { TrackedData } from 'src/app/player/data/tracked-data';
 import { RegionToCity } from 'src/app/city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
+import { City } from 'src/app/city/city';
 
 export class GameModeStandard extends BaseGameMode {
 	public CITIES_TO_WIN: number;
@@ -28,15 +29,19 @@ export class GameModeStandard extends BaseGameMode {
 		return this.GAME_VICTORY_STATE == 'DECIDED';
 	}
 
-	OnStartTurn(turn: number): void {}
+	OnStartTurn(turn: number): void {
+		super.OnStartTurn(turn);
+	}
 
 	OnStartMatch(): void {
+		super.OnStartMatch();
 		this.players = [];
 		this._leader = null;
 		VictoryManager.OVERTIME_ACTIVE = false;
 		VictoryManager.GAME_VICTORY_STATE = 'UNDECIDED';
 	}
 	OnEndMatch(): void {
+		super.OnEndMatch();
 		this.GAME_VICTORY_STATE = 'DECIDED';
 		this.players.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
@@ -56,10 +61,12 @@ export class GameModeStandard extends BaseGameMode {
 	}
 
 	OnEndTurn(turn: number): void {
+		super.OnEndTurn(turn);
 		this.GAME_VICTORY_STATE = this.updateAndGetGameState();
 	}
 
-	OnCityCapture(): void {
+	OnCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
+		super.OnCityCapture(city, preOwner, owner);
 		this.updateRequiredCityCount();
 	}
 

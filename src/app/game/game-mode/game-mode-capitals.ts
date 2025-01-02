@@ -1,3 +1,3 @@
 import { BaseGameMode } from './game-mode';
 
-export class GameModeCapitals implements BaseGameMode {}
+export class GameModeCapitals extends BaseGameMode {}

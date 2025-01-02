@@ -29,18 +29,22 @@ export abstract class BaseGameMode implements GameMode {
 	private _turnCount: number;
 
 	IsMatchOver(): boolean {
+		print('IsMatchOver');
 		return this.isMatchOver;
 	}
 
 	OnStartMatch(): void {
+		print('OnStartMatch');
 		this.isMatchOver = false;
 	}
 
 	OnEndMatch(): void {
+		print('OnEndMatch');
 		this.isMatchOver = true;
 	}
 
 	OnStartTurn(turn: number): void {
+		print('OnStartTurn');
 		this._turnCount = turn;
 		let state = VictoryManager.getInstance().updateAndGetGameState();
 
@@ -58,6 +62,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	OnEndTurn(turn: number): void {
+		print('OnEndTurn');
 		let state = VictoryManager.getInstance().updateAndGetGameState();
 
 		if (state == 'DECIDED') {
@@ -71,19 +76,26 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	OnTick(tick: number): void {
+		print('OnTick');
+
 		this._tickCounter = tick;
 
 		ScoreboardManager.getInstance().updatePartial();
 		this.updateUI(this._turnCount, this._tickCounter);
 	}
 
-	OnCityCapture(): void {
+	OnCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
+		print('OnCityCapture');
 		return;
 	}
 
-	OnForfeits(): void {}
+	OnForfeits(): void {
+		print('OnForfeits');
+	}
 
-	OnRematch(): void {}
+	OnRematch(): void {
+		print('OnForfeits');
+	}
 
 	private messageGameState(state: VictoryProgressState) {
 		let playersToAnnounce = VictoryManager.getInstance().getFrontRunnersByThreshold(
