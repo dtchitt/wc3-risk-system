@@ -1,4 +1,4 @@
-import { VictoryManager } from 'src/app/managers/victory-manager';
+import { MatchGameInfo } from 'src/app/game/match-game-info';
 import { SettingsStrategy } from './settings-strategy';
 import { HexColors } from 'src/app/utils/hex-colors';
 
@@ -41,22 +41,22 @@ export class OvertimeStrategy implements SettingsStrategy {
 	}
 
 	private handleTurboOption(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 30;
-		VictoryManager.OVERTIME_MODE = true;
+		MatchGameInfo.OVERTIME_ACTIVE_AT_TURN = 30;
+		MatchGameInfo.OVERTIME_MODE = true;
 	}
 
 	private handleMediumOption(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 60;
-		VictoryManager.OVERTIME_MODE = true;
+		MatchGameInfo.OVERTIME_ACTIVE_AT_TURN = 60;
+		MatchGameInfo.OVERTIME_MODE = true;
 	}
 
 	private handleExtendedOption(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 120;
-		VictoryManager.OVERTIME_MODE = true;
+		MatchGameInfo.OVERTIME_ACTIVE_AT_TURN = 120;
+		MatchGameInfo.OVERTIME_MODE = true;
 	}
 
 	private handleOff(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
-		VictoryManager.OVERTIME_MODE = false;
+		MatchGameInfo.OVERTIME_ACTIVE_AT_TURN = 0;
+		MatchGameInfo.OVERTIME_MODE = false;
 	}
 }
