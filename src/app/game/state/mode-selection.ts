@@ -1,18 +1,16 @@
 import { GameManager } from '../game-manager';
-import { GameState } from './game-state';
 import { SettingsView } from 'src/app/settings/settings-view';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
+import { GameModeStandard } from '../game-mode/game-mode-standard';
 
-export class ModeSelection implements GameState {
+export class ModeSelection {
 	private manager: GameManager;
-	private nextState: GameState;
 	private ui: SettingsView;
 
-	public constructor(nextState: GameState) {
-		this.nextState = nextState;
+	public constructor() {
 		this.ui = new SettingsView();
 	}
 
@@ -60,7 +58,8 @@ export class ModeSelection implements GameState {
 		this.setupSettingsQuest();
 		ExportGameSettings.write(settings);
 
-		this.manager.updateState(this.nextState);
+		let defaultGameMode = new GameModeStandard();
+		this.manager.startGameMode(defaultGameMode);
 	}
 
 	private setupSettingsQuest(): void {

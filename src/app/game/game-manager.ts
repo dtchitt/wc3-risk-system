@@ -1,34 +1,27 @@
-import { GameLoop } from './game-loop';
-import { GameModeStandard } from './game-mode/game-mode-standard';
+import { ActivePlayer } from '../player/types/active-player';
+import { MatchGameLoop } from './match-game-loop';
+import { GameMode } from './game-mode/game-mode';
 import { GameState } from './state/game-state';
-import { MetaGame } from './state/meta-game';
 import { ModeSelection } from './state/mode-selection';
-import { PostGame } from './state/post-game';
-import { PreGame } from './state/pre-game';
 
 export class GameManager {
-	private _state: GameState;
 	private _round: number;
-	private modeSelectionState: ModeSelection;
-	private preGameState: PreGame;
-	private metaGameState: MetaGame;
-	private postGameState: PostGame;
-	private restartEnabled: boolean;
+	private _gameState: GameState = 'preGame';
+	private _modeSelectionState: ModeSelection;
+	private _gameLoop: MatchGameLoop;
 
-	private _gameLoop: GameLoop;
+	private _restartEnabled: boolean;
+
+	private _leader: ActivePlayer;
+	private players: ActivePlayer[];
 
 	private static instance: GameManager;
 
 	private constructor() {
 		this._round = 1;
-		this._gameLoop = new GameLoop(new GameModeStandard());
-		// this._gameLoop.preMatchCountdown();
-		// this.postGameState = new PostGame();
-		// this.metaGameState = new MetaGame(this.postGameState);
-		// this.preGameState = new PreGame(this.metaGameState);
-		// this.modeSelectionState = new ModeSelection(this.preGameState);
-
-		// this.updateState(this.modeSelectionState);
+		this._gameState = 'preGame';
+		this._modeSelectionState = new ModeSelection();
+		// this.startGameMode();
 	}
 
 	public static getInstance() {
@@ -39,41 +32,78 @@ export class GameManager {
 		return this.instance;
 	}
 
-	public updateState(state: GameState) {
-		this._state = state;
-		this._state.setObserver(this);
-		this._state.start();
+	public startGameMode(gameMode: GameMode) {
+		MatchGameLoop.getInstance().setGameMode(gameMode);
+		this._gameState = 'inProgress';
+		MatchGameLoop.getInstance().startGameMode();
 	}
 
 	public isStateMetaGame() {
-		return this._state instanceof MetaGame;
+		return this._gameState == 'preGame';
 	}
 
 	public isStatePostGame() {
-		return this._state instanceof PostGame;
+		return this._gameState == 'postGame';
 	}
 
 	public isRestartEnabled() {
-		return this.restartEnabled;
+		return this._restartEnabled;
 	}
 
 	public setRestartEnabled(bool: boolean) {
-		this.restartEnabled = bool;
+		this._restartEnabled = bool;
 	}
 
 	public fastRestart() {
-		this.updateState(this.preGameState);
+		// this.startGameMode(this.preGameState);
 	}
 
 	public fullRestart() {
-		this.updateState(this.modeSelectionState);
-	}
-
-	public get state(): GameState {
-		return this._state;
+		// this.startGameMode(this.modeSelectionState);
 	}
 
 	public get round(): number {
 		return this._round;
+	}
+
+	public get gameState(): GameState {
+		return this._gameState;
+	}
+
+	public get leader(): ActivePlayer {
+		return this._leader;
+	}
+
+	public get matchPlayers(): ActivePlayer[] {
+		return this.players;
+	}
+
+	public addPlayer(player: ActivePlayer) {
+		this.players.push(player);
+
+		if (!this._leader) {
+			this._leader = player;
+		}
+	}
+
+	public removePlayer(player: ActivePlayer) {
+		const index: number = this.players.indexOf(player);
+
+		if (index > -1) {
+			this.players.splice(index, 1);
+		}
+
+		if (this.players.length == 1) {
+			this._leader = this.players[0];
+			return true;
+		}
+
+		this._gameLoop.onPlayerElimination(player);
+	}
+
+	public setLeader(player: ActivePlayer) {
+		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
+			this._leader = player;
+		}
 	}
 }

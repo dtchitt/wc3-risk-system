@@ -2,7 +2,6 @@ import { City } from '../city/city';
 import { UnitToCity } from '../city/city-map';
 import { Country } from '../country/country';
 import { CityToCountry } from '../country/country-map';
-import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
@@ -14,8 +13,9 @@ import { Region } from '../region/region';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
+import { MatchGameLoop } from '../game/match-game-loop';
 
-export function OwnershipChangeEvent(onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => void) {
+export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
 
 	for (let i = 0; i < bj_MAX_PLAYER_SLOTS; i++) {
@@ -88,7 +88,7 @@ export function OwnershipChangeEvent(onCityCapture: (city: City, preOwner: Activ
 				}
 
 				if (GameManager.getInstance().isStateMetaGame()) {
-					VictoryManager.getInstance().setLeader(owner);
+					GameManager.getInstance().setLeader(owner);
 				}
 
 				if (ownerData.countries.get(country) == country.getCities().length) {
@@ -127,7 +127,7 @@ export function OwnershipChangeEvent(onCityCapture: (city: City, preOwner: Activ
 				ScoreboardManager.updateScoreboardTitle();
 			}
 
-			onCityCapture(city, prevOwner, owner);
+			MatchGameLoop.getInstance().onCityCapture(city, prevOwner, owner);
 
 			return false;
 		})

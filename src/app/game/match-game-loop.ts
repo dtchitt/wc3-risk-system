@@ -1,33 +1,48 @@
-import { VictoryManager } from 'src/app/managers/victory-manager';
-import { PlayerManager } from 'src/app/player/player-manager';
-import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
-import { GameManager } from '../game-manager';
-import { GameState } from './game-state';
-import { SettingsContext } from 'src/app/settings/settings-context';
-import { TimerService } from '../services/timer-service';
-import { NameManager } from 'src/app/managers/names/name-manager';
-import { CountdownMessage } from 'src/app/utils/messages';
-import { NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
-import { ActivePlayer } from 'src/app/player/types/active-player';
-import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
-import { CityToCountry } from 'src/app/country/country-map';
-import { Wait } from 'src/app/utils/wait';
+import { GameMode } from './game-mode/game-mode';
+import { City } from '../city/city';
+import { ActivePlayer } from '../player/types/active-player';
+import { PlayerManager } from '../player/player-manager';
+import { PLAYER_STATUS } from '../player/status/status-enum';
+import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
+import { SettingsContext } from '../settings/settings-context';
+import { CountdownMessage } from '../utils/messages';
+import { NEUTRAL_HOSTILE, PlayGlobalSound } from '../utils/utils';
+import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
+import { File } from 'w3ts';
+import { CityToCountry } from '../country/country-map';
+import { Wait } from '../utils/wait';
+import { GameManager } from './game-manager';
 
-export class MetaGame implements GameState {
-	private manager: GameManager;
-	private nextState: GameState;
-	private timer: TimerService;
+export class MatchGameLoop {
+	private static instance: MatchGameLoop;
+	private _gameMode: GameMode;
+	private _matchLoopTimer: timer;
+	private _tickCounter: number;
+	private _turnCount: number;
 
-	public constructor(nextState: GameState) {
-		this.nextState = nextState;
-		this.timer = new TimerService(this);
+	private constructor() {}
+
+	public static getInstance() {
+		if (this.instance == null) {
+			this.instance = new MatchGameLoop();
+		}
+
+		return this.instance;
 	}
 
-	public setObserver(observer: GameManager) {
-		this.manager = observer;
+	public setGameMode(gameMode: GameMode) {
+		this._gameMode = gameMode;
 	}
 
-	public async start() {
+	public onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer) {
+		this._gameMode.onCityCapture(city, preOwner, owner);
+	}
+
+	public onPlayerElimination(player: ActivePlayer) {
+		this._gameMode.onPlayerElimination(player);
+	}
+
+	public async startGameMode() {
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
 
@@ -36,7 +51,7 @@ export class MetaGame implements GameState {
 				player.status.set(PLAYER_STATUS.ALIVE);
 				player.trackedData.bonus.showForPlayer(player.getPlayer());
 				player.trackedData.bonus.repositon();
-				VictoryManager.getInstance().addPlayer(player);
+				GameManager.getInstance().addPlayer(player);
 			});
 
 			const scoreboardManager: ScoreboardManager = ScoreboardManager.getInstance();
@@ -60,7 +75,6 @@ export class MetaGame implements GameState {
 
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = 3;
-
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`The Game will start in:\n${duration}`);
 
@@ -74,7 +88,7 @@ export class MetaGame implements GameState {
 					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), false);
 					EnableSelect(true, true);
 					EnableDragSelect(true, true);
-					this.timer.start();
+					this.run();
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 				}
 
@@ -85,21 +99,45 @@ export class MetaGame implements GameState {
 		}
 	}
 
-	public end(): void {
-		ScoreboardManager.getInstance().destroyBoards();
+	private run() {
+		this._gameMode.onStartMatch();
+		this._tickCounter = TURN_DURATION_IN_SECONDS;
+		this._turnCount = 0;
+		// Start a timer that executes the game loop every second
+		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
+			try {
+				// Check if the match is over
+				if (this._gameMode.isMatchOver()) {
+					PauseTimer(this._matchLoopTimer);
+					this._gameMode.onEndMatch();
+					return;
+				}
 
-		PlayerManager.getInstance().players.forEach((player) => {
-			if (SettingsContext.getInstance().isPromode()) {
-				NameManager.getInstance().setName(player.getPlayer(), 'acct');
-			} else {
-				NameManager.getInstance().setName(player.getPlayer(), 'btag');
-				player.trackedData.bonus.hideUI();
+				// Check if a turn has ended
+				if (this._tickCounter == 0) {
+					this._gameMode.onEndTurn(this._turnCount);
+				} else {
+					this._gameMode.onTick(this._tickCounter);
+				}
+
+				// Stop game loop if match is over
+				if (this._gameMode.isMatchOver()) {
+					PauseTimer(this._matchLoopTimer);
+					return;
+				}
+
+				this._tickCounter--;
+
+				if (this._tickCounter <= 0) {
+					this._tickCounter = TURN_DURATION_IN_SECONDS;
+					this._turnCount++;
+					this._gameMode.onStartTurn(this._turnCount);
+				}
+			} catch (error) {
+				File.write('errors', error as string);
+				print('Error in Timer ' + error);
 			}
 		});
-
-		this.timer.reset();
-
-		this.manager.updateState(this.nextState);
 	}
 
 	private async setTempVision(players: Map<player, ActivePlayer>) {

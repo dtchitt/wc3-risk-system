@@ -86,6 +86,7 @@ function tsMain() {
 		UnitDeathEvent();
 		UnitTrainedEvent();
 		//UnitUpgradeEvent();
+		OwnershipChangeEvent();
 		PlayerLeaveEvent();
 		SpellEffectEvent();
 		AntiSpam();
