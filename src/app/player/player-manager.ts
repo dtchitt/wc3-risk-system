@@ -11,6 +11,7 @@ const banList: string[] = [
 	'arfan#11830', //Fake account to impersonate arfan
 	'selinace#1683', //Multi accounter - serenity
 	'serenity#13183', //Multi accounter - selinace
+	'arker#11471', //Repeated harassement
 ];
 
 export class PlayerManager {
