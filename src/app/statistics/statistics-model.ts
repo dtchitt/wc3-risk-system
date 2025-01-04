@@ -1,11 +1,11 @@
-import { TURN_DURATION_SECONDS } from 'src/configs/game-settings';
-import { VictoryManager } from '../managers/victory-manager';
+import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
 import { MAP_VERSION } from '../utils/map-info';
+import { GameManager } from '../game/game-manager';
 
 export class StatisticsModel {
 	private timePlayed: string;
@@ -19,7 +19,7 @@ export class StatisticsModel {
 
 	public setData() {
 		this.setGameTime();
-		this.winner = VictoryManager.getInstance().leader;
+		this.winner = GameManager.getInstance().leader;
 		this.ranks = [...PlayerManager.getInstance().players.values()];
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);
@@ -60,7 +60,7 @@ export class StatisticsModel {
 	}
 
 	private setGameTime() {
-		const turnTime: number = TURN_DURATION_SECONDS;
+		const turnTime: number = TURN_DURATION_IN_SECONDS;
 		const minutes: number = parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarSupplyText', 0))) - 1;
 		const seconds: number = turnTime - parseInt(BlzFrameGetText(BlzGetFrameByName('ResourceBarUpkeepText', 0)));
 		const hours: number = Math.floor(minutes / turnTime);
