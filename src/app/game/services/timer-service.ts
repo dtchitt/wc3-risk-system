@@ -10,7 +10,7 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { PlayGlobalSound } from 'src/app/utils/utils';
 import { File } from 'w3ts';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
-import { CITIES_TO_WIN_WARNING_RATIO, TURN_DURATION_SECONDS } from 'src/configs/game-settings';
+import { CITIES_TO_WIN_WARNING_RATIO, TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 /**
  * TimerService is a class responsible for managing the main game timer.
@@ -30,7 +30,7 @@ export class TimerService implements Resetable {
 	 */
 	public constructor(gameState: GameState) {
 		this._timer = CreateTimer();
-		this._duration = TURN_DURATION_SECONDS;
+		this._duration = TURN_DURATION_IN_SECONDS;
 		this._tick = this._duration;
 		this._turn = 1;
 		this.gameState = gameState;

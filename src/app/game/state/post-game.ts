@@ -25,7 +25,7 @@ export class PostGame implements GameState {
 		this.manager = observer;
 	}
 
-	public start(): void {
+	public run(): void {
 		if (this.isOver) return;
 		this.isOver = true;
 

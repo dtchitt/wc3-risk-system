@@ -27,7 +27,7 @@ export class MetaGame implements GameState {
 		this.manager = observer;
 	}
 
-	public async start() {
+	public async run() {
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
 

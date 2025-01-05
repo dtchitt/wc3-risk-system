@@ -22,19 +22,19 @@ export class PreGame implements GameState {
 		this.manager = observer;
 	}
 
-	public start(): void {
-		PlayerManager.getInstance().players.forEach((val) => {
-			val.trackedData.setKDMaps();
+	public run(): void {
+		// PlayerManager.getInstance().players.forEach((val) => {
+		// 	val.trackedData.setKDMaps();
 
-			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
-				val.status.set(PLAYER_STATUS.ALIVE);
-			} else {
-				val.status.set(PLAYER_STATUS.LEFT);
+		// 	if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
+		// 		val.status.set(PLAYER_STATUS.ALIVE);
+		// 	} else {
+		// 		val.status.set(PLAYER_STATUS.LEFT);
 
-				PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
-				PlayerManager.getInstance().players.delete(val.getPlayer());
-			}
-		});
+		// 		PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
+		// 		PlayerManager.getInstance().players.delete(val.getPlayer());
+		// 	}
+		// });
 
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);

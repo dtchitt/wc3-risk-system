@@ -7,6 +7,6 @@ export function RestartCommand(chatManager: ChatManager, gameManager: GameManage
 		if (!gameManager.isRestartEnabled()) return;
 
 		print('Restarting...');
-		gameManager.state.end();
+		gameManager.getGameState.end();
 	});
 }
