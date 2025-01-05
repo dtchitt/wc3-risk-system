@@ -4,7 +4,6 @@ import { BaseGameMode } from './game-mode';
 
 export class GameModeStandard extends BaseGameMode {
 	onEndTurn(turn: number): void {
-		this.isMatchOverField = true;
 		super.onEndTurn(turn);
 	}
 

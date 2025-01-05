@@ -96,7 +96,7 @@ export class MatchGameLoop {
 		this._gameMode.onStartMatch();
 		this._tickCounter = TURN_DURATION_IN_SECONDS;
 		this._turnCount = 1;
-
+		this._gameMode.onStartTurn(this._turnCount);
 		// Start a timer that executes the game loop every second
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
 			try {
