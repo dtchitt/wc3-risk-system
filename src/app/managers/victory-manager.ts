@@ -123,7 +123,7 @@ export class VictoryManager {
 	public checkKnockOutVictory(): boolean {
 		if (this.players.length == 1) {
 			this._leader = this.players[0];
-			this.endGame();
+			this.saveStats();
 			return true;
 		}
 
@@ -148,18 +148,13 @@ export class VictoryManager {
 		this.winTracker.addWinForEntity(this._leader.getPlayer());
 	}
 
-	public endGame() {
+	public saveStats() {
 		VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
 		this.players.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
 			}
 		});
-
-		BlzEnableSelections(false, false);
-		this.gameTimer.stop();
-
-		this.pauseAllUnits();
 	}
 
 	private pauseAllUnits() {

@@ -49,7 +49,7 @@ export class TimerService implements Resetable {
 					let state = this.victoryManager.updateAndGetGameState();
 
 					if (state == 'DECIDED') {
-						this.victoryManager.endGame();
+						this.victoryManager.saveStats();
 						return false;
 					}
 
