@@ -12,7 +12,6 @@ import { File } from 'w3ts';
 import { CityToCountry } from '../country/country-map';
 import { Wait } from '../utils/wait';
 import { VictoryManager } from '../managers/victory-manager';
-import { ModeSelection } from './state/mode-selection';
 import { HexColors } from '../utils/hex-colors';
 
 export class MatchGameLoop {
@@ -21,7 +20,6 @@ export class MatchGameLoop {
 	private _matchLoopTimer: timer;
 	private _tickCounter: number;
 	private _turnCount: number;
-	private _modeSelection: ModeSelection;
 
 	private constructor() {
 		this._matchLoopTimer = CreateTimer();
@@ -100,10 +98,7 @@ export class MatchGameLoop {
 		this._turnCount = 1;
 
 		// Start a timer that executes the game loop every second
-		GlobalMessage(this._tickCounter.toString(), 'Sound\\Interface\\ItemReceived.flac', 4);
-
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
-			GlobalMessage(this._tickCounter.toString(), 'Sound\\Interface\\ItemReceived.flac', 4);
 			try {
 				// Check if the match is over
 				if (this._gameMode.isMatchOver()) {
@@ -113,10 +108,10 @@ export class MatchGameLoop {
 				}
 
 				// Check if a turn has ended
-				if (this._tickCounter == 0) {
+				this._gameMode.onTick(this._tickCounter);
+
+				if (this._tickCounter <= 0) {
 					this._gameMode.onEndTurn(this._turnCount);
-				} else {
-					this._gameMode.onTick(this._tickCounter);
 				}
 
 				// Stop game loop if match is over
@@ -128,11 +123,11 @@ export class MatchGameLoop {
 				this._tickCounter--;
 
 				if (this._tickCounter <= 0) {
+					this._gameMode.onEndTurn(this._turnCount);
 					this._tickCounter = TURN_DURATION_IN_SECONDS;
 					this._turnCount++;
 					this._gameMode.onStartTurn(this._turnCount);
 				}
-
 				this.updateUI();
 			} catch (error) {
 				File.write('errors', error as string);

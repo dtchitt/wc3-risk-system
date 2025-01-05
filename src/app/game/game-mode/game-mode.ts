@@ -1,7 +1,5 @@
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { City } from 'src/app/city/city';
-import { GameManager } from '../game-manager';
-import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PlayerManager } from 'src/app/player/player-manager';
 
 export interface GameMode {
@@ -19,10 +17,10 @@ export interface GameMode {
 }
 
 export abstract class BaseGameMode implements GameMode {
-	private isMatchOverField: boolean = false;
+	protected isMatchOverField: boolean = false;
 
 	isMatchOver(): boolean {
-		print('isMatchOver');
+		// print('isMatchOver');
 		return this.isMatchOverField;
 	}
 
@@ -45,7 +43,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onTick(tick: number): void {
-		print('onTick');
+		// print('onTick');
 	}
 
 	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {

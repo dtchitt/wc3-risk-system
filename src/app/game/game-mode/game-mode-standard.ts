@@ -3,17 +3,12 @@ import { City } from 'src/app/city/city';
 import { BaseGameMode } from './game-mode';
 
 export class GameModeStandard extends BaseGameMode {
-	isMatchOver(): boolean {
-		return false;
+	onEndTurn(turn: number): void {
+		this.isMatchOverField = true;
+		super.onEndTurn(turn);
 	}
 
-	onStartTurn(turn: number): void {}
-
-	onStartMatch(): void {}
-
-	onEndMatch(): void {}
-
-	onEndTurn(turn: number): void {}
-
-	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {}
+	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
+		super.onCityCapture(city, preOwner, owner);
+	}
 }
