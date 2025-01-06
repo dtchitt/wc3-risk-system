@@ -23,8 +23,6 @@ export class GameManager {
 	private constructor() {
 		this._round = 1;
 		this._gameState = 'preGame';
-		// this._modeSelectionState = new ModeSelection();
-		// this.startGameMode();
 	}
 
 	public static getInstance() {

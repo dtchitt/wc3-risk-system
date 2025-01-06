@@ -24,11 +24,9 @@ import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { SetCommands } from './app/commands/commands';
 import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-shuffled-player-list';
-import { GameModeStandard } from './app/game/game-mode/game-mode-standard';
-import { MatchGameLoop } from './app/game/match-game-loop';
 import { ModeSelection } from './app/game/state/mode-selection';
 import { PlayerSetupService } from './app/game/services/player-setup-service';
-import { MapSetupService } from './app/game/services/map-setup-service';
+import { Wait } from './app/utils/wait';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -106,7 +104,7 @@ function tsMain() {
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
 
-		TimerStart(onLoadTimer, 0.0, false, () => {
+		TimerStart(onLoadTimer, 0.0, false, async () => {
 			PauseTimer(onLoadTimer);
 			DestroyTimer(onLoadTimer);
 			FogEnable(false);
@@ -119,7 +117,12 @@ function tsMain() {
 			SetCommands(GameManager.getInstance());
 
 			new PlayerSetupService().run();
-			new MapSetupService().run();
+
+			EnableSelect(false, false);
+			EnableDragSelect(false, false);
+			FogEnable(true);
+
+			await Wait.forSeconds(2);
 			new ModeSelection().run();
 		});
 	} catch (e) {

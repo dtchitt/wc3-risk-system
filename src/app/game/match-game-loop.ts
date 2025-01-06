@@ -5,7 +5,7 @@ import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
-import { CountdownMessage, GlobalMessage } from '../utils/messages';
+import { CountdownMessage } from '../utils/messages';
 import { NEUTRAL_HOSTILE, PlayGlobalSound } from '../utils/utils';
 import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
@@ -13,6 +13,9 @@ import { CityToCountry } from '../country/country-map';
 import { Wait } from '../utils/wait';
 import { VictoryManager } from '../managers/victory-manager';
 import { HexColors } from '../utils/hex-colors';
+import { TreeManager } from './services/tree-service';
+import { DistributionService } from './services/distribution-service';
+import { RegionToCity } from '../city/city-map';
 
 export class MatchGameLoop {
 	private static instance: MatchGameLoop;
@@ -20,6 +23,7 @@ export class MatchGameLoop {
 	private _matchLoopTimer: timer;
 	private _tickCounter: number;
 	private _turnCount: number;
+	private distributionService: DistributionService;
 
 	private constructor() {
 		this._matchLoopTimer = CreateTimer();
@@ -46,7 +50,33 @@ export class MatchGameLoop {
 		this._gameMode.onPlayerElimination(player);
 	}
 
+	public async resetMap() {
+		TreeManager.getInstance();
+
+		EnableSelect(false, false);
+		EnableDragSelect(false, false);
+		FogEnable(true);
+
+		const playerManager: PlayerManager = PlayerManager.getInstance();
+		this.distributionService = new DistributionService();
+		this.distributionService.runDistro(() => {
+			RegionToCity.forEach((city) => {
+				city.guard.reposition();
+				//Prevent guards from moving and update unit counts
+				IssueImmediateOrder(city.guard.unit, 'stop');
+
+				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
+					playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+				}
+
+				SetUnitInvulnerable(city.guard.unit, false);
+			});
+		});
+	}
+
 	public async startGameMode() {
+		await this.resetMap();
+		await Wait.forSeconds(2);
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
 			players.forEach((player) => {
