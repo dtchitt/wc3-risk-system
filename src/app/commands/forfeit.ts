@@ -5,7 +5,7 @@ import { PLAYER_STATUS } from '../player/status/status-enum';
 
 export function ForfeitCommand(chatManager: ChatManager, gameManager: GameManager, playerManager: PlayerManager) {
 	chatManager.addCmd(['-ff', '-forfeit'], () => {
-		if (!gameManager.isMatchInProgress()) return;
+		if (!GameManager.isMatchInProgress()) return;
 
 		playerManager.players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.DEAD);
 	});

@@ -43,12 +43,12 @@ export class GameManager {
 		this._state.run();
 	}
 
-	public isMatchInProgress() {
-		return this._matchState == 'preMatch';
+	public static isMatchInProgress() {
+		return this.getInstance()._matchState == 'inProgress';
 	}
 
-	public isMatchPostStage() {
-		return this._matchState == 'postMatch';
+	public static isMatchPostStage() {
+		return this.getInstance()._matchState == 'postMatch';
 	}
 
 	public static getMatchStage(): MatchState {

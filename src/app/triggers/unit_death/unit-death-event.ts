@@ -18,8 +18,7 @@ export function UnitDeathEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			print(GameManager.getMatchStage());
-			if (!GameManager.getInstance().isMatchInProgress()) return false;
+			if (!GameManager.isMatchInProgress()) return false;
 
 			const dyingUnit: unit = GetTriggerUnit();
 			const killingUnit: unit = GetKillingUnit();

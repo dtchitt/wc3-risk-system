@@ -30,7 +30,7 @@ export interface GameMode {
 
 export abstract class BaseGameMode implements GameMode {
 	isMatchOver(): boolean {
-		return GameManager.getInstance().isMatchPostStage();
+		return GameManager.isMatchPostStage();
 		// print('isMatchOver');
 	}
 
