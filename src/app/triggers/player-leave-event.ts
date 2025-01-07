@@ -14,7 +14,7 @@ export function PlayerLeaveEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			if (!GameManager.getInstance().isStateMetaGame()) return false;
+			if (!GameManager.getInstance().isMatchInProgress()) return false;
 
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
 

@@ -10,6 +10,9 @@ import { GlobalMessage } from 'src/app/utils/messages';
 import { CITIES_TO_WIN_WARNING_RATIO } from 'src/configs/game-settings';
 import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
+import { SettingsContext } from 'src/app/settings/settings-context';
+import { StatisticsController } from 'src/app/statistics/statistics-controller';
+import { GameManager } from '../game-manager';
 
 export interface GameMode {
 	isMatchOver: () => boolean;
@@ -26,21 +29,20 @@ export interface GameMode {
 }
 
 export abstract class BaseGameMode implements GameMode {
-	protected isMatchOverField: boolean = false;
-
 	isMatchOver(): boolean {
+		return GameManager.getInstance().isMatchPostStage();
 		// print('isMatchOver');
-		return this.isMatchOverField;
 	}
 
 	onStartMatch(): void {
 		print('onStartMatch');
-		this.isMatchOverField = false;
+		GameManager.setMatchStage('inProgress');
 	}
 
 	onEndMatch(): void {
 		print('onEndMatch');
-		this.isMatchOverField = true;
+		GameManager.setMatchStage('postMatch');
+		this.postMatchSetup();
 	}
 
 	onStartTurn(turn: number): void {
@@ -63,9 +65,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	onEndTurn(turn: number): void {
 		if (VictoryManager.GAME_VICTORY_STATE == 'DECIDED') {
-			this.isMatchOverField = true;
-			VictoryManager.getInstance().saveStats();
-			this.SaveStats();
+			GameManager.setMatchStage('postMatch');
 		}
 
 		print('onEndTurn');
@@ -91,7 +91,7 @@ export abstract class BaseGameMode implements GameMode {
 	onPlayerElimination(): void {
 		print('onPlayerElimination');
 		if (PlayerManager.getInstance().players.size == 1) {
-			this.isMatchOverField = true;
+			GameManager.setMatchStage('postMatch');
 		}
 	}
 
@@ -128,9 +128,23 @@ export abstract class BaseGameMode implements GameMode {
 		GlobalMessage([tiedMessage, overtimeMessage, playerMessages].join('\n\n'), 'Sound\\Interface\\ItemReceived.flac', 4);
 	}
 
-	private SaveStats() {
-		BlzEnableSelections(false, false);
+	private postMatchSetup() {
 		this.pauseAllUnits();
+		VictoryManager.getInstance().saveStats();
+
+		FogEnable(false);
+		BlzEnableSelections(false, false);
+
+		if (SettingsContext.getInstance().isPromode()) {
+			VictoryManager.getInstance().updateWinTracker();
+		} else {
+			const statsController: StatisticsController = StatisticsController.getInstance();
+			statsController.refreshView();
+			statsController.setViewVisibility(true);
+			statsController.writeStatisticsData();
+		}
+
+		GameManager.getInstance().setRestartEnabled(true);
 	}
 
 	private pauseAllUnits() {

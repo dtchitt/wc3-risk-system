@@ -8,7 +8,7 @@ import { isNonEmptySubstring } from '../utils/utils';
 
 export function GoldCommand(chatManager: ChatManager, gameManager: GameManager, nameManager: NameManager) {
 	chatManager.addCmd(['-g', '-gold'], () => {
-		if (!gameManager.isStateMetaGame()) return;
+		if (!gameManager.isMatchInProgress()) return;
 		if (SettingsContext.getInstance().isFFA()) return;
 
 		const player: player = GetTriggerPlayer();

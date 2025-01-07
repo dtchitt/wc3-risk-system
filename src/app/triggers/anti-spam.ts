@@ -23,7 +23,7 @@ export const AntiSpam = () => {
 		t,
 		Condition(() => {
 			if (GetEventPlayerChatString().length < MINIMUM_MESSAGE_LENGTH) return false;
-			if (!GameManager.getInstance().isStateMetaGame()) return false;
+			if (!GameManager.getInstance().isMatchInProgress()) return false;
 
 			const player: player = GetTriggerPlayer();
 

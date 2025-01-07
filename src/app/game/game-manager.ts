@@ -4,14 +4,13 @@ import { GameMode } from './game-mode/game-mode';
 import { ModeSelection } from './state/mode-selection';
 import { GameState } from './state/game-state';
 
-type State = 'modeSelection' | 'preGame' | 'inProgress' | 'postGame';
+export type MatchState = 'modeSelection' | 'preMatch' | 'inProgress' | 'postMatch';
 
 export class GameManager {
-	private _round: number;
 	private _state: GameState;
-	private _gameState: State = 'preGame';
 	private _modeSelectionState: ModeSelection;
 	private _gameLoop: MatchGameLoop;
+	private _matchState: MatchState;
 
 	private _restartEnabled: boolean;
 
@@ -21,8 +20,7 @@ export class GameManager {
 	private static instance: GameManager;
 
 	private constructor() {
-		this._round = 1;
-		this._gameState = 'preGame';
+		this._matchState = 'modeSelection';
 	}
 
 	public static getInstance() {
@@ -35,7 +33,7 @@ export class GameManager {
 
 	public startGameMode(gameMode: GameMode) {
 		MatchGameLoop.getInstance().setup(gameMode);
-		this._gameState = 'inProgress';
+		GameManager.setMatchStage('inProgress');
 		MatchGameLoop.getInstance().startGameMode();
 	}
 
@@ -45,12 +43,20 @@ export class GameManager {
 		this._state.run();
 	}
 
-	public isStateMetaGame() {
-		return this._gameState == 'preGame';
+	public isMatchInProgress() {
+		return this._matchState == 'preMatch';
 	}
 
-	public isStatePostGame() {
-		return this._gameState == 'postGame';
+	public isMatchPostStage() {
+		return this._matchState == 'postMatch';
+	}
+
+	public static getMatchStage(): MatchState {
+		return this.getInstance()._matchState;
+	}
+
+	public static setMatchStage(matchStage: MatchState) {
+		this.getInstance()._matchState = matchStage;
 	}
 
 	public isRestartEnabled() {
@@ -69,16 +75,8 @@ export class GameManager {
 		// this.startGameMode(this.modeSelectionState);
 	}
 
-	public get round(): number {
-		return this._round;
-	}
-
 	public get getGameState(): GameState {
 		return this._state;
-	}
-
-	public get gameState(): State {
-		return this._gameState;
 	}
 
 	public get leader(): ActivePlayer {

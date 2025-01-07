@@ -26,7 +26,7 @@ export function OwnershipChangeEvent() {
 		t,
 		Condition(() => {
 			if (!IsUnitType(GetChangingUnit(), UNIT_TYPE.CITY)) return false;
-			if (GameManager.getInstance().isStatePostGame()) return false;
+			if (GameManager.getInstance().isMatchPostStage()) return false;
 
 			const city: City = UnitToCity.get(GetChangingUnit());
 			const country: Country = CityToCountry.get(city);
@@ -87,7 +87,7 @@ export function OwnershipChangeEvent() {
 					ownerData.countries.set(country, 1);
 				}
 
-				if (GameManager.getInstance().isStateMetaGame()) {
+				if (GameManager.getInstance().isMatchInProgress()) {
 					VictoryManager.getInstance().setLeader(owner);
 				}
 
