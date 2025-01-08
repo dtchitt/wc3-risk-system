@@ -3,8 +3,8 @@ import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
-import { NEUTRAL_HOSTILE, PLAYER_SLOTS } from '../utils/utils';
-import { UNIT_TYPE } from '../utils/unit-types';
+import { MatchGameLoop } from '../game/match-game-loop';
+import { MatchData } from '../game/state/match-state';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
 
@@ -108,11 +108,11 @@ export class VictoryManager {
 
 	private calculateCitiesToWin(): number {
 		if (VictoryManager.OVERTIME_MODE) {
-			VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE = VictoryManager.OVERTIME_ACTIVE_AT_TURN - this.gameTimer.getTurns();
-			VictoryManager.OVERTIME_TOTAL_TURNS = this.gameTimer.getTurns() - VictoryManager.OVERTIME_ACTIVE_AT_TURN;
+			VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE = VictoryManager.OVERTIME_ACTIVE_AT_TURN - MatchData.turnCount;
+			VictoryManager.OVERTIME_TOTAL_TURNS = MatchData.turnCount - VictoryManager.OVERTIME_ACTIVE_AT_TURN;
 		}
 
-		if (VictoryManager.OVERTIME_MODE && this.gameTimer.getTurns() >= VictoryManager.OVERTIME_ACTIVE_AT_TURN) {
+		if (VictoryManager.OVERTIME_MODE && MatchData.turnCount >= VictoryManager.OVERTIME_ACTIVE_AT_TURN) {
 			VictoryManager.OVERTIME_ACTIVE = true;
 			return Math.ceil(RegionToCity.size * CITIES_TO_WIN_RATIO) - OVERTIME_MODIFIER * VictoryManager.OVERTIME_TOTAL_TURNS;
 		}
@@ -130,11 +130,8 @@ export class VictoryManager {
 		return false;
 	}
 
-	// public capitalsVictory(): ActivePlayer | null {}
-	// public checkPointVictory(): ActivePlayer | null {}
-
 	public setTimer(timer: TimerService) {
-		this.gameTimer = timer;
+		// this.gameTimer = timer;
 	}
 
 	public reset() {
@@ -155,51 +152,5 @@ export class VictoryManager {
 				player.setEndData();
 			}
 		});
-	}
-
-	private pauseAllUnits() {
-		// Players
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = Player(i);
-
-			const group: group = CreateGroup();
-			GroupEnumUnitsOfPlayer(
-				group,
-				player,
-				Filter(() => {
-					const unit: unit = GetFilterUnit();
-
-					// Cancels units in training by changing ownership
-					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-						SetUnitOwner(unit, NEUTRAL_HOSTILE, false);
-						SetUnitOwner(unit, player, false);
-					}
-
-					// Prevents neutral buildings from attacking post-game
-					IssueImmediateOrder(unit, 'holdposition');
-					SetUnitInvulnerable(unit, true);
-				})
-			);
-			DestroyGroup(group);
-			GroupClear(group);
-		}
-
-		// Neutral
-		const group: group = CreateGroup();
-		GroupEnumUnitsOfPlayer(
-			group,
-			NEUTRAL_HOSTILE,
-			Filter(() => {
-				const unit: unit = GetFilterUnit();
-
-				// Prevents defenders from being attacked
-				if (IsUnitType(unit, UNIT_TYPE.GUARD)) {
-					IssueImmediateOrder(unit, 'holdposition');
-					SetUnitInvulnerable(unit, true);
-				}
-			})
-		);
-		DestroyGroup(group);
-		GroupClear(group);
 	}
 }

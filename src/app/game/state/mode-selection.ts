@@ -12,8 +12,18 @@ export class ModeSelection implements GameState {
 	private manager: GameManager;
 	private ui: SettingsView;
 
-	public constructor() {
+	private static instance: ModeSelection;
+
+	private constructor() {
 		this.ui = new SettingsView();
+	}
+
+	public static getInstance() {
+		if (this.instance == null) {
+			this.instance = new ModeSelection();
+		}
+
+		return this.instance;
 	}
 
 	public setObserver(observer: GameManager) {

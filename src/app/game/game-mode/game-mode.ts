@@ -35,19 +35,18 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onStartMatch(): void {
-		print('onStartMatch');
+		// print('onStartMatch');
 		GameManager.setMatchStage('inProgress');
 	}
 
 	onEndMatch(): void {
-		print('onEndMatch');
+		// print('onEndMatch');
 		GameManager.setMatchStage('postMatch');
 		this.postMatchSetup();
 	}
 
 	onStartTurn(turn: number): void {
-		print('onStartTurn');
-
+		// print('onStartTurn');
 		ScoreboardManager.updateScoreboardTitle();
 
 		PlayerManager.getInstance().players.forEach((player) => {
@@ -68,7 +67,7 @@ export abstract class BaseGameMode implements GameMode {
 			GameManager.setMatchStage('postMatch');
 		}
 
-		print('onEndTurn');
+		// print('onEndTurn');
 	}
 
 	onTick(tick: number): void {

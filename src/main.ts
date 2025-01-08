@@ -123,7 +123,7 @@ function tsMain() {
 			FogEnable(true);
 
 			await Wait.forSeconds(2);
-			new ModeSelection().run();
+			ModeSelection.getInstance().run();
 		});
 	} catch (e) {
 		print(e);

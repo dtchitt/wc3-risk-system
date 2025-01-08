@@ -16,13 +16,12 @@ import { HexColors } from '../utils/hex-colors';
 import { TreeManager } from './services/tree-service';
 import { DistributionService } from './services/distribution-service';
 import { RegionToCity } from '../city/city-map';
+import { MatchData } from './state/match-state';
 
 export class MatchGameLoop {
 	private static instance: MatchGameLoop;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
-	private _tickCounter: number;
-	private _turnCount: number;
 	private distributionService: DistributionService;
 
 	private constructor() {
@@ -124,9 +123,8 @@ export class MatchGameLoop {
 
 	private run() {
 		this._gameMode.onStartMatch();
-		this._tickCounter = TURN_DURATION_IN_SECONDS;
-		this._turnCount = 1;
-		this._gameMode.onStartTurn(this._turnCount);
+		MatchData.resetMatchData();
+		this._gameMode.onStartTurn(MatchData.turnCount);
 		// Start a timer that executes the game loop every second
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
 			try {
@@ -138,10 +136,10 @@ export class MatchGameLoop {
 				}
 
 				// Check if a turn has ended
-				this._gameMode.onTick(this._tickCounter);
+				this._gameMode.onTick(MatchData.tickCounter);
 
-				if (this._tickCounter <= 0) {
-					this._gameMode.onEndTurn(this._turnCount);
+				if (MatchData.tickCounter <= 0) {
+					this._gameMode.onEndTurn(MatchData.turnCount);
 				}
 
 				// Stop game loop if match is over
@@ -150,13 +148,13 @@ export class MatchGameLoop {
 					return;
 				}
 
-				this._tickCounter--;
+				MatchData.tickCounter--;
 
-				if (this._tickCounter <= 0) {
-					this._gameMode.onEndTurn(this._turnCount);
-					this._tickCounter = TURN_DURATION_IN_SECONDS;
-					this._turnCount++;
-					this._gameMode.onStartTurn(this._turnCount);
+				if (MatchData.tickCounter <= 0) {
+					this._gameMode.onEndTurn(MatchData.turnCount);
+					MatchData.tickCounter = TURN_DURATION_IN_SECONDS;
+					MatchData.turnCount++;
+					this._gameMode.onStartTurn(MatchData.turnCount);
 				}
 				this.updateUI();
 			} catch (error) {
@@ -221,14 +219,14 @@ export class MatchGameLoop {
 	 * Update the UI elements related to the timer.
 	 */
 	private updateUI() {
-		let tick: string = `${this._tickCounter}`;
+		let tick: string = `${MatchData.tickCounter}`;
 
-		if (this._tickCounter <= 3) {
-			tick = `${HexColors.RED}${this._tickCounter}|r`;
+		if (MatchData.tickCounter <= 3) {
+			tick = `${HexColors.RED}${MatchData.tickCounter}|r`;
 			PlayGlobalSound('Sound\\Interface\\BattleNetTick.flac');
 		}
 
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
-		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${this._turnCount}`);
+		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${MatchData.turnCount}`);
 	}
 }

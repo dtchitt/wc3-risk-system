@@ -68,11 +68,11 @@ export class GameManager {
 	}
 
 	public fastRestart() {
-		// this.startGameMode(this.preGameState);
+		this._gameLoop.startGameMode().then();
 	}
 
 	public fullRestart() {
-		// this.startGameMode(this.modeSelectionState);
+		// ModeSelection.getInstance().run();
 	}
 
 	public get getGameState(): GameState {
