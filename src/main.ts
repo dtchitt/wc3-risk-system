@@ -24,6 +24,9 @@ import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { SetCommands } from './app/commands/commands';
 import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-shuffled-player-list';
+import { ModeSelection } from './app/game/state/mode-selection';
+import { PlayerSetupService } from './app/game/services/player-setup-service';
+import { Wait } from './app/utils/wait';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -101,7 +104,7 @@ function tsMain() {
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
 
-		TimerStart(onLoadTimer, 0.0, false, () => {
+		TimerStart(onLoadTimer, 0.0, false, async () => {
 			PauseTimer(onLoadTimer);
 			DestroyTimer(onLoadTimer);
 			FogEnable(false);
@@ -112,6 +115,15 @@ function tsMain() {
 			TransportManager.getInstance();
 			TimedEventManager.getInstance();
 			SetCommands(GameManager.getInstance());
+
+			new PlayerSetupService().run();
+
+			EnableSelect(false, false);
+			EnableDragSelect(false, false);
+			FogEnable(true);
+
+			await Wait.forSeconds(2);
+			ModeSelection.getInstance().run();
 		});
 	} catch (e) {
 		print(e);

@@ -5,22 +5,32 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
+import { MatchGameLoop } from '../match-game-loop';
+import { GameModeStandard } from '../game-mode/game-mode-standard';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
-	private nextState: GameState;
 	private ui: SettingsView;
 
-	public constructor(nextState: GameState) {
-		this.nextState = nextState;
+	private static instance: ModeSelection;
+
+	private constructor() {
 		this.ui = new SettingsView();
+	}
+
+	public static getInstance() {
+		if (this.instance == null) {
+			this.instance = new ModeSelection();
+		}
+
+		return this.instance;
 	}
 
 	public setObserver(observer: GameManager) {
 		this.manager = observer;
 	}
 
-	public start(): void {
+	public run(): void {
 		if (NameManager.getInstance().getAcct(Player(23)) == 'RiskBot') {
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
 			settingsContext.getSettings().Promode = 0;
@@ -60,7 +70,7 @@ export class ModeSelection implements GameState {
 		this.setupSettingsQuest();
 		ExportGameSettings.write(settings);
 
-		this.manager.updateState(this.nextState);
+		MatchGameLoop.getInstance().setup(new GameModeStandard());
 	}
 
 	private setupSettingsQuest(): void {
