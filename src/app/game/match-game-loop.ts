@@ -36,7 +36,7 @@ export class MatchGameLoop {
 		return this.instance;
 	}
 
-	public setup(gameMode: GameMode) {
+	public setGameMode(gameMode: GameMode) {
 		this._gameMode = gameMode;
 		this.startGameMode().then();
 	}
@@ -122,8 +122,9 @@ export class MatchGameLoop {
 	}
 
 	private run() {
-		this._gameMode.onStartMatch();
 		MatchData.resetMatchData();
+		this._gameMode.onStartMatch();
+		print('DOING IT');
 		this._gameMode.onStartTurn(MatchData.turnCount);
 		// Start a timer that executes the game loop every second
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {

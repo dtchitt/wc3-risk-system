@@ -7,6 +7,7 @@ import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
 import { MatchGameLoop } from '../match-game-loop';
 import { GameModeStandard } from '../game-mode/game-mode-standard';
+import { MatchData } from './match-state';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
@@ -70,7 +71,8 @@ export class ModeSelection implements GameState {
 		this.setupSettingsQuest();
 		ExportGameSettings.write(settings);
 
-		MatchGameLoop.getInstance().setup(new GameModeStandard());
+		MatchData.gameMode = 'ffa';
+		MatchGameLoop.getInstance().setGameMode(new GameModeStandard());
 	}
 
 	private setupSettingsQuest(): void {

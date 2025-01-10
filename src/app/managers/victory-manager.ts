@@ -3,7 +3,6 @@ import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
-import { MatchGameLoop } from '../game/match-game-loop';
 import { MatchData } from '../game/state/match-state';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
@@ -18,13 +17,9 @@ export class VictoryManager {
 	public static OVERTIME_TURNS_UNTIL_ACTIVE: number = 0;
 	public static GAME_VICTORY_STATE: VictoryProgressState = 'UNDECIDED';
 
-	private _leader: ActivePlayer;
-	private players: ActivePlayer[];
-	private gameTimer: TimerService;
 	private winTracker: WinTracker;
 
 	private constructor() {
-		this.players = [];
 		this.winTracker = new WinTracker();
 
 		// since gameTimer is not set yet and CalculateCitiesToWin relies on the gameTimer, we need to manually set the cities to win
@@ -43,40 +38,37 @@ export class VictoryManager {
 	}
 
 	public addPlayer(player: ActivePlayer) {
-		this.players.push(player);
+		MatchData.players.push(player);
 
-		if (!this._leader) {
-			this._leader = player;
+		if (!MatchData.leader) {
+			MatchData.leader = player;
 		}
 	}
 
 	public removePlayer(player: ActivePlayer) {
-		const index: number = this.players.indexOf(player);
+		const index: number = MatchData.players.indexOf(player);
 
 		if (index > -1) {
-			this.players.splice(index, 1);
+			MatchData.players.splice(index, 1);
 		}
 
 		this.checkKnockOutVictory();
 	}
 
 	public setLeader(player: ActivePlayer) {
-		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
-			this._leader = player;
+		if (player.trackedData.cities.cities.length > MatchData.leader.trackedData.cities.cities.length) {
+			MatchData.leader = player;
 		}
 	}
 
-	public get leader(): ActivePlayer {
-		return this._leader;
-	}
 	public getFrontRunnersByThreshold(threshold: number): ActivePlayer[] {
-		return this.players
+		return MatchData.players
 			.filter((player) => player.trackedData.cities.cities.length >= threshold)
 			.sort((player) => player.trackedData.cities.cities.length);
 	}
 
 	public victors(): ActivePlayer[] {
-		let potentialVictors = this.players.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
+		let potentialVictors = MatchData.players.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
 
 		if (potentialVictors.length == 0) {
 			return [];
@@ -121,8 +113,8 @@ export class VictoryManager {
 	}
 
 	public checkKnockOutVictory(): boolean {
-		if (this.players.length == 1) {
-			this._leader = this.players[0];
+		if (MatchData.players.length == 1) {
+			MatchData.leader = MatchData.players[0];
 			this.saveStats();
 			return true;
 		}
@@ -135,19 +127,17 @@ export class VictoryManager {
 	}
 
 	public reset() {
-		this.players = [];
-		this._leader = null;
 		VictoryManager.OVERTIME_ACTIVE = false;
 		VictoryManager.GAME_VICTORY_STATE = 'UNDECIDED';
 	}
 
 	public updateWinTracker() {
-		this.winTracker.addWinForEntity(this._leader.getPlayer());
+		this.winTracker.addWinForEntity(MatchData.leader.getPlayer());
 	}
 
 	public saveStats() {
 		VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
-		this.players.forEach((player) => {
+		MatchData.players.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
 			}

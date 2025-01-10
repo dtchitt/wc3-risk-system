@@ -1,11 +1,11 @@
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
-import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
 import { MAP_VERSION } from '../utils/map-info';
+import { MatchData } from '../game/state/match-state';
 
 export class StatisticsModel {
 	private timePlayed: string;
@@ -19,7 +19,7 @@ export class StatisticsModel {
 
 	public setData() {
 		this.setGameTime();
-		this.winner = VictoryManager.getInstance().leader;
+		this.winner = MatchData.leader;
 		this.ranks = [...PlayerManager.getInstance().players.values()];
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);

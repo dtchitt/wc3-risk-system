@@ -1,15 +1,26 @@
+import { ActivePlayer } from 'src/app/player/types/active-player';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
+
+export type GameModeType = 'ffa' | 'capital';
+
+export type MatchState = 'modeSelection' | 'preMatch' | 'inProgress' | 'postMatch';
 
 export interface GameData {
 	turn: number;
 	ticks: number;
+	leader: ActivePlayer;
+	players: ActivePlayer[];
+	matchState: MatchState;
+	gameModeType?: GameModeType;
 }
 
 export class MatchData {
 	private static instance: MatchData;
 	private data: GameData;
 
-	private constructor() {}
+	private constructor() {
+		this.data = MatchData.defaultData();
+	}
 
 	public static getInstance() {
 		if (this.instance == null) {
@@ -21,8 +32,19 @@ export class MatchData {
 
 	public static resetMatchData() {
 		this.getInstance().data = {
+			...MatchData.defaultData(),
+			matchState: 'inProgress',
+		};
+	}
+
+	private static defaultData(): GameData {
+		return {
 			turn: 1,
 			ticks: TURN_DURATION_IN_SECONDS,
+			leader: null,
+			players: [],
+			matchState: 'modeSelection',
+			gameModeType: null,
 		};
 	}
 
@@ -38,5 +60,33 @@ export class MatchData {
 	}
 	public static set tickCounter(v: number) {
 		this.getInstance().data.ticks = v;
+	}
+
+	public static get leader(): ActivePlayer {
+		return this.getInstance().data.leader;
+	}
+	public static set leader(v: ActivePlayer) {
+		this.getInstance().data.leader = v;
+	}
+
+	public static get players(): ActivePlayer[] {
+		return this.getInstance().data.players;
+	}
+	public static set players(v: ActivePlayer[]) {
+		this.getInstance().data.players = v;
+	}
+
+	public static get matchState(): MatchState {
+		return this.getInstance().data.matchState;
+	}
+	public static set matchState(v: MatchState) {
+		this.getInstance().data.matchState = v;
+	}
+
+	public static get gameMode(): GameModeType {
+		return this.getInstance().data.gameModeType;
+	}
+	public static set gameMode(v: GameModeType) {
+		this.getInstance().data.gameModeType = v;
 	}
 }

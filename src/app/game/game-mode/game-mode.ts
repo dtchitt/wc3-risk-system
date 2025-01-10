@@ -1,6 +1,5 @@
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { City } from 'src/app/city/city';
-import { PlayerManager } from 'src/app/player/player-manager';
 import { StringToCountry } from 'src/app/country/country-map';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { VictoryProgressState, VictoryManager } from 'src/app/managers/victory-manager';
@@ -13,6 +12,7 @@ import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { GameManager } from '../game-manager';
+import { MatchData } from '../state/match-state';
 
 export interface GameMode {
 	isMatchOver: () => boolean;
@@ -30,26 +30,27 @@ export interface GameMode {
 
 export abstract class BaseGameMode implements GameMode {
 	isMatchOver(): boolean {
-		return GameManager.isMatchPostStage();
+		return MatchData.matchState == 'postMatch';
 		// print('isMatchOver');
 	}
 
 	onStartMatch(): void {
 		// print('onStartMatch');
-		GameManager.setMatchStage('inProgress');
+		// MatchData.matchState = 'inProgress';
 	}
 
 	onEndMatch(): void {
 		// print('onEndMatch');
-		GameManager.setMatchStage('postMatch');
+		MatchData.matchState = 'postMatch';
 		this.postMatchSetup();
 	}
 
 	onStartTurn(turn: number): void {
-		// print('onStartTurn');
 		ScoreboardManager.updateScoreboardTitle();
 
-		PlayerManager.getInstance().players.forEach((player) => {
+		print(MatchData.players.length);
+		MatchData.players.forEach((player, i) => {
+			print(i + ', ' + player.status.status);
 			if (!player.status.isDead()) {
 				player.giveGold();
 			}
@@ -64,7 +65,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	onEndTurn(turn: number): void {
 		if (VictoryManager.GAME_VICTORY_STATE == 'DECIDED') {
-			GameManager.setMatchStage('postMatch');
+			MatchData.matchState = 'postMatch';
 		}
 
 		// print('onEndTurn');
@@ -87,10 +88,10 @@ export abstract class BaseGameMode implements GameMode {
 		print('onRematch');
 	}
 
-	onPlayerElimination(): void {
+	onPlayerElimination(player: ActivePlayer): void {
 		print('onPlayerElimination');
-		if (PlayerManager.getInstance().players.size == 1) {
-			GameManager.setMatchStage('postMatch');
+		if (MatchData.players.length == 1) {
+			MatchData.matchState = 'postMatch';
 		}
 	}
 

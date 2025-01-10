@@ -3,24 +3,19 @@ import { MatchGameLoop } from './match-game-loop';
 import { GameMode } from './game-mode/game-mode';
 import { ModeSelection } from './state/mode-selection';
 import { GameState } from './state/game-state';
-
-export type MatchState = 'modeSelection' | 'preMatch' | 'inProgress' | 'postMatch';
+import { MatchData } from './state/match-state';
 
 export class GameManager {
 	private _state: GameState;
 	private _modeSelectionState: ModeSelection;
 	private _gameLoop: MatchGameLoop;
-	private _matchState: MatchState;
 
 	private _restartEnabled: boolean;
-
-	private _leader: ActivePlayer;
-	private players: ActivePlayer[];
 
 	private static instance: GameManager;
 
 	private constructor() {
-		this._matchState = 'modeSelection';
+		MatchData.matchState = 'modeSelection';
 	}
 
 	public static getInstance() {
@@ -32,8 +27,9 @@ export class GameManager {
 	}
 
 	public startGameMode(gameMode: GameMode) {
-		MatchGameLoop.getInstance().setup(gameMode);
-		GameManager.setMatchStage('inProgress');
+		print('startGameMode');
+		MatchGameLoop.getInstance().setGameMode(gameMode);
+		MatchData.matchState = 'inProgress';
 		MatchGameLoop.getInstance().startGameMode();
 	}
 
@@ -44,19 +40,11 @@ export class GameManager {
 	}
 
 	public static isMatchInProgress() {
-		return this.getInstance()._matchState == 'inProgress';
+		return MatchData.matchState == 'inProgress';
 	}
 
 	public static isMatchPostStage() {
-		return this.getInstance()._matchState == 'postMatch';
-	}
-
-	public static getMatchStage(): MatchState {
-		return this.getInstance()._matchState;
-	}
-
-	public static setMatchStage(matchStage: MatchState) {
-		this.getInstance()._matchState = matchStage;
+		return MatchData.matchState == 'postMatch';
 	}
 
 	public isRestartEnabled() {
@@ -79,40 +67,32 @@ export class GameManager {
 		return this._state;
 	}
 
-	public get leader(): ActivePlayer {
-		return this._leader;
-	}
+	// public addPlayer(player: ActivePlayer) {
+	// 	MatchData.players.push(player);
 
-	public get matchPlayers(): ActivePlayer[] {
-		return this.players;
-	}
+	// 	if (!MatchData.leader) {
+	// 		MatchData.leader = player;
+	// 	}
+	// }
 
-	public addPlayer(player: ActivePlayer) {
-		this.players.push(player);
+	// public removePlayer(player: ActivePlayer) {
+	// 	const index: number = MatchData.players.indexOf(player);
 
-		if (!this._leader) {
-			this._leader = player;
-		}
-	}
+	// 	if (index > -1) {
+	// 		MatchData.players.splice(index, 1);
+	// 	}
 
-	public removePlayer(player: ActivePlayer) {
-		const index: number = this.players.indexOf(player);
+	// 	if (MatchData.players.length == 1) {
+	// 		MatchData.leader = MatchData.players[0];
+	// 		return true;
+	// 	}
 
-		if (index > -1) {
-			this.players.splice(index, 1);
-		}
-
-		if (this.players.length == 1) {
-			this._leader = this.players[0];
-			return true;
-		}
-
-		this._gameLoop.onPlayerElimination(player);
-	}
+	// 	this._gameLoop.onPlayerElimination(player);
+	// }
 
 	public setLeader(player: ActivePlayer) {
-		if (player.trackedData.cities.cities.length > this.leader.trackedData.cities.cities.length) {
-			this._leader = player;
+		if (player.trackedData.cities.cities.length > MatchData.leader.trackedData.cities.cities.length) {
+			MatchData.leader = player;
 		}
 	}
 }
