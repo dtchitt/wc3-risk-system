@@ -7,7 +7,6 @@ import { MatchData } from './state/match-state';
 
 export class GameManager {
 	private _state: GameState;
-	private _modeSelectionState: ModeSelection;
 	private _gameLoop: MatchGameLoop;
 
 	private _restartEnabled: boolean;

@@ -14,6 +14,7 @@ import { Region } from '../region/region';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
+import { MatchData } from '../game/state/match-state';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -117,14 +118,18 @@ export function OwnershipChangeEvent() {
 						}
 					}
 
-					ScoreboardManager.getInstance().setAlert(ownerHandle, country.getName());
+					if (MatchData.matchState == 'inProgress') {
+						ScoreboardManager.getInstance().setAlert(ownerHandle, country.getName());
+					}
 				}
 
 				if (teamManager) {
 					teamManager.getTeamFromPlayer(ownerHandle).updateCityCount(1);
 				}
 
-				ScoreboardManager.updateScoreboardTitle();
+				if (MatchData.matchState == 'inProgress') {
+					ScoreboardManager.updateScoreboardTitle();
+				}
 			}
 
 			return false;

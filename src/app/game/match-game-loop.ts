@@ -73,8 +73,13 @@ export class MatchGameLoop {
 		});
 	}
 
-	public async startGameMode() {
+	private async resetMatch() {
+		MatchData.resetMatchData();
 		await this.resetMap();
+	}
+
+	public async startGameMode() {
+		await this.resetMatch();
 		await Wait.forSeconds(2);
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
@@ -122,7 +127,6 @@ export class MatchGameLoop {
 	}
 
 	private run() {
-		MatchData.resetMatchData();
 		this._gameMode.onStartMatch();
 		print('DOING IT');
 		this._gameMode.onStartTurn(MatchData.turnCount);
