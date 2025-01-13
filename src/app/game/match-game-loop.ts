@@ -6,10 +6,10 @@ import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { CountdownMessage } from '../utils/messages';
-import { NEUTRAL_HOSTILE, PlayGlobalSound } from '../utils/utils';
+import { NEUTRAL_HOSTILE, PLAYER_SLOTS, PlayGlobalSound } from '../utils/utils';
 import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
-import { CityToCountry } from '../country/country-map';
+import { CityToCountry, StringToCountry } from '../country/country-map';
 import { Wait } from '../utils/wait';
 import { VictoryManager } from '../managers/victory-manager';
 import { HexColors } from '../utils/hex-colors';
@@ -17,6 +17,7 @@ import { TreeManager } from './services/tree-service';
 import { DistributionService } from './services/distribution-service';
 import { RegionToCity } from '../city/city-map';
 import { MatchData } from './state/match-state';
+import { UNIT_TYPE } from '../utils/unit-types';
 
 export class MatchGameLoop {
 	private static instance: MatchGameLoop;
@@ -36,9 +37,8 @@ export class MatchGameLoop {
 		return this.instance;
 	}
 
-	public setGameMode(gameMode: GameMode) {
+	public injectGameMode(gameMode: GameMode) {
 		this._gameMode = gameMode;
-		this.startGameMode().then();
 	}
 
 	public onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer) {
@@ -49,8 +49,26 @@ export class MatchGameLoop {
 		this._gameMode.onPlayerElimination(player);
 	}
 
-	public async resetMap() {
-		TreeManager.getInstance();
+	public async resetMatch() {
+		FogEnable(true);
+
+		print('Resetting match data...');
+		MatchData.prepareMatchData();
+
+		if (MatchData.matchCount > 1) {
+			print('Removing units...');
+			await this.removeUnits();
+			await Wait.forSeconds(1);
+			print('Resuming units...');
+			await this.resumingUnits();
+			await Wait.forSeconds(1);
+			print('Resetting countries...');
+			await this.resetCountries();
+			await Wait.forSeconds(1);
+			print('Resetting trees...');
+			await TreeManager.getInstance().reset();
+			await Wait.forSeconds(1);
+		}
 
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);
@@ -71,15 +89,28 @@ export class MatchGameLoop {
 				SetUnitInvulnerable(city.guard.unit, false);
 			});
 		});
-	}
 
-	private async resetMatch() {
-		MatchData.resetMatchData();
-		await this.resetMap();
+		// VictoryManager.getInstance().reset();
+
+		// if (!SettingsContext.getInstance().isPromode()) {
+		// 	StatisticsController.getInstance().setViewVisibility(false);
+		// }
+
+		// if (!SettingsContext.getInstance().isFFA()) {
+		// 	TeamManager.getInstance()
+		// 		.getTeams()
+		// 		.forEach((team) => {
+		// 			team.reset();
+		// 		});
+		// }
+
+		// PlayerManager.getInstance().players.forEach((player) => {
+		// 	player.reset();
+		// });
 	}
 
 	public async startGameMode() {
-		await this.resetMatch();
+		await this.resetMatch().then();
 		await Wait.forSeconds(2);
 		try {
 			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
@@ -233,5 +264,65 @@ export class MatchGameLoop {
 
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${MatchData.turnCount}`);
+	}
+
+	private resumingUnits(): Promise<void> {
+		return new Promise((resolve) => {
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player = Player(i);
+
+				const group: group = CreateGroup();
+				GroupEnumUnitsOfPlayer(
+					group,
+					player,
+					Filter(() => {
+						const unit: unit = GetFilterUnit();
+						if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
+							PauseUnit(unit, false);
+						}
+					})
+				);
+
+				GroupClear(group);
+				DestroyGroup(group);
+			}
+
+			resolve();
+		});
+	}
+
+	private removeUnits(): Promise<void> {
+		return new Promise((resolve) => {
+			for (let i = 0; i < PLAYER_SLOTS; i++) {
+				const player = Player(i);
+
+				const group: group = CreateGroup();
+				GroupEnumUnitsOfPlayer(
+					group,
+					player,
+					Filter(() => {
+						const unit: unit = GetFilterUnit();
+
+						if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
+							RemoveUnit(unit);
+						}
+					})
+				);
+
+				GroupClear(group);
+				DestroyGroup(group);
+			}
+
+			resolve();
+		});
+	}
+
+	private resetCountries(): Promise<void> {
+		return new Promise((resolve) => {
+			StringToCountry.forEach((country) => {
+				country.reset();
+			});
+			resolve();
+		});
 	}
 }

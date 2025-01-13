@@ -1,3 +1,4 @@
+import { PlayerManager } from 'src/app/player/player-manager';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 
@@ -12,6 +13,7 @@ export interface GameData {
 	players: ActivePlayer[];
 	matchState: MatchState;
 	gameModeType?: GameModeType;
+	matchCount: number;
 }
 
 export class MatchData {
@@ -30,10 +32,11 @@ export class MatchData {
 		return this.instance;
 	}
 
-	public static resetMatchData() {
+	public static prepareMatchData() {
 		this.getInstance().data = {
 			...MatchData.defaultData(),
 			matchState: 'inProgress',
+			matchCount: this.getInstance().data.matchCount + 1,
 		};
 	}
 
@@ -45,6 +48,7 @@ export class MatchData {
 			players: [],
 			matchState: 'modeSelection',
 			gameModeType: null,
+			matchCount: 0,
 		};
 	}
 
@@ -88,5 +92,9 @@ export class MatchData {
 	}
 	public static set gameMode(v: GameModeType) {
 		this.getInstance().data.gameModeType = v;
+	}
+
+	public static get matchCount(): number {
+		return this.getInstance().data.matchCount;
 	}
 }

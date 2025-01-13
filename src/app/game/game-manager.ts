@@ -1,7 +1,5 @@
 import { ActivePlayer } from '../player/types/active-player';
 import { MatchGameLoop } from './match-game-loop';
-import { GameMode } from './game-mode/game-mode';
-import { ModeSelection } from './state/mode-selection';
 import { GameState } from './state/game-state';
 import { MatchData } from './state/match-state';
 
@@ -15,6 +13,7 @@ export class GameManager {
 
 	private constructor() {
 		MatchData.matchState = 'modeSelection';
+		this._gameLoop = MatchGameLoop.getInstance();
 	}
 
 	public static getInstance() {
@@ -25,11 +24,10 @@ export class GameManager {
 		return this.instance;
 	}
 
-	public startGameMode(gameMode: GameMode) {
+	public startGameMode() {
 		print('startGameMode');
-		MatchGameLoop.getInstance().setGameMode(gameMode);
 		MatchData.matchState = 'inProgress';
-		MatchGameLoop.getInstance().startGameMode();
+		this._gameLoop.startGameMode();
 	}
 
 	public updateState(state: GameState) {

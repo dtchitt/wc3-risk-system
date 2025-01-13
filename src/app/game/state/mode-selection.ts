@@ -72,7 +72,8 @@ export class ModeSelection implements GameState {
 		ExportGameSettings.write(settings);
 
 		MatchData.gameMode = 'ffa';
-		MatchGameLoop.getInstance().setGameMode(new GameModeStandard());
+		MatchGameLoop.getInstance().injectGameMode(new GameModeStandard());
+		MatchGameLoop.getInstance().startGameMode();
 	}
 
 	private setupSettingsQuest(): void {

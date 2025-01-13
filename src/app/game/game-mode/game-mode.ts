@@ -29,6 +29,11 @@ export interface GameMode {
 }
 
 export abstract class BaseGameMode implements GameMode {
+	private statsController: StatisticsController;
+	constructor() {
+		this.statsController = StatisticsController.getInstance();
+	}
+
 	isMatchOver(): boolean {
 		return MatchData.matchState == 'postMatch';
 		// print('isMatchOver');
@@ -37,6 +42,7 @@ export abstract class BaseGameMode implements GameMode {
 	onStartMatch(): void {
 		// print('onStartMatch');
 		// MatchData.matchState = 'inProgress';
+		this.statsController.setViewVisibility(false);
 	}
 
 	onEndMatch(): void {
@@ -86,6 +92,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	onRematch(): void {
 		print('onRematch');
+		this.statsController.setViewVisibility(false);
 	}
 
 	onPlayerElimination(player: ActivePlayer): void {
@@ -138,10 +145,9 @@ export abstract class BaseGameMode implements GameMode {
 		if (SettingsContext.getInstance().isPromode()) {
 			VictoryManager.getInstance().updateWinTracker();
 		} else {
-			const statsController: StatisticsController = StatisticsController.getInstance();
-			statsController.refreshView();
-			statsController.setViewVisibility(true);
-			statsController.writeStatisticsData();
+			this.statsController.refreshView();
+			this.statsController.setViewVisibility(true);
+			this.statsController.writeStatisticsData();
 		}
 
 		GameManager.getInstance().setRestartEnabled(true);
