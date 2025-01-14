@@ -13,6 +13,7 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { GameManager } from '../game-manager';
 import { MatchData } from '../state/match-state';
+import { PlayerManager } from 'src/app/player/player-manager';
 
 export interface GameMode {
 	isMatchOver: () => boolean;
@@ -24,7 +25,7 @@ export interface GameMode {
 
 	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => void;
 	onForfeits: () => void;
-	onRematch: () => void;
+	onRematch: () => Promise<void>;
 	onPlayerElimination: (player: ActivePlayer) => void;
 }
 
@@ -90,7 +91,7 @@ export abstract class BaseGameMode implements GameMode {
 		print('onForfeits');
 	}
 
-	onRematch(): void {
+	async onRematch(): Promise<void> {
 		print('onRematch');
 		this.statsController.setViewVisibility(false);
 	}
@@ -149,6 +150,17 @@ export abstract class BaseGameMode implements GameMode {
 			this.statsController.setViewVisibility(true);
 			this.statsController.writeStatisticsData();
 		}
+
+		// Hide UI
+		ScoreboardManager.getInstance().destroyBoards();
+		PlayerManager.getInstance().players.forEach((player) => {
+			if (SettingsContext.getInstance().isPromode()) {
+				NameManager.getInstance().setName(player.getPlayer(), 'acct');
+			} else {
+				NameManager.getInstance().setName(player.getPlayer(), 'btag');
+				player.trackedData.bonus.hideUI();
+			}
+		});
 
 		GameManager.getInstance().setRestartEnabled(true);
 	}

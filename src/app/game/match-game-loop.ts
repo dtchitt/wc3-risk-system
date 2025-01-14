@@ -24,9 +24,11 @@ export class MatchGameLoop {
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
 	private distributionService: DistributionService;
+	private playerManager: PlayerManager;
 
 	private constructor() {
 		this._matchLoopTimer = CreateTimer();
+		this.playerManager = PlayerManager.getInstance();
 	}
 
 	public static getInstance() {
@@ -52,10 +54,17 @@ export class MatchGameLoop {
 	public async resetMatch() {
 		FogEnable(true);
 
-		print('Resetting match data...');
 		MatchData.prepareMatchData();
 
-		if (MatchData.matchCount > 1) {
+		if (MatchData.matchCount == 1) {
+			print(`Preparing round #${MatchData.matchCount}`);
+		} else {
+			print(`Preparing next round #${MatchData.matchCount}`);
+
+			// this.playerManager.players.forEach((player) => {
+			// 	player.reset();
+			// });
+
 			print('Removing units...');
 			await this.removeUnits();
 			await Wait.forSeconds(1);
@@ -74,7 +83,6 @@ export class MatchGameLoop {
 		EnableDragSelect(false, false);
 		FogEnable(true);
 
-		const playerManager: PlayerManager = PlayerManager.getInstance();
 		this.distributionService = new DistributionService();
 		this.distributionService.runDistro(() => {
 			RegionToCity.forEach((city) => {
@@ -83,30 +91,12 @@ export class MatchGameLoop {
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					this.playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
 
 				SetUnitInvulnerable(city.guard.unit, false);
 			});
 		});
-
-		// VictoryManager.getInstance().reset();
-
-		// if (!SettingsContext.getInstance().isPromode()) {
-		// 	StatisticsController.getInstance().setViewVisibility(false);
-		// }
-
-		// if (!SettingsContext.getInstance().isFFA()) {
-		// 	TeamManager.getInstance()
-		// 		.getTeams()
-		// 		.forEach((team) => {
-		// 			team.reset();
-		// 		});
-		// }
-
-		// PlayerManager.getInstance().players.forEach((player) => {
-		// 	player.reset();
-		// });
 	}
 
 	public async startGameMode() {
