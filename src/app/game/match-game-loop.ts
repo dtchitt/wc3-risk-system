@@ -20,6 +20,7 @@ import { MatchData } from './state/match-state';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { StatisticsController } from '../statistics/statistics-controller';
 import { SlavePlayer } from '../player/types/slave-player';
+import { NameManager } from '../managers/names/name-manager';
 
 export class MatchGameLoop {
 	private static instance: MatchGameLoop;
@@ -30,6 +31,7 @@ export class MatchGameLoop {
 	private _statsController: StatisticsController;
 	private _scoreboardManager: ScoreboardManager;
 	private _settingsContext: SettingsContext;
+	private _nameManager: NameManager;
 
 	private constructor() {
 		this._matchLoopTimer = CreateTimer();
@@ -37,6 +39,7 @@ export class MatchGameLoop {
 		this._statsController = StatisticsController.getInstance();
 		this._scoreboardManager = ScoreboardManager.getInstance();
 		this._settingsContext = SettingsContext.getInstance();
+		this._nameManager = NameManager.getInstance();
 	}
 
 	public static getInstance() {
@@ -81,10 +84,16 @@ export class MatchGameLoop {
 			await Wait.forSeconds(1);
 		}
 
+		if (!this._settingsContext.isPromode()) {
+			this._playerManager.players.forEach((val) => {
+				this._nameManager.setName(val.getPlayer(), 'color');
+			});
+		}
+
 		// Remove irrelevant players from the game
 		this._playerManager.players.forEach((val) => {
 			val.trackedData.setKDMaps();
-
+			this._nameManager.setName(val.getPlayer(), 'color');
 			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
 				val.status.set(PLAYER_STATUS.ALIVE);
 			} else {
