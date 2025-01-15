@@ -43,7 +43,6 @@ export abstract class BaseGameMode implements GameMode {
 	onStartMatch(): void {
 		// print('onStartMatch');
 		// MatchData.matchState = 'inProgress';
-		this.statsController.setViewVisibility(false);
 	}
 
 	onEndMatch(): void {
@@ -53,11 +52,8 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onStartTurn(turn: number): void {
-		ScoreboardManager.updateScoreboardTitle();
-
-		print(MatchData.players.length);
+		ScoreboardManager.getInstance().updateFull();
 		MatchData.players.forEach((player, i) => {
-			print(i + ', ' + player.status.status);
 			if (!player.status.isDead()) {
 				player.giveGold();
 			}
@@ -75,12 +71,16 @@ export abstract class BaseGameMode implements GameMode {
 			MatchData.matchState = 'postMatch';
 		}
 
+		ScoreboardManager.getInstance().updateFull();
+
 		// print('onEndTurn');
 	}
 
 	onTick(tick: number): void {
 		// print('onTick');
 		VictoryManager.getInstance().updateAndGetGameState();
+		ScoreboardManager.updateScoreboardTitle();
+		ScoreboardManager.getInstance().updatePartial();
 	}
 
 	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {

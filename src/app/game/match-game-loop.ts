@@ -18,17 +18,25 @@ import { DistributionService } from './services/distribution-service';
 import { RegionToCity } from '../city/city-map';
 import { MatchData } from './state/match-state';
 import { UNIT_TYPE } from '../utils/unit-types';
+import { StatisticsController } from '../statistics/statistics-controller';
+import { SlavePlayer } from '../player/types/slave-player';
 
 export class MatchGameLoop {
 	private static instance: MatchGameLoop;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
-	private distributionService: DistributionService;
-	private playerManager: PlayerManager;
+	private _distributionService: DistributionService;
+	private _playerManager: PlayerManager;
+	private _statsController: StatisticsController;
+	private _scoreboardManager: ScoreboardManager;
+	private _settingsContext: SettingsContext;
 
 	private constructor() {
 		this._matchLoopTimer = CreateTimer();
-		this.playerManager = PlayerManager.getInstance();
+		this._playerManager = PlayerManager.getInstance();
+		this._statsController = StatisticsController.getInstance();
+		this._scoreboardManager = ScoreboardManager.getInstance();
+		this._settingsContext = SettingsContext.getInstance();
 	}
 
 	public static getInstance() {
@@ -52,19 +60,13 @@ export class MatchGameLoop {
 	}
 
 	public async resetMatch() {
-		FogEnable(true);
+		FogEnable(false);
 
 		MatchData.prepareMatchData();
+		this._statsController.setViewVisibility(false);
 
 		if (MatchData.matchCount == 1) {
-			print(`Preparing round #${MatchData.matchCount}`);
 		} else {
-			print(`Preparing next round #${MatchData.matchCount}`);
-
-			// this.playerManager.players.forEach((player) => {
-			// 	player.reset();
-			// });
-
 			print('Removing units...');
 			await this.removeUnits();
 			await Wait.forSeconds(1);
@@ -79,50 +81,68 @@ export class MatchGameLoop {
 			await Wait.forSeconds(1);
 		}
 
+		// Remove irrelevant players from the game
+		this._playerManager.players.forEach((val) => {
+			val.trackedData.setKDMaps();
+
+			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
+				val.status.set(PLAYER_STATUS.ALIVE);
+			} else {
+				val.status.set(PLAYER_STATUS.LEFT);
+
+				this._playerManager.slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
+				this._playerManager.players.delete(val.getPlayer());
+			}
+		});
+
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);
 		FogEnable(true);
 
-		this.distributionService = new DistributionService();
-		this.distributionService.runDistro(() => {
+		// Distribute bases
+		this._distributionService = new DistributionService();
+		this._distributionService.runDistro(() => {
 			RegionToCity.forEach((city) => {
 				city.guard.reposition();
 				//Prevent guards from moving and update unit counts
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					this.playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					this._playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
 
 				SetUnitInvulnerable(city.guard.unit, false);
 			});
 		});
+
+		// Prepare stat tracking
+		const players: ActivePlayer[] = [...this._playerManager.players.values()];
+		players.forEach((player) => {
+			SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
+			player.status.set(PLAYER_STATUS.ALIVE);
+			player.trackedData.bonus.showForPlayer(player.getPlayer());
+			player.trackedData.bonus.repositon();
+
+			// player.trackedData.reset();
+			VictoryManager.getInstance().addPlayer(player);
+		});
+
+		if (this._settingsContext.isFFA() || players.length <= 2) {
+			this._scoreboardManager.ffaSetup(players);
+		} else {
+			this._scoreboardManager.teamSetup();
+		}
+		this._scoreboardManager.obsSetup(players, [...this._playerManager.observers.keys()]);
+		this._settingsContext.applyStrategy('Fog');
+		if (this._settingsContext.isPromode()) {
+			await this.setTempVision(this._playerManager.players);
+		}
 	}
 
 	public async startGameMode() {
-		await this.resetMatch().then();
+		await this.resetMatch();
 		await Wait.forSeconds(2);
 		try {
-			const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-			players.forEach((player) => {
-				SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-				player.status.set(PLAYER_STATUS.ALIVE);
-				player.trackedData.bonus.showForPlayer(player.getPlayer());
-				player.trackedData.bonus.repositon();
-				VictoryManager.getInstance().addPlayer(player);
-			});
-			const scoreboardManager: ScoreboardManager = ScoreboardManager.getInstance();
-			const settingsContext: SettingsContext = SettingsContext.getInstance();
-			if (settingsContext.isFFA() || players.length <= 2) {
-				scoreboardManager.ffaSetup(players);
-			} else {
-				scoreboardManager.teamSetup();
-			}
-			scoreboardManager.obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
-			settingsContext.applyStrategy('Fog');
-			if (settingsContext.isPromode()) {
-				await this.setTempVision(PlayerManager.getInstance().players);
-			}
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = 3;
@@ -149,7 +169,6 @@ export class MatchGameLoop {
 
 	private run() {
 		this._gameMode.onStartMatch();
-		print('DOING IT');
 		this._gameMode.onStartTurn(MatchData.turnCount);
 		// Start a timer that executes the game loop every second
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
