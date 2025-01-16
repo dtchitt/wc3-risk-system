@@ -25,20 +25,7 @@ export class PostGame implements GameState {
 		this.manager = observer;
 	}
 
-	public run(): void {
-		// if (this.isOver) return;
-		// this.isOver = true;
-		// FogEnable(false);
-		// if (SettingsContext.getInstance().isPromode()) {
-		// 	VictoryManager.getInstance().updateWinTracker();
-		// } else {
-		// 	const statsController: StatisticsController = StatisticsController.getInstance();
-		// 	statsController.refreshView();
-		// 	statsController.setViewVisibility(true);
-		// 	statsController.writeStatisticsData();
-		// }
-		// this.manager.setRestartEnabled(true);
-	}
+	public run(): void {}
 
 	public async end() {
 		// if (!this.isOver) return;
@@ -77,73 +64,4 @@ export class PostGame implements GameState {
 		// FogEnable(true);
 		// this.manager.fastRestart();
 	}
-
-	// private resumingUnits(): Promise<void> {
-	// 	return new Promise((resolve) => {
-	// 		for (let i = 0; i < PLAYER_SLOTS; i++) {
-	// 			const player = Player(i);
-
-	// 			const group: group = CreateGroup();
-	// 			GroupEnumUnitsOfPlayer(
-	// 				group,
-	// 				player,
-	// 				Filter(() => {
-	// 					const unit: unit = GetFilterUnit();
-	// 					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-	// 						PauseUnit(unit, false);
-	// 					}
-	// 				})
-	// 			);
-
-	// 			GroupClear(group);
-	// 			DestroyGroup(group);
-	// 		}
-
-	// 		resolve();
-	// 	});
-	// }
-
-	// private removeUnits(): Promise<void> {
-	// 	return new Promise((resolve) => {
-	// 		for (let i = 0; i < PLAYER_SLOTS; i++) {
-	// 			const player = Player(i);
-
-	// 			const group: group = CreateGroup();
-	// 			GroupEnumUnitsOfPlayer(
-	// 				group,
-	// 				player,
-	// 				Filter(() => {
-	// 					const unit: unit = GetFilterUnit();
-
-	// 					if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
-	// 						RemoveUnit(unit);
-	// 					}
-	// 				})
-	// 			);
-
-	// 			GroupClear(group);
-	// 			DestroyGroup(group);
-	// 		}
-
-	// 		resolve();
-	// 	});
-	// }
-
-	// private resetCountries(): Promise<void> {
-	// 	return new Promise((resolve) => {
-	// 		StringToCountry.forEach((country) => {
-	// 			country.reset();
-	// 		});
-	// 		resolve();
-	// 	});
-	// }
-
-	// private resetRegions(): Promise<void> {
-	// 	return new Promise((resolve) => {
-	// 		CountryToRegion.forEach((region) => {
-	// 			region.reset();
-	// 		});
-	// 		resolve();
-	// 	});
-	// }
 }

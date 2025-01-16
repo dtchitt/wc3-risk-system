@@ -148,6 +148,7 @@ export class MatchGameLoop {
 	}
 
 	public async startGameMode() {
+		MatchData.matchState = 'preMatch';
 		await this.resetMatch();
 		await Wait.forSeconds(2);
 		try {
@@ -177,6 +178,7 @@ export class MatchGameLoop {
 
 	private run() {
 		this._gameMode.onStartMatch();
+		MatchData.matchState = 'inProgress';
 		this._gameMode.onStartTurn(MatchData.turnCount);
 		// Start a timer that executes the game loop every second
 		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
