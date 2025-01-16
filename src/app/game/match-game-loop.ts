@@ -93,7 +93,6 @@ export class MatchGameLoop {
 		// Remove irrelevant players from the game
 		this._playerManager.players.forEach((val) => {
 			val.trackedData.setKDMaps();
-			this._nameManager.setName(val.getPlayer(), 'color');
 			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
 				val.status.set(PLAYER_STATUS.ALIVE);
 			} else {
@@ -150,7 +149,7 @@ export class MatchGameLoop {
 
 	public async startGameMode() {
 		await this.resetMatch();
-		await Wait.forSeconds(3);
+		await Wait.forSeconds(2);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
