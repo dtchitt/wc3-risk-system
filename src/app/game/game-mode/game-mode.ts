@@ -31,6 +31,7 @@ export interface GameMode {
 
 export abstract class BaseGameMode implements GameMode {
 	private statsController: StatisticsController;
+
 	constructor() {
 		this.statsController = StatisticsController.getInstance();
 	}
@@ -143,15 +144,7 @@ export abstract class BaseGameMode implements GameMode {
 		FogEnable(false);
 		BlzEnableSelections(false, false);
 
-		if (SettingsContext.getInstance().isPromode()) {
-			VictoryManager.getInstance().updateWinTracker();
-		} else {
-			this.statsController.refreshView();
-			this.statsController.setViewVisibility(true);
-			this.statsController.writeStatisticsData();
-		}
-
-		// Hide UI
+		// Hide match scoreboard and show score screen
 		ScoreboardManager.getInstance().destroyBoards();
 		PlayerManager.getInstance().players.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
@@ -161,6 +154,14 @@ export abstract class BaseGameMode implements GameMode {
 				player.trackedData.bonus.hideUI();
 			}
 		});
+
+		if (SettingsContext.getInstance().isPromode()) {
+			VictoryManager.getInstance().updateWinTracker();
+		} else {
+			this.statsController.refreshView();
+			this.statsController.setViewVisibility(true);
+			this.statsController.writeStatisticsData();
+		}
 
 		GameManager.getInstance().setRestartEnabled(true);
 	}

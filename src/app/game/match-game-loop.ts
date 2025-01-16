@@ -150,7 +150,7 @@ export class MatchGameLoop {
 
 	public async startGameMode() {
 		await this.resetMatch();
-		await Wait.forSeconds(2);
+		await Wait.forSeconds(3);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
@@ -199,6 +199,7 @@ export class MatchGameLoop {
 				// Stop game loop if match is over
 				if (this._gameMode.isMatchOver()) {
 					PauseTimer(this._matchLoopTimer);
+					this._gameMode.onEndMatch();
 					return;
 				}
 
