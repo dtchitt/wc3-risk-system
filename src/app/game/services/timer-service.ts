@@ -35,7 +35,6 @@ export class TimerService implements Resetable {
 		this._turn = 1;
 		this.gameState = gameState;
 		this.victoryManager = VictoryManager.getInstance();
-		this.victoryManager.setTimer(this);
 	}
 
 	/**

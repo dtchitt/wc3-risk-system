@@ -26,7 +26,7 @@ export class GameManager {
 
 	public startGameMode() {
 		print('startGameMode');
-		MatchData.matchState = 'inProgress';
+		MatchData.matchState = 'preMatch';
 		this._gameLoop.startGameMode();
 	}
 

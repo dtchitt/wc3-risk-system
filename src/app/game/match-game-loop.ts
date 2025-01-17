@@ -148,8 +148,8 @@ export class MatchGameLoop {
 	}
 
 	public async startGameMode() {
-		MatchData.matchState = 'preMatch';
 		await this.resetMatch();
+		MatchData.matchState = 'preMatch';
 		await Wait.forSeconds(2);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');

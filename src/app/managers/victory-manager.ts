@@ -1,5 +1,4 @@
 import { ActivePlayer } from '../player/types/active-player';
-import { TimerService } from '../game/services/timer-service';
 import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
@@ -120,10 +119,6 @@ export class VictoryManager {
 		}
 
 		return false;
-	}
-
-	public setTimer(timer: TimerService) {
-		// this.gameTimer = timer;
 	}
 
 	public reset() {

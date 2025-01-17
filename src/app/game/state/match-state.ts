@@ -34,7 +34,7 @@ export class MatchData {
 	public static prepareMatchData() {
 		this.getInstance().data = {
 			...MatchData.defaultData(),
-			matchState: 'inProgress',
+			matchState: 'preMatch',
 			matchCount: this.getInstance().data.matchCount + 1,
 		};
 	}
