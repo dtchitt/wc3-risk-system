@@ -27,7 +27,7 @@ export class GameManager {
 	public startGameMode() {
 		print('startGameMode');
 		MatchData.matchState = 'preMatch';
-		this._gameLoop.startGameMode();
+		this._gameLoop.startCountdown();
 	}
 
 	public updateState(state: GameState) {
@@ -53,7 +53,7 @@ export class GameManager {
 	}
 
 	public fastRestart() {
-		this._gameLoop.startGameMode().then();
+		this._gameLoop.startCountdown().then();
 	}
 
 	public fullRestart() {

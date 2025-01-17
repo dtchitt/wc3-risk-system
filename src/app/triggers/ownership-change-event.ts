@@ -15,6 +15,7 @@ import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
 import { MatchData } from '../game/state/match-state';
+import { MatchGameLoop } from '../game/match-game-loop';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -131,6 +132,8 @@ export function OwnershipChangeEvent() {
 					ScoreboardManager.updateScoreboardTitle();
 				}
 			}
+
+			MatchGameLoop.getInstance().onCityCapture(city, prevOwner, owner);
 
 			return false;
 		})

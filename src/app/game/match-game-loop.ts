@@ -1,4 +1,4 @@
-import { GameMode } from './game-mode/game-mode';
+import { GameMode, GameModeHooks } from './game-mode/game-mode';
 import { City } from '../city/city';
 import { ActivePlayer } from '../player/types/active-player';
 import { PlayerManager } from '../player/player-manager';
@@ -22,7 +22,7 @@ import { StatisticsController } from '../statistics/statistics-controller';
 import { SlavePlayer } from '../player/types/slave-player';
 import { NameManager } from '../managers/names/name-manager';
 
-export class MatchGameLoop {
+export class MatchGameLoop implements GameModeHooks {
 	private static instance: MatchGameLoop;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
@@ -54,12 +54,24 @@ export class MatchGameLoop {
 		this._gameMode = gameMode;
 	}
 
-	public onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer) {
+	public async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
 		this._gameMode.onCityCapture(city, preOwner, owner);
 	}
 
-	public onPlayerElimination(player: ActivePlayer) {
+	public async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+		this._gameMode.onPlayerForfeit(player);
+	}
+
+	public async onRematch(): Promise<void> {
+		this._gameMode.onRematch();
+	}
+
+	public async onPlayerElimination(player: ActivePlayer): Promise<void> {
 		this._gameMode.onPlayerElimination(player);
+	}
+
+	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		this._gameMode.onPlayerLeaves(player);
 	}
 
 	public async resetMatch() {
@@ -147,7 +159,7 @@ export class MatchGameLoop {
 		}
 	}
 
-	public async startGameMode() {
+	public async startCountdown() {
 		await this.resetMatch();
 		MatchData.matchState = 'preMatch';
 		await Wait.forSeconds(2);
@@ -166,7 +178,7 @@ export class MatchGameLoop {
 					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), false);
 					EnableSelect(true, true);
 					EnableDragSelect(true, true);
-					this.run();
+					this.startGameLoop();
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 				}
 				duration--;
@@ -176,7 +188,7 @@ export class MatchGameLoop {
 		}
 	}
 
-	private run() {
+	private startGameLoop() {
 		this._gameMode.onStartMatch();
 		MatchData.matchState = 'inProgress';
 		this._gameMode.onStartTurn(MatchData.turnCount);

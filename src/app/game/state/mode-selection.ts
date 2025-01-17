@@ -73,7 +73,7 @@ export class ModeSelection implements GameState {
 
 		MatchData.gameMode = 'ffa';
 		MatchGameLoop.getInstance().injectGameMode(new GameModeStandard());
-		MatchGameLoop.getInstance().startGameMode();
+		MatchGameLoop.getInstance().startCountdown();
 	}
 
 	private setupSettingsQuest(): void {

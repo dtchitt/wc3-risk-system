@@ -15,18 +15,21 @@ import { GameManager } from '../game-manager';
 import { MatchData } from '../state/match-state';
 import { PlayerManager } from 'src/app/player/player-manager';
 
-export interface GameMode {
+export interface GameModeHooks {
+	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
+	onPlayerForfeit: (player: ActivePlayer) => Promise<void>;
+	onRematch: () => Promise<void>;
+	onPlayerElimination: (player: ActivePlayer) => Promise<void>;
+	onPlayerLeaves: (player: ActivePlayer) => Promise<void>;
+}
+
+export interface GameMode extends GameModeHooks {
 	isMatchOver: () => boolean;
 	onStartMatch: () => void;
 	onEndMatch: () => void;
 	onStartTurn: (turn: number) => void;
 	onEndTurn: (turn: number) => void;
 	onTick: (tick: number) => void;
-
-	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => void;
-	onForfeits: () => void;
-	onRematch: () => Promise<void>;
-	onPlayerElimination: (player: ActivePlayer) => void;
 }
 
 export abstract class BaseGameMode implements GameMode {
@@ -54,7 +57,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	onStartTurn(turn: number): void {
 		ScoreboardManager.getInstance().updateFull();
-		MatchData.players.forEach((player, i) => {
+		MatchData.players.forEach((player) => {
 			if (!player.status.isDead()) {
 				player.giveGold();
 			}
@@ -84,12 +87,15 @@ export abstract class BaseGameMode implements GameMode {
 		ScoreboardManager.getInstance().updatePartial();
 	}
 
-	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
+	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
 		print('onCityCapture');
 	}
 
-	onForfeits(): void {
+	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
 		print('onForfeits');
+		if (MatchData.players.length == 1) {
+			MatchData.matchState = 'postMatch';
+		}
 	}
 
 	async onRematch(): Promise<void> {
@@ -97,8 +103,15 @@ export abstract class BaseGameMode implements GameMode {
 		this.statsController.setViewVisibility(false);
 	}
 
-	onPlayerElimination(player: ActivePlayer): void {
+	async onPlayerElimination(player: ActivePlayer): Promise<void> {
 		print('onPlayerElimination');
+		if (MatchData.players.length == 1) {
+			MatchData.matchState = 'postMatch';
+		}
+	}
+
+	async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		print('onPlayerLeaves');
 		if (MatchData.players.length == 1) {
 			MatchData.matchState = 'postMatch';
 		}
