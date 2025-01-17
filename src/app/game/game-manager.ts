@@ -64,29 +64,6 @@ export class GameManager {
 		return this._state;
 	}
 
-	// public addPlayer(player: ActivePlayer) {
-	// 	MatchData.players.push(player);
-
-	// 	if (!MatchData.leader) {
-	// 		MatchData.leader = player;
-	// 	}
-	// }
-
-	// public removePlayer(player: ActivePlayer) {
-	// 	const index: number = MatchData.players.indexOf(player);
-
-	// 	if (index > -1) {
-	// 		MatchData.players.splice(index, 1);
-	// 	}
-
-	// 	if (MatchData.players.length == 1) {
-	// 		MatchData.leader = MatchData.players[0];
-	// 		return true;
-	// 	}
-
-	// 	this._gameLoop.onPlayerElimination(player);
-	// }
-
 	public onPlayerElimination(player: ActivePlayer) {}
 
 	public setLeader(player: ActivePlayer) {

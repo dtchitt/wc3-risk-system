@@ -59,6 +59,7 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerForfeit(player);
 	}
 
@@ -67,10 +68,12 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async onPlayerElimination(player: ActivePlayer): Promise<void> {
+		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerElimination(player);
 	}
 
 	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerLeaves(player);
 	}
 

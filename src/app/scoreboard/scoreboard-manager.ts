@@ -77,16 +77,16 @@ export class ScoreboardManager {
 		});
 	}
 
-	public static updateScoreboardTitle() {
+	public updateScoreboardTitle() {
 		if (MatchData.leader) {
 			if (VictoryManager.OVERTIME_ACTIVE) {
-				ScoreboardManager.getInstance().setTitle(
+				this.setTitle(
 					`${NameManager.getInstance().getDisplayName(MatchData.leader.getPlayer())} ${
 						MatchData.leader.trackedData.cities.cities.length
 					}/${HexColors.RED}${VictoryManager.CITIES_TO_WIN}|r ${HexColors.RED}(Overtime)|r`
 				);
 			} else {
-				ScoreboardManager.getInstance().setTitle(
+				this.setTitle(
 					`${NameManager.getInstance().getDisplayName(MatchData.leader.getPlayer())} ${
 						MatchData.leader.trackedData.cities.cities.length
 					}/${VictoryManager.CITIES_TO_WIN}${VictoryManager.OVERTIME_MODE ? ` (Overtime in: ${VictoryManager.OVERTIME_TURNS_UNTIL_ACTIVE})` : ''}`

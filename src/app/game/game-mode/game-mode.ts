@@ -34,9 +34,11 @@ export interface GameMode extends GameModeHooks {
 
 export abstract class BaseGameMode implements GameMode {
 	private statsController: StatisticsController;
+	private scoreboardManager: ScoreboardManager;
 
 	constructor() {
 		this.statsController = StatisticsController.getInstance();
+		this.scoreboardManager = ScoreboardManager.getInstance();
 	}
 
 	isMatchOver(): boolean {
@@ -56,7 +58,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onStartTurn(turn: number): void {
-		ScoreboardManager.getInstance().updateFull();
+		this.scoreboardManager.updateFull();
 		MatchData.players.forEach((player) => {
 			if (!player.status.isDead()) {
 				player.giveGold();
@@ -75,7 +77,7 @@ export abstract class BaseGameMode implements GameMode {
 			MatchData.matchState = 'postMatch';
 		}
 
-		ScoreboardManager.getInstance().updateFull();
+		this.scoreboardManager.updateFull();
 
 		// print('onEndTurn');
 	}
@@ -83,8 +85,8 @@ export abstract class BaseGameMode implements GameMode {
 	onTick(tick: number): void {
 		// print('onTick');
 		VictoryManager.getInstance().updateAndGetGameState();
-		ScoreboardManager.updateScoreboardTitle();
-		ScoreboardManager.getInstance().updatePartial();
+		this.scoreboardManager.updateScoreboardTitle();
+		this.scoreboardManager.updatePartial();
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
@@ -158,7 +160,7 @@ export abstract class BaseGameMode implements GameMode {
 		BlzEnableSelections(false, false);
 
 		// Hide match scoreboard and show score screen
-		ScoreboardManager.getInstance().destroyBoards();
+		this.scoreboardManager.destroyBoards();
 		PlayerManager.getInstance().players.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');

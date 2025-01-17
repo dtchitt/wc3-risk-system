@@ -129,7 +129,7 @@ export function OwnershipChangeEvent() {
 				}
 
 				if (MatchData.matchState == 'inProgress') {
-					ScoreboardManager.updateScoreboardTitle();
+					ScoreboardManager.getInstance().updateScoreboardTitle();
 				}
 			}
 
