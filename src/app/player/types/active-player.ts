@@ -5,7 +5,6 @@ import { Status } from '../status/status';
 import { GamePlayer } from './game-player';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { PLAYER_STATUS } from '../status/status-enum';
-import { VictoryManager } from 'src/app/managers/victory-manager';
 import { MatchData } from 'src/app/game/state/match-state';
 
 //Use lowercase for simplicity here

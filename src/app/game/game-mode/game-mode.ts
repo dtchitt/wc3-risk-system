@@ -43,16 +43,11 @@ export abstract class BaseGameMode implements GameMode {
 
 	isMatchOver(): boolean {
 		return MatchData.matchState == 'postMatch';
-		// print('isMatchOver');
 	}
 
-	onStartMatch(): void {
-		// print('onStartMatch');
-		// MatchData.matchState = 'inProgress';
-	}
+	onStartMatch(): void {}
 
 	onEndMatch(): void {
-		// print('onEndMatch');
 		MatchData.matchState = 'postMatch';
 		this.postMatchSetup();
 	}
@@ -78,30 +73,23 @@ export abstract class BaseGameMode implements GameMode {
 		}
 
 		this.scoreboardManager.updateFull();
-
-		// print('onEndTurn');
 	}
 
 	onTick(tick: number): void {
-		// print('onTick');
 		VictoryManager.getInstance().updateAndGetGameState();
 		this.scoreboardManager.updateScoreboardTitle();
 		this.scoreboardManager.updatePartial();
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		print('onCityCapture');
-	}
+	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {}
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
-		print('onForfeits');
 		if (MatchData.players.length == 1) {
 			MatchData.matchState = 'postMatch';
 		}
 	}
 
 	async onRematch(): Promise<void> {
-		print('onRematch');
 		this.statsController.setViewVisibility(false);
 	}
 

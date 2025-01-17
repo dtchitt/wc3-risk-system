@@ -6,7 +6,7 @@ import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { CountdownMessage } from '../utils/messages';
-import { NEUTRAL_HOSTILE, PLAYER_SLOTS, PlayGlobalSound } from '../utils/utils';
+import { NEUTRAL_HOSTILE, PLAYER_SLOTS, PlayGlobalSound, ShuffleArray } from '../utils/utils';
 import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
 import { CityToCountry, StringToCountry } from '../country/country-map';
@@ -21,6 +21,7 @@ import { UNIT_TYPE } from '../utils/unit-types';
 import { StatisticsController } from '../statistics/statistics-controller';
 import { SlavePlayer } from '../player/types/slave-player';
 import { NameManager } from '../managers/names/name-manager';
+import { PLAYER_COLORS } from '../utils/player-colors';
 
 export class MatchGameLoop implements GameModeHooks {
 	private static instance: MatchGameLoop;
@@ -90,6 +91,9 @@ export class MatchGameLoop implements GameModeHooks {
 			await Wait.forSeconds(1);
 			print('Resuming units...');
 			await this.resumingUnits();
+			await Wait.forSeconds(1);
+			print('Shuffling player identities...');
+			this.ShufflePlayerColorWithColoredName();
 			await Wait.forSeconds(1);
 			print('Resetting countries...');
 			await this.resetCountries();
@@ -359,5 +363,29 @@ export class MatchGameLoop implements GameModeHooks {
 			});
 			resolve();
 		});
+	}
+
+	private ShufflePlayerColorWithColoredName(): void {
+		const activePlayers: Map<player, ActivePlayer> = PlayerManager.getInstance().players;
+		const nameManager: NameManager = NameManager.getInstance();
+		const colors: playercolor[] = PLAYER_COLORS.slice(0, activePlayers.size);
+
+		ShuffleArray(colors);
+
+		if (SettingsContext.getInstance().isPromode()) {
+			activePlayers.forEach((val, playerHandle) => {
+				nameManager.setColor(playerHandle, GetPlayerColor(playerHandle));
+				nameManager.setName(playerHandle, 'acct');
+				val.trackedData.bonus.disable();
+			});
+
+			SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, true);
+			//TODO Handle teams for promode
+		} else {
+			activePlayers.forEach((val, playerHandle) => {
+				nameManager.setColor(playerHandle, colors.pop());
+				nameManager.setName(playerHandle, 'color');
+			});
+		}
 	}
 }
