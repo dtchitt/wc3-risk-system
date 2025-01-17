@@ -1,7 +1,6 @@
 import { GameManager } from '../game/game-manager';
 import { MatchData } from '../game/state/match-state';
 import { ChatManager } from '../managers/chat-manager';
-import { VictoryManager } from '../managers/victory-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 

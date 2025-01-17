@@ -131,7 +131,6 @@ export class MatchGameLoop {
 			player.trackedData.bonus.showForPlayer(player.getPlayer());
 			player.trackedData.bonus.repositon();
 
-			// player.trackedData.reset();
 			VictoryManager.getInstance().addPlayer(player);
 		});
 
@@ -140,6 +139,7 @@ export class MatchGameLoop {
 		} else {
 			this._scoreboardManager.teamSetup();
 		}
+
 		this._scoreboardManager.obsSetup(players, [...this._playerManager.observers.keys()]);
 		this._settingsContext.applyStrategy('Fog');
 		if (this._settingsContext.isPromode()) {

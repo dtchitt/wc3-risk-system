@@ -87,6 +87,8 @@ export class GameManager {
 	// 	this._gameLoop.onPlayerElimination(player);
 	// }
 
+	public onPlayerElimination(player: ActivePlayer) {}
+
 	public setLeader(player: ActivePlayer) {
 		if (player.trackedData.cities.cities.length > MatchData.leader.trackedData.cities.cities.length) {
 			MatchData.leader = player;

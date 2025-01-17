@@ -20,7 +20,7 @@ export class MatchData {
 	private data: GameData;
 
 	private constructor() {
-		this.data = MatchData.defaultData();
+		this.data = MatchData.initialGameData();
 	}
 
 	public static getInstance() {
@@ -33,13 +33,13 @@ export class MatchData {
 
 	public static prepareMatchData() {
 		this.getInstance().data = {
-			...MatchData.defaultData(),
+			...MatchData.initialGameData(),
 			matchState: 'preMatch',
 			matchCount: this.getInstance().data.matchCount + 1,
 		};
 	}
 
-	private static defaultData(): GameData {
+	private static initialGameData(): GameData {
 		return {
 			turn: 1,
 			ticks: TURN_DURATION_IN_SECONDS,
