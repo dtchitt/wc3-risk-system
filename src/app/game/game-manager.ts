@@ -1,4 +1,5 @@
 import { ActivePlayer } from '../player/types/active-player';
+import { SettingsContext } from '../settings/settings-context';
 import { MatchGameLoop } from './match-game-loop';
 import { GameState } from './state/game-state';
 import { MatchData } from './state/match-state';
@@ -45,11 +46,7 @@ export class GameManager {
 	}
 
 	public isRestartEnabled() {
-		return this._restartEnabled;
-	}
-
-	public setRestartEnabled(bool: boolean) {
-		this._restartEnabled = bool;
+		return SettingsContext.getInstance().isPromode();
 	}
 
 	public fastRestart() {

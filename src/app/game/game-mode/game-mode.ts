@@ -165,8 +165,6 @@ export abstract class BaseGameMode implements GameMode {
 			this.statsController.setViewVisibility(true);
 			this.statsController.writeStatisticsData();
 		}
-
-		GameManager.getInstance().setRestartEnabled(true);
 	}
 
 	private pauseAllUnits() {
