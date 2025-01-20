@@ -1,3 +1,5 @@
+import { Status } from 'src/app/player/status/status';
+import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 
@@ -72,10 +74,17 @@ export class MatchData {
 		this.getInstance().data.leader = v;
 	}
 
-	public static get players(): ActivePlayer[] {
+	public static get remainingPlayers(): ActivePlayer[] {
+		return this.getInstance().data.players.filter((x) => x.status.isAlive || x.status.isNomad);
+	}
+	public static setPlayerStatus(v: ActivePlayer, status: PLAYER_STATUS) {
+		this.getInstance().data.players[this.getInstance().data.players.indexOf(v)].status.set(status);
+	}
+
+	public static get initialPlayers(): ActivePlayer[] {
 		return this.getInstance().data.players;
 	}
-	public static set players(v: ActivePlayer[]) {
+	public static set initialPlayers(v: ActivePlayer[]) {
 		this.getInstance().data.players = v;
 	}
 

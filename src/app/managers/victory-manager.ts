@@ -3,6 +3,7 @@ import { RegionToCity } from '../city/city-map';
 import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-settings';
 import { WinTracker } from '../game/services/win-tracker';
 import { MatchData } from '../game/state/match-state';
+import { PLAYER_STATUS } from '../player/status/status-enum';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
 
@@ -36,21 +37,8 @@ export class VictoryManager {
 		return this.instance;
 	}
 
-	public addPlayer(player: ActivePlayer) {
-		MatchData.players.push(player);
-
-		if (!MatchData.leader) {
-			MatchData.leader = player;
-		}
-	}
-
-	public removePlayer(player: ActivePlayer) {
-		const index: number = MatchData.players.indexOf(player);
-
-		if (index > -1) {
-			MatchData.players.splice(index, 1);
-		}
-
+	public removePlayer(player: ActivePlayer, status: PLAYER_STATUS) {
+		MatchData.setPlayerStatus(player, status);
 		this.checkKnockOutVictory();
 	}
 
@@ -61,13 +49,13 @@ export class VictoryManager {
 	}
 
 	public getFrontRunnersByThreshold(threshold: number): ActivePlayer[] {
-		return MatchData.players
+		return MatchData.remainingPlayers
 			.filter((player) => player.trackedData.cities.cities.length >= threshold)
 			.sort((player) => player.trackedData.cities.cities.length);
 	}
 
 	public victors(): ActivePlayer[] {
-		let potentialVictors = MatchData.players.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
+		let potentialVictors = MatchData.remainingPlayers.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
 
 		if (potentialVictors.length == 0) {
 			return [];
@@ -112,8 +100,8 @@ export class VictoryManager {
 	}
 
 	public checkKnockOutVictory(): boolean {
-		if (MatchData.players.length == 1) {
-			MatchData.leader = MatchData.players[0];
+		if (MatchData.remainingPlayers.length == 1) {
+			MatchData.leader = MatchData.remainingPlayers[0];
 			this.saveStats();
 			return true;
 		}
@@ -132,7 +120,7 @@ export class VictoryManager {
 
 	public saveStats() {
 		VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
-		MatchData.players.forEach((player) => {
+		MatchData.remainingPlayers.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
 			}

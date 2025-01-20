@@ -12,7 +12,7 @@ export class DeadStrategy implements StatusStrategy {
 		gamePlayer.status.status = PLAYER_STATUS.DEAD;
 		gamePlayer.setEndData();
 		gamePlayer.trackedData.income.income = 1;
-		VictoryManager.getInstance().removePlayer(gamePlayer);
+		VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.DEAD);
 		GlobalMessage(
 			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`,
 			'Sound\\Interface\\SecretFound.flac'

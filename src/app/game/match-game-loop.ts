@@ -60,6 +60,8 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerForfeit(player);
 	}
@@ -69,11 +71,15 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async onPlayerElimination(player: ActivePlayer): Promise<void> {
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerElimination(player);
 	}
 
 	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
+		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerLeaves(player);
 	}
@@ -150,7 +156,11 @@ export class MatchGameLoop implements GameModeHooks {
 			player.trackedData.bonus.showForPlayer(player.getPlayer());
 			player.trackedData.bonus.repositon();
 
-			VictoryManager.getInstance().addPlayer(player);
+			MatchData.initialPlayers.push(player);
+
+			if (MatchData.leader == null) {
+				MatchData.leader = player;
+			}
 		});
 
 		if (this._settingsContext.isFFA() || players.length <= 2) {

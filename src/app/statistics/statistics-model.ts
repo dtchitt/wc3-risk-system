@@ -1,11 +1,11 @@
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
-import { PlayerManager } from '../player/player-manager';
 import { ActivePlayer } from '../player/types/active-player';
 import { HexColors } from '../utils/hex-colors';
 import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
 import { MAP_VERSION } from '../utils/map-info';
 import { MatchData } from '../game/state/match-state';
+import { PlayerManager } from '../player/player-manager';
 
 export class StatisticsModel {
 	private timePlayed: string;
@@ -19,8 +19,10 @@ export class StatisticsModel {
 
 	public setData() {
 		this.setGameTime();
+		print(MatchData.leader == null ? 'setData MatchData.leader == null' : 'setData MatchData.leader != null');
 		this.winner = MatchData.leader;
 		this.ranks = [...PlayerManager.getInstance().players.values()];
+		print('this.ranks = [...MatchData.initialPlayers]: ' + MatchData.initialPlayers.length);
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);
 	}
@@ -34,6 +36,7 @@ export class StatisticsModel {
 	}
 
 	public getWinner(): ActivePlayer {
+		print(this.winner == null ? 'winner EMPTY' : 'winner NOT EMPTY');
 		return this.winner;
 	}
 
@@ -45,7 +48,7 @@ export class StatisticsModel {
 		let rival: ActivePlayer | null = null;
 		let maxKills = 0;
 
-		PlayerManager.getInstance().players.forEach((p) => {
+		MatchData.initialPlayers.forEach((p) => {
 			if (p === player) return;
 
 			const killsOnPlayer = p.trackedData.killsDeaths.get(player.getPlayer()).kills;

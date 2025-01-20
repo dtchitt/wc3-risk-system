@@ -54,10 +54,8 @@ export abstract class BaseGameMode implements GameMode {
 
 	onStartTurn(turn: number): void {
 		this.scoreboardManager.updateFull();
-		MatchData.players.forEach((player) => {
-			if (!player.status.isDead()) {
-				player.giveGold();
-			}
+		MatchData.remainingPlayers.forEach((player) => {
+			player.giveGold();
 		});
 
 		StringToCountry.forEach((country) => {
@@ -84,7 +82,7 @@ export abstract class BaseGameMode implements GameMode {
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {}
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
-		if (MatchData.players.length == 1) {
+		if (MatchData.remainingPlayers.length <= 1) {
 			MatchData.matchState = 'postMatch';
 		}
 	}
@@ -95,14 +93,14 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onPlayerElimination(player: ActivePlayer): Promise<void> {
 		print('onPlayerElimination');
-		if (MatchData.players.length == 1) {
+		if (MatchData.remainingPlayers.length <= 1) {
 			MatchData.matchState = 'postMatch';
 		}
 	}
 
 	async onPlayerLeaves(player: ActivePlayer): Promise<void> {
 		print('onPlayerLeaves');
-		if (MatchData.players.length == 1) {
+		if (MatchData.remainingPlayers.length == 1) {
 			MatchData.matchState = 'postMatch';
 		}
 	}
@@ -148,8 +146,10 @@ export abstract class BaseGameMode implements GameMode {
 		BlzEnableSelections(false, false);
 
 		// Hide match scoreboard and show score screen
+		print('TEST');
 		this.scoreboardManager.destroyBoards();
-		PlayerManager.getInstance().players.forEach((player) => {
+		print('TEST1');
+		MatchData.initialPlayers.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
 			} else {
@@ -157,13 +157,19 @@ export abstract class BaseGameMode implements GameMode {
 				player.trackedData.bonus.hideUI();
 			}
 		});
-
+		print('TEST2');
 		if (SettingsContext.getInstance().isPromode()) {
+			print('TEST3_1');
 			VictoryManager.getInstance().updateWinTracker();
+			print('TEST4');
 		} else {
+			print('TEST3_2');
 			this.statsController.refreshView();
+			print('TEST4');
 			this.statsController.setViewVisibility(true);
+			print('TEST5');
 			this.statsController.writeStatisticsData();
+			print('TEST6');
 		}
 	}
 

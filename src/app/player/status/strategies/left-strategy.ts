@@ -21,6 +21,6 @@ export class LeftStrategy implements StatusStrategy {
 			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has left the game!`,
 			'Sound\\Interface\\SecretFound.flac'
 		);
-		VictoryManager.getInstance().removePlayer(gamePlayer);
+		VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.LEFT);
 	}
 }
