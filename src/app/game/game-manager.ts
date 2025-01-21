@@ -23,7 +23,6 @@ export class GameManager {
 	}
 
 	public startGameMode() {
-		print('startGameMode');
 		MatchData.matchState = 'preMatch';
 		this._gameLoop.startCountdown();
 	}

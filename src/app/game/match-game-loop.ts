@@ -64,6 +64,7 @@ export class MatchGameLoop implements GameModeHooks {
 		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerForfeit(player);
+		this._gameMode.onPlayerElimination(player);
 	}
 
 	public async onRematch(): Promise<void> {
@@ -77,11 +78,18 @@ export class MatchGameLoop implements GameModeHooks {
 		this._gameMode.onPlayerElimination(player);
 	}
 
+	// Only runs onPlayerLeaves and onPlayerElimination is the player has not previously been eliminated (marked dead).
 	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		let previousStatus = MatchData.getPlayerStatus(player);
+
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
 		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
-		this._gameMode.onPlayerLeaves(player);
+
+		if (previousStatus.isAlive() || previousStatus.isNomad()) {
+			this._gameMode.onPlayerLeaves(player);
+			this._gameMode.onPlayerElimination(player);
+		}
 	}
 
 	public async resetMatch() {

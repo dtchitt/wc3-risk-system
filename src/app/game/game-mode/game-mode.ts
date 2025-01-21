@@ -11,9 +11,7 @@ import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
-import { GameManager } from '../game-manager';
 import { MatchData } from '../state/match-state';
-import { PlayerManager } from 'src/app/player/player-manager';
 
 export interface GameModeHooks {
 	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
@@ -146,9 +144,7 @@ export abstract class BaseGameMode implements GameMode {
 		BlzEnableSelections(false, false);
 
 		// Hide match scoreboard and show score screen
-		print('TEST');
 		this.scoreboardManager.destroyBoards();
-		print('TEST1');
 		MatchData.initialPlayers.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
@@ -157,19 +153,12 @@ export abstract class BaseGameMode implements GameMode {
 				player.trackedData.bonus.hideUI();
 			}
 		});
-		print('TEST2');
 		if (SettingsContext.getInstance().isPromode()) {
-			print('TEST3_1');
 			VictoryManager.getInstance().updateWinTracker();
-			print('TEST4');
 		} else {
-			print('TEST3_2');
 			this.statsController.refreshView();
-			print('TEST4');
 			this.statsController.setViewVisibility(true);
-			print('TEST5');
 			this.statsController.writeStatisticsData();
-			print('TEST6');
 		}
 	}
 

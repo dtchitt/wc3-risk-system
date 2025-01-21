@@ -75,7 +75,7 @@ export class MatchData {
 	}
 
 	public static get remainingPlayers(): ActivePlayer[] {
-		return this.getInstance().data.players.filter((x) => x.status.isAlive || x.status.isNomad);
+		return this.getInstance().data.players.filter((x) => x.status.isAlive() || x.status.isNomad());
 	}
 
 	public static setPlayerStatus(v: ActivePlayer, status: PLAYER_STATUS) {

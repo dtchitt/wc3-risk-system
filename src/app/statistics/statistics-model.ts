@@ -19,10 +19,8 @@ export class StatisticsModel {
 
 	public setData() {
 		this.setGameTime();
-		print(MatchData.leader == null ? 'setData MatchData.leader == null' : 'setData MatchData.leader != null');
 		this.winner = MatchData.leader;
 		this.ranks = [...PlayerManager.getInstance().players.values()];
-		print('this.ranks = [...MatchData.initialPlayers]: ' + MatchData.initialPlayers.length);
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);
 	}
@@ -36,7 +34,6 @@ export class StatisticsModel {
 	}
 
 	public getWinner(): ActivePlayer {
-		print(this.winner == null ? 'winner EMPTY' : 'winner NOT EMPTY');
 		return this.winner;
 	}
 
