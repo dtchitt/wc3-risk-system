@@ -1,4 +1,3 @@
-import { ActivePlayer } from '../player/types/active-player';
 import { SettingsContext } from '../settings/settings-context';
 import { MatchGameLoop } from './match-game-loop';
 import { GameState } from './state/game-state';
@@ -7,8 +6,6 @@ import { MatchData } from './state/match-state';
 export class GameManager {
 	private _state: GameState;
 	private _gameLoop: MatchGameLoop;
-
-	private _restartEnabled: boolean;
 
 	private static instance: GameManager;
 
@@ -53,19 +50,7 @@ export class GameManager {
 		this._gameLoop.startCountdown().then();
 	}
 
-	public fullRestart() {
-		// ModeSelection.getInstance().run();
-	}
-
 	public get getGameState(): GameState {
 		return this._state;
-	}
-
-	public onPlayerElimination(player: ActivePlayer) {}
-
-	public setLeader(player: ActivePlayer) {
-		if (player.trackedData.cities.cities.length > MatchData.leader.trackedData.cities.cities.length) {
-			MatchData.leader = player;
-		}
 	}
 }

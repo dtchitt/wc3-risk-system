@@ -77,8 +77,14 @@ export class MatchData {
 	public static get remainingPlayers(): ActivePlayer[] {
 		return this.getInstance().data.players.filter((x) => x.status.isAlive || x.status.isNomad);
 	}
+
 	public static setPlayerStatus(v: ActivePlayer, status: PLAYER_STATUS) {
-		this.getInstance().data.players[this.getInstance().data.players.indexOf(v)].status.set(status);
+		let index = this.getInstance().data.players.findIndex((x) => v.getPlayer() == x.getPlayer());
+		this.getInstance().data.players[index].status.set(status);
+	}
+	public static getPlayerStatus(v: ActivePlayer): Status {
+		let index = this.getInstance().data.players.findIndex((x) => v.getPlayer() == x.getPlayer());
+		return this.getInstance().data.players[index].status;
 	}
 
 	public static get initialPlayers(): ActivePlayer[] {
