@@ -14,13 +14,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Bump version and push tag
-        uses: hennejg/github-tag-action@v4.1.jh1
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
           tag_prefix: 'v'
-      - uses: actions/checkout@v4
       - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
