@@ -1,49 +1,52 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+name: Build and Release
 
-name: Bump version
 on:
   push:
-    branches:
-      - main
-
+    tags:
+      - 'v*.*.*' # Trigger only on tags matching semantic versioning, e.g., v1.0.0-alpha.1
 env:
   OUTPUT_FOLDER: './build'
 
 jobs:
   build:
-    permissions: write-all
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: 'v'
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: 'npm'
-      - run: npm ci
-      - name: Build with BUILD_VERSION
-        env:
-          BUILD_VERSION: ${{ steps.tag_version.outputs.new_tag }}
-        run: npm run build --if-present
 
-      # Upload the Artifact to the Release
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/Risk Europe ${{steps.tag_version.outputs.new_tag}}.w3x
-          asset_name: Risk Europe ${{steps.tag_version.outputs.new_tag}}.w3x
-          asset_content_type: application/octet-stream
+          node-version: '16' # Use the desired Node.js version
+      - name: Generate SemVer suffix
+        id: semver
+        run: |
+          # Extract SemVer suffix from the tag
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the application
+        env:
+          TAG_NAME: ${{ env.TAG_NAME }}
+        run: npm run build
+
+      - name: Package the application
+        run: |
+          # Include SemVer suffix in the package name
+          PACKAGE_NAME="my-app-${TAG_NAME}.tgz"
+          npm pack
+          mv *.tgz $PACKAGE_NAME
+        env:
+          TAG_NAME: ${{ env.TAG_NAME }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        env:
+          TAG_NAME: ${{ env.TAG_NAME }}
+        with:
+          name: release-artifact
+          path: ${{env.OUTPUT_FOLDER}}/Risk Europe ${{ env.TAG_NAME }}.w3x
