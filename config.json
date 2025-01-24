@@ -1,7 +1,7 @@
 {
 	"mapFolder": "risk_europe.w3x",
 	"mapName": "Risk Europe",
-	"mapVersion": "2.06c",
+	"mapVersion": "${BUILD_VERSION}",
 	"minifyScript": false,
 	"gameExecutable": "${GAME_EXECUTABLE}",
 	"outputFolder": "${OUTPUT_FOLDER}",

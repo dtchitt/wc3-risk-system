@@ -34,4 +34,16 @@ jobs:
           node-version: 22.x
           cache: 'npm'
       - run: npm ci
-      - run: npm run build --if-present
+      - name: Build with BUILD_VERSION
+        env:
+          BUILD_VERSION: ${{ steps.tag_version.outputs.new_tag }}
+        run: npm run build --if-present
+
+      # Upload the Artifact to the Release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/Risk Europe ${{steps.tag_version.outputs.new_tag}}.w3x
+          asset_name: Risk Europe ${{steps.tag_version.outputs.new_tag}}.w3x
+          asset_content_type: application/octet-stream
