@@ -1,6 +1,6 @@
 target
-package-lock.json
 dist
+artifact
 
 # Logs
 logs
