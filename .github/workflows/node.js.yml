@@ -43,10 +43,13 @@ jobs:
         env:
           TAG_NAME: ${{ env.TAG_NAME }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload artifact to release
+        uses: ncipollo/release-action@v1
         env:
           TAG_NAME: ${{ env.TAG_NAME }}
         with:
-          name: release-artifact
-          path: ${{env.OUTPUT_FOLDER}}/Risk Europe ${{ env.TAG_NAME }}.w3x
+          tag: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
+          draft: false
+          prerelease: true
+          artifacts: ${{env.OUTPUT_FOLDER}}/Risk Europe ${{ env.TAG_NAME }}.w3x
