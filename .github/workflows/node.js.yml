@@ -5,7 +5,7 @@ on:
     tags:
       - 'v*.*.*' # Trigger only on tags matching semantic versioning, e.g., v1.0.0-alpha.1
 env:
-  OUTPUT_FOLDER: './build'
+  OUTPUT_FOLDER: './artifact'
 
 jobs:
   build:
