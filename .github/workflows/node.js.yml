@@ -49,7 +49,7 @@ jobs:
           TAG_NAME: ${{ env.TAG_NAME }}
         with:
           tag: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: true
           artifacts: ${{env.OUTPUT_FOLDER}}/Risk Europe ${{ env.TAG_NAME }}.w3x
