@@ -94,6 +94,21 @@ npm run build
 
 TODO
 
+## Publish builds
+
+This project uses Github Actions to publish its builds. Maps are named `Risk Europe v[Major].[Minor].[Patch].w3x`. Example, `Risk Europe v2.6.2.w3x`.
+
+The fastest way to publish a new build as a release based on the main branch is to push a tag.
+
+Run the following commands:
+
+```
+git tag v2.6.2
+git push origin v2.6.2
+```
+
+Replace the values as you see fit.
+
 ## Contributing
 
 TODO
