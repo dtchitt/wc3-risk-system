@@ -77,30 +77,25 @@ export abstract class BaseGameMode implements GameMode {
 		this.scoreboardManager.updatePartial();
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {}
-
-	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
-		if (MatchData.remainingPlayers.length <= 1) {
-			MatchData.matchState = 'postMatch';
-		}
+	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+		this.scoreboardManager.updatePartial();
 	}
 
-	async onRematch(): Promise<void> {
-		this.statsController.setViewVisibility(false);
+	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+		print('onPlayerForfeit');
 	}
 
 	async onPlayerElimination(player: ActivePlayer): Promise<void> {
 		print('onPlayerElimination');
-		if (MatchData.remainingPlayers.length <= 1) {
-			MatchData.matchState = 'postMatch';
-		}
+		this.scoreboardManager.updatePartial();
 	}
 
 	async onPlayerLeaves(player: ActivePlayer): Promise<void> {
 		print('onPlayerLeaves');
-		if (MatchData.remainingPlayers.length == 1) {
-			MatchData.matchState = 'postMatch';
-		}
+	}
+
+	async onRematch(): Promise<void> {
+		this.statsController.setViewVisibility(false);
 	}
 
 	private messageGameState() {

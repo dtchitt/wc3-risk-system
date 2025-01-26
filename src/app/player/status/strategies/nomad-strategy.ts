@@ -2,11 +2,16 @@ import { NOMAD_DURATION, TURN_DURATION_IN_SECONDS } from 'src/configs/game-setti
 import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
+import { MatchData } from 'src/app/game/state/match-state';
 
 export class NomadStrategy implements StatusStrategy {
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isLeft()) return;
-		if (gamePlayer.trackedData.units.size <= 0) return gamePlayer.status.set(PLAYER_STATUS.DEAD);
+		if (gamePlayer.trackedData.units.size <= 0) {
+			MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.DEAD);
+			gamePlayer.status.set(PLAYER_STATUS.DEAD)
+			return;
+		}
 
 		gamePlayer.status.status = PLAYER_STATUS.NOMAD;
 		gamePlayer.trackedData.income.income = 4;
@@ -19,8 +24,10 @@ export class NomadStrategy implements StatusStrategy {
 			if (!gamePlayer.status.isAlive() && gamePlayer.trackedData.cities.cities.length >= 1) {
 				if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
 					gamePlayer.status.set(PLAYER_STATUS.LEFT);
+					MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.LEFT);
 				} else {
 					gamePlayer.status.set(PLAYER_STATUS.ALIVE);
+					MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.ALIVE);
 
 					gamePlayer.trackedData.countries.forEach((val, country) => {
 						if (country.getOwner() == gamePlayer.getPlayer()) {
@@ -34,8 +41,10 @@ export class NomadStrategy implements StatusStrategy {
 			} else if (gamePlayer.trackedData.cities.cities.length <= 0 && gamePlayer.trackedData.units.size <= 0) {
 				if (GetPlayerSlotState(gamePlayer.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
 					gamePlayer.status.set(PLAYER_STATUS.LEFT);
+					MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.LEFT);
 				} else {
 					gamePlayer.status.set(PLAYER_STATUS.DEAD);
+					MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.DEAD);
 				}
 
 				PauseTimer(nomadTimer);
@@ -45,6 +54,7 @@ export class NomadStrategy implements StatusStrategy {
 
 				if (gamePlayer.status.statusDuration <= 0 || gamePlayer.trackedData.units.size <= 0) {
 					gamePlayer.status.set(PLAYER_STATUS.DEAD);
+					MatchData.setPlayerStatus(gamePlayer, PLAYER_STATUS.DEAD);
 					PauseTimer(nomadTimer);
 					DestroyTimer(nomadTimer);
 				}

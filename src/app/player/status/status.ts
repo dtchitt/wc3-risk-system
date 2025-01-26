@@ -29,6 +29,7 @@ export class Status {
 		const strategy = Status.STRATEGY_MAP.get(status);
 
 		if (strategy) {
+			
 			strategy.run(this.player);
 		} else {
 			print('Unknown player status:', status);

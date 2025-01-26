@@ -60,36 +60,36 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+		print('Player forfeit');
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		VictoryManager.getInstance().checkKnockOutVictory();
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerForfeit(player);
 		this._gameMode.onPlayerElimination(player);
 	}
 
-	public async onRematch(): Promise<void> {
-		this._gameMode.onRematch();
-	}
-
 	public async onPlayerElimination(player: ActivePlayer): Promise<void> {
+		print('Player eliminated');
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		VictoryManager.getInstance().checkKnockOutVictory();
+		if (VictoryManager.getInstance().checkKnockOutVictory()) {
+			MatchData.matchState = 'postMatch';
+		}
 		this._scoreboardManager.updatePartial();
 		this._gameMode.onPlayerElimination(player);
 	}
 
 	// Only runs onPlayerLeaves and onPlayerElimination is the player has not previously been eliminated (marked dead).
 	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
+		print('Player leaves');
 		let previousStatus = MatchData.getPlayerStatus(player);
-
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
-		VictoryManager.getInstance().checkKnockOutVictory();
-		this._scoreboardManager.updatePartial();
-
 		if (previousStatus.isAlive() || previousStatus.isNomad()) {
 			this._gameMode.onPlayerLeaves(player);
 			this._gameMode.onPlayerElimination(player);
 		}
+	}
+
+	public async onRematch(): Promise<void> {
+		this._gameMode.onRematch();
 	}
 
 	public async resetMatch() {

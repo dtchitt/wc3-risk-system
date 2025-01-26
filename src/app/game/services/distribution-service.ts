@@ -5,12 +5,13 @@ import { PlayerManager } from 'src/app/player/player-manager';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
 import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
+import { CITIES_PER_PLAYER_UPPER_BOUND } from 'src/configs/game-settings';
 
 /**
  * Handles the distribution of cities among active players.
  */
 export class DistributionService {
-	private citiesPerPlayerUpperBound: number = 22;
+	private citiesPerPlayerUpperBound: number = CITIES_PER_PLAYER_UPPER_BOUND;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
 	private players: DoublyLinkedList<ActivePlayer>;

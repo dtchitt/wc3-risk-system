@@ -100,12 +100,15 @@ export class VictoryManager {
 	}
 
 	public checkKnockOutVictory(): boolean {
-		if (MatchData.remainingPlayers.length == 1) {
+		print('Checking knockout victory');
+		if (MatchData.remainingPlayers.length <= 1) {
+			print('Knockout victory');
 			MatchData.leader = MatchData.remainingPlayers[0];
 			this.saveStats();
+			print('saveStats, MatchData.leader: ' + MatchData.leader);
 			return true;
 		}
-
+		print('No knockout victory');
 		return false;
 	}
 
