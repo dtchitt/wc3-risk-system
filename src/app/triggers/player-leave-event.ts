@@ -1,5 +1,5 @@
 import { GameManager } from '../game/game-manager';
-import { MatchGameLoop } from '../game/match-game-loop';
+import { GameLoop } from '../game/game-loop';
 import { MatchData } from '../game/state/match-state';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
@@ -22,7 +22,7 @@ export function PlayerLeaveEvent() {
 
 			player.status.set(PLAYER_STATUS.LEFT);
 
-			MatchGameLoop.getInstance().onPlayerLeaves(player);
+			// MatchGameLoop.getInstance().onPlayerLeft(player);
 		})
 	);
 }

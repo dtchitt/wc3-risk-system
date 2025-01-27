@@ -15,7 +15,9 @@ import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
 import { MatchData } from '../game/state/match-state';
-import { MatchGameLoop } from '../game/match-game-loop';
+import { EventEmitter } from '../utils/event-emitter';
+
+export const EVENT_ON_CITY_CAPTURE = 'OnCityCapture';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();
@@ -133,7 +135,8 @@ export function OwnershipChangeEvent() {
 				}
 			}
 
-			MatchGameLoop.getInstance().onCityCapture(city, prevOwner, owner);
+			const eventEmitter = EventEmitter.getInstance();
+			eventEmitter.emit(EVENT_ON_CITY_CAPTURE, city, prevOwner, owner);
 
 			return false;
 		})

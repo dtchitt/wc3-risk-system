@@ -27,6 +27,8 @@ import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-s
 import { ModeSelection } from './app/game/state/mode-selection';
 import { PlayerSetupService } from './app/game/services/player-setup-service';
 import { Wait } from './app/utils/wait';
+import { GameLoop } from './app/game/game-loop';
+import { EventEmitter } from './app/utils/event-emitter';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -121,9 +123,13 @@ function tsMain() {
 			EnableSelect(false, false);
 			EnableDragSelect(false, false);
 			FogEnable(true);
+			EventEmitter.getInstance();
+			GameLoop.getInstance();
+			ModeSelection.getInstance();
 
 			await Wait.forSeconds(2);
-			ModeSelection.getInstance().run();
+
+			EventEmitter.getInstance().emit('modeSelection');
 		});
 	} catch (e) {
 		print(e);

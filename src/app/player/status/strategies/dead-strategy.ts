@@ -1,21 +1,28 @@
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
-import { VictoryManager } from 'src/app/managers/victory-manager';
 import { PLAYER_STATUS } from '../status-enum';
 import { GlobalMessage } from 'src/app/utils/messages';
+import { EventEmitter } from 'src/app/utils/event-emitter';
 
 export class DeadStrategy implements StatusStrategy {
+	public static EVENT_ON_PLAYER_DEAD = 'onPlayerDead';
+
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isDead() || gamePlayer.status.isLeft()) return;
 
 		gamePlayer.status.status = PLAYER_STATUS.DEAD;
 		gamePlayer.setEndData();
 		gamePlayer.trackedData.income.income = 1;
-		VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.DEAD);
+		// VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.DEAD);
+
 		GlobalMessage(
 			`${NameManager.getInstance().getDisplayName(gamePlayer.getPlayer())} has been defeated!`,
 			'Sound\\Interface\\SecretFound.flac'
 		);
+
+		EventEmitter.getInstance().emit(DeadStrategy.EVENT_ON_PLAYER_DEAD, gamePlayer);
+
+		// MatchGameLoop.getInstance().onPlayerDead(gamePlayer);
 	}
 }

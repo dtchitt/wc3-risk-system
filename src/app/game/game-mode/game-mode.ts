@@ -12,13 +12,21 @@ import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../state/match-state';
+import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
+import { AliveStrategy } from 'src/app/player/status/strategies/alive-strategy';
+import { NomadStrategy } from 'src/app/player/status/strategies/nomad-strategy';
+import { STFUStrategy } from 'src/app/player/status/strategies/stfu-strategy';
 
 export interface GameModeHooks {
-	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
+	onPlayerAlive: (player: ActivePlayer) => Promise<void>;
+	onPlayerDead: (player: ActivePlayer) => Promise<void>;
+	onPlayerNomad: (player: ActivePlayer) => Promise<void>;
+	onPlayerLeft: (player: ActivePlayer) => Promise<void>;
+	onPlayerSTFU: (player: ActivePlayer) => Promise<void>;
 	onPlayerForfeit: (player: ActivePlayer) => Promise<void>;
+
+	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
 	onRematch: () => Promise<void>;
-	onPlayerElimination: (player: ActivePlayer) => Promise<void>;
-	onPlayerLeaves: (player: ActivePlayer) => Promise<void>;
 }
 
 export interface GameMode extends GameModeHooks {
@@ -31,12 +39,12 @@ export interface GameMode extends GameModeHooks {
 }
 
 export abstract class BaseGameMode implements GameMode {
-	private statsController: StatisticsController;
-	private scoreboardManager: ScoreboardManager;
+	private _statsController: StatisticsController;
+	private _scoreboardManager: ScoreboardManager;
 
 	constructor() {
-		this.statsController = StatisticsController.getInstance();
-		this.scoreboardManager = ScoreboardManager.getInstance();
+		this._statsController = StatisticsController.getInstance();
+		this._scoreboardManager = ScoreboardManager.getInstance();
 	}
 
 	isMatchOver(): boolean {
@@ -51,7 +59,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onStartTurn(turn: number): void {
-		this.scoreboardManager.updateFull();
+		this._scoreboardManager.updateFull();
 		MatchData.remainingPlayers.forEach((player) => {
 			player.giveGold();
 		});
@@ -68,34 +76,62 @@ export abstract class BaseGameMode implements GameMode {
 			MatchData.matchState = 'postMatch';
 		}
 
-		this.scoreboardManager.updateFull();
+		this._scoreboardManager.updateFull();
 	}
 
 	onTick(tick: number): void {
 		VictoryManager.getInstance().updateAndGetGameState();
-		this.scoreboardManager.updateScoreboardTitle();
-		this.scoreboardManager.updatePartial();
+		this._scoreboardManager.updateScoreboardTitle();
+		this._scoreboardManager.updatePartial();
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		this.scoreboardManager.updatePartial();
+	async onPlayerAlive(player: ActivePlayer): Promise<void> {
+		print(AliveStrategy.EVENT_ON_PLAYER_ALIVE);
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.ALIVE);
+		this._scoreboardManager.updatePartial();
+	}
+
+	async onPlayerDead(player: ActivePlayer): Promise<void> {
+		print('onPlayerElimination');
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+		if (VictoryManager.getInstance().checkKnockOutVictory()) {
+			MatchData.matchState = 'postMatch';
+		}
+		this._scoreboardManager.updatePartial();
+	}
+
+	async onPlayerNomad(player: ActivePlayer): Promise<void> {
+		print(NomadStrategy.EVENT_ON_PLAYER_NOMAD);
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.NOMAD);
+		this._scoreboardManager.updatePartial();
+	}
+
+	async onPlayerLeft(player: ActivePlayer): Promise<void> {
+		print('onPlayerLeaves');
+		let previousStatus = MatchData.getPlayerStatus(player);
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
+	}
+
+	async onPlayerSTFU(player: ActivePlayer): Promise<void> {
+		print(STFUStrategy.EVENT_ON_PLAYER_STFU);
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.STFU);
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
 		print('onPlayerForfeit');
+		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerElimination(player: ActivePlayer): Promise<void> {
-		print('onPlayerElimination');
-		this.scoreboardManager.updatePartial();
-	}
-
-	async onPlayerLeaves(player: ActivePlayer): Promise<void> {
-		print('onPlayerLeaves');
+	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+		print('onCityCapture');
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onRematch(): Promise<void> {
-		this.statsController.setViewVisibility(false);
+		print('onRematch');
+		this._statsController.setViewVisibility(false);
 	}
 
 	private messageGameState() {
@@ -139,7 +175,7 @@ export abstract class BaseGameMode implements GameMode {
 		BlzEnableSelections(false, false);
 
 		// Hide match scoreboard and show score screen
-		this.scoreboardManager.destroyBoards();
+		this._scoreboardManager.destroyBoards();
 		MatchData.initialPlayers.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
@@ -151,9 +187,9 @@ export abstract class BaseGameMode implements GameMode {
 		if (SettingsContext.getInstance().isPromode()) {
 			VictoryManager.getInstance().updateWinTracker();
 		} else {
-			this.statsController.refreshView();
-			this.statsController.setViewVisibility(true);
-			this.statsController.writeStatisticsData();
+			this._statsController.refreshView();
+			this._statsController.setViewVisibility(true);
+			this._statsController.writeStatisticsData();
 		}
 	}
 

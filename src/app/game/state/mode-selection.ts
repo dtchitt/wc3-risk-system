@@ -5,18 +5,21 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
-import { MatchGameLoop } from '../match-game-loop';
 import { GameModeStandard } from '../game-mode/game-mode-standard';
 import { MatchData } from './match-state';
+import { EventEmitter } from 'src/app/utils/event-emitter';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
 	private ui: SettingsView;
+	private eventEmitter: EventEmitter;
 
 	private static instance: ModeSelection;
 
 	private constructor() {
 		this.ui = new SettingsView();
+		this.eventEmitter = EventEmitter.getInstance();
+		this.eventEmitter.on('modeSelection', () => this.run());
 	}
 
 	public static getInstance() {
@@ -31,7 +34,7 @@ export class ModeSelection implements GameState {
 		this.manager = observer;
 	}
 
-	public run(): void {
+	public async run(): Promise<void> {
 		if (NameManager.getInstance().getAcct(Player(23)) == 'RiskBot') {
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
 			settingsContext.getSettings().Promode = 0;
@@ -61,7 +64,7 @@ export class ModeSelection implements GameState {
 		}
 	}
 
-	public end(): void {
+	public async end(): Promise<void> {
 		const settings: SettingsContext = SettingsContext.getInstance();
 		settings.initStrategies();
 		settings.applyStrategy('Diplomacy');
@@ -72,8 +75,9 @@ export class ModeSelection implements GameState {
 		ExportGameSettings.write(settings);
 
 		MatchData.gameMode = 'ffa';
-		MatchGameLoop.getInstance().injectGameMode(new GameModeStandard());
-		MatchGameLoop.getInstance().startCountdown();
+
+		this.eventEmitter.emit('setGameMode', new GameModeStandard());
+		this.eventEmitter.emit('startGame');
 	}
 
 	private setupSettingsQuest(): void {

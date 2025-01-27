@@ -29,8 +29,9 @@ export class Status {
 		const strategy = Status.STRATEGY_MAP.get(status);
 
 		if (strategy) {
-			
+			print('Setting player status:', status);
 			strategy.run(this.player);
+			print('Player status set:', status);
 		} else {
 			print('Unknown player status:', status);
 		}

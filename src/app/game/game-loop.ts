@@ -1,4 +1,4 @@
-import { GameMode, GameModeHooks } from './game-mode/game-mode';
+import { GameMode } from './game-mode/game-mode';
 import { City } from '../city/city';
 import { ActivePlayer } from '../player/types/active-player';
 import { PlayerManager } from '../player/player-manager';
@@ -11,7 +11,6 @@ import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/
 import { File } from 'w3ts';
 import { CityToCountry, StringToCountry } from '../country/country-map';
 import { Wait } from '../utils/wait';
-import { VictoryManager } from '../managers/victory-manager';
 import { HexColors } from '../utils/hex-colors';
 import { TreeManager } from './services/tree-service';
 import { DistributionService } from './services/distribution-service';
@@ -22,9 +21,17 @@ import { StatisticsController } from '../statistics/statistics-controller';
 import { SlavePlayer } from '../player/types/slave-player';
 import { NameManager } from '../managers/names/name-manager';
 import { PLAYER_COLORS } from '../utils/player-colors';
+import { EventEmitter } from '../utils/event-emitter';
+import { AliveStrategy } from '../player/status/strategies/alive-strategy';
+import { LeftStrategy } from '../player/status/strategies/left-strategy';
+import { DeadStrategy } from '../player/status/strategies/dead-strategy';
+import { NomadStrategy } from '../player/status/strategies/nomad-strategy';
+import { STFUStrategy } from '../player/status/strategies/stfu-strategy';
+import { EVENT_ON_PLAYER_FORFEIT } from '../commands/forfeit';
+import { EVENT_ON_CITY_CAPTURE } from '../triggers/ownership-change-event';
 
-export class MatchGameLoop implements GameModeHooks {
-	private static instance: MatchGameLoop;
+export class GameLoop {
+	private static instance: GameLoop;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
 	private _distributionService: DistributionService;
@@ -34,7 +41,25 @@ export class MatchGameLoop implements GameModeHooks {
 	private _settingsContext: SettingsContext;
 	private _nameManager: NameManager;
 
+	private eventEmitter: EventEmitter;
+
 	private constructor() {
+		this.eventEmitter = EventEmitter.getInstance();
+		this.eventEmitter.on(AliveStrategy.EVENT_ON_PLAYER_ALIVE, (player: ActivePlayer) => this._gameMode.onPlayerAlive(player));
+		this.eventEmitter.on(DeadStrategy.EVENT_ON_PLAYER_DEAD, (player: ActivePlayer) => this._gameMode.onPlayerDead(player));
+		this.eventEmitter.on(LeftStrategy.EVENT_ON_PLAYER_LEFT, (player: ActivePlayer) => this._gameMode.onPlayerLeft(player));
+		this.eventEmitter.on(NomadStrategy.EVENT_ON_PLAYER_NOMAD, (player: ActivePlayer) => this._gameMode.onPlayerNomad(player));
+		this.eventEmitter.on(STFUStrategy.EVENT_ON_PLAYER_STFU, (player: ActivePlayer) => this._gameMode.onPlayerSTFU(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) => this._gameMode.onPlayerForfeit(player));
+		this.eventEmitter.on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
+			this._gameMode.onCityCapture(city, preOwner, owner)
+		);
+		this.eventEmitter.on('onRematch', () => this._gameMode.onRematch());
+
+		this.eventEmitter.on('startGame', () => this.startCountdown());
+		this.eventEmitter.on('gameRestart', () => this.startCountdown());
+		this.eventEmitter.on('setGameMode', () => this.startCountdown());
+
 		this._matchLoopTimer = CreateTimer();
 		this._playerManager = PlayerManager.getInstance();
 		this._statsController = StatisticsController.getInstance();
@@ -45,51 +70,14 @@ export class MatchGameLoop implements GameModeHooks {
 
 	public static getInstance() {
 		if (this.instance == null) {
-			this.instance = new MatchGameLoop();
+			this.instance = new GameLoop();
 		}
 
 		return this.instance;
 	}
 
-	public injectGameMode(gameMode: GameMode) {
+	public applyGameMode(gameMode: GameMode) {
 		this._gameMode = gameMode;
-	}
-
-	public async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		this._gameMode.onCityCapture(city, preOwner, owner);
-	}
-
-	public async onPlayerForfeit(player: ActivePlayer): Promise<void> {
-		print('Player forfeit');
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		this._scoreboardManager.updatePartial();
-		this._gameMode.onPlayerForfeit(player);
-		this._gameMode.onPlayerElimination(player);
-	}
-
-	public async onPlayerElimination(player: ActivePlayer): Promise<void> {
-		print('Player eliminated');
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		if (VictoryManager.getInstance().checkKnockOutVictory()) {
-			MatchData.matchState = 'postMatch';
-		}
-		this._scoreboardManager.updatePartial();
-		this._gameMode.onPlayerElimination(player);
-	}
-
-	// Only runs onPlayerLeaves and onPlayerElimination is the player has not previously been eliminated (marked dead).
-	public async onPlayerLeaves(player: ActivePlayer): Promise<void> {
-		print('Player leaves');
-		let previousStatus = MatchData.getPlayerStatus(player);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
-		if (previousStatus.isAlive() || previousStatus.isNomad()) {
-			this._gameMode.onPlayerLeaves(player);
-			this._gameMode.onPlayerElimination(player);
-		}
-	}
-
-	public async onRematch(): Promise<void> {
-		this._gameMode.onRematch();
 	}
 
 	public async resetMatch() {
@@ -185,6 +173,7 @@ export class MatchGameLoop implements GameModeHooks {
 	}
 
 	public async startCountdown() {
+		this.eventEmitter.emit('matchStart');
 		await this.resetMatch();
 		MatchData.matchState = 'preMatch';
 		await Wait.forSeconds(2);

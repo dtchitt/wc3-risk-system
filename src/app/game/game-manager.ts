@@ -1,17 +1,17 @@
 import { SettingsContext } from '../settings/settings-context';
-import { MatchGameLoop } from './match-game-loop';
+import { GameLoop } from './game-loop';
 import { GameState } from './state/game-state';
 import { MatchData } from './state/match-state';
 
 export class GameManager {
 	private _state: GameState;
-	private _gameLoop: MatchGameLoop;
+	private _gameLoop: GameLoop;
 
 	private static instance: GameManager;
 
 	private constructor() {
 		MatchData.matchState = 'modeSelection';
-		this._gameLoop = MatchGameLoop.getInstance();
+		this._gameLoop = GameLoop.getInstance();
 	}
 
 	public static getInstance() {
