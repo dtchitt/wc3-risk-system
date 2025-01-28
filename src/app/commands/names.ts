@@ -1,4 +1,5 @@
 import { GameManager } from '../game/game-manager';
+import { MatchData } from '../game/state/match-state';
 import { ChatManager } from '../managers/chat-manager';
 import { NameManager } from '../managers/names/name-manager';
 import { PlayerManager } from '../player/player-manager';
@@ -6,7 +7,7 @@ import { ShuffleArray } from '../utils/utils';
 
 export function NamesCommand(chatManager: ChatManager, gameManager: GameManager, playerManager: PlayerManager, nameManager: NameManager) {
 	chatManager.addCmd(['-names', '-players'], () => {
-		if (!GameManager.isMatchInProgress()) return;
+		if (MatchData.matchState != 'inProgress') return;
 
 		const player: player = GetTriggerPlayer();
 		const nameList: player[] = [];

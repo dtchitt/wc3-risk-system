@@ -7,6 +7,7 @@ import { SPANWER_UNITS } from '../../spawner/spawner';
 import { UNIT_TYPE } from '../../utils/unit-types';
 import { HandleGuardDeath } from './handle-guard-death';
 import { TeamManager } from 'src/app/teams/team-manager';
+import { MatchData } from 'src/app/game/state/match-state';
 
 export function UnitDeathEvent() {
 	const t: trigger = CreateTrigger();
@@ -18,7 +19,7 @@ export function UnitDeathEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			if (!GameManager.isMatchInProgress()) return false;
+			if (MatchData.matchState != 'inProgress') return false;
 
 			const dyingUnit: unit = GetTriggerUnit();
 			const killingUnit: unit = GetKillingUnit();

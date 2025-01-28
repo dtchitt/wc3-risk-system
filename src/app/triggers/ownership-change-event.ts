@@ -29,7 +29,7 @@ export function OwnershipChangeEvent() {
 		t,
 		Condition(() => {
 			if (!IsUnitType(GetChangingUnit(), UNIT_TYPE.CITY)) return false;
-			if (GameManager.isMatchPostStage()) return false;
+			if (MatchData.matchState == 'postMatch') return false;
 
 			const city: City = UnitToCity.get(GetChangingUnit());
 			const country: Country = CityToCountry.get(city);
@@ -90,7 +90,7 @@ export function OwnershipChangeEvent() {
 					ownerData.countries.set(country, 1);
 				}
 
-				if (GameManager.isMatchInProgress()) {
+				if (MatchData.matchState == 'inProgress') {
 					VictoryManager.getInstance().setLeader(owner);
 				}
 
@@ -134,8 +134,7 @@ export function OwnershipChangeEvent() {
 				}
 			}
 
-			const eventEmitter = EventEmitter.getInstance();
-			eventEmitter.emit(EVENT_ON_CITY_CAPTURE, city, prevOwner, owner);
+			EventEmitter.getInstance().emit(EVENT_ON_CITY_CAPTURE, city, prevOwner, owner);
 
 			return false;
 		})
