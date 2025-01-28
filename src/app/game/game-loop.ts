@@ -64,7 +64,7 @@ export class GameLoop {
 
 		this.eventEmitter.on(EVENT_START_GAME, () => this.startCountdown());
 		this.eventEmitter.on(EVENT_GAME_RESTART, () => this.startCountdown());
-		this.eventEmitter.on(EVENT_SET_GAME_MODE, () => this.startCountdown());
+		this.eventEmitter.on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
 
 		this._matchLoopTimer = CreateTimer();
 		this._playerManager = PlayerManager.getInstance();

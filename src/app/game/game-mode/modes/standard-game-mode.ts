@@ -1,8 +1,8 @@
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { City } from 'src/app/city/city';
-import { BaseGameMode } from './game-mode';
+import { BaseGameMode } from '../base-game-mode';
 
-export class GameModeStandard extends BaseGameMode {
+export class StandardGameMode extends BaseGameMode {
 	onEndTurn(turn: number): void {
 		super.onEndTurn(turn);
 	}
