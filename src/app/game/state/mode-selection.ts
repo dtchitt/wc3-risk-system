@@ -7,7 +7,8 @@ import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
 import { GameModeStandard } from '../game-mode/game-mode-standard';
 import { MatchData } from './match-state';
-import { EventEmitter } from 'src/app/utils/event-emitter';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
+import { EVENT_MODE_SELECTION, EVENT_SET_GAME_MODE, EVENT_START_GAME } from 'src/app/utils/events/event-constants';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
@@ -19,7 +20,7 @@ export class ModeSelection implements GameState {
 	private constructor() {
 		this.ui = new SettingsView();
 		this.eventEmitter = EventEmitter.getInstance();
-		this.eventEmitter.on('modeSelection', () => this.run());
+		this.eventEmitter.on(EVENT_MODE_SELECTION, () => this.run());
 	}
 
 	public static getInstance() {
@@ -76,8 +77,8 @@ export class ModeSelection implements GameState {
 
 		MatchData.gameMode = 'ffa';
 
-		this.eventEmitter.emit('setGameMode', new GameModeStandard());
-		this.eventEmitter.emit('startGame');
+		this.eventEmitter.emit(EVENT_SET_GAME_MODE, new GameModeStandard());
+		this.eventEmitter.emit(EVENT_START_GAME);
 	}
 
 	private setupSettingsQuest(): void {

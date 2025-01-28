@@ -3,11 +3,10 @@ import { ActivePlayer } from '../../types/active-player';
 import { StatusStrategy } from './status-strategy';
 import { PLAYER_STATUS } from '../status-enum';
 import { GlobalMessage } from 'src/app/utils/messages';
-import { EventEmitter } from 'src/app/utils/event-emitter';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
+import { EVENT_ON_PLAYER_LEFT } from 'src/app/utils/events/event-constants';
 
 export class LeftStrategy implements StatusStrategy {
-	public static EVENT_ON_PLAYER_LEFT = 'onPlayerLeft';
-
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isLeft()) return;
 
@@ -24,6 +23,6 @@ export class LeftStrategy implements StatusStrategy {
 			'Sound\\Interface\\SecretFound.flac'
 		);
 
-		EventEmitter.getInstance().emit(LeftStrategy.EVENT_ON_PLAYER_LEFT, gamePlayer);
+		EventEmitter.getInstance().emit(EVENT_ON_PLAYER_LEFT, gamePlayer);
 	}
 }

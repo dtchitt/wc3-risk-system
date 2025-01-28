@@ -3,7 +3,7 @@ import { MatchData } from '../game/state/match-state';
 import { ChatManager } from '../managers/chat-manager';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
-import { EventEmitter } from '../utils/event-emitter';
+import { EventEmitter } from '../utils/events/event-emitter';
 
 export const EVENT_ON_PLAYER_FORFEIT = 'onPlayerForfeit';
 

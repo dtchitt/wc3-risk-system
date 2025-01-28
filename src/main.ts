@@ -28,7 +28,8 @@ import { ModeSelection } from './app/game/state/mode-selection';
 import { PlayerSetupService } from './app/game/services/player-setup-service';
 import { Wait } from './app/utils/wait';
 import { GameLoop } from './app/game/game-loop';
-import { EventEmitter } from './app/utils/event-emitter';
+import { EventEmitter } from './app/utils/events/event-emitter';
+import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -129,7 +130,7 @@ function tsMain() {
 
 			await Wait.forSeconds(2);
 
-			EventEmitter.getInstance().emit('modeSelection');
+			EventEmitter.getInstance().emit(EVENT_MODE_SELECTION);
 		});
 	} catch (e) {
 		print(e);

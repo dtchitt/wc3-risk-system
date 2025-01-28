@@ -16,6 +16,7 @@ import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { AliveStrategy } from 'src/app/player/status/strategies/alive-strategy';
 import { NomadStrategy } from 'src/app/player/status/strategies/nomad-strategy';
 import { STFUStrategy } from 'src/app/player/status/strategies/stfu-strategy';
+import { EVENT_ON_PLAYER_ALIVE, EVENT_ON_PLAYER_NOMAD, EVENT_ON_PLAYER_STFU } from 'src/app/utils/events/event-constants';
 
 export interface GameModeHooks {
 	onPlayerAlive: (player: ActivePlayer) => Promise<void>;
@@ -86,7 +87,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerAlive(player: ActivePlayer): Promise<void> {
-		print(AliveStrategy.EVENT_ON_PLAYER_ALIVE);
+		print(EVENT_ON_PLAYER_ALIVE);
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.ALIVE);
 		this._scoreboardManager.updatePartial();
 	}
@@ -101,7 +102,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerNomad(player: ActivePlayer): Promise<void> {
-		print(NomadStrategy.EVENT_ON_PLAYER_NOMAD);
+		print(EVENT_ON_PLAYER_NOMAD);
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.NOMAD);
 		this._scoreboardManager.updatePartial();
 	}
@@ -113,7 +114,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerSTFU(player: ActivePlayer): Promise<void> {
-		print(STFUStrategy.EVENT_ON_PLAYER_STFU);
+		print(EVENT_ON_PLAYER_STFU);
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.STFU);
 		this._scoreboardManager.updatePartial();
 	}

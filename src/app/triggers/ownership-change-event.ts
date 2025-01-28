@@ -15,9 +15,8 @@ import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
 import { SettingsContext } from '../settings/settings-context';
 import { TeamManager } from '../teams/team-manager';
 import { MatchData } from '../game/state/match-state';
-import { EventEmitter } from '../utils/event-emitter';
-
-export const EVENT_ON_CITY_CAPTURE = 'OnCityCapture';
+import { EventEmitter } from '../utils/events/event-emitter';
+import { EVENT_ON_CITY_CAPTURE } from '../utils/events/event-constants';
 
 export function OwnershipChangeEvent() {
 	const t: trigger = CreateTrigger();

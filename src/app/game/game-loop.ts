@@ -21,14 +21,20 @@ import { StatisticsController } from '../statistics/statistics-controller';
 import { SlavePlayer } from '../player/types/slave-player';
 import { NameManager } from '../managers/names/name-manager';
 import { PLAYER_COLORS } from '../utils/player-colors';
-import { EventEmitter } from '../utils/event-emitter';
-import { AliveStrategy } from '../player/status/strategies/alive-strategy';
-import { LeftStrategy } from '../player/status/strategies/left-strategy';
-import { DeadStrategy } from '../player/status/strategies/dead-strategy';
-import { NomadStrategy } from '../player/status/strategies/nomad-strategy';
-import { STFUStrategy } from '../player/status/strategies/stfu-strategy';
+import { EventEmitter } from '../utils/events/event-emitter';
 import { EVENT_ON_PLAYER_FORFEIT } from '../commands/forfeit';
-import { EVENT_ON_CITY_CAPTURE } from '../triggers/ownership-change-event';
+import {
+	EVENT_GAME_RESTART,
+	EVENT_ON_CITY_CAPTURE,
+	EVENT_ON_PLAYER_ALIVE,
+	EVENT_ON_PLAYER_DEAD,
+	EVENT_ON_PLAYER_LEFT,
+	EVENT_ON_PLAYER_NOMAD,
+	EVENT_ON_PLAYER_STFU,
+	EVENT_ON_REMATCH,
+	EVENT_SET_GAME_MODE,
+	EVENT_START_GAME,
+} from '../utils/events/event-constants';
 
 export class GameLoop {
 	private static instance: GameLoop;
@@ -45,20 +51,20 @@ export class GameLoop {
 
 	private constructor() {
 		this.eventEmitter = EventEmitter.getInstance();
-		this.eventEmitter.on(AliveStrategy.EVENT_ON_PLAYER_ALIVE, (player: ActivePlayer) => this._gameMode.onPlayerAlive(player));
-		this.eventEmitter.on(DeadStrategy.EVENT_ON_PLAYER_DEAD, (player: ActivePlayer) => this._gameMode.onPlayerDead(player));
-		this.eventEmitter.on(LeftStrategy.EVENT_ON_PLAYER_LEFT, (player: ActivePlayer) => this._gameMode.onPlayerLeft(player));
-		this.eventEmitter.on(NomadStrategy.EVENT_ON_PLAYER_NOMAD, (player: ActivePlayer) => this._gameMode.onPlayerNomad(player));
-		this.eventEmitter.on(STFUStrategy.EVENT_ON_PLAYER_STFU, (player: ActivePlayer) => this._gameMode.onPlayerSTFU(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_ALIVE, (player: ActivePlayer) => this._gameMode.onPlayerAlive(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_DEAD, (player: ActivePlayer) => this._gameMode.onPlayerDead(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_LEFT, (player: ActivePlayer) => this._gameMode.onPlayerLeft(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_NOMAD, (player: ActivePlayer) => this._gameMode.onPlayerNomad(player));
+		this.eventEmitter.on(EVENT_ON_PLAYER_STFU, (player: ActivePlayer) => this._gameMode.onPlayerSTFU(player));
 		this.eventEmitter.on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) => this._gameMode.onPlayerForfeit(player));
 		this.eventEmitter.on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
 			this._gameMode.onCityCapture(city, preOwner, owner)
 		);
-		this.eventEmitter.on('onRematch', () => this._gameMode.onRematch());
+		this.eventEmitter.on(EVENT_ON_REMATCH, () => this._gameMode.onRematch());
 
-		this.eventEmitter.on('startGame', () => this.startCountdown());
-		this.eventEmitter.on('gameRestart', () => this.startCountdown());
-		this.eventEmitter.on('setGameMode', () => this.startCountdown());
+		this.eventEmitter.on(EVENT_START_GAME, () => this.startCountdown());
+		this.eventEmitter.on(EVENT_GAME_RESTART, () => this.startCountdown());
+		this.eventEmitter.on(EVENT_SET_GAME_MODE, () => this.startCountdown());
 
 		this._matchLoopTimer = CreateTimer();
 		this._playerManager = PlayerManager.getInstance();

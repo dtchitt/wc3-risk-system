@@ -3,13 +3,12 @@ import { ActivePlayer } from '../../types/active-player';
 import { PLAYER_STATUS } from '../status-enum';
 import { StatusStrategy } from './status-strategy';
 import { TimedEvent } from 'src/app/libs/timer/timed-event';
-import { EventEmitter } from 'src/app/utils/event-emitter';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
+import { EVENT_ON_PLAYER_STFU } from 'src/app/utils/events/event-constants';
 
 const STFU_DURATION: number = 300;
 
 export class STFUStrategy implements StatusStrategy {
-	public static EVENT_ON_PLAYER_STFU = 'onPlayerSTFU';
-
 	run(gamePlayer: ActivePlayer): void {
 		if (gamePlayer.status.isNomad() || gamePlayer.status.isAlive() || gamePlayer.status.isSTFU()) return;
 		const oldStatus = gamePlayer.status.status;
@@ -35,7 +34,7 @@ export class STFUStrategy implements StatusStrategy {
 			gamePlayer.status.statusDuration--;
 		});
 
-		EventEmitter.getInstance().emit(STFUStrategy.EVENT_ON_PLAYER_STFU, gamePlayer);
+		EventEmitter.getInstance().emit(EVENT_ON_PLAYER_STFU, gamePlayer);
 		// MatchGameLoop.getInstance().onPlayerSTFU(gamePlayer);
 	}
 }
