@@ -6,7 +6,7 @@ import { VictoryProgressState, VictoryManager } from 'src/app/managers/victory-m
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { GlobalMessage } from 'src/app/utils/messages';
-import { CITIES_TO_WIN_WARNING_RATIO } from 'src/configs/game-settings';
+import { CITIES_TO_WIN_WARNING_RATIO, NOMAD_DURATION, STARTING_INCOME, STFU_DURATION } from 'src/configs/game-settings';
 import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
@@ -14,24 +14,32 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../state/match-state';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import {
-	EVENT_CITY_CAPTURE,
-	EVENT_ON_CITY_CAPTURE,
 	EVENT_ON_PLAYER_ALIVE,
 	EVENT_ON_PLAYER_DEAD,
 	EVENT_ON_PLAYER_FORFEIT,
 	EVENT_ON_PLAYER_LEFT,
 	EVENT_ON_PLAYER_NOMAD,
 	EVENT_ON_PLAYER_STFU,
-	EVENT_ON_REMATCH,
-	EVENT_PLAYER_ALIVE,
-	EVENT_PLAYER_DEAD,
-	EVENT_PLAYER_FORFEIT,
-	EVENT_PLAYER_LEFT,
-	EVENT_PLAYER_NOMAD,
-	EVENT_PLAYER_STFU,
-	EVENT_REMATCH,
+	EVENT_ON_CITY_CAPTURE,
+	EVENT_START_GAME,
+	EVENT_GAME_RESTART,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from './game-mode';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
+import { TimedEventManager } from 'src/app/libs/timer/timed-event-manager';
+import { TimedEvent } from 'src/app/libs/timer/timed-event';
+import { PlayerManager } from 'src/app/player/player-manager';
+import { SlavePlayer } from 'src/app/player/types/slave-player';
+import { removeUnits } from '../utillity/remove-units';
+import { Wait } from 'src/app/utils/wait';
+import { resumingUnits } from '../utillity/resuming-units';
+import { ShufflePlayerColorWithColoredName } from '../utillity/shuffle-player-color-with-colored-name';
+import { resetCountries } from '../utillity/reset-countries';
+import { TreeManager } from '../services/tree-service';
+import { DistributionService } from '../services/distribution-service';
+import { distributeBases } from '../utillity/distribute-bases';
+import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
+import { setStatTracking as setStatTrackingAndLeaderboard } from '../utillity/prepare-stat-tracking';
 
 export abstract class BaseGameMode implements GameMode {
 	private _statsController: StatisticsController;
@@ -41,6 +49,12 @@ export abstract class BaseGameMode implements GameMode {
 		this._statsController = StatisticsController.getInstance();
 		this._scoreboardManager = ScoreboardManager.getInstance();
 	}
+
+	async onPreMatch(): Promise<void> {}
+
+	async onInProgress(): Promise<void> {}
+
+	async onPostMatch(): Promise<void> {}
 
 	isMatchOver(): boolean {
 		return MatchData.matchState == 'postMatch';
@@ -82,65 +96,150 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onPlayerAlive(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_ALIVE);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.ALIVE);
-		this._scoreboardManager.updatePartial();
-	}
+		player.status.status = PLAYER_STATUS.ALIVE;
+		player.trackedData.income.income = STARTING_INCOME;
 
-	async playerAlive(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_ALIVE);
+		if (player.trackedData.income.max == 0) {
+			player.trackedData.income.max = STARTING_INCOME;
+		}
+		// MatchData.setPlayerStatus(player, PLAYER_STATUS.ALIVE);
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onPlayerDead(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_DEAD);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+
+		player.status.status = PLAYER_STATUS.DEAD;
+		player.setEndData();
+		player.trackedData.income.income = 1;
+		// VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.DEAD);
+
+		GlobalMessage(
+			`${NameManager.getInstance().getDisplayName(player.getPlayer())} has been defeated!`,
+			'Sound\\Interface\\SecretFound.flac'
+		);
+
+		// MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
 		if (VictoryManager.getInstance().checkKnockOutVictory()) {
 			MatchData.matchState = 'postMatch';
 		}
 		this._scoreboardManager.updatePartial();
 	}
 
-	async playerDead(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_DEAD);
-	}
-
 	async onPlayerNomad(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_NOMAD);
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.NOMAD);
-		this._scoreboardManager.updatePartial();
-	}
 
-	async playerNomad(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_NOMAD);
+		if (player.trackedData.units.size <= 0) {
+			player.status.set(PLAYER_STATUS.DEAD);
+			return;
+		}
+
+		player.status.status = PLAYER_STATUS.NOMAD;
+		player.trackedData.income.income = 4;
+
+		const tick: number = 1;
+		const nomadTimer: timer = CreateTimer();
+		player.status.statusDuration = NOMAD_DURATION;
+
+		TimerStart(nomadTimer, tick, true, () => {
+			if (!player.status.isAlive() && player.trackedData.cities.cities.length >= 1) {
+				if (GetPlayerSlotState(player.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+					player.status.set(PLAYER_STATUS.LEFT);
+				} else {
+					player.status.set(PLAYER_STATUS.ALIVE);
+					player.trackedData.countries.forEach((val, country) => {
+						if (country.getOwner() == player.getPlayer()) {
+							player.trackedData.income.income += country.getCities().length;
+						}
+					});
+				}
+
+				PauseTimer(nomadTimer);
+				DestroyTimer(nomadTimer);
+			} else if (player.trackedData.cities.cities.length <= 0 && player.trackedData.units.size <= 0) {
+				if (GetPlayerSlotState(player.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+					player.status.set(PLAYER_STATUS.LEFT);
+				} else {
+					player.status.set(PLAYER_STATUS.DEAD);
+				}
+
+				PauseTimer(nomadTimer);
+				DestroyTimer(nomadTimer);
+			} else if (player.status.isNomad()) {
+				player.status.statusDuration--;
+
+				if (player.status.statusDuration <= 0 || player.trackedData.units.size <= 0) {
+					player.status.set(PLAYER_STATUS.DEAD);
+					PauseTimer(nomadTimer);
+					DestroyTimer(nomadTimer);
+				}
+			}
+		});
+
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onPlayerLeft(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_LEFT);
-		let previousStatus = MatchData.getPlayerStatus(player);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
-	}
 
-	async playerLeft(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_LEFT);
+		if (player.status.isDead() || player.status.isSTFU()) {
+			player.status.status = PLAYER_STATUS.LEFT;
+			return;
+		}
+
+		player.status.status = PLAYER_STATUS.LEFT;
+		player.setEndData();
+		player.trackedData.income.income = 0;
+		GlobalMessage(
+			`${NameManager.getInstance().getDisplayName(player.getPlayer())} has left the game!`,
+			'Sound\\Interface\\SecretFound.flac'
+		);
+
+		// let previousStatus = MatchData.getPlayerStatus(player);
+		// MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
 	}
 
 	async onPlayerSTFU(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_STFU);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.STFU);
-		this._scoreboardManager.updatePartial();
-	}
 
-	async playerSTFU(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_STFU);
+		const oldStatus = player.status.status;
+		player.status.status = PLAYER_STATUS.STFU;
+		SetPlayerState(player.getPlayer(), PLAYER_STATE_OBSERVER, 1);
+		player.status.statusDuration = STFU_DURATION;
+
+		const timedEventManager: TimedEventManager = TimedEventManager.getInstance();
+
+		const event: TimedEvent = timedEventManager.registerTimedEvent(player.status.statusDuration, () => {
+			if (GetPlayerSlotState(player.getPlayer()) == PLAYER_SLOT_STATE_LEFT) {
+				player.status.set(PLAYER_STATUS.LEFT);
+				timedEventManager.removeTimedEvent(event);
+			} else if (player.status.statusDuration <= 1) {
+				SetPlayerState(player.getPlayer(), PLAYER_STATE_OBSERVER, 0);
+				player.status.status = oldStatus;
+				timedEventManager.removeTimedEvent(event);
+			} else if (player.status.isAlive()) {
+				SetPlayerState(player.getPlayer(), PLAYER_STATE_OBSERVER, 0);
+				timedEventManager.removeTimedEvent(event);
+			}
+
+			player.status.statusDuration--;
+		});
+
+		// MatchData.setPlayerStatus(player, PLAYER_STATUS.STFU);
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
 		print(EVENT_ON_PLAYER_FORFEIT);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		this._scoreboardManager.updatePartial();
-	}
+		if (!SettingsContext.getInstance().isPromode()) return;
 
-	async playerForfeit(player: ActivePlayer): Promise<void> {
-		print(EVENT_PLAYER_FORFEIT);
+		const playerStatus = MatchData.getPlayerStatus(PlayerManager.getInstance().players.get(GetTriggerPlayer()));
+		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
+
+		PlayerManager.getInstance().players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.DEAD);
+		// MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+		this._scoreboardManager.updatePartial();
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
@@ -148,17 +247,63 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async cityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		print(EVENT_CITY_CAPTURE);
-	}
-
 	async onRematch(): Promise<void> {
-		print(EVENT_ON_REMATCH);
+		print(EVENT_GAME_RESTART);
+		FogEnable(false);
+		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
-	}
 
-	async rematch(): Promise<void> {
-		print(EVENT_REMATCH);
+		if (MatchData.matchCount == 1) {
+		} else {
+			print('Removing units...');
+			await removeUnits();
+			await Wait.forSeconds(1);
+			print('Resuming units...');
+			await resumingUnits();
+			await Wait.forSeconds(1);
+			print('Shuffling player identities...');
+			ShufflePlayerColorWithColoredName();
+			await Wait.forSeconds(1);
+			print('Resetting countries...');
+			await resetCountries();
+			await Wait.forSeconds(1);
+			print('Resetting trees...');
+			await TreeManager.getInstance().reset();
+			await Wait.forSeconds(1);
+		}
+
+		if (!SettingsContext.getInstance().isPromode()) {
+			PlayerManager.getInstance().players.forEach((val) => {
+				NameManager.getInstance().setName(val.getPlayer(), 'color');
+			});
+		}
+
+		// Remove irrelevant players from the game
+		PlayerManager.getInstance().players.forEach((val) => {
+			val.trackedData.setKDMaps();
+			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
+				val.status.set(PLAYER_STATUS.ALIVE);
+			} else {
+				val.status.set(PLAYER_STATUS.LEFT);
+
+				PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
+				PlayerManager.getInstance().players.delete(val.getPlayer());
+			}
+		});
+
+		EnableSelect(false, false);
+		EnableDragSelect(false, false);
+		FogEnable(true);
+
+		// Distribute bases
+		distributeBases();
+
+		// Prepare stat tracking
+		setStatTrackingAndLeaderboard();
+
+		await setProModeTempVision();
+
+		EventEmitter.getInstance().emit(EVENT_START_GAME);
 	}
 
 	private messageGameState() {

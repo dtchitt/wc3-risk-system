@@ -17,8 +17,11 @@ export const NOMAD_DURATION: number = 60;
 //This represents the drop in required cities to win each turn. Default is 1.
 export const OVERTIME_MODIFIER: number = 1;
 
-//This represents the ratio of total cities to conquer to win
+//This represents the ratio of total cities to conquer to win.
 export const CITIES_TO_WIN_WARNING_RATIO: number = 0.7;
 
-//This represents the number of cities to conquer to win
+//This represents the number of cities to conquer to win. Default is 22.
 export const CITIES_PER_PLAYER_UPPER_BOUND: number = 1;
+
+//This represents the duration a player can be muted for in seconds. Default is 300 seconds.
+export const STFU_DURATION: number = 300;

@@ -1,77 +1,39 @@
 import { GameMode } from './game-mode/game-mode';
 import { City } from '../city/city';
 import { ActivePlayer } from '../player/types/active-player';
-import { PlayerManager } from '../player/player-manager';
-import { PLAYER_STATUS } from '../player/status/status-enum';
-import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
-import { SettingsContext } from '../settings/settings-context';
 import { CountdownMessage } from '../utils/messages';
-import { NEUTRAL_HOSTILE, PLAYER_SLOTS, PlayGlobalSound, ShuffleArray } from '../utils/utils';
+import { PlayGlobalSound } from '../utils/utils';
 import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
-import { CityToCountry, StringToCountry } from '../country/country-map';
 import { Wait } from '../utils/wait';
 import { HexColors } from '../utils/hex-colors';
-import { TreeManager } from './services/tree-service';
-import { DistributionService } from './services/distribution-service';
-import { RegionToCity } from '../city/city-map';
 import { MatchData } from './state/match-state';
-import { UNIT_TYPE } from '../utils/unit-types';
-import { StatisticsController } from '../statistics/statistics-controller';
-import { SlavePlayer } from '../player/types/slave-player';
-import { NameManager } from '../managers/names/name-manager';
-import { PLAYER_COLORS } from '../utils/player-colors';
 import { EventEmitter } from '../utils/events/event-emitter';
-import { EVENT_ON_PLAYER_FORFEIT } from '../commands/forfeit';
 import {
 	EVENT_GAME_RESTART,
+	EVENT_IN_PROGRESS,
 	EVENT_ON_CITY_CAPTURE,
 	EVENT_ON_PLAYER_ALIVE,
 	EVENT_ON_PLAYER_DEAD,
+	EVENT_ON_PLAYER_FORFEIT,
 	EVENT_ON_PLAYER_LEFT,
 	EVENT_ON_PLAYER_NOMAD,
 	EVENT_ON_PLAYER_STFU,
-	EVENT_ON_REMATCH,
+	EVENT_POST_MATCH,
+	EVENT_PRE_MATCH,
 	EVENT_SET_GAME_MODE,
 	EVENT_START_GAME,
+	EVENT_START_GAME_LOOP,
 } from '../utils/events/event-constants';
 
 export class GameLoop {
 	private static instance: GameLoop;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
-	private _distributionService: DistributionService;
-	private _playerManager: PlayerManager;
-	private _statsController: StatisticsController;
-	private _scoreboardManager: ScoreboardManager;
-	private _settingsContext: SettingsContext;
-	private _nameManager: NameManager;
-
-	private eventEmitter: EventEmitter;
 
 	private constructor() {
-		this.eventEmitter = EventEmitter.getInstance();
-		this.eventEmitter.on(EVENT_ON_PLAYER_ALIVE, (player: ActivePlayer) => this._gameMode.onPlayerAlive(player));
-		this.eventEmitter.on(EVENT_ON_PLAYER_DEAD, (player: ActivePlayer) => this._gameMode.onPlayerDead(player));
-		this.eventEmitter.on(EVENT_ON_PLAYER_LEFT, (player: ActivePlayer) => this._gameMode.onPlayerLeft(player));
-		this.eventEmitter.on(EVENT_ON_PLAYER_NOMAD, (player: ActivePlayer) => this._gameMode.onPlayerNomad(player));
-		this.eventEmitter.on(EVENT_ON_PLAYER_STFU, (player: ActivePlayer) => this._gameMode.onPlayerSTFU(player));
-		this.eventEmitter.on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) => this._gameMode.onPlayerForfeit(player));
-		this.eventEmitter.on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
-			this._gameMode.onCityCapture(city, preOwner, owner)
-		);
-		this.eventEmitter.on(EVENT_ON_REMATCH, () => this._gameMode.onRematch());
-
-		this.eventEmitter.on(EVENT_START_GAME, () => this.startCountdown());
-		this.eventEmitter.on(EVENT_GAME_RESTART, () => this.startCountdown());
-		this.eventEmitter.on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
-
+		this.registerEvents();
 		this._matchLoopTimer = CreateTimer();
-		this._playerManager = PlayerManager.getInstance();
-		this._statsController = StatisticsController.getInstance();
-		this._scoreboardManager = ScoreboardManager.getInstance();
-		this._settingsContext = SettingsContext.getInstance();
-		this._nameManager = NameManager.getInstance();
 	}
 
 	public static getInstance() {
@@ -82,105 +44,33 @@ export class GameLoop {
 		return this.instance;
 	}
 
+	private registerEvents() {
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_ALIVE, (player: ActivePlayer) => this._gameMode.onPlayerAlive(player));
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_DEAD, (player: ActivePlayer) => this._gameMode.onPlayerDead(player));
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_LEFT, (player: ActivePlayer) => this._gameMode.onPlayerLeft(player));
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_NOMAD, (player: ActivePlayer) => this._gameMode.onPlayerNomad(player));
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_STFU, (player: ActivePlayer) => this._gameMode.onPlayerSTFU(player));
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) => this._gameMode.onPlayerForfeit(player));
+		EventEmitter.getInstance().on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
+			this._gameMode.onCityCapture(city, preOwner, owner)
+		);
+		EventEmitter.getInstance().on(EVENT_START_GAME, () => this.startCountdown());
+		EventEmitter.getInstance().on(EVENT_GAME_RESTART, () => this._gameMode.onRematch());
+		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
+
+		EventEmitter.getInstance().on(EVENT_PRE_MATCH, () => this._gameMode.onPreMatch());
+		EventEmitter.getInstance().on(EVENT_IN_PROGRESS, () => this._gameMode.onInProgress());
+		EventEmitter.getInstance().on(EVENT_POST_MATCH, () => this._gameMode.onPostMatch());
+
+		EventEmitter.getInstance().on(EVENT_START_GAME_LOOP, () => this.startGameLoop());
+	}
+
 	public applyGameMode(gameMode: GameMode) {
 		this._gameMode = gameMode;
 	}
 
-	public async resetMatch() {
-		FogEnable(false);
-
-		MatchData.prepareMatchData();
-		this._statsController.setViewVisibility(false);
-
-		if (MatchData.matchCount == 1) {
-		} else {
-			print('Removing units...');
-			await this.removeUnits();
-			await Wait.forSeconds(1);
-			print('Resuming units...');
-			await this.resumingUnits();
-			await Wait.forSeconds(1);
-			print('Shuffling player identities...');
-			this.ShufflePlayerColorWithColoredName();
-			await Wait.forSeconds(1);
-			print('Resetting countries...');
-			await this.resetCountries();
-			await Wait.forSeconds(1);
-			print('Resetting trees...');
-			await TreeManager.getInstance().reset();
-			await Wait.forSeconds(1);
-		}
-
-		if (!this._settingsContext.isPromode()) {
-			this._playerManager.players.forEach((val) => {
-				this._nameManager.setName(val.getPlayer(), 'color');
-			});
-		}
-
-		// Remove irrelevant players from the game
-		this._playerManager.players.forEach((val) => {
-			val.trackedData.setKDMaps();
-			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
-				val.status.set(PLAYER_STATUS.ALIVE);
-			} else {
-				val.status.set(PLAYER_STATUS.LEFT);
-
-				this._playerManager.slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
-				this._playerManager.players.delete(val.getPlayer());
-			}
-		});
-
-		EnableSelect(false, false);
-		EnableDragSelect(false, false);
-		FogEnable(true);
-
-		// Distribute bases
-		this._distributionService = new DistributionService();
-		this._distributionService.runDistro(() => {
-			RegionToCity.forEach((city) => {
-				city.guard.reposition();
-				//Prevent guards from moving and update unit counts
-				IssueImmediateOrder(city.guard.unit, 'stop');
-
-				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					this._playerManager.players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
-				}
-
-				SetUnitInvulnerable(city.guard.unit, false);
-			});
-		});
-
-		// Prepare stat tracking
-		const players: ActivePlayer[] = [...this._playerManager.players.values()];
-		players.forEach((player) => {
-			SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
-			player.status.set(PLAYER_STATUS.ALIVE);
-			player.trackedData.bonus.showForPlayer(player.getPlayer());
-			player.trackedData.bonus.repositon();
-
-			MatchData.initialPlayers.push(player);
-
-			if (MatchData.leader == null) {
-				MatchData.leader = player;
-			}
-		});
-
-		if (this._settingsContext.isFFA() || players.length <= 2) {
-			this._scoreboardManager.ffaSetup(players);
-		} else {
-			this._scoreboardManager.teamSetup();
-		}
-
-		this._scoreboardManager.obsSetup(players, [...this._playerManager.observers.keys()]);
-		this._settingsContext.applyStrategy('Fog');
-		if (this._settingsContext.isPromode()) {
-			await this.setTempVision(this._playerManager.players);
-		}
-	}
-
 	public async startCountdown() {
-		this.eventEmitter.emit('matchStart');
-		await this.resetMatch();
+		EventEmitter.getInstance().emit('matchStart');
 		MatchData.matchState = 'preMatch';
 		await Wait.forSeconds(2);
 		try {
@@ -209,7 +99,6 @@ export class GameLoop {
 	}
 
 	private startGameLoop() {
-		this._gameMode.onStartMatch();
 		MatchData.matchState = 'inProgress';
 		this._gameMode.onStartTurn(MatchData.turnCount);
 		// Start a timer that executes the game loop every second
@@ -252,57 +141,6 @@ export class GameLoop {
 		});
 	}
 
-	private async setTempVision(players: Map<player, ActivePlayer>) {
-		const visionMap = new Map<unit, player[]>();
-
-		DisplayTextToForce(bj_FORCE_ALL_PLAYERS, `Revealing blocks`);
-
-		for (const activePlayer of players.values()) {
-			const playerHandle: player = activePlayer.getPlayer();
-
-			const allies: player[] = [];
-			for (const otherPlayer of players.values()) {
-				const otherPlayerHandle: player = otherPlayer.getPlayer();
-				if (IsPlayerAlly(playerHandle, otherPlayerHandle)) {
-					allies.push(otherPlayerHandle);
-				}
-			}
-
-			activePlayer.trackedData.cities.cities.forEach((playerCity) => {
-				const country = CityToCountry.get(playerCity);
-
-				country.getCities().forEach((countryCity) => {
-					const unit: unit = countryCity.cop;
-
-					if (GetOwningPlayer(unit) !== NEUTRAL_HOSTILE) {
-						UnitShareVision(unit, playerHandle, true);
-
-						const playersWithVision = visionMap.get(unit) || [];
-
-						playersWithVision.push(playerHandle);
-
-						allies.forEach((ally) => {
-							UnitShareVision(unit, ally, true);
-							playersWithVision.push(ally);
-						});
-
-						visionMap.set(unit, playersWithVision);
-					}
-				});
-			});
-		}
-
-		await Wait.forSeconds(4);
-
-		for (const [unit, players] of visionMap.entries()) {
-			players.forEach((playerHandle) => {
-				UnitShareVision(unit, playerHandle, false);
-			});
-		}
-
-		ClearTextMessages();
-	}
-
 	/**
 	 * Update the UI elements related to the timer.
 	 */
@@ -316,89 +154,5 @@ export class GameLoop {
 
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
 		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${MatchData.turnCount}`);
-	}
-
-	private resumingUnits(): Promise<void> {
-		return new Promise((resolve) => {
-			for (let i = 0; i < PLAYER_SLOTS; i++) {
-				const player = Player(i);
-
-				const group: group = CreateGroup();
-				GroupEnumUnitsOfPlayer(
-					group,
-					player,
-					Filter(() => {
-						const unit: unit = GetFilterUnit();
-						if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-							PauseUnit(unit, false);
-						}
-					})
-				);
-
-				GroupClear(group);
-				DestroyGroup(group);
-			}
-
-			resolve();
-		});
-	}
-
-	private removeUnits(): Promise<void> {
-		return new Promise((resolve) => {
-			for (let i = 0; i < PLAYER_SLOTS; i++) {
-				const player = Player(i);
-
-				const group: group = CreateGroup();
-				GroupEnumUnitsOfPlayer(
-					group,
-					player,
-					Filter(() => {
-						const unit: unit = GetFilterUnit();
-
-						if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
-							RemoveUnit(unit);
-						}
-					})
-				);
-
-				GroupClear(group);
-				DestroyGroup(group);
-			}
-
-			resolve();
-		});
-	}
-
-	private resetCountries(): Promise<void> {
-		return new Promise((resolve) => {
-			StringToCountry.forEach((country) => {
-				country.reset();
-			});
-			resolve();
-		});
-	}
-
-	private ShufflePlayerColorWithColoredName(): void {
-		const activePlayers: Map<player, ActivePlayer> = PlayerManager.getInstance().players;
-		const nameManager: NameManager = NameManager.getInstance();
-		const colors: playercolor[] = PLAYER_COLORS.slice(0, activePlayers.size);
-
-		ShuffleArray(colors);
-
-		if (SettingsContext.getInstance().isPromode()) {
-			activePlayers.forEach((val, playerHandle) => {
-				nameManager.setColor(playerHandle, GetPlayerColor(playerHandle));
-				nameManager.setName(playerHandle, 'acct');
-				val.trackedData.bonus.disable();
-			});
-
-			SetMapFlag(MAP_LOCK_ALLIANCE_CHANGES, true);
-			//TODO Handle teams for promode
-		} else {
-			activePlayers.forEach((val, playerHandle) => {
-				nameManager.setColor(playerHandle, colors.pop());
-				nameManager.setName(playerHandle, 'color');
-			});
-		}
 	}
 }

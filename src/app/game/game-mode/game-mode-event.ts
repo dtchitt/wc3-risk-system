@@ -9,16 +9,17 @@ export interface GameModeEvents {
 	onPlayerSTFU: (player: ActivePlayer) => Promise<void>;
 	onPlayerForfeit: (player: ActivePlayer) => Promise<void>;
 
-	playerAlive: (player: ActivePlayer) => Promise<void>;
-	playerDead: (player: ActivePlayer) => Promise<void>;
-	playerNomad: (player: ActivePlayer) => Promise<void>;
-	playerLeft: (player: ActivePlayer) => Promise<void>;
-	playerSTFU: (player: ActivePlayer) => Promise<void>;
-	playerForfeit: (player: ActivePlayer) => Promise<void>;
-
 	onCityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
 	onRematch: () => Promise<void>;
 
-	cityCapture: (city: City, preOwner: ActivePlayer, owner: ActivePlayer) => Promise<void>;
-	rematch: () => Promise<void>;
+	onPreMatch: () => Promise<void>;
+	onInProgress: () => Promise<void>;
+	onPostMatch: () => Promise<void>;
+
+	isMatchOver: () => boolean;
+	onStartMatch: () => void;
+	onEndMatch: () => void;
+	onStartTurn: (turn: number) => void;
+	onEndTurn: (turn: number) => void;
+	onTick: (tick: number) => void;
 }
