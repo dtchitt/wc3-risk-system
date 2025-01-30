@@ -5,6 +5,7 @@ export const EVENT_ON_PLAYER_DEAD: string = 'onPlayerDead';
 export const EVENT_ON_PLAYER_STFU: string = 'onPlayerSTFU';
 export const EVENT_ON_PLAYER_FORFEIT: string = 'onPlayerForfeit';
 export const EVENT_ON_CITY_CAPTURE: string = 'onCityCapture';
+export const EVENT_ON_UNIT_KILLED: string = 'onUnitKilled';
 
 export const EVENT_ON_PRE_MATCH: string = 'onPreMatch';
 export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';

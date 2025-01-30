@@ -27,6 +27,7 @@ import {
 	EVENT_IN_PROGRESS,
 	EVENT_POST_MATCH,
 	EVENT_START_GAME_LOOP,
+	EVENT_ON_UNIT_KILLED,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from './game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
@@ -43,6 +44,7 @@ import { TreeManager } from '../services/tree-service';
 import { distributeBases } from '../utillity/distribute-bases';
 import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
 import { setStatTracking as setStatTrackingAndLeaderboard } from '../utillity/prepare-stat-tracking';
+import { debugPrint } from 'src/app/utils/debug-print';
 
 export abstract class BaseGameMode implements GameMode {
 	private _statsController: StatisticsController;
@@ -54,15 +56,15 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPreMatch(): Promise<void> {
-		print(EVENT_ON_PRE_MATCH);
+		debugPrint(EVENT_ON_PRE_MATCH);
 	}
 
 	async onInProgress(): Promise<void> {
-		print(EVENT_IN_PROGRESS);
+		debugPrint(EVENT_IN_PROGRESS);
 	}
 
 	async onPostMatch(): Promise<void> {
-		print(EVENT_POST_MATCH);
+		debugPrint(EVENT_POST_MATCH);
 	}
 
 	isMatchOver(): boolean {
@@ -131,7 +133,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerAlive(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_ALIVE);
+		debugPrint(EVENT_ON_PLAYER_ALIVE);
 		player.status.status = PLAYER_STATUS.ALIVE;
 		player.trackedData.income.income = STARTING_INCOME;
 
@@ -143,7 +145,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerDead(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_DEAD);
+		debugPrint(EVENT_ON_PLAYER_DEAD);
 
 		player.status.status = PLAYER_STATUS.DEAD;
 		player.setEndData();
@@ -163,7 +165,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerNomad(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_NOMAD);
+		debugPrint(EVENT_ON_PLAYER_NOMAD);
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.NOMAD);
 
 		if (player.trackedData.units.size <= 0) {
@@ -217,7 +219,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerLeft(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_LEFT);
+		debugPrint(EVENT_ON_PLAYER_LEFT);
 
 		if (player.status.isDead() || player.status.isSTFU()) {
 			player.status.status = PLAYER_STATUS.LEFT;
@@ -237,7 +239,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerSTFU(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_STFU);
+		debugPrint(EVENT_ON_PLAYER_STFU);
 
 		const oldStatus = player.status.status;
 		player.status.status = PLAYER_STATUS.STFU;
@@ -267,7 +269,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
-		print(EVENT_ON_PLAYER_FORFEIT);
+		debugPrint(EVENT_ON_PLAYER_FORFEIT);
 		if (!SettingsContext.getInstance().isPromode()) return;
 
 		const playerStatus = MatchData.getPlayerStatus(PlayerManager.getInstance().players.get(GetTriggerPlayer()));
@@ -279,12 +281,17 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		print(EVENT_ON_CITY_CAPTURE);
+		debugPrint(EVENT_ON_CITY_CAPTURE);
+		this._scoreboardManager.updatePartial();
+	}
+
+	async onUnitKilled(killingUnit: unit, dyingUnit: unit): Promise<void> {
+		debugPrint(EVENT_ON_UNIT_KILLED);
 		this._scoreboardManager.updatePartial();
 	}
 
 	async prepareMatch(): Promise<void> {
-		print('Preparing match...');
+		debugPrint('Preparing match...');
 
 		FogEnable(false);
 		MatchData.prepareMatchData();
@@ -323,7 +330,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onRematch(): Promise<void> {
-		print(EVENT_GAME_RESTART);
+		debugPrint(EVENT_GAME_RESTART);
 		FogEnable(false);
 		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);

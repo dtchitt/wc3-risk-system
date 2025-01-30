@@ -1,3 +1,4 @@
+import { debugPrint } from 'src/app/utils/debug-print';
 import { ActivePlayer } from '../types/active-player';
 import { PLAYER_STATUS } from './status-enum';
 import { AliveStrategy } from './strategies/alive-strategy';
@@ -29,11 +30,11 @@ export class Status {
 		const strategy = Status.STRATEGY_MAP.get(status);
 
 		if (strategy) {
-			print('Setting player status:', status);
+			debugPrint('Setting player status:', status);
 			strategy.run(this.player);
-			print('Player status set:', status);
+			debugPrint('Player status set:', status);
 		} else {
-			print('Unknown player status:', status);
+			debugPrint('Unknown player status:', status);
 		}
 	}
 

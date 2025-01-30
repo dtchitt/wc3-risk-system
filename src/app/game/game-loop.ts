@@ -17,6 +17,7 @@ import {
 	EVENT_ON_PLAYER_LEFT,
 	EVENT_ON_PLAYER_NOMAD,
 	EVENT_ON_PLAYER_STFU,
+	EVENT_ON_UNIT_KILLED,
 	EVENT_POST_MATCH,
 	EVENT_PRE_MATCH,
 	EVENT_SET_GAME_MODE,
@@ -51,6 +52,9 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) => this._gameMode.onPlayerForfeit(player));
 		EventEmitter.getInstance().on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
 			this._gameMode.onCityCapture(city, preOwner, owner)
+		);
+		EventEmitter.getInstance().on(EVENT_ON_UNIT_KILLED, (killingUnit: unit, dyingUnit: unit) =>
+			this._gameMode.onUnitKilled(killingUnit, dyingUnit)
 		);
 		EventEmitter.getInstance().on(EVENT_START_GAME, () => this._gameMode.onStartMatch());
 		EventEmitter.getInstance().on(EVENT_GAME_RESTART, () => this._gameMode.onRematch());

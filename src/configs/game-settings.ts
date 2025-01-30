@@ -25,3 +25,6 @@ export const CITIES_PER_PLAYER_UPPER_BOUND: number = 1;
 
 //This represents the duration a player can be muted for in seconds. Default is 300 seconds.
 export const STFU_DURATION: number = 300;
+
+//This represents whether debug messages should be printed. Default is false.
+export const SHOW_DEBUG_PRINTS = false;

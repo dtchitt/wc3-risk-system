@@ -4,6 +4,7 @@ import { CITIES_TO_WIN_RATIO, OVERTIME_MODIFIER } from 'src/configs/game-setting
 import { WinTracker } from '../game/services/win-tracker';
 import { MatchData } from '../game/state/match-state';
 import { PLAYER_STATUS } from '../player/status/status-enum';
+import { debugPrint } from '../utils/debug-print';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
 
@@ -100,15 +101,15 @@ export class VictoryManager {
 	}
 
 	public checkKnockOutVictory(): boolean {
-		print('Checking knockout victory');
+		debugPrint('Checking knockout victory');
 		if (MatchData.remainingPlayers.length <= 1) {
-			print('Knockout victory');
+			debugPrint('Knockout victory');
 			MatchData.leader = MatchData.remainingPlayers[0];
 			this.saveStats();
-			print('saveStats, MatchData.leader: ' + MatchData.leader);
+			debugPrint('saveStats, MatchData.leader: ' + MatchData.leader);
 			return true;
 		}
-		print('No knockout victory');
+		debugPrint('No knockout victory');
 		return false;
 	}
 

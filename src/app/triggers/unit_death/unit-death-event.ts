@@ -7,6 +7,8 @@ import { UNIT_TYPE } from '../../utils/unit-types';
 import { HandleGuardDeath } from './handle-guard-death';
 import { TeamManager } from 'src/app/teams/team-manager';
 import { MatchData } from 'src/app/game/state/match-state';
+import { EVENT_ON_UNIT_KILLED } from 'src/app/utils/events/event-constants';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
 
 export function UnitDeathEvent() {
 	const t: trigger = CreateTrigger();
@@ -41,6 +43,8 @@ export function UnitDeathEvent() {
 			TransportManager.getInstance().onDeath(killingUnit, dyingUnit);
 
 			if (SPANWER_UNITS.has(dyingUnit)) SPANWER_UNITS.get(dyingUnit).onDeath(dyingUnitOwnerHandle, dyingUnit);
+
+			EventEmitter.getInstance().emit(EVENT_ON_UNIT_KILLED, killingUnit, dyingUnit);
 
 			return false;
 		})
