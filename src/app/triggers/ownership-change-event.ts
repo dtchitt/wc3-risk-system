@@ -67,7 +67,8 @@ export function OwnershipChangeEvent() {
 					}
 				}
 
-				if (prevOwnerData.cities.cities.length == 0) {
+				// Makes no sense to set a player as nomad during the game setup. Only during the game.
+				if (prevOwnerData.cities.cities.length == 0 && MatchData.matchState == 'inProgress') {
 					prevOwner.status.set(PLAYER_STATUS.NOMAD);
 				}
 

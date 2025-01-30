@@ -270,18 +270,11 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
 		debugPrint(EVENT_ON_PLAYER_FORFEIT);
-		// if (!SettingsContext.getInstance().isPromode()) return;
-		debugPrint('0');
 		const playerStatus = MatchData.getPlayerStatus(PlayerManager.getInstance().players.get(GetTriggerPlayer()));
-		debugPrint('1');
 		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
-		debugPrint('2');
 		PlayerManager.getInstance().players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.DEAD);
-		debugPrint('3');
 		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
-		debugPrint('4');
 		this._scoreboardManager.updatePartial();
-		debugPrint('5');
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
