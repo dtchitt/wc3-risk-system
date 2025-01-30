@@ -1,11 +1,9 @@
 import { GameMode } from './game-mode/game-mode';
 import { City } from '../city/city';
 import { ActivePlayer } from '../player/types/active-player';
-import { CountdownMessage } from '../utils/messages';
 import { PlayGlobalSound } from '../utils/utils';
 import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
-import { Wait } from '../utils/wait';
 import { HexColors } from '../utils/hex-colors';
 import { MatchData } from './state/match-state';
 import { EventEmitter } from '../utils/events/event-emitter';
@@ -54,7 +52,7 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
 			this._gameMode.onCityCapture(city, preOwner, owner)
 		);
-		EventEmitter.getInstance().on(EVENT_START_GAME, () => this.startCountdown());
+		EventEmitter.getInstance().on(EVENT_START_GAME, () => this._gameMode.onStartMatch());
 		EventEmitter.getInstance().on(EVENT_GAME_RESTART, () => this._gameMode.onRematch());
 		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
 
@@ -67,35 +65,6 @@ export class GameLoop {
 
 	public applyGameMode(gameMode: GameMode) {
 		this._gameMode = gameMode;
-	}
-
-	public async startCountdown() {
-		EventEmitter.getInstance().emit('matchStart');
-		MatchData.matchState = 'preMatch';
-		await Wait.forSeconds(2);
-		try {
-			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
-			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 3;
-			TimerStart(startDelayTimer, 1, true, () => {
-				CountdownMessage(`The Game will start in:\n${duration}`);
-				if (duration == 3) {
-					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
-				}
-				if (duration <= 0) {
-					PauseTimer(startDelayTimer);
-					DestroyTimer(startDelayTimer);
-					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), false);
-					EnableSelect(true, true);
-					EnableDragSelect(true, true);
-					this.startGameLoop();
-					PlayGlobalSound('Sound\\Interface\\Hint.flac');
-				}
-				duration--;
-			});
-		} catch (error) {
-			print('Error in Metagame ' + error);
-		}
 	}
 
 	private startGameLoop() {

@@ -1,5 +1,3 @@
-import { GameManager } from '../game-manager';
-import { GameState } from './game-state';
 import { SettingsView } from 'src/app/settings/settings-view';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
@@ -10,8 +8,7 @@ import { MatchData } from './match-state';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION, EVENT_SET_GAME_MODE, EVENT_START_GAME } from 'src/app/utils/events/event-constants';
 
-export class ModeSelection implements GameState {
-	private manager: GameManager;
+export class ModeSelection {
 	private ui: SettingsView;
 	private eventEmitter: EventEmitter;
 
@@ -19,6 +16,7 @@ export class ModeSelection implements GameState {
 
 	private constructor() {
 		this.ui = new SettingsView();
+		this.ui.hide();
 		this.eventEmitter = EventEmitter.getInstance();
 		this.eventEmitter.on(EVENT_MODE_SELECTION, () => this.run());
 	}
@@ -31,11 +29,8 @@ export class ModeSelection implements GameState {
 		return this.instance;
 	}
 
-	public setObserver(observer: GameManager) {
-		this.manager = observer;
-	}
-
 	public async run(): Promise<void> {
+		this.ui.show();
 		if (NameManager.getInstance().getAcct(Player(23)) == 'RiskBot') {
 			const settingsContext: SettingsContext = SettingsContext.getInstance();
 			settingsContext.getSettings().Promode = 0;
@@ -51,8 +46,6 @@ export class ModeSelection implements GameState {
 			this.ui.update(time);
 
 			TimerStart(modeTimer, tick, true, () => {
-				this.ui.update(time);
-
 				if (time <= 0 || !this.ui.isVisible()) {
 					PauseTimer(modeTimer);
 					DestroyTimer(modeTimer);
@@ -61,6 +54,7 @@ export class ModeSelection implements GameState {
 				}
 
 				time -= tick;
+				this.ui.update(time);
 			});
 		}
 	}

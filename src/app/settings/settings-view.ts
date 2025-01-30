@@ -36,6 +36,11 @@ export class SettingsView {
 		BlzFrameSetVisible(this.backdrop, false);
 	}
 
+	public show() {
+		BlzFrameSetEnable(this.backdrop, true);
+		BlzFrameSetVisible(this.backdrop, true);
+	}
+
 	public isVisible(): boolean {
 		return BlzFrameIsVisible(this.backdrop);
 	}
@@ -196,11 +201,17 @@ export class SettingsView {
 				this.colorizeFogText(BlzFrameGetValue(fogFrame));
 				this.colorizeDiplomacyText(BlzFrameGetValue(diploFrame));
 				this.colorizeOvertimeText(BlzFrameGetValue(overtimeFrame));
-				BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`);
+				BlzFrameSetText(
+					BlzGetFrameByName('PromodeOption', 0),
+					`${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`
+				);
 			})
 		);
 
-		BlzFrameSetText(BlzGetFrameByName('PromodeOption', 0), `${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`);
+		BlzFrameSetText(
+			BlzGetFrameByName('PromodeOption', 0),
+			`${PromodeOptionsColorFormatted[SettingsContext.getInstance().getSettings().Promode]}`
+		);
 	}
 
 	private hostSetup() {

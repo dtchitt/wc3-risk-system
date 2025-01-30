@@ -9,7 +9,6 @@ import { NameManager } from './app/managers/names/name-manager';
 import { ChatManager } from './app/managers/chat-manager';
 import { TransportManager } from './app/managers/transport-manager';
 import { SetConsoleUI } from './app/ui/console';
-import { GameManager } from './app/game/game-manager';
 import { OwnershipChangeEvent } from './app/triggers/ownership-change-event';
 import { EnterRegionEvent } from './app/triggers/enter-region-event';
 import { LeaveRegionEvent } from './app/triggers/leave-region-event';
@@ -117,7 +116,7 @@ function tsMain() {
 			ChatManager.getInstance();
 			TransportManager.getInstance();
 			TimedEventManager.getInstance();
-			SetCommands(GameManager.getInstance());
+			SetCommands();
 
 			new PlayerSetupService().run();
 

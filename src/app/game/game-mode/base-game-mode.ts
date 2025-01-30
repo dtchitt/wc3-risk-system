@@ -5,10 +5,10 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { VictoryProgressState, VictoryManager } from 'src/app/managers/victory-manager';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
-import { GlobalMessage } from 'src/app/utils/messages';
+import { CountdownMessage, GlobalMessage } from 'src/app/utils/messages';
 import { CITIES_TO_WIN_WARNING_RATIO, NOMAD_DURATION, STARTING_INCOME, STFU_DURATION } from 'src/configs/game-settings';
 import { UNIT_TYPE } from 'src/app/utils/unit-types';
-import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
+import { PLAYER_SLOTS, NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../state/match-state';
@@ -23,6 +23,10 @@ import {
 	EVENT_ON_CITY_CAPTURE,
 	EVENT_START_GAME,
 	EVENT_GAME_RESTART,
+	EVENT_ON_PRE_MATCH,
+	EVENT_IN_PROGRESS,
+	EVENT_POST_MATCH,
+	EVENT_START_GAME_LOOP,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from './game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
@@ -36,7 +40,6 @@ import { resumingUnits } from '../utillity/resuming-units';
 import { ShufflePlayerColorWithColoredName } from '../utillity/shuffle-player-color-with-colored-name';
 import { resetCountries } from '../utillity/reset-countries';
 import { TreeManager } from '../services/tree-service';
-import { DistributionService } from '../services/distribution-service';
 import { distributeBases } from '../utillity/distribute-bases';
 import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
 import { setStatTracking as setStatTrackingAndLeaderboard } from '../utillity/prepare-stat-tracking';
@@ -50,17 +53,50 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager = ScoreboardManager.getInstance();
 	}
 
-	async onPreMatch(): Promise<void> {}
+	async onPreMatch(): Promise<void> {
+		print(EVENT_ON_PRE_MATCH);
+	}
 
-	async onInProgress(): Promise<void> {}
+	async onInProgress(): Promise<void> {
+		print(EVENT_IN_PROGRESS);
+	}
 
-	async onPostMatch(): Promise<void> {}
+	async onPostMatch(): Promise<void> {
+		print(EVENT_POST_MATCH);
+	}
 
 	isMatchOver(): boolean {
 		return MatchData.matchState == 'postMatch';
 	}
 
-	onStartMatch(): void {}
+	async onStartMatch(): Promise<void> {
+		await this.prepareMatch();
+		MatchData.matchState = 'preMatch';
+		await Wait.forSeconds(2);
+		try {
+			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
+			const startDelayTimer: timer = CreateTimer();
+			let duration: number = 3;
+			TimerStart(startDelayTimer, 1, true, () => {
+				CountdownMessage(`The Game will start in:\n${duration}`);
+				if (duration == 3) {
+					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
+				}
+				if (duration <= 0) {
+					PauseTimer(startDelayTimer);
+					DestroyTimer(startDelayTimer);
+					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), false);
+					EnableSelect(true, true);
+					EnableDragSelect(true, true);
+					PlayGlobalSound('Sound\\Interface\\Hint.flac');
+					EventEmitter.getInstance().emit(EVENT_START_GAME_LOOP);
+				}
+				duration--;
+			});
+		} catch (error) {
+			print('Error in Metagame ' + error);
+		}
+	}
 
 	onEndMatch(): void {
 		MatchData.matchState = 'postMatch';
@@ -247,30 +283,12 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onRematch(): Promise<void> {
-		print(EVENT_GAME_RESTART);
+	async prepareMatch(): Promise<void> {
+		print('Preparing match...');
+
 		FogEnable(false);
 		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
-
-		if (MatchData.matchCount == 1) {
-		} else {
-			print('Removing units...');
-			await removeUnits();
-			await Wait.forSeconds(1);
-			print('Resuming units...');
-			await resumingUnits();
-			await Wait.forSeconds(1);
-			print('Shuffling player identities...');
-			ShufflePlayerColorWithColoredName();
-			await Wait.forSeconds(1);
-			print('Resetting countries...');
-			await resetCountries();
-			await Wait.forSeconds(1);
-			print('Resetting trees...');
-			await TreeManager.getInstance().reset();
-			await Wait.forSeconds(1);
-		}
 
 		if (!SettingsContext.getInstance().isPromode()) {
 			PlayerManager.getInstance().players.forEach((val) => {
@@ -302,6 +320,32 @@ export abstract class BaseGameMode implements GameMode {
 		setStatTrackingAndLeaderboard();
 
 		await setProModeTempVision();
+	}
+
+	async onRematch(): Promise<void> {
+		print(EVENT_GAME_RESTART);
+		FogEnable(false);
+		MatchData.prepareMatchData();
+		this._statsController.setViewVisibility(false);
+
+		if (MatchData.matchCount == 1) {
+		} else {
+			print('Removing units...');
+			await removeUnits();
+			await Wait.forSeconds(1);
+			print('Resuming units...');
+			await resumingUnits();
+			await Wait.forSeconds(1);
+			print('Shuffling player identities...');
+			ShufflePlayerColorWithColoredName();
+			await Wait.forSeconds(1);
+			print('Resetting countries...');
+			await resetCountries();
+			await Wait.forSeconds(1);
+			print('Resetting trees...');
+			await TreeManager.getInstance().reset();
+			await Wait.forSeconds(1);
+		}
 
 		EventEmitter.getInstance().emit(EVENT_START_GAME);
 	}

@@ -1,5 +1,4 @@
 import { SettingsContext } from 'src/app/settings/settings-context';
-import { GameManager } from '../../game/game-manager';
 import { TransportManager } from '../../managers/transport-manager';
 import { PlayerManager } from '../../player/player-manager';
 import { GamePlayer } from '../../player/types/game-player';

@@ -1,5 +1,3 @@
-import { GameManager } from '../game/game-manager';
-import { GameLoop } from '../game/game-loop';
 import { MatchData } from '../game/state/match-state';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';

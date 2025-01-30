@@ -8,7 +8,6 @@ import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { TrackedData } from '../player/data/tracked-data';
-import { GameManager } from '../game/game-manager';
 import { CountryToRegion } from '../region/region-map';
 import { Region } from '../region/region';
 import { ScoreboardManager } from '../scoreboard/scoreboard-manager';
