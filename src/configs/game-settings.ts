@@ -27,4 +27,4 @@ export const CITIES_PER_PLAYER_UPPER_BOUND: number = 1;
 export const STFU_DURATION: number = 300;
 
 //This represents whether debug messages should be printed. Default is false.
-export const SHOW_DEBUG_PRINTS = false;
+export const SHOW_DEBUG_PRINTS = true;
