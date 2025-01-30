@@ -107,6 +107,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	onStartTurn(turn: number): void {
 		this._scoreboardManager.updateFull();
+		this._scoreboardManager.updateScoreboardTitle();
 		MatchData.remainingPlayers.forEach((player) => {
 			player.giveGold();
 		});
@@ -128,7 +129,6 @@ export abstract class BaseGameMode implements GameMode {
 
 	onTick(tick: number): void {
 		VictoryManager.getInstance().updateAndGetGameState();
-		this._scoreboardManager.updateScoreboardTitle();
 		this._scoreboardManager.updatePartial();
 	}
 
@@ -280,6 +280,7 @@ export abstract class BaseGameMode implements GameMode {
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
 		debugPrint(EVENT_ON_CITY_CAPTURE);
 		this._scoreboardManager.updatePartial();
+		this._scoreboardManager.updateScoreboardTitle();
 	}
 
 	async onUnitKilled(killingUnit: unit, dyingUnit: unit): Promise<void> {

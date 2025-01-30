@@ -128,10 +128,6 @@ export function OwnershipChangeEvent() {
 				if (teamManager) {
 					teamManager.getTeamFromPlayer(ownerHandle).updateCityCount(1);
 				}
-
-				if (MatchData.matchState == 'inProgress') {
-					ScoreboardManager.getInstance().updateScoreboardTitle();
-				}
 			}
 
 			EventEmitter.getInstance().emit(EVENT_ON_CITY_CAPTURE, city, prevOwner, owner);
