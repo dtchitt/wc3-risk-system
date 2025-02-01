@@ -5,6 +5,7 @@ import { WinTracker } from '../game/services/win-tracker';
 import { MatchData } from '../game/state/match-state';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { debugPrint } from '../utils/debug-print';
+import { PlayerManager } from '../player/player-manager';
 
 export type VictoryProgressState = 'UNDECIDED' | 'TIE' | 'DECIDED';
 
@@ -39,7 +40,7 @@ export class VictoryManager {
 	}
 
 	public removePlayer(player: ActivePlayer, status: PLAYER_STATUS) {
-		MatchData.setPlayerStatus(player, status);
+		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), status);
 		this.checkKnockOutVictory();
 	}
 
@@ -49,14 +50,16 @@ export class VictoryManager {
 		}
 	}
 
-	public getFrontRunnersByThreshold(threshold: number): ActivePlayer[] {
-		return MatchData.remainingPlayers
+	// This function is used to get the players who have a certain number of cities or more
+	public getOwnershipByThresholdDescending(threshold: number): ActivePlayer[] {
+		return Array.from(PlayerManager.getInstance().playersAliveOrNomad.values())
 			.filter((player) => player.trackedData.cities.cities.length >= threshold)
-			.sort((player) => player.trackedData.cities.cities.length);
+			.sort((a, b) => b.trackedData.cities.cities.length - a.trackedData.cities.cities.length);
 	}
 
+	// This function is used to get the players who have won with the most cities (many players can have the same number of cities)
 	public victors(): ActivePlayer[] {
-		let potentialVictors = MatchData.remainingPlayers.filter((x) => x.trackedData.cities.cities.length >= VictoryManager.CITIES_TO_WIN);
+		let potentialVictors = this.getOwnershipByThresholdDescending(VictoryManager.CITIES_TO_WIN);
 
 		if (potentialVictors.length == 0) {
 			return [];
@@ -102,9 +105,9 @@ export class VictoryManager {
 
 	public checkKnockOutVictory(): boolean {
 		debugPrint('Checking knockout victory');
-		if (MatchData.remainingPlayers.length <= 1) {
+		if (PlayerManager.getInstance().playersAliveOrNomad.size <= 1) {
 			debugPrint('Knockout victory');
-			MatchData.leader = MatchData.remainingPlayers[0];
+			MatchData.leader = Array.from(PlayerManager.getInstance().playersAliveOrNomad.values())[0];
 			this.saveStats();
 			debugPrint('saveStats, MatchData.leader: ' + MatchData.leader);
 			return true;
@@ -124,7 +127,7 @@ export class VictoryManager {
 
 	public saveStats() {
 		VictoryManager.GAME_VICTORY_STATE = 'DECIDED';
-		MatchData.remainingPlayers.forEach((player) => {
+		PlayerManager.getInstance().playersAliveOrNomad.forEach((player) => {
 			if (player.trackedData.turnDied == -1) {
 				player.setEndData();
 			}

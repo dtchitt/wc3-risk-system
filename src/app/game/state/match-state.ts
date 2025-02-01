@@ -1,5 +1,3 @@
-import { Status } from 'src/app/player/status/status';
-import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 
@@ -11,7 +9,6 @@ export interface GameData {
 	turn: number;
 	ticks: number;
 	leader: ActivePlayer;
-	players: ActivePlayer[];
 	matchState: MatchState;
 	gameModeType?: GameModeType;
 	matchCount: number;
@@ -46,7 +43,6 @@ export class MatchData {
 			turn: 1,
 			ticks: TURN_DURATION_IN_SECONDS,
 			leader: null,
-			players: [],
 			matchState: 'modeSelection',
 			gameModeType: null,
 			matchCount: 0,
@@ -72,31 +68,6 @@ export class MatchData {
 	}
 	public static set leader(v: ActivePlayer) {
 		this.getInstance().data.leader = v;
-	}
-
-	public static get remainingPlayers(): ActivePlayer[] {
-		return this.getInstance().data.players.filter((x) => x.status.isAlive() || x.status.isNomad());
-	}
-
-	public static setPlayerStatus(v: ActivePlayer, status: PLAYER_STATUS) {
-		let index = this.getInstance().data.players.findIndex((x) => v.getPlayer() == x.getPlayer());
-		this.getInstance().data.players[index].status.set(status);
-	}
-	public static getPlayerStatus(v: ActivePlayer): Status {
-		let index = this.getInstance().data.players.findIndex((x) => v.getPlayer() == x.getPlayer());
-		return this.getInstance().data.players[index].status;
-	}
-
-	public static getActivePlayer(v: player): ActivePlayer {
-		let index = this.getInstance().data.players.findIndex((x) => v == x.getPlayer());
-		return this.getInstance().data.players[index];
-	}
-
-	public static get initialPlayers(): ActivePlayer[] {
-		return this.getInstance().data.players;
-	}
-	public static set initialPlayers(v: ActivePlayer[]) {
-		this.getInstance().data.players = v;
 	}
 
 	public static get matchState(): MatchState {

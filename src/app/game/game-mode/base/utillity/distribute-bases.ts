@@ -1,5 +1,5 @@
 import { RegionToCity } from 'src/app/city/city-map';
-import { DistributionService } from '../services/distribution-service';
+import { DistributionService } from '../../../services/distribution-service';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { PlayerManager } from 'src/app/player/player-manager';
 

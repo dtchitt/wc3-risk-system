@@ -7,11 +7,10 @@ import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { CountdownMessage, GlobalMessage } from 'src/app/utils/messages';
 import { CITIES_TO_WIN_WARNING_RATIO, NOMAD_DURATION, STARTING_INCOME, STFU_DURATION } from 'src/configs/game-settings';
-import { UNIT_TYPE } from 'src/app/utils/unit-types';
-import { PLAYER_SLOTS, NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
+import { PlayGlobalSound } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
-import { MatchData } from '../state/match-state';
+import { MatchData } from '../../state/match-state';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import {
 	EVENT_ON_PLAYER_ALIVE,
@@ -30,20 +29,20 @@ import {
 	EVENT_ON_UNIT_KILLED,
 	EVENT_ON_END_MATCH,
 } from 'src/app/utils/events/event-constants';
-import { GameMode } from './game-mode';
+import { GameMode } from '../game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
 import { TimedEventManager } from 'src/app/libs/timer/timed-event-manager';
 import { TimedEvent } from 'src/app/libs/timer/timed-event';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { SlavePlayer } from 'src/app/player/types/slave-player';
-import { removeUnits } from '../utillity/remove-units';
+import { removeUnits } from './utillity/remove-units';
 import { Wait } from 'src/app/utils/wait';
-import { resumingUnits } from '../utillity/resuming-units';
-import { ShufflePlayerColorWithColoredName } from '../utillity/shuffle-player-color-with-colored-name';
-import { resetCountries } from '../utillity/reset-countries';
-import { TreeManager } from '../services/tree-service';
-import { distributeBases } from '../utillity/distribute-bases';
-import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
+import { resumingUnits } from './utillity/resuming-units';
+import { ShufflePlayerColorWithColoredName } from './utillity/shuffle-player-color-with-colored-name';
+import { resetCountries } from './utillity/reset-countries';
+import { TreeManager } from '../../services/tree-service';
+import { distributeBases } from './utillity/distribute-bases';
+import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
 import { debugPrint } from 'src/app/utils/debug-print';
 
 export abstract class BaseGameMode implements GameMode {
@@ -72,7 +71,7 @@ export abstract class BaseGameMode implements GameMode {
 
 		// Hide match scoreboard and show score screen
 		this._scoreboardManager.destroyBoards();
-		MatchData.initialPlayers.forEach((player) => {
+		PlayerManager.getInstance().players.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
 			} else {
@@ -133,7 +132,7 @@ export abstract class BaseGameMode implements GameMode {
 	onStartTurn(turn: number): void {
 		this._scoreboardManager.updateFull();
 		this._scoreboardManager.updateScoreboardTitle();
-		MatchData.remainingPlayers.forEach((player) => {
+		PlayerManager.getInstance().playersAliveOrNomad.forEach((player) => {
 			player.giveGold();
 		});
 
@@ -191,7 +190,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onPlayerNomad(player: ActivePlayer): Promise<void> {
 		debugPrint(EVENT_ON_PLAYER_NOMAD);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.NOMAD);
+		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), PLAYER_STATUS.NOMAD);
 
 		if (player.trackedData.units.size <= 0) {
 			player.status.set(PLAYER_STATUS.DEAD);
@@ -295,10 +294,10 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
 		debugPrint(EVENT_ON_PLAYER_FORFEIT);
-		const playerStatus = MatchData.getPlayerStatus(PlayerManager.getInstance().players.get(GetTriggerPlayer()));
+		const playerStatus = PlayerManager.getInstance().getPlayerStatus(GetTriggerPlayer());
 		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
-		PlayerManager.getInstance().players.get(GetTriggerPlayer()).status.set(PLAYER_STATUS.DEAD);
-		MatchData.setPlayerStatus(player, PLAYER_STATUS.DEAD);
+
+		PlayerManager.getInstance().setPlayerStatus(GetTriggerPlayer(), PLAYER_STATUS.DEAD);
 		this._scoreboardManager.updatePartial();
 	}
 
@@ -348,15 +347,13 @@ export abstract class BaseGameMode implements GameMode {
 			player.trackedData.bonus.showForPlayer(player.getPlayer());
 			player.trackedData.bonus.repositon();
 
-			MatchData.initialPlayers.push(player);
-
 			if (MatchData.leader == null) {
 				MatchData.leader = player;
 			}
 		});
 
 		if (SettingsContext.getInstance().isFFA() || players.length <= 2) {
-			ScoreboardManager.getInstance().ffaSetup(MatchData.initialPlayers);
+			ScoreboardManager.getInstance().ffaSetup(players);
 		} else {
 			ScoreboardManager.getInstance().teamSetup();
 		}
@@ -402,7 +399,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	private messageGameState() {
-		let playersToAnnounce = VictoryManager.getInstance().getFrontRunnersByThreshold(
+		let playersToAnnounce = VictoryManager.getInstance().getOwnershipByThresholdDescending(
 			VictoryManager.CITIES_TO_WIN * CITIES_TO_WIN_WARNING_RATIO
 		);
 

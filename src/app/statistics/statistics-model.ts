@@ -45,7 +45,7 @@ export class StatisticsModel {
 		let rival: ActivePlayer | null = null;
 		let maxKills = 0;
 
-		MatchData.initialPlayers.forEach((p) => {
+		PlayerManager.getInstance().playersAliveOrNomad.forEach((p) => {
 			if (p === player) return;
 
 			const killsOnPlayer = p.trackedData.killsDeaths.get(player.getPlayer()).kills;

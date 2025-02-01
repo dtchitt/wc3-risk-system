@@ -4,6 +4,8 @@ import { SlavePlayer } from './types/slave-player';
 import { NameManager } from '../managers/names/name-manager';
 import { buildGuardHealthButton, buildGuardValueButton } from '../ui/player-preference-buttons';
 import { File } from 'w3ts';
+import { PLAYER_STATUS } from './status/status-enum';
+import { Status } from './status/status';
 
 const banList: string[] = [
 	'nappa#11822', //Full screen spam
@@ -132,5 +134,13 @@ export class PlayerManager {
 
 	public get slaves(): Map<player, SlavePlayer> {
 		return this._slavesFromHandle;
+	}
+
+	public setPlayerStatus(v: player, status: PLAYER_STATUS) {
+		this.players.get(v).status.set(status);
+	}
+
+	public getPlayerStatus(v: player): Status {
+		return this.players.get(v).status;
 	}
 }
