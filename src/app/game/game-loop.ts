@@ -8,8 +8,8 @@ import { HexColors } from '../utils/hex-colors';
 import { MatchData } from './state/match-state';
 import { EventEmitter } from '../utils/events/event-emitter';
 import {
-	EVENT_GAME_RESTART,
-	EVENT_IN_PROGRESS,
+	EVENT_GAME_RESTART as EVENT_ON_REMATCH,
+	EVENT_IN_PROGRESS as EVENT_ON_IN_PROGRESS,
 	EVENT_ON_CITY_CAPTURE,
 	EVENT_ON_PLAYER_ALIVE,
 	EVENT_ON_PLAYER_DEAD,
@@ -18,11 +18,12 @@ import {
 	EVENT_ON_PLAYER_NOMAD,
 	EVENT_ON_PLAYER_STFU,
 	EVENT_ON_UNIT_KILLED,
-	EVENT_POST_MATCH,
-	EVENT_PRE_MATCH,
+	EVENT_POST_MATCH as EVENT_ON_POST_MATCH,
+	EVENT_PRE_MATCH as EVENT_ON_PRE_MATCH,
 	EVENT_SET_GAME_MODE,
-	EVENT_START_GAME,
+	EVENT_START_GAME as EVENT_ON_START_GAME,
 	EVENT_START_GAME_LOOP,
+	EVENT_ON_END_MATCH,
 } from '../utils/events/event-constants';
 
 export class GameLoop {
@@ -56,13 +57,14 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_UNIT_KILLED, (killingUnit: unit, dyingUnit: unit) =>
 			this._gameMode.onUnitKilled(killingUnit, dyingUnit)
 		);
-		EventEmitter.getInstance().on(EVENT_START_GAME, () => this._gameMode.onStartMatch());
-		EventEmitter.getInstance().on(EVENT_GAME_RESTART, () => this._gameMode.onRematch());
+		EventEmitter.getInstance().on(EVENT_ON_START_GAME, () => this._gameMode.onStartMatch());
+		EventEmitter.getInstance().on(EVENT_ON_REMATCH, () => this._gameMode.onRematch());
 		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
 
-		EventEmitter.getInstance().on(EVENT_PRE_MATCH, () => this._gameMode.onPreMatch());
-		EventEmitter.getInstance().on(EVENT_IN_PROGRESS, () => this._gameMode.onInProgress());
-		EventEmitter.getInstance().on(EVENT_POST_MATCH, () => this._gameMode.onPostMatch());
+		EventEmitter.getInstance().on(EVENT_ON_PRE_MATCH, () => this._gameMode.onPreMatch());
+		EventEmitter.getInstance().on(EVENT_ON_IN_PROGRESS, () => this._gameMode.onInProgress());
+		EventEmitter.getInstance().on(EVENT_ON_POST_MATCH, () => this._gameMode.onPostMatch());
+		EventEmitter.getInstance().on(EVENT_ON_END_MATCH, () => this._gameMode.onEndMatch());
 
 		EventEmitter.getInstance().on(EVENT_START_GAME_LOOP, () => this.startGameLoop());
 	}
@@ -80,7 +82,7 @@ export class GameLoop {
 				// Check if the match is over
 				if (this._gameMode.isMatchOver()) {
 					PauseTimer(this._matchLoopTimer);
-					this._gameMode.onEndMatch();
+					EventEmitter.getInstance().emit(EVENT_ON_END_MATCH);
 					return;
 				}
 
@@ -94,7 +96,7 @@ export class GameLoop {
 				// Stop game loop if match is over
 				if (this._gameMode.isMatchOver()) {
 					PauseTimer(this._matchLoopTimer);
-					this._gameMode.onEndMatch();
+					EventEmitter.getInstance().emit(EVENT_ON_END_MATCH);
 					return;
 				}
 

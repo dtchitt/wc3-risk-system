@@ -87,6 +87,11 @@ export class MatchData {
 		return this.getInstance().data.players[index].status;
 	}
 
+	public static getActivePlayer(v: player): ActivePlayer {
+		let index = this.getInstance().data.players.findIndex((x) => v == x.getPlayer());
+		return this.getInstance().data.players[index];
+	}
+
 	public static get initialPlayers(): ActivePlayer[] {
 		return this.getInstance().data.players;
 	}

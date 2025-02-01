@@ -25,9 +25,10 @@ import {
 	EVENT_GAME_RESTART,
 	EVENT_ON_PRE_MATCH,
 	EVENT_IN_PROGRESS,
-	EVENT_POST_MATCH,
+	EVENT_POST_MATCH as EVENT_ON_POST_MATCH,
 	EVENT_START_GAME_LOOP,
 	EVENT_ON_UNIT_KILLED,
+	EVENT_ON_END_MATCH,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from './game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
@@ -43,7 +44,6 @@ import { resetCountries } from '../utillity/reset-countries';
 import { TreeManager } from '../services/tree-service';
 import { distributeBases } from '../utillity/distribute-bases';
 import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
-import { setStatTracking as setStatTrackingAndLeaderboard } from '../utillity/prepare-stat-tracking';
 import { debugPrint } from 'src/app/utils/debug-print';
 
 export abstract class BaseGameMode implements GameMode {
@@ -64,7 +64,29 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onPostMatch(): Promise<void> {
-		debugPrint(EVENT_POST_MATCH);
+		debugPrint(EVENT_ON_POST_MATCH);
+
+		MatchData.matchState = 'postMatch';
+
+		VictoryManager.getInstance().saveStats();
+
+		// Hide match scoreboard and show score screen
+		this._scoreboardManager.destroyBoards();
+		MatchData.initialPlayers.forEach((player) => {
+			if (SettingsContext.getInstance().isPromode()) {
+				NameManager.getInstance().setName(player.getPlayer(), 'acct');
+			} else {
+				NameManager.getInstance().setName(player.getPlayer(), 'btag');
+				player.trackedData.bonus.hideUI();
+			}
+		});
+		if (SettingsContext.getInstance().isPromode()) {
+			VictoryManager.getInstance().updateWinTracker();
+		} else {
+			this._statsController.refreshView();
+			this._statsController.setViewVisibility(true);
+			this._statsController.writeStatisticsData();
+		}
 	}
 
 	isMatchOver(): boolean {
@@ -101,8 +123,11 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onEndMatch(): void {
+		debugPrint(EVENT_ON_END_MATCH);
 		MatchData.matchState = 'postMatch';
-		this.postMatchSetup();
+		FogEnable(false);
+		BlzEnableSelections(false, false);
+		EventEmitter.getInstance().emit(EVENT_ON_POST_MATCH);
 	}
 
 	onStartTurn(turn: number): void {
@@ -298,6 +323,7 @@ export abstract class BaseGameMode implements GameMode {
 		if (!SettingsContext.getInstance().isPromode()) {
 			PlayerManager.getInstance().players.forEach((val) => {
 				NameManager.getInstance().setName(val.getPlayer(), 'color');
+				val.trackedData.reset();
 			});
 		}
 
@@ -314,15 +340,35 @@ export abstract class BaseGameMode implements GameMode {
 			}
 		});
 
+		// Prepare stat tracking
+		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
+		players.forEach((player) => {
+			SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
+			player.status.set(PLAYER_STATUS.ALIVE);
+			player.trackedData.bonus.showForPlayer(player.getPlayer());
+			player.trackedData.bonus.repositon();
+
+			MatchData.initialPlayers.push(player);
+
+			if (MatchData.leader == null) {
+				MatchData.leader = player;
+			}
+		});
+
+		if (SettingsContext.getInstance().isFFA() || players.length <= 2) {
+			ScoreboardManager.getInstance().ffaSetup(MatchData.initialPlayers);
+		} else {
+			ScoreboardManager.getInstance().teamSetup();
+		}
+
+		ScoreboardManager.getInstance().obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
+
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);
 		FogEnable(true);
 
 		// Distribute bases
 		distributeBases();
-
-		// Prepare stat tracking
-		setStatTrackingAndLeaderboard();
 
 		await setProModeTempVision();
 	}
@@ -386,77 +432,5 @@ export abstract class BaseGameMode implements GameMode {
 		const playerMessages = playersToAnnounce.map((player) => announceCandidate(player, VictoryManager.GAME_VICTORY_STATE)).join('\n');
 
 		GlobalMessage([tiedMessage, overtimeMessage, playerMessages].join('\n\n'), 'Sound\\Interface\\ItemReceived.flac', 4);
-	}
-
-	private postMatchSetup() {
-		this.pauseAllUnits();
-		VictoryManager.getInstance().saveStats();
-
-		FogEnable(false);
-		BlzEnableSelections(false, false);
-
-		// Hide match scoreboard and show score screen
-		this._scoreboardManager.destroyBoards();
-		MatchData.initialPlayers.forEach((player) => {
-			if (SettingsContext.getInstance().isPromode()) {
-				NameManager.getInstance().setName(player.getPlayer(), 'acct');
-			} else {
-				NameManager.getInstance().setName(player.getPlayer(), 'btag');
-				player.trackedData.bonus.hideUI();
-			}
-		});
-		if (SettingsContext.getInstance().isPromode()) {
-			VictoryManager.getInstance().updateWinTracker();
-		} else {
-			this._statsController.refreshView();
-			this._statsController.setViewVisibility(true);
-			this._statsController.writeStatisticsData();
-		}
-	}
-
-	private pauseAllUnits() {
-		// Players
-		for (let i = 0; i < PLAYER_SLOTS; i++) {
-			const player = Player(i);
-
-			const group: group = CreateGroup();
-			GroupEnumUnitsOfPlayer(
-				group,
-				player,
-				Filter(() => {
-					const unit: unit = GetFilterUnit();
-
-					// Cancels units in training by changing ownership
-					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-						SetUnitOwner(unit, NEUTRAL_HOSTILE, false);
-						SetUnitOwner(unit, player, false);
-					}
-
-					// Prevents neutral buildings from attacking post-game
-					IssueImmediateOrder(unit, 'holdposition');
-					SetUnitInvulnerable(unit, true);
-				})
-			);
-			DestroyGroup(group);
-			GroupClear(group);
-		}
-
-		// Neutral
-		const group: group = CreateGroup();
-		GroupEnumUnitsOfPlayer(
-			group,
-			NEUTRAL_HOSTILE,
-			Filter(() => {
-				const unit: unit = GetFilterUnit();
-
-				// Prevents defenders from being attacked
-				if (IsUnitType(unit, UNIT_TYPE.GUARD)) {
-					IssueImmediateOrder(unit, 'holdposition');
-					SetUnitInvulnerable(unit, true);
-				}
-			})
-		);
-		DestroyGroup(group);
-		GroupClear(group);
 	}
 }
