@@ -7,6 +7,9 @@ export const EVENT_ON_PLAYER_FORFEIT: string = 'onPlayerForfeit';
 export const EVENT_ON_CITY_CAPTURE: string = 'onCityCapture';
 export const EVENT_ON_UNIT_KILLED: string = 'onUnitKilled';
 
+export const EVENT_ON_CITY_SELECTED: string = 'onCitySelected';
+export const EVENT_ON_CITY_DESELECTED: string = 'onCityDeselected';
+
 export const EVENT_ON_PRE_MATCH: string = 'onPreMatch';
 export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';
 export const EVENT_ON_POST_MATCH: string = 'onPostMatch';

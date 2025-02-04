@@ -13,6 +13,9 @@ export interface GameMode {
 	onUnitKilled: (killingUnit: unit, dyingUnit: unit) => Promise<void>;
 	onRematch: () => Promise<void>;
 
+	onCitySelected: (city: City, player: player) => Promise<void>;
+	onCityDeselected: (city: City, player: player) => Promise<void>;
+
 	onPreMatch: () => Promise<void>;
 	onInProgress: () => Promise<void>;
 	onPostMatch: () => Promise<void>;

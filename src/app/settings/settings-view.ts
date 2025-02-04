@@ -215,7 +215,7 @@ export class SettingsView {
 	}
 
 	private hostSetup() {
-		BlzFrameSetEnable(BlzGetFrameByName('GameTypePopup', 0), false);
+		BlzFrameSetEnable(BlzGetFrameByName('GameTypePopup', 0), true);
 
 		if (GetLocalPlayer() == Player(0)) {
 			BlzFrameSetVisible(BlzGetFrameByName('PopupMenuOptions', 0), false);

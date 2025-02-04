@@ -29,6 +29,8 @@ import { Wait } from './app/utils/wait';
 import { GameLoop } from './app/game/game-loop';
 import { EventEmitter } from './app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
+import { CapitalSelectedEvent } from './app/triggers/capital-selected-event';
+import { CapitalDeselectedEvent } from './app/triggers/capital-deselected-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -96,6 +98,8 @@ function tsMain() {
 		SpellEffectEvent();
 		AntiSpam();
 		KeyEvents();
+		CapitalSelectedEvent();
+		CapitalDeselectedEvent();
 
 		//Create Quests
 		Quests.Create();

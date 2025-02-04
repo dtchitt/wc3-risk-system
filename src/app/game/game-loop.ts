@@ -24,7 +24,12 @@ import {
 	EVENT_START_GAME as EVENT_ON_START_GAME,
 	EVENT_START_GAME_LOOP,
 	EVENT_ON_END_MATCH,
+	EVENT_ON_CITY_SELECTED,
+	EVENT_ON_CITY_DESELECTED,
 } from '../utils/events/event-constants';
+import { StandardGameMode } from './game-mode/modes/standard-game-mode';
+import { GameType } from '../settings/strategies/game-type-strategy';
+import { CapitalsGameMode } from './game-mode/modes/capitals-game-mode';
 
 export class GameLoop {
 	private static instance: GameLoop;
@@ -57,9 +62,13 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_UNIT_KILLED, (killingUnit: unit, dyingUnit: unit) =>
 			this._gameMode.onUnitKilled(killingUnit, dyingUnit)
 		);
+
+		EventEmitter.getInstance().on(EVENT_ON_CITY_SELECTED, (city: City, player: player) => this._gameMode.onCitySelected(city, player));
+		EventEmitter.getInstance().on(EVENT_ON_CITY_DESELECTED, (city: City, player: player) => this._gameMode.onCityDeselected(city, player));
+
 		EventEmitter.getInstance().on(EVENT_ON_START_GAME, () => this._gameMode.onStartMatch());
 		EventEmitter.getInstance().on(EVENT_ON_REMATCH, () => this._gameMode.onRematch());
-		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameMode: GameMode) => this.applyGameMode(gameMode));
+		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameType: GameType) => this.applyGameMode(gameType));
 
 		EventEmitter.getInstance().on(EVENT_ON_PRE_MATCH, () => this._gameMode.onPreMatch());
 		EventEmitter.getInstance().on(EVENT_ON_IN_PROGRESS, () => this._gameMode.onInProgress());
@@ -69,8 +78,8 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_START_GAME_LOOP, () => this.startGameLoop());
 	}
 
-	public applyGameMode(gameMode: GameMode) {
-		this._gameMode = gameMode;
+	public applyGameMode(gameType: GameType) {
+		this._gameMode = gameType === 'Standard' ? new StandardGameMode() : new CapitalsGameMode();
 	}
 
 	private startGameLoop() {

@@ -62,6 +62,7 @@ export class ModeSelection {
 	public async end(): Promise<void> {
 		const settings: SettingsContext = SettingsContext.getInstance();
 		settings.initStrategies();
+		settings.applyStrategy('GameType');
 		settings.applyStrategy('Diplomacy');
 		settings.applyStrategy('Promode');
 		settings.applyStrategy('Overtime');
@@ -70,8 +71,6 @@ export class ModeSelection {
 		ExportGameSettings.write(settings);
 
 		MatchData.gameMode = 'ffa';
-
-		this.eventEmitter.emit(EVENT_SET_GAME_MODE, new StandardGameMode());
 		this.eventEmitter.emit(EVENT_START_GAME);
 	}
 

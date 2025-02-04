@@ -312,6 +312,10 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
+	async onCitySelected(city: City, player: player): Promise<void> {}
+
+	async onCityDeselected(city: City, player: player): Promise<void> {}
+
 	async prepareMatch(): Promise<void> {
 		debugPrint('Preparing match...');
 
