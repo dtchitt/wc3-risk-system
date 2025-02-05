@@ -29,7 +29,7 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		if (city.getOwner() != NEUTRAL_HOSTILE) {
 			LocalMessage(
-				city.getOwner(),
+				player,
 				`${city.getOwner()} has already selected this city!\nPlease choose another city for your capital.`,
 				'Sound\\Interface\\Error.flac'
 			);
