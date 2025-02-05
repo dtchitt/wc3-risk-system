@@ -20,11 +20,11 @@ import {
 	EVENT_ON_PLAYER_NOMAD,
 	EVENT_ON_PLAYER_STFU,
 	EVENT_ON_CITY_CAPTURE,
-	EVENT_START_GAME,
-	EVENT_GAME_RESTART,
+	EVENT_ON_START_GAME,
+	EVENT_ON_REMATCH,
 	EVENT_ON_PRE_MATCH,
-	EVENT_IN_PROGRESS,
-	EVENT_POST_MATCH as EVENT_ON_POST_MATCH,
+	EVENT_ON_IN_PROGRESS,
+	EVENT_ON_POST_MATCH,
 	EVENT_START_GAME_LOOP,
 	EVENT_ON_UNIT_KILLED,
 	EVENT_ON_END_MATCH,
@@ -59,7 +59,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onInProgress(): Promise<void> {
-		debugPrint(EVENT_IN_PROGRESS);
+		debugPrint(EVENT_ON_IN_PROGRESS);
 	}
 
 	async onPostMatch(): Promise<void> {
@@ -375,7 +375,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onRematch(): Promise<void> {
-		debugPrint(EVENT_GAME_RESTART);
+		debugPrint(EVENT_ON_REMATCH);
 		FogEnable(false);
 		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
@@ -399,7 +399,7 @@ export abstract class BaseGameMode implements GameMode {
 			await Wait.forSeconds(1);
 		}
 
-		EventEmitter.getInstance().emit(EVENT_START_GAME);
+		EventEmitter.getInstance().emit(EVENT_ON_START_GAME);
 	}
 
 	private messageGameState() {

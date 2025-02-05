@@ -14,15 +14,12 @@ export const EVENT_ON_PRE_MATCH: string = 'onPreMatch';
 export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';
 export const EVENT_ON_POST_MATCH: string = 'onPostMatch';
 
-export const EVENT_START_GAME: string = 'startGame';
-export const EVENT_GAME_RESTART: string = 'gameRestart';
+export const EVENT_ON_START_GAME: string = 'startGame';
+export const EVENT_ON_REMATCH: string = 'gameRestart';
 export const EVENT_SET_GAME_MODE: string = 'setGameMode';
 
 export const EVENT_MODE_SELECTION: string = 'modeSelection';
 
-export const EVENT_PRE_MATCH: string = 'preMatch';
-export const EVENT_IN_PROGRESS: string = 'inProgress';
-export const EVENT_POST_MATCH: string = 'postMatch';
 export const EVENT_ON_END_MATCH: string = 'onEndMatch';
 
 export const EVENT_START_GAME_LOOP: string = 'startGameLoop';

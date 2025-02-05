@@ -3,10 +3,9 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
-import { StandardGameMode } from '../game-mode/modes/standard-game-mode';
 import { MatchData } from './match-state';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
-import { EVENT_MODE_SELECTION, EVENT_SET_GAME_MODE, EVENT_START_GAME } from 'src/app/utils/events/event-constants';
+import { EVENT_MODE_SELECTION, EVENT_ON_START_GAME } from 'src/app/utils/events/event-constants';
 
 export class ModeSelection {
 	private ui: SettingsView;
@@ -71,7 +70,7 @@ export class ModeSelection {
 		ExportGameSettings.write(settings);
 
 		MatchData.gameMode = 'ffa';
-		this.eventEmitter.emit(EVENT_START_GAME);
+		this.eventEmitter.emit(EVENT_ON_START_GAME);
 	}
 
 	private setupSettingsQuest(): void {
