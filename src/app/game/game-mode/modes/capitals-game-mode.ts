@@ -4,6 +4,8 @@ import { BaseGameMode } from '../base/base-game-mode';
 import { NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
 import { debugPrint } from 'src/app/utils/debug-print';
 import { CountdownMessage, LocalMessage } from 'src/app/utils/messages';
+import { LandCity } from 'src/app/city/land-city';
+import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
@@ -13,6 +15,12 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+		if (preOwner == owner) return;
+
+		if (city.isCapital()) {
+			preOwner.status.set(PLAYER_STATUS.DEAD);
+		}
+
 		await super.onCityCapture(city, preOwner, owner);
 	}
 
@@ -36,6 +44,8 @@ export class CapitalsGameMode extends BaseGameMode {
 			return;
 		}
 
+		(city as LandCity).setCapital();
+
 		city.changeOwner(player);
 		SetUnitOwner(city.guard.unit, player, true);
 		city.guard.unit;
@@ -53,9 +63,7 @@ export class CapitalsGameMode extends BaseGameMode {
 			return;
 		}
 
-		city.changeOwner(NEUTRAL_HOSTILE);
-		SetUnitOwner(city.guard.unit, NEUTRAL_HOSTILE, true);
-		city.guard.unit;
+		city.reset();
 		await super.onCityDeselected(city, player);
 	}
 
