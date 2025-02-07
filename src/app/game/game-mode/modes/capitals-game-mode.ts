@@ -9,6 +9,8 @@ import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import { PlayerManager } from 'src/app/player/player-manager';
 import { CapitalDistributionService } from '../../services/distribution-service/capital-distribution-service';
 import { RegionToCity } from 'src/app/city/city-map';
+import { CityToCountry } from 'src/app/country/country-map';
+import { NameManager } from 'src/app/managers/names/name-manager';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
@@ -42,7 +44,20 @@ export class CapitalsGameMode extends BaseGameMode {
 		if (city.getOwner() != NEUTRAL_HOSTILE) {
 			LocalMessage(
 				player,
-				`${city.getOwner()} has already selected this city!\nPlease choose another city for your capital.`,
+				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
+				'Sound\\Interface\\Error.flac'
+			);
+			return;
+		}
+
+		if (
+			CityToCountry.get(city)
+				.getCities()
+				.find((x) => x.getOwner() != NEUTRAL_HOSTILE) !== undefined
+		) {
+			LocalMessage(
+				player,
+				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
 				'Sound\\Interface\\Error.flac'
 			);
 			return;
@@ -94,7 +109,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 1;
+			let duration: number = 30;
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
