@@ -7,7 +7,7 @@ import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { HexColors } from 'src/app/utils/hex-colors';
 import { CountdownMessage, GlobalMessage } from 'src/app/utils/messages';
 import { CITIES_TO_WIN_WARNING_RATIO, NOMAD_DURATION, STARTING_INCOME, STFU_DURATION } from 'src/configs/game-settings';
-import { PlayGlobalSound } from 'src/app/utils/utils';
+import { NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../../state/match-state';
@@ -41,9 +41,10 @@ import { resumingUnits } from './utillity/resuming-units';
 import { ShufflePlayerColorWithColoredName } from './utillity/shuffle-player-color-with-colored-name';
 import { resetCountries } from './utillity/reset-countries';
 import { TreeManager } from '../../services/tree-service';
-import { distributeBases } from './utillity/distribute-bases';
 import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
 import { debugPrint } from 'src/app/utils/debug-print';
+import { RegionToCity } from 'src/app/city/city-map';
+import { BaseDistributionService } from '../../services/distribution-service/base-distribution-service';
 
 export abstract class BaseGameMode implements GameMode {
 	private _statsController: StatisticsController;
@@ -369,9 +370,25 @@ export abstract class BaseGameMode implements GameMode {
 		FogEnable(true);
 
 		// Distribute bases
-		distributeBases();
+		this.onDistributeBases();
 
 		await setProModeTempVision();
+	}
+
+	onDistributeBases(): void {
+		new BaseDistributionService().runDistro(() => {
+			RegionToCity.forEach((city) => {
+				city.guard.reposition();
+				//Prevent guards from moving and update unit counts
+				IssueImmediateOrder(city.guard.unit, 'stop');
+
+				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
+					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+				}
+
+				SetUnitInvulnerable(city.guard.unit, false);
+			});
+		});
 	}
 
 	async onRematch(): Promise<void> {

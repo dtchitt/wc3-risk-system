@@ -6,11 +6,13 @@ import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
 import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 import { CITIES_PER_PLAYER_UPPER_BOUND } from 'src/configs/game-settings';
+import { debugPrint } from 'src/app/utils/debug-print';
+import { DistributionService } from './distribution-service';
 
 /**
  * Handles the distribution of cities among active players.
  */
-export class DistributionService {
+export class BaseDistributionService implements DistributionService {
 	private citiesPerPlayerUpperBound: number = CITIES_PER_PLAYER_UPPER_BOUND;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
@@ -36,22 +38,59 @@ export class DistributionService {
 	 * @param callback - Function to call after distribution is complete.
 	 */
 	public runDistro(callback: () => void) {
-		//TODO used to control which distro mode to use
-		this.standardDistro();
-
+		this.distribute();
 		callback();
 	}
 
 	/**
-	 * Implements the standard distribution algorithm.
+	 * Implements the distribution algorithm.
 	 */
-	private standardDistro() {
+	private distribute() {
 		try {
 			const neutralCities: City[] = [];
 			const numOfCities: number = this.cities.length;
 
 			for (let i = 0; i < numOfCities; i++) {
 				const city: City = GetRandomElementFromArray(this.cities);
+				const player: ActivePlayer = this.getValidPlayerForCity(city);
+
+				if (player) {
+					this.changeCityOwner(city, player);
+
+					if (!this.isPlayerFull(player)) {
+						this.players.addLast(player);
+					}
+				} else {
+					neutralCities.push(city);
+				}
+
+				if (this.players.length() == 0) break;
+			}
+
+			//TODO
+			//Here I will check if each player has this.maxCitiesPerPlayer
+			//It is safe to assume no player has more at this point
+			//I can check the neutral cities to see if a players who need one
+			//can take one, and do it if so. repeat the process until they are all full
+			//There is some RARE edge cases where the player cannot get any of the neutral cities.
+			//I should handle that as well
+		} catch (error) {
+			print('Error in StandardDistro' + error);
+		}
+	}
+
+	/**
+	 * Implements the standard distribution algorithm.
+	 */
+	private capitalsDistro() {
+		try {
+			const neutralCities: City[] = [];
+			const numOfCities: number = this.cities.length;
+
+			for (let i = 0; i < numOfCities; i++) {
+				const city: City = GetRandomElementFromArray(this.cities);
+				const country: Country = CityToCountry.get(city);
+				debugPrint(country.getCities().length.toString());
 				const player: ActivePlayer = this.getValidPlayerForCity(city);
 
 				if (player) {

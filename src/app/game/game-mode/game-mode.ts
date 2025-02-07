@@ -26,4 +26,5 @@ export interface GameMode {
 	onStartTurn: (turn: number) => void;
 	onEndTurn: (turn: number) => void;
 	onTick: (tick: number) => void;
+	onDistributeBases(): void;
 }

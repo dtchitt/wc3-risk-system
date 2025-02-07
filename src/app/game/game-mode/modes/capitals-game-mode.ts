@@ -6,9 +6,13 @@ import { debugPrint } from 'src/app/utils/debug-print';
 import { CountdownMessage, LocalMessage } from 'src/app/utils/messages';
 import { LandCity } from 'src/app/city/land-city';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
+import { PlayerManager } from 'src/app/player/player-manager';
+import { CapitalDistributionService } from '../../services/distribution-service/capital-distribution-service';
+import { RegionToCity } from 'src/app/city/city-map';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
+	private playerCapitalCities: Map<player, City> = new Map();
 
 	onEndTurn(turn: number): void {
 		super.onEndTurn(turn);
@@ -49,6 +53,9 @@ export class CapitalsGameMode extends BaseGameMode {
 		city.changeOwner(player);
 		SetUnitOwner(city.guard.unit, player, true);
 		city.guard.unit;
+
+		this.playerCapitalCities.set(player, city);
+
 		await super.onCitySelected(city, player);
 	}
 
@@ -64,6 +71,9 @@ export class CapitalsGameMode extends BaseGameMode {
 		}
 
 		city.reset();
+
+		this.playerCapitalCities.set(player, null);
+
 		await super.onCityDeselected(city, player);
 	}
 
@@ -71,14 +81,22 @@ export class CapitalsGameMode extends BaseGameMode {
 		FogEnable(false);
 		BlzEnableSelections(true, false);
 
+		debugPrint('Starting Capitals Game Mode');
+		// Initialize the player capital cities map with empty capitals
+		this.playerCapitalCities = new Map();
+		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
+		players.forEach((player) => {
+			this.playerCapitalCities.set(player.getPlayer(), null);
+		});
+
 		this.capitalPickPhase = true;
 
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 30;
+			let duration: number = 1;
 			TimerStart(startDelayTimer, 1, true, () => {
-				CountdownMessage(`Choose Your Capital\n\nThe Game will start in:\n${duration}`);
+				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
 					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
 				}
@@ -89,7 +107,7 @@ export class CapitalsGameMode extends BaseGameMode {
 					EnableSelect(true, true);
 					EnableDragSelect(true, true);
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
-					this.capitalPickPhase = true;
+					this.capitalPickPhase = false;
 					super.onStartMatch();
 				}
 				duration--;
@@ -97,5 +115,23 @@ export class CapitalsGameMode extends BaseGameMode {
 		} catch (error) {
 			print('Error in Metagame ' + error);
 		}
+	}
+
+	// // Ensure that all players without capitals get assigned a random capital city.
+	override onDistributeBases(): void {
+		debugPrint('Distributing capitals');
+		new CapitalDistributionService(this.playerCapitalCities).runDistro(() => {
+			RegionToCity.forEach((city) => {
+				city.guard.reposition();
+				//Prevent guards from moving and update unit counts
+				IssueImmediateOrder(city.guard.unit, 'stop');
+
+				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
+					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+				}
+
+				SetUnitInvulnerable(city.guard.unit, false);
+			});
+		});
 	}
 }
