@@ -96,7 +96,7 @@ export class CapitalDistributionService implements DistributionService {
 				// assign the first city to the player
 				ShuffleArray(cities);
 
-				const capital = cities.pop();
+				const capital = cities[0];
 				capital.setOwner(player);
 				SetUnitOwner(capital.guard.unit, player, true);
 
