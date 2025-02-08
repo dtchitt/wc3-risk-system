@@ -50,11 +50,18 @@ export class CapitalsGameMode extends BaseGameMode {
 			return;
 		}
 
-		if (
-			CityToCountry.get(city)
-				.getCities()
-				.find((x) => x.getOwner() != NEUTRAL_HOSTILE) !== undefined
-		) {
+		const country = CityToCountry.get(city);
+		const cities = country.getCities();
+		if (cities.length <= 1) {
+			LocalMessage(
+				player,
+				`Only countries with 2 or cities can be chosen.\nPlease choose another city for your capital.`,
+				'Sound\\Interface\\Error.flac'
+			);
+			return;
+		}
+
+		if (cities.find((x) => x.getOwner() != NEUTRAL_HOSTILE) !== undefined) {
 			LocalMessage(
 				player,
 				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
@@ -109,7 +116,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 30;
+			let duration: number = 5;
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
