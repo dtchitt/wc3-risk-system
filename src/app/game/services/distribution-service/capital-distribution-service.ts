@@ -8,25 +8,19 @@ import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 import { DistributionService } from './distribution-service';
 import { debugPrint } from 'src/app/utils/debug-print';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { LocalMessage } from 'src/app/utils/messages';
 
 /**
  * Handles the distribution of cities among active players.
  */
 export class CapitalDistributionService implements DistributionService {
-	private players: DoublyLinkedList<ActivePlayer>;
 	private playerCapitalCities: Map<player, City>;
-	private playerCapitalCountries: Map<player, Country>;
 
 	/**
 	 * Initializes city pool and player list.
 	 */
 	constructor(playerCapitalCities: Map<player, City>) {
-		this.players = new DoublyLinkedList<ActivePlayer>();
 		this.playerCapitalCities = playerCapitalCities;
-
-		PlayerManager.getInstance().players.forEach((player) => {
-			this.players.addFirst(player);
-		});
 	}
 
 	/**
@@ -43,36 +37,19 @@ export class CapitalDistributionService implements DistributionService {
 	 * Implements the distribution algorithm.
 	 */
 	public distribute() {
-		this.playerCapitalCountries = new Map();
+		let playerCapitalCountries = new Map<player, Country>();
 
-		debugPrint('playerCaptalCities size: ' + this.playerCapitalCities.size);
-
-		this.playerCapitalCities.forEach((city, player) => {
-			if (CityToCountry.has(city)) {
-				debugPrint('City has country');
-				this.playerCapitalCountries.set(player, CityToCountry.get(city));
-				debugPrint('City count by country' + this.playerCapitalCountries.get(player).getCities().length);
-			} else {
-				debugPrint('City does not have country');
-				this.playerCapitalCountries.set(player, null);
-			}
-		});
-
-		debugPrint('playerCaptalCountries size: ' + this.playerCapitalCountries.size);
 		const countries = Array.from(CityToCountry.values());
-		debugPrint('countries size: ' + countries.length);
 
-		const playerCountries = new Set(this.playerCapitalCountries.values());
+		const playerCountries = new Set(playerCapitalCountries.values());
 		let filteredCountries = countries.filter((country) => !playerCountries.has(country));
-		debugPrint('filteredCountries size: ' + filteredCountries.length);
 
 		ShuffleArray(filteredCountries);
 
-		// players with city == null have not picked any capital yet
-		debugPrint('playerCaptalCities size: ' + this.playerCapitalCities.size);
 		this.playerCapitalCities.forEach((city, player) => {
 			if (city != null) {
 				debugPrint('Player named ' + NameManager.getInstance().getDisplayName(player) + ' already has a capital');
+				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(city).getName()}.`, 'Sound\\Interface\\Error.flac');
 				return;
 			}
 
@@ -86,7 +63,6 @@ export class CapitalDistributionService implements DistributionService {
 				const country = filteredCountries.pop();
 				let cities = country.getCities();
 				if (cities.length <= 1) {
-					debugPrint('Country named ' + country.getName() + ' has only one city, skipping country');
 					continue;
 				}
 
@@ -101,7 +77,8 @@ export class CapitalDistributionService implements DistributionService {
 				SetUnitOwner(capital.guard.unit, player, true);
 
 				// terminate the loop, a country has been found that can be assigned to the player
-				debugPrint('Assigned capital to ' + NameManager.getInstance().getDisplayName(player) + ' in ' + country.getName());
+				LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');
+
 				break;
 			}
 		});
