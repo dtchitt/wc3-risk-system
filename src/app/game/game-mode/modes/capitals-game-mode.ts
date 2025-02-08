@@ -23,7 +23,17 @@ export class CapitalsGameMode extends BaseGameMode {
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
 		if (preOwner == owner) return;
 
-		if (city.isCapital()) {
+		if (this.playerCapitalCities.get(preOwner.getPlayer()) === city) {
+			LocalMessage(
+				preOwner.getPlayer(),
+				`Your capital has been captured by ${NameManager.getInstance().getDisplayName(owner.getPlayer())}!\nYou have been eliminated!`,
+				'Sound\\Interface\\Error.flac'
+			);
+			LocalMessage(
+				owner.getPlayer(),
+				`You have captured the capital of ${NameManager.getInstance().getDisplayName(preOwner.getPlayer())}!\nThey have been eliminated!`,
+				'Sound\\Interface\\Victory.flac'
+			);
 			preOwner.status.set(PLAYER_STATUS.DEAD);
 		}
 
