@@ -3,22 +3,24 @@ import { UnitToCity } from '../city/city-map';
 import { debugPrint } from '../utils/debug-print';
 import { EVENT_ON_CITY_SELECTED } from '../utils/events/event-constants';
 import { EventEmitter } from '../utils/events/event-emitter';
+import { UNIT_TYPE } from '../utils/unit-types';
 import { PLAYER_SLOTS } from '../utils/utils';
 
-export function CapitalSelectedEvent() {
+export function CitySelectedEvent() {
 	const t: trigger = CreateTrigger();
-	debugPrint('CapitalSelectedEvent');
-
+	debugPrint('RegisteringPlayerUnitEvent');
 	for (let i = 0; i < PLAYER_SLOTS; i++) {
-		debugPrint('RegisteringPlayerUnitEvent');
 		TriggerRegisterPlayerUnitEvent(t, Player(i), EVENT_PLAYER_UNIT_SELECTED);
-		debugPrint('RegisteredPlayerUnitEvent');
 	}
+	debugPrint('RegisteredPlayerUnitEvent');
 
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			debugPrint('CapitalSelectedEvent');
+			if (!IsUnitType(GetTriggerUnit(), UNIT_TYPE.CITY)) return;
+
+			debugPrint('CitySelectedEvent');
+
 			const city: City = UnitToCity.get(GetTriggerUnit());
 			EventEmitter.getInstance().emit(EVENT_ON_CITY_SELECTED, city, GetTriggerPlayer());
 		})

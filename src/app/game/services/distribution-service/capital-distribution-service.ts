@@ -86,9 +86,11 @@ export class CapitalDistributionService implements DistributionService {
 				const country = filteredCountries.pop();
 				let cities = country.getCities();
 				if (cities.length <= 1) {
-					debugPrint('Country named ' + country.getName() + ' has only one city, skpping country');
+					debugPrint('Country named ' + country.getName() + ' has only one city, skipping country');
 					continue;
 				}
+
+				cities = cities.filter((city) => !city.isPort());
 
 				// pop the first element from the remaining country list
 				// assign the first city to the player
