@@ -11,7 +11,7 @@ export function UnitUpgradeEvent() {
 			const upgradedUnit = GetTriggerUnit();
 
 			SetAltMinimapIcon('war3mapImported\\capital_star.blp');
-			UnitSetUsesAltIcon(upgradedUnit, true);
+			UnitSetUsesAltIcon(upgradedUnit, GetUnitTypeId(upgradedUnit) == FourCC('h005'));
 
 			return false;
 		})

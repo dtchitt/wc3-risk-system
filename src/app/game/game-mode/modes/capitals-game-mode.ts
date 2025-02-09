@@ -146,7 +146,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 30;
+			let duration: number = 5;
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
