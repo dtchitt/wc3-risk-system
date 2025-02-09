@@ -28,3 +28,12 @@ export const STFU_DURATION: number = 300;
 
 //This represents whether debug messages should be printed. Default is false.
 export const SHOW_DEBUG_PRINTS = true;
+
+//This represents whether player names should be exported
+export const ENABLE_EXPORT_SHUFFLED_PLAYER_LIST: boolean = false;
+
+//This represents whether game settings should be exported
+export const ENABLE_EXPORT_GAME_SETTINGS: boolean = false;
+
+//This represents whether end game score should be exported
+export const ENABLE_EXPORT_END_GAME_SCORE: boolean = false;

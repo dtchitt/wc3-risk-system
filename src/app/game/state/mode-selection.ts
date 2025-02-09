@@ -6,6 +6,7 @@ import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-
 import { MatchData } from './match-state';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION, EVENT_ON_START_GAME } from 'src/app/utils/events/event-constants';
+import { ENABLE_EXPORT_GAME_SETTINGS } from 'src/configs/game-settings';
 
 export class ModeSelection {
 	private ui: SettingsView;
@@ -67,7 +68,10 @@ export class ModeSelection {
 		settings.applyStrategy('Overtime');
 
 		this.setupSettingsQuest();
-		ExportGameSettings.write(settings);
+
+		if (ENABLE_EXPORT_GAME_SETTINGS) {
+			ExportGameSettings.write(settings);
+		}
 
 		MatchData.gameMode = 'ffa';
 		this.eventEmitter.emit(EVENT_ON_START_GAME);

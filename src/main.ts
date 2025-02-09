@@ -32,6 +32,7 @@ import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 import { CitySelectedEvent } from './app/triggers/city-selected-event';
 import { CityDeselectedEvent } from './app/triggers/city-deselected-event';
 import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
+import { ENABLE_EXPORT_SHUFFLED_PLAYER_LIST } from './configs/game-settings';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -106,7 +107,9 @@ function tsMain() {
 		Quests.Create();
 
 		//Export statistics
-		ExportShuffledPlayerList.write();
+		if (ENABLE_EXPORT_SHUFFLED_PLAYER_LIST) {
+			ExportShuffledPlayerList.write();
+		}
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
