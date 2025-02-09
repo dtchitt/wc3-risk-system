@@ -50,6 +50,10 @@ export class CapitalDistributionService implements DistributionService {
 			if (city != null) {
 				debugPrint('Player named ' + NameManager.getInstance().getDisplayName(player) + ' already has a capital');
 				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(city).getName()}.`, 'Sound\\Interface\\Error.flac');
+
+				// Set the country spawn multiplier to 2
+				CityToCountry.get(city).getSpawn().setMultiplier(2);
+
 				return;
 			}
 
@@ -75,6 +79,9 @@ export class CapitalDistributionService implements DistributionService {
 				const capital = cities[0];
 				capital.setOwner(player);
 				SetUnitOwner(capital.guard.unit, player, true);
+
+				// Set the country spawn multiplier to 2
+				CityToCountry.get(capital).getSpawn().setMultiplier(2);
 
 				// terminate the loop, a country has been found that can be assigned to the player
 				LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');

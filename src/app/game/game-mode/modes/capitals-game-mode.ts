@@ -35,6 +35,9 @@ export class CapitalsGameMode extends BaseGameMode {
 				'Sound\\Interface\\Victory.flac'
 			);
 			preOwner.status.set(PLAYER_STATUS.DEAD);
+
+			// Reset the country spawn multiplier to 1
+			CityToCountry.get(city).getSpawn().setMultiplier(1);
 		}
 
 		await super.onCityCapture(city, preOwner, owner);
