@@ -58,7 +58,10 @@ export class ModeSelection implements GameState {
 		settings.applyStrategy('Overtime');
 
 		this.setupSettingsQuest();
-		ExportGameSettings.write(settings);
+
+		if (ENABLE_EXPORT_GAME_SETTINGS) {
+			ExportGameSettings.write(settings);
+		}
 
 		this.manager.updateState(this.nextState);
 	}
