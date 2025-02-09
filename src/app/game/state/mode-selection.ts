@@ -5,6 +5,7 @@ import { NameManager } from 'src/app/managers/names/name-manager';
 import { SettingsContext } from 'src/app/settings/settings-context';
 import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
+import { ENABLE_EXPORT_GAME_SETTINGS } from 'src/configs/game-settings';
 
 export class ModeSelection implements GameState {
 	private manager: GameManager;
@@ -58,7 +59,10 @@ export class ModeSelection implements GameState {
 		settings.applyStrategy('Overtime');
 
 		this.setupSettingsQuest();
-		ExportGameSettings.write(settings);
+
+		if (ENABLE_EXPORT_GAME_SETTINGS) {
+			ExportGameSettings.write(settings);
+		}
 
 		this.manager.updateState(this.nextState);
 	}

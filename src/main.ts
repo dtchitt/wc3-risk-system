@@ -24,6 +24,7 @@ import { TimedEventManager } from './app/libs/timer/timed-event-manager';
 import { AntiSpam } from './app/triggers/anti-spam';
 import { SetCommands } from './app/commands/commands';
 import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-shuffled-player-list';
+import { ENABLE_EXPORT_SHUFFLED_PLAYER_LIST } from './configs/game-settings';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -96,7 +97,9 @@ function tsMain() {
 		Quests.Create();
 
 		//Export statistics
-		ExportShuffledPlayerList.write();
+		if (ENABLE_EXPORT_SHUFFLED_PLAYER_LIST) {
+			ExportShuffledPlayerList.write();
+		}
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
