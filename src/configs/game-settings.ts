@@ -16,3 +16,6 @@ export const OVERTIME_MODIFIER: number = 1;
 
 //This represents the ratio of total cities to conquer to win
 export const CITIES_TO_WIN_WARNING_RATIO: number = 0.7;
+
+//
+export const ENABLE_USERNAMES_EXPORT: boolean = false;
