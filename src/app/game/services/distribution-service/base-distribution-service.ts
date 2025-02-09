@@ -34,10 +34,9 @@ export class BaseDistributionService implements DistributionService {
 
 	/**
 	 * Executes the distribution algorithm.
-	 * It will run the correct algorithm based on game settings.
 	 * @param callback - Function to call after distribution is complete.
 	 */
-	public runDistro(callback: () => void) {
+	public runDistro(callback: () => void): void {
 		this.distribute();
 		callback();
 	}

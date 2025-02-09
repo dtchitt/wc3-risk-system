@@ -1,10 +1,7 @@
 import { City } from 'src/app/city/city';
 import { Country } from 'src/app/country/country';
 import { CityToCountry } from 'src/app/country/country-map';
-import { PlayerManager } from 'src/app/player/player-manager';
-import { ActivePlayer } from 'src/app/player/types/active-player';
 import { ShuffleArray } from 'src/app/utils/utils';
-import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 import { DistributionService } from './distribution-service';
 import { debugPrint } from 'src/app/utils/debug-print';
 import { NameManager } from 'src/app/managers/names/name-manager';
@@ -14,7 +11,7 @@ import { LocalMessage } from 'src/app/utils/messages';
  * Handles the distribution of cities among active players.
  */
 export class CapitalDistributionService implements DistributionService {
-	private playerCapitalCities: Map<player, City>;
+	public playerCapitalCities: Map<player, City>;
 
 	/**
 	 * Initializes city pool and player list.
@@ -25,10 +22,9 @@ export class CapitalDistributionService implements DistributionService {
 
 	/**
 	 * Executes the distribution algorithm.
-	 * It will run the correct algorithm based on game settings.
 	 * @param callback - Function to call after distribution is complete.
 	 */
-	public runDistro(callback: () => void) {
+	public runDistro(callback: () => void): void {
 		this.distribute();
 		callback();
 	}
@@ -82,6 +78,8 @@ export class CapitalDistributionService implements DistributionService {
 
 				// Set the country spawn multiplier to 2
 				CityToCountry.get(capital).getSpawn().setMultiplier(2);
+
+				this.playerCapitalCities.set(player, capital);
 
 				// terminate the loop, a country has been found that can be assigned to the player
 				LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');

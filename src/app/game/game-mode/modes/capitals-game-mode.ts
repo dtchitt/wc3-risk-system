@@ -11,6 +11,7 @@ import { CapitalDistributionService } from '../../services/distribution-service/
 import { RegionToCity } from 'src/app/city/city-map';
 import { CityToCountry } from 'src/app/country/country-map';
 import { NameManager } from 'src/app/managers/names/name-manager';
+import { Wait } from 'src/app/utils/wait';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
@@ -21,6 +22,7 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+		debugPrint('City captured');
 		if (preOwner == owner) return;
 
 		if (this.playerCapitalCities.get(preOwner.getPlayer()) === city) {
@@ -35,6 +37,10 @@ export class CapitalsGameMode extends BaseGameMode {
 				'Sound\\Interface\\Victory.flac'
 			);
 			preOwner.status.set(PLAYER_STATUS.DEAD);
+
+			debugPrint('Downgrading capital to city');
+			IssueImmediateOrderById(city.barrack.unit, FourCC('h000'));
+			debugPrint('Downgraded capital to city');
 
 			// Reset the country spawn multiplier to 1
 			CityToCountry.get(city).getSpawn().setMultiplier(1);
@@ -118,6 +124,17 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		debugPrint('Starting Capitals Game Mode');
 		// Initialize the player capital cities map with empty capitals
+
+		if (this.playerCapitalCities?.size > 0) {
+			debugPrint('Resetting capitals');
+			this.playerCapitalCities.forEach((city, player) => {
+				debugPrint(`Downgrading capital for ${NameManager.getInstance().getDisplayName(player)}`);
+				IssueImmediateOrderById(city.barrack.unit, FourCC('h000'));
+			});
+		}
+
+		await Wait.forSeconds(2);
+
 		this.playerCapitalCities = new Map();
 		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
 		players.forEach((player) => {
@@ -129,7 +146,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 5;
+			let duration: number = 30;
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
@@ -143,6 +160,7 @@ export class CapitalsGameMode extends BaseGameMode {
 					EnableDragSelect(true, true);
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 					this.capitalPickPhase = false;
+
 					super.onStartMatch();
 				}
 				duration--;
@@ -153,9 +171,10 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	// // Ensure that all players without capitals get assigned a random capital city.
-	override onDistributeBases(): void {
+	override async onDistributeBases(): Promise<void> {
 		debugPrint('Distributing capitals');
-		new CapitalDistributionService(this.playerCapitalCities).runDistro(() => {
+		const capitalDistroService = new CapitalDistributionService(this.playerCapitalCities);
+		capitalDistroService.runDistro(() => {
 			RegionToCity.forEach((city) => {
 				city.guard.reposition();
 				//Prevent guards from moving and update unit counts
@@ -168,5 +187,15 @@ export class CapitalsGameMode extends BaseGameMode {
 				SetUnitInvulnerable(city.guard.unit, false);
 			});
 		});
+
+		// Use the capital distribution service to also get the randomly assigned player capital cities
+		this.playerCapitalCities = new Map(capitalDistroService.playerCapitalCities);
+
+		debugPrint('Upgrading cities to capitals');
+		this.playerCapitalCities.forEach((city, player) => {
+			debugPrint(`Upgrading city to capital for ${NameManager.getInstance().getDisplayName(player)}`);
+			IssueImmediateOrderById(city.barrack.unit, FourCC('h005'));
+		});
+		debugPrint('Finished upgrading cities to capitals');
 	}
 }

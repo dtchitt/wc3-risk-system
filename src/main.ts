@@ -31,6 +31,7 @@ import { EventEmitter } from './app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 import { CitySelectedEvent } from './app/triggers/city-selected-event';
 import { CityDeselectedEvent } from './app/triggers/city-deselected-event';
+import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -92,7 +93,7 @@ function tsMain() {
 		LeaveRegionEvent();
 		UnitDeathEvent();
 		UnitTrainedEvent();
-		//UnitUpgradeEvent();
+		UnitUpgradeEvent();
 		OwnershipChangeEvent();
 		PlayerLeaveEvent();
 		SpellEffectEvent();
