@@ -47,6 +47,9 @@ export class CapitalDistributionService implements DistributionService {
 				debugPrint('Player named ' + NameManager.getInstance().getDisplayName(player) + ' already has a capital');
 				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(city).getName()}.`, 'Sound\\Interface\\Error.flac');
 
+				city.setOwner(player);
+				SetUnitOwner(city.guard.unit, player, true);
+
 				// Set the country spawn multiplier to 2
 				CityToCountry.get(city).getSpawn().setMultiplier(2);
 
