@@ -21,4 +21,4 @@ export const CITIES_TO_WIN_WARNING_RATIO: number = 0.7;
 export const ENABLE_EXPORT_SHUFFLED_PLAYER_LIST: boolean = false;
 
 //This represents whether game settings should be exported
-export const ENABLE_EXPORT_GAME_SETTINGS: boolean = true;
+export const ENABLE_EXPORT_GAME_SETTINGS: boolean = false;
