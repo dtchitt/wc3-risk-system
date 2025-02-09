@@ -154,6 +154,11 @@ export class CapitalsGameMode extends BaseGameMode {
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = 30;
 			debugPrint('Starting capital pick countdown');
+
+			// Prepare the countdown message
+			CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
+			BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
+
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
