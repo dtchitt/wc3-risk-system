@@ -1,3 +1,4 @@
+import { ENABLE_EXPORT_END_GAME_SCORE } from 'src/configs/game-settings';
 import { NameManager } from '../managers/names/name-manager';
 import { ExportEndGameScore } from '../utils/export-statistics/export-end-game-score';
 import { ComputeRatio } from '../utils/utils';
@@ -88,6 +89,8 @@ export class StatisticsController {
 			};
 		});
 
-		ExportEndGameScore.write(data);
+		if (ENABLE_EXPORT_END_GAME_SCORE) {
+			ExportEndGameScore.write(data);
+		}
 	}
 }
