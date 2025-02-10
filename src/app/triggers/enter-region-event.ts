@@ -1,6 +1,6 @@
 import { CityRegionSize } from 'src/configs/city-settings';
 import { City } from '../city/city';
-import { RegionToCity, UnitToCity } from '../city/city-map';
+import { HandleToCity } from '../city/handle-to-city';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { GetUnitsInRangeByAllegiance } from '../utils/guard-filters';
 import { CompareUnitByValue } from '../utils/unit-comparisons';
@@ -14,7 +14,7 @@ export function EnterRegionEvent() {
 		Condition(() => {
 			if (IsUnitType(GetTriggerUnit(), UNIT_TYPE.TRANSPORT)) return false;
 
-			const city: City = RegionToCity.get(GetTriggeringRegion());
+			const city: City = HandleToCity.get(GetTriggeringRegion());
 
 			//Validate current guard
 			if (IsUnitInRegion(GetTriggeringRegion(), city.getGuard().getUnit()) && city.isValidGuard(city.getGuard().getUnit())) {
@@ -51,9 +51,9 @@ export function EnterRegionEvent() {
 				city.setOwner(GetOwningPlayer(guardChoice));
 			}
 
-			UnitToCity.delete(city.getGuard().getUnit());
+			HandleToCity.delete(city.getGuard().getUnit());
 			city.getGuard().replace(guardChoice);
-			UnitToCity.set(guardChoice, city);
+			HandleToCity.set(guardChoice, city);
 			DestroyGroup(g);
 			g = null;
 			guardChoice = null;

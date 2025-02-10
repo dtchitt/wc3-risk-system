@@ -1,4 +1,4 @@
-import { Resetable } from 'src/app/interfaces/resetable';
+import { Resetable } from '../interfaces';
 
 export interface Bonus extends Resetable {
 	add(val: number): void;

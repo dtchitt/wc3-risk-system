@@ -1,4 +1,4 @@
-import { Resetable } from 'src/app/interfaces/resetable';
+import { Resetable } from 'src/app/interfaces';
 import { Cities } from '../data/cities';
 import { Gold } from '../data/gold';
 import { Income } from '../data/income';

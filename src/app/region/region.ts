@@ -1,6 +1,6 @@
 import { Country } from '../country/country';
+import { Resetable } from '../interfaces';
 import { Ownable } from '../interfaces/ownable';
-import { Resetable } from '../interfaces/resetable';
 import { NEUTRAL_HOSTILE } from '../utils/utils';
 
 export class Region implements Resetable, Ownable {

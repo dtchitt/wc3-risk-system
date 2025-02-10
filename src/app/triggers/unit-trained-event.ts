@@ -1,4 +1,4 @@
-import { UnitToCity } from '../city/city-map';
+import { HandleToCity } from '../city/handle-to-city';
 import { GamePlayer } from '../entity/player/game-player';
 import { PlayerManager } from '../entity/player/player-manager';
 import { UNIT_TYPE } from '../utils/unit-types';
@@ -11,7 +11,7 @@ export function UnitTrainedEvent() {
 		Condition(() => {
 			const trainedUnit = GetTrainedUnit();
 
-			UnitToCity.get(GetTriggerUnit()).onUnitTrain(trainedUnit);
+			HandleToCity.get(GetTriggerUnit()).onUnitTrain(trainedUnit);
 
 			const player: GamePlayer = PlayerManager.getInstance().getPlayers().get(GetOwningPlayer(trainedUnit));
 

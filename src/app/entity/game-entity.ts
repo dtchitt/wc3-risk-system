@@ -1,4 +1,4 @@
-import { Resetable } from '../interfaces/resetable';
+import { Resetable } from '../interfaces';
 import { EntityActions } from './entity-actions';
 import { EntityData } from './entity-data';
 

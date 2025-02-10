@@ -1,5 +1,5 @@
 import { City } from '../city/city';
-import { RegionToCity, UnitToCity } from '../city/city-map';
+import { HandleToCity } from '../city/handle-to-city';
 import { UNIT_ID } from '../../configs/unit-id';
 import { UNIT_TYPE } from '../utils/unit-types';
 import { CityRegionSize } from 'src/configs/city-settings';
@@ -14,7 +14,7 @@ export function LeaveRegionEvent() {
 		Condition(() => {
 			if (!IsUnitType(GetTriggerUnit(), UNIT_TYPE.GUARD)) return false;
 
-			const city: City = RegionToCity.get(GetTriggeringRegion());
+			const city: City = HandleToCity.get(GetTriggeringRegion());
 			let g: group = CreateGroup();
 			let guardChoice: unit = city.getGuard().getUnit();
 
@@ -33,9 +33,9 @@ export function LeaveRegionEvent() {
 				});
 			}
 
-			UnitToCity.delete(city.getGuard().getUnit());
+			HandleToCity.delete(city.getGuard().getUnit());
 			city.getGuard().replace(guardChoice);
-			UnitToCity.set(guardChoice, city);
+			HandleToCity.set(guardChoice, city);
 			DestroyGroup(g);
 			g = null;
 			guardChoice = null;
