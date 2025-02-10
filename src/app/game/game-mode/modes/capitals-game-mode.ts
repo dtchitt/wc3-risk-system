@@ -41,7 +41,11 @@ export class CapitalsGameMode extends BaseGameMode {
 			preOwner.status.set(PLAYER_STATUS.DEAD);
 
 			debugPrint('Downgrading capital to city');
-			IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CITY);
+
+			if (GetUnitTypeId(city.barrack.unit) == UNIT_ID.CAPITAL) {
+				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CONQUERED_CAPITAL);
+			}
+
 			debugPrint('Downgraded capital to city');
 
 			// Reset the country spawn multiplier to 1
@@ -112,11 +116,11 @@ export class CapitalsGameMode extends BaseGameMode {
 		// Initialize the player capital cities map with empty capitals
 		debugPrint('Resetting capitals');
 		this.capitals?.forEach((city, player) => {
-			if (GetUnitTypeId(city?.barrack.unit) == FourCC('h005')) {
-				debugPrint(`Downgrading capital for ${NameManager.getInstance().getDisplayName(player)}`);
+			if (city == null) return;
+
+			const unitTypeId = GetUnitTypeId(city.barrack.unit);
+			if (unitTypeId == UNIT_ID.CAPITAL || unitTypeId == UNIT_ID.CONQUERED_CAPITAL) {
 				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CITY);
-			} else {
-				debugPrint(`Capital is already downgraded for ${NameManager.getInstance().getDisplayName(player)}`);
 			}
 		});
 
@@ -196,7 +200,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		debugPrint('Upgrading cities to capitals');
 		this.capitals.forEach((city, player) => {
 			debugPrint(`Upgrading city to capital for ${NameManager.getInstance().getDisplayName(player)}`);
-			IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CONQUERED_CAPITAL);
+			IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CAPITAL);
 		});
 		debugPrint('Finished upgrading cities to capitals');
 	}
