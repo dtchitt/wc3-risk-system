@@ -81,7 +81,7 @@ export class CapitalsGameMode extends BaseGameMode {
 			return;
 		}
 
-		if (cities.find((x) => x.getOwner() != NEUTRAL_HOSTILE) !== undefined) {
+		if (cities.find((x) => x.getOwner() != NEUTRAL_HOSTILE && x.getOwner() != player) !== undefined) {
 			LocalMessage(
 				player,
 				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
@@ -89,6 +89,8 @@ export class CapitalsGameMode extends BaseGameMode {
 			);
 			return;
 		}
+
+		this.playerCapitalSelections.get(player)?.reset();
 
 		(city as LandCity).setCapital();
 
@@ -98,24 +100,6 @@ export class CapitalsGameMode extends BaseGameMode {
 		this.playerCapitalSelections.set(player, city);
 
 		await super.onCitySelected(city, player);
-	}
-
-	async onCityDeselected(city: City, player: player): Promise<void> {
-		debugPrint(`City deselected`);
-
-		if (!this.capitalPickPhase) return;
-		if (city.getOwner() !== player) return;
-
-		if (city.isPort()) {
-			LocalMessage(player, `Capital can not be a port!\nPlease choose another city for your capital.`, 'Sound\\Interface\\Error.flac');
-			return;
-		}
-
-		city.reset();
-
-		this.playerCapitalSelections.set(player, null);
-
-		await super.onCityDeselected(city, player);
 	}
 
 	async onStartMatch(): Promise<void> {
