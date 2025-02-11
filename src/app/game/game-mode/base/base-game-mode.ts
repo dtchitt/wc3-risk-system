@@ -44,7 +44,7 @@ import { TreeManager } from '../../services/tree-service';
 import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
 import { debugPrint } from 'src/app/utils/debug-print';
 import { RegionToCity } from 'src/app/city/city-map';
-import { BaseDistributionService } from '../../services/distribution-service/base-distribution-service';
+import { StandardDistributionService } from '../../services/distribution-service/standard-distribution-service';
 
 export abstract class BaseGameMode implements GameMode {
 	private _statsController: StatisticsController;
@@ -376,7 +376,7 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onDistributeBases(): void {
-		new BaseDistributionService().runDistro(() => {
+		new StandardDistributionService().runDistro(() => {
 			RegionToCity.forEach((city) => {
 				city.guard.reposition();
 				//Prevent guards from moving and update unit counts
