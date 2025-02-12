@@ -55,15 +55,15 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager = ScoreboardManager.getInstance();
 	}
 
-	async onPreMatch(): Promise<void> {
+	onPreMatch(): void {
 		debugPrint(EVENT_ON_PRE_MATCH);
 	}
 
-	async onInProgress(): Promise<void> {
+	onInProgress(): void {
 		debugPrint(EVENT_ON_IN_PROGRESS);
 	}
 
-	async onPostMatch(): Promise<void> {
+	onPostMatch(): void {
 		debugPrint(EVENT_ON_POST_MATCH);
 
 		MatchData.matchState = 'postMatch';
@@ -157,7 +157,7 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerAlive(player: ActivePlayer): Promise<void> {
+	onPlayerAlive(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_ALIVE);
 		player.status.status = PLAYER_STATUS.ALIVE;
 		player.trackedData.income.income = STARTING_INCOME;
@@ -169,7 +169,7 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerDead(player: ActivePlayer): Promise<void> {
+	onPlayerDead(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_DEAD);
 
 		player.status.status = PLAYER_STATUS.DEAD;
@@ -189,7 +189,7 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerNomad(player: ActivePlayer): Promise<void> {
+	onPlayerNomad(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_NOMAD);
 		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), PLAYER_STATUS.NOMAD);
 
@@ -243,7 +243,7 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerLeft(player: ActivePlayer): Promise<void> {
+	onPlayerLeft(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_LEFT);
 
 		if (player.status.isDead() || player.status.isSTFU()) {
@@ -263,7 +263,7 @@ export abstract class BaseGameMode implements GameMode {
 		// MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
 	}
 
-	async onPlayerSTFU(player: ActivePlayer): Promise<void> {
+	onPlayerSTFU(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_STFU);
 
 		const oldStatus = player.status.status;
@@ -293,7 +293,7 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onPlayerForfeit(player: ActivePlayer): Promise<void> {
+	onPlayerForfeit(player: ActivePlayer): void {
 		debugPrint(EVENT_ON_PLAYER_FORFEIT);
 		const playerStatus = PlayerManager.getInstance().getPlayerStatus(GetTriggerPlayer());
 		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
@@ -302,20 +302,20 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
 		debugPrint(EVENT_ON_CITY_CAPTURE);
 		this._scoreboardManager.updatePartial();
 		this._scoreboardManager.updateScoreboardTitle();
 	}
 
-	async onUnitKilled(killingUnit: unit, dyingUnit: unit): Promise<void> {
+	onUnitKilled(killingUnit: unit, dyingUnit: unit): void {
 		debugPrint(EVENT_ON_UNIT_KILLED);
 		this._scoreboardManager.updatePartial();
 	}
 
-	async onCitySelected(city: City, player: player): Promise<void> {}
+	onCitySelected(city: City, player: player): void {}
 
-	async onCityDeselected(city: City, player: player): Promise<void> {}
+	onCityDeselected(city: City, player: player): void {}
 
 	async prepareMatch(): Promise<void> {
 		debugPrint('Preparing match...');
@@ -400,19 +400,20 @@ export abstract class BaseGameMode implements GameMode {
 		if (MatchData.matchCount == 1) {
 		} else {
 			print('Removing units...');
-			await removeUnits();
+			removeUnits();
 			await Wait.forSeconds(1);
 			print('Resuming units...');
-			await resumingUnits();
+			resumingUnits();
 			await Wait.forSeconds(1);
-			print('Shuffling player identities...');
-			ShufflePlayerColorWithColoredName();
+			//TODO why shuffle player color and names? rematch should only happen in promode in which case we dont want this
+			//print('Shuffling player identities...');
+			//ShufflePlayerColorWithColoredName();
 			await Wait.forSeconds(1);
 			print('Resetting countries...');
-			await resetCountries();
+			resetCountries();
 			await Wait.forSeconds(1);
 			print('Resetting trees...');
-			await TreeManager.getInstance().reset();
+			TreeManager.getInstance().reset();
 			await Wait.forSeconds(1);
 		}
 

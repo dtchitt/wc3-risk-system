@@ -20,10 +20,10 @@ export class EventEmitter {
 		this.events.get(event)?.push(handler);
 	}
 
-	public async emit(event: string, ...args: any[]): Promise<void> {
+	public emit(event: string, ...args: any[]): void {
 		const handlers = this.events.get(event) || [];
 		for (const handler of handlers) {
-			await handler(...args);
+			handler(...args);
 		}
 	}
 }

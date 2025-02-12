@@ -23,7 +23,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		super.onEndTurn(turn);
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
+	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
 		debugPrint('City captured');
 		if (preOwner == owner) return;
 
@@ -52,10 +52,10 @@ export class CapitalsGameMode extends BaseGameMode {
 			CityToCountry.get(city).getSpawn().setMultiplier(1);
 		}
 
-		await super.onCityCapture(city, preOwner, owner);
+		super.onCityCapture(city, preOwner, owner);
 	}
 
-	async onCitySelected(city: City, player: player): Promise<void> {
+	onCitySelected(city: City, player: player): void {
 		debugPrint(`City selected`);
 
 		if (!this.capitalPickPhase) return;
@@ -104,7 +104,7 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		this.playerCapitalSelections.set(player, city);
 
-		await super.onCitySelected(city, player);
+		super.onCitySelected(city, player);
 	}
 
 	async onStartMatch(): Promise<void> {
@@ -177,7 +177,7 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	// // Ensure that all players without capitals get assigned a random capital city.
-	override async onDistributeBases(): Promise<void> {
+	override onDistributeBases(): void {
 		debugPrint('Distributing capitals');
 		const capitalDistroService = new CapitalDistributionService(this.playerCapitalSelections);
 		capitalDistroService.runDistro(() => {
