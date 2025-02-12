@@ -5,6 +5,7 @@ import { SettingsContext } from 'src/app/settings/settings-context';
 import { PLAYER_COLORS } from 'src/app/utils/player-colors';
 import { ShuffleArray } from 'src/app/utils/utils';
 
+//TODO Decide if we actually need this, the only use case would be if we let non promode games restart, but that should never really happen because people are not sitting around and waiting.
 export function ShufflePlayerColorWithColoredName(): void {
 	const activePlayers: Map<player, ActivePlayer> = PlayerManager.getInstance().players;
 	const nameManager: NameManager = NameManager.getInstance();

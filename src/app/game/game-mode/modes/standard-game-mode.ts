@@ -7,7 +7,7 @@ export class StandardGameMode extends BaseGameMode {
 		super.onEndTurn(turn);
 	}
 
-	async onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): Promise<void> {
-		await super.onCityCapture(city, preOwner, owner);
+	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
+		super.onCityCapture(city, preOwner, owner);
 	}
 }
