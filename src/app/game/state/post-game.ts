@@ -47,18 +47,18 @@ export class PostGame implements GameState {
 		if (!this.isOver) return;
 
 		print('Removing units...');
-		await this.removeUnits();
+		this.removeUnits();
 		await Wait.forSeconds(1);
 		print('Resuming units...');
-		await this.resumingUnits();
+		this.resumingUnits();
 		await Wait.forSeconds(1);
 		print('Resetting countries...');
-		await this.resetCountries();
+		this.resetCountries();
 		await Wait.forSeconds(1);
 		// print('Resetting regions...');
 		// await this.resetRegions();
 		print('Resetting trees...');
-		await TreeManager.getInstance().reset();
+		TreeManager.getInstance().reset();
 		print('Resetting game data...');
 
 		VictoryManager.getInstance().reset();
@@ -87,72 +87,58 @@ export class PostGame implements GameState {
 		this.manager.fastRestart();
 	}
 
-	private resumingUnits(): Promise<void> {
-		return new Promise((resolve) => {
-			for (let i = 0; i < PLAYER_SLOTS; i++) {
-				const player = Player(i);
+	private resumingUnits(): void {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player = Player(i);
 
-				const group: group = CreateGroup();
-				GroupEnumUnitsOfPlayer(
-					group,
-					player,
-					Filter(() => {
-						const unit: unit = GetFilterUnit();
-						if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
-							PauseUnit(unit, false);
-						}
-					})
-				);
+			const group: group = CreateGroup();
+			GroupEnumUnitsOfPlayer(
+				group,
+				player,
+				Filter(() => {
+					const unit: unit = GetFilterUnit();
+					if (IsUnitType(unit, UNIT_TYPE.BUILDING)) {
+						PauseUnit(unit, false);
+					}
+				})
+			);
 
-				GroupClear(group);
-				DestroyGroup(group);
-			}
+			GroupClear(group);
+			DestroyGroup(group);
+		}
+	}
 
-			resolve();
+	private removeUnits(): void {
+		for (let i = 0; i < PLAYER_SLOTS; i++) {
+			const player = Player(i);
+
+			const group: group = CreateGroup();
+			GroupEnumUnitsOfPlayer(
+				group,
+				player,
+				Filter(() => {
+					const unit: unit = GetFilterUnit();
+
+					if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
+						RemoveUnit(unit);
+					}
+				})
+			);
+
+			GroupClear(group);
+			DestroyGroup(group);
+		}
+	}
+
+	private resetCountries(): void {
+		StringToCountry.forEach((country) => {
+			country.reset();
 		});
 	}
 
-	private removeUnits(): Promise<void> {
-		return new Promise((resolve) => {
-			for (let i = 0; i < PLAYER_SLOTS; i++) {
-				const player = Player(i);
-
-				const group: group = CreateGroup();
-				GroupEnumUnitsOfPlayer(
-					group,
-					player,
-					Filter(() => {
-						const unit: unit = GetFilterUnit();
-
-						if (!IsUnitType(unit, UNIT_TYPE.BUILDING) && !IsUnitType(unit, UNIT_TYPE.GUARD)) {
-							RemoveUnit(unit);
-						}
-					})
-				);
-
-				GroupClear(group);
-				DestroyGroup(group);
-			}
-
-			resolve();
-		});
-	}
-
-	private resetCountries(): Promise<void> {
-		return new Promise((resolve) => {
-			StringToCountry.forEach((country) => {
-				country.reset();
-			});
-			resolve();
-		});
-	}
-
-	private resetRegions(): Promise<void> {
-		return new Promise((resolve) => {
-			CountryToRegion.forEach((region) => {
-				region.reset();
-			});
-			resolve();
+	private resetRegions(): void {
+		CountryToRegion.forEach((region) => {
+			region.reset();
 		});
 	}
 }
