@@ -34,7 +34,6 @@ import { EventEmitter } from 'src/app/utils/events/event-emitter';
 import { TimedEventManager } from 'src/app/libs/timer/timed-event-manager';
 import { TimedEvent } from 'src/app/libs/timer/timed-event';
 import { PlayerManager } from 'src/app/player/player-manager';
-import { SlavePlayer } from 'src/app/player/types/slave-player';
 import { removeUnits } from './utillity/remove-units';
 import { Wait } from 'src/app/utils/wait';
 import { resumingUnits } from './utillity/resuming-units';
@@ -339,7 +338,6 @@ export abstract class BaseGameMode implements GameMode {
 			} else {
 				val.status.set(PLAYER_STATUS.LEFT);
 
-				PlayerManager.getInstance().slaves.set(val.getPlayer(), new SlavePlayer(val.getPlayer()));
 				PlayerManager.getInstance().players.delete(val.getPlayer());
 			}
 		});
