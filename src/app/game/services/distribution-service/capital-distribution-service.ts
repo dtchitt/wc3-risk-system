@@ -2,37 +2,30 @@ import { City } from 'src/app/city/city';
 import { Country } from 'src/app/country/country';
 import { CityToCountry } from 'src/app/country/country-map';
 import { ShuffleArray } from 'src/app/utils/utils';
-import { DistributionService } from './distribution-service';
 import { debugPrint } from 'src/app/utils/debug-print';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { LocalMessage } from 'src/app/utils/messages';
+import { StandardDistributionService } from './standard-distribution-service';
+import { PlayerManager } from 'src/app/player/player-manager';
 
 /**
  * Handles the distribution of cities among active players.
  */
-export class CapitalDistributionService implements DistributionService {
+export class CapitalDistributionService extends StandardDistributionService {
 	public playerCapitalCities: Map<player, City>;
 
 	/**
 	 * Initializes city pool and player list.
 	 */
 	constructor(playerCapitalCities: Map<player, City>) {
+		super();
 		this.playerCapitalCities = playerCapitalCities;
-	}
-
-	/**
-	 * Executes the distribution algorithm.
-	 * @param callback - Function to call after distribution is complete.
-	 */
-	public runDistro(callback: () => void): void {
-		this.distribute();
-		callback();
 	}
 
 	/**
 	 * Implements the distribution algorithm.
 	 */
-	public distribute() {
+	protected distribute() {
 		let playerCapitalCountries = new Map<player, Country>();
 
 		const countries = Array.from(CityToCountry.values());
@@ -76,6 +69,7 @@ export class CapitalDistributionService implements DistributionService {
 				ShuffleArray(cities);
 
 				const capital = cities[0];
+				// this.changeCityOwner(capital, PlayerManager.getInstance().players.get(player));
 				capital.setOwner(player);
 				SetUnitOwner(capital.guard.unit, player, true);
 
@@ -90,5 +84,9 @@ export class CapitalDistributionService implements DistributionService {
 				break;
 			}
 		});
+
+		const assignedCapitalCities = new Set(this.playerCapitalCities.values());
+		this.setCities(this.getCities().filter((city) => !assignedCapitalCities.has(city)));
+		super.distribute();
 	}
 }

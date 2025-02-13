@@ -6,13 +6,11 @@ import { ActivePlayer } from 'src/app/player/types/active-player';
 import { GetRandomElementFromArray } from 'src/app/utils/utils';
 import { DoublyLinkedList } from 'src/app/utils/doubly-linked-list';
 import { CITIES_PER_PLAYER_UPPER_BOUND } from 'src/configs/game-settings';
-import { debugPrint } from 'src/app/utils/debug-print';
-import { DistributionService } from './distribution-service';
 
 /**
  * Handles the distribution of cities among active players.
  */
-export class BaseDistributionService implements DistributionService {
+export class StandardDistributionService {
 	private citiesPerPlayerUpperBound: number = CITIES_PER_PLAYER_UPPER_BOUND;
 	private maxCitiesPerPlayer: number;
 	private cities: City[];
@@ -44,52 +42,13 @@ export class BaseDistributionService implements DistributionService {
 	/**
 	 * Implements the distribution algorithm.
 	 */
-	private distribute() {
+	protected distribute() {
 		try {
 			const neutralCities: City[] = [];
 			const numOfCities: number = this.cities.length;
 
 			for (let i = 0; i < numOfCities; i++) {
 				const city: City = GetRandomElementFromArray(this.cities);
-				const player: ActivePlayer = this.getValidPlayerForCity(city);
-
-				if (player) {
-					this.changeCityOwner(city, player);
-
-					if (!this.isPlayerFull(player)) {
-						this.players.addLast(player);
-					}
-				} else {
-					neutralCities.push(city);
-				}
-
-				if (this.players.length() == 0) break;
-			}
-
-			//TODO
-			//Here I will check if each player has this.maxCitiesPerPlayer
-			//It is safe to assume no player has more at this point
-			//I can check the neutral cities to see if a players who need one
-			//can take one, and do it if so. repeat the process until they are all full
-			//There is some RARE edge cases where the player cannot get any of the neutral cities.
-			//I should handle that as well
-		} catch (error) {
-			print('Error in StandardDistro' + error);
-		}
-	}
-
-	/**
-	 * Implements the standard distribution algorithm.
-	 */
-	private capitalsDistro() {
-		try {
-			const neutralCities: City[] = [];
-			const numOfCities: number = this.cities.length;
-
-			for (let i = 0; i < numOfCities; i++) {
-				const city: City = GetRandomElementFromArray(this.cities);
-				const country: Country = CityToCountry.get(city);
-				debugPrint(country.getCities().length.toString());
 				const player: ActivePlayer = this.getValidPlayerForCity(city);
 
 				if (player) {
@@ -161,7 +120,7 @@ export class BaseDistributionService implements DistributionService {
 	 * @param country - The country where the city is located.
 	 * @returns A boolean indicating if the city is valid for the player.
 	 */
-	private isCityValidForPlayer(player: ActivePlayer, country: Country) {
+	protected isCityValidForPlayer(player: ActivePlayer, country: Country) {
 		if (!player.trackedData.countries.has(country)) {
 			player.trackedData.countries.set(country, 0);
 		}
@@ -183,8 +142,16 @@ export class BaseDistributionService implements DistributionService {
 	 * @param city - The city for which the ownership is to be changed.
 	 * @param player - The new owner of the city.
 	 */
-	private changeCityOwner(city: City, player: ActivePlayer) {
+	protected changeCityOwner(city: City, player: ActivePlayer) {
 		city.setOwner(player.getPlayer());
 		SetUnitOwner(city.guard.unit, player.getPlayer(), true);
 	}
+
+	protected setCities = (cities: City[]): void => {
+		this.cities = cities;
+	};
+
+	protected getCities = (): City[] => {
+		return this.cities;
+	};
 }
