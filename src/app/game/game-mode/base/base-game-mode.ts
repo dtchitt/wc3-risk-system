@@ -37,7 +37,6 @@ import { PlayerManager } from 'src/app/player/player-manager';
 import { removeUnits } from './utillity/remove-units';
 import { Wait } from 'src/app/utils/wait';
 import { resumingUnits } from './utillity/resuming-units';
-import { ShufflePlayerColorWithColoredName } from './utillity/shuffle-player-color-with-colored-name';
 import { resetCountries } from './utillity/reset-countries';
 import { TreeManager } from '../../services/tree-service';
 import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
@@ -95,6 +94,7 @@ export abstract class BaseGameMode implements GameMode {
 	async onStartMatch(): Promise<void> {
 		await this.prepareMatch();
 		MatchData.matchState = 'preMatch';
+
 		await Wait.forSeconds(2);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
@@ -362,6 +362,9 @@ export abstract class BaseGameMode implements GameMode {
 		}
 
 		ScoreboardManager.getInstance().obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
+
+		VictoryManager.getInstance().updateAndGetGameState();
+		this._scoreboardManager.updateScoreboardTitle();
 
 		EnableSelect(false, false);
 		EnableDragSelect(false, false);

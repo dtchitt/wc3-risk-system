@@ -28,7 +28,6 @@ export class VictoryManager {
 		VictoryManager.CITIES_TO_WIN = Math.ceil(RegionToCity.size * CITIES_TO_WIN_RATIO);
 
 		VictoryManager.OVERTIME_ACTIVE = false;
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
 	}
 
 	public static getInstance(): VictoryManager {
