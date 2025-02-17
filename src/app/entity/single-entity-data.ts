@@ -1,6 +1,6 @@
 import { Country } from '../country/country';
-import { Bounty } from '../bonus/bounty';
-import { FightBonus } from '../bonus/fight-bonus';
+import { Bounty } from './data/bonus/bounty';
+import { FightBonus } from './data/bonus/fight-bonus';
 import { EntityData } from './entity-data';
 import { KillsDeaths } from './data/kills-death';
 import { EntityID } from './entity-id';

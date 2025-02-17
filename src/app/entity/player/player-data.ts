@@ -1,8 +1,8 @@
 import { Country } from 'src/app/country/country';
 import { PLAYER_SLOTS, NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { TRACKED_UNITS } from 'src/configs/tracked-units';
-import { Bounty } from '../../bonus/bounty';
-import { FightBonus } from '../../bonus/fight-bonus';
+import { Bounty } from '../data/bonus/bounty';
+import { FightBonus } from '../data/bonus/fight-bonus';
 import { Cities } from '../data/cities';
 import { Gold } from '../data/gold';
 import { Income } from '../data/income';

@@ -7,7 +7,7 @@ import { Country } from '../country';
 import { StringToCountry, CityToCountry } from '../country-map';
 import { SpawnerBuilder } from 'src/app/spawner/builder/spawner-builder';
 import { ISpawnerData } from 'src/app/spawner/builder/spawner-data.interface';
-import { DefaultSpawnType, SpawnTurnLimit } from 'src/configs/country-settings';
+import { DefaultSpawnType, SpawnLimitMultiplier } from 'src/configs/country-settings';
 
 export class CountryBuilder implements ICountryBuilder {
 	private name: string;
@@ -29,7 +29,7 @@ export class CountryBuilder implements ICountryBuilder {
 		const spawnsPerStep = Math.floor((this.cities.length + 1) / 2);
 		const spawnerData: ISpawnerData = {
 			spawnsPerStep: spawnsPerStep,
-			spawnsPerPlayer: spawnsPerStep * SpawnTurnLimit,
+			spawnsPerPlayer: spawnsPerStep * SpawnLimitMultiplier,
 			x: data.spawnerSettings.x,
 			y: data.spawnerSettings.y,
 			countryName: this.name,

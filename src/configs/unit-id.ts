@@ -27,5 +27,4 @@ export const UNIT_ID = {
 	//Special Units
 	CAMERA_LOCK_UNIT: FourCC('u051'),
 	DUMMY_CASTER: FourCC('u052'),
-	PLAYER_TOOLS: FourCC('H000'),
 };
