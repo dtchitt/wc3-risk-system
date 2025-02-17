@@ -1,4 +1,4 @@
-import { Resetable } from 'src/app/interfaces';
+import { Resetable } from 'src/app/interfaces/resettable';
 import { Spawner } from '../spawner';
 import { ISpawnerData } from './spawner-data.interface';
 

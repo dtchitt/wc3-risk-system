@@ -1,5 +1,5 @@
 import { City } from '../city/city';
-import { Resetable } from '../interfaces';
+import { Resetable } from '../interfaces/resettable';
 import { Spawner } from '../spawner/spawner';
 import { HexColors } from '../utils/hex-colors';
 import { LocalMessage } from '../utils/messages';

@@ -1,4 +1,5 @@
-import { Ownable, Resetable } from 'src/app/interfaces';
+import { Ownable } from 'src/app/interfaces/ownable';
+import { Resetable } from 'src/app/interfaces/resettable';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 
 export class Barrack implements Ownable, Resetable {

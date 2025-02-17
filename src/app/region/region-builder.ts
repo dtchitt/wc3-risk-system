@@ -1,5 +1,5 @@
 import { Country } from '../country/country';
-import { Resetable } from '../interfaces';
+import { Resetable } from '../interfaces/resettable';
 import { Region } from './region';
 
 export interface RegionBuilder extends Resetable {

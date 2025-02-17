@@ -1,7 +1,6 @@
 import { DefaultCityType, CityGuardXOffSet, CityGuardYOffSet, CityRegionSize } from 'src/configs/city-settings';
 import { DefaultGuardType, DefaultBarrackType } from 'src/configs/country-settings';
 import { UNIT_ID } from 'src/configs/unit-id';
-import { Resetable } from '../../interfaces';
 import { EnterRegionTrigger } from '../../triggers/enter-region-event';
 import { LeaveRegionTrigger } from '../../triggers/leave-region-event';
 import { UnitTrainedTrigger } from '../../triggers/unit-trained-event';
@@ -15,6 +14,7 @@ import { Barrack } from '../components/barrack';
 import { Guard } from '../components/guard';
 import { GuardFactory } from './guard-factory';
 import { HandleToCity } from '../handle-to-city';
+import { Resetable } from 'src/app/interfaces/resettable';
 
 export class CityBuilder implements ICityBuilder, Resetable {
 	private x: number;

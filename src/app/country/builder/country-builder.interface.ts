@@ -1,4 +1,4 @@
-import { Resetable } from 'src/app/interfaces';
+import { Resetable } from 'src/app/interfaces/resettable';
 import { Country } from '../country';
 import { ICountryData } from './country-data.interface';
 import { CityBuilder } from 'src/app/city/builder/city-builder';

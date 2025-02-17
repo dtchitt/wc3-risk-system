@@ -9,7 +9,7 @@ import { Income } from '../data/income';
 import { KillsDeaths } from '../data/kills-death';
 import { SingleEntityData } from '../single-entity-data';
 import { EntityID } from '../entity-id';
-import { Resetable } from 'src/app/interfaces';
+import { Resetable } from 'src/app/interfaces/resettable';
 
 export class PlayerData implements Resetable, SingleEntityData {
 	private income: Income;

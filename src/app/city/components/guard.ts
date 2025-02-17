@@ -1,9 +1,9 @@
-import { Resetable } from 'src/app/interfaces';
 import { UNIT_TYPE } from 'src/app/utils/unit-types';
 import { NEUTRAL_HOSTILE } from 'src/app/utils/utils';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { City } from '../city';
 import { HandleToCity } from '../handle-to-city';
+import { Resetable } from 'src/app/interfaces/resettable';
 
 export class Guard implements Resetable {
 	private unit: unit;
