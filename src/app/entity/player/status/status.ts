@@ -9,8 +9,8 @@ import { STFUStrategy } from './strategies/stfu-strategy';
 
 export class Status {
 	private player: GamePlayer;
-	private _status: string;
-	private _statusDuration: number;
+	private status: string;
+	private statusDuration: number;
 
 	private static readonly STRATEGY_MAP: Map<string, StatusStrategy> = new Map([
 		[PLAYER_STATUS.ALIVE, new AliveStrategy()],
@@ -36,38 +36,38 @@ export class Status {
 	}
 
 	public isAlive(): boolean {
-		return this._status == PLAYER_STATUS.ALIVE;
+		return this.status == PLAYER_STATUS.ALIVE;
 	}
 
 	public isDead(): boolean {
-		return this._status == PLAYER_STATUS.DEAD;
+		return this.status == PLAYER_STATUS.DEAD;
 	}
 
 	public isLeft(): boolean {
-		return this._status == PLAYER_STATUS.LEFT;
+		return this.status == PLAYER_STATUS.LEFT;
 	}
 
 	public isNomad(): boolean {
-		return this._status == PLAYER_STATUS.NOMAD;
+		return this.status == PLAYER_STATUS.NOMAD;
 	}
 
 	public isSTFU(): boolean {
-		return this._status == PLAYER_STATUS.STFU;
+		return this.status == PLAYER_STATUS.STFU;
 	}
 
-	public get status(): string {
-		return this._status;
+	public getStatus(): string {
+		return this.status;
 	}
 
-	public set status(value: string) {
-		this._status = value;
+	public setStatus(value: string) {
+		this.status = value;
 	}
 
-	public get statusDuration(): number {
-		return this._statusDuration;
+	public getStatusDuration(): number {
+		return this.statusDuration;
 	}
 
-	public set statusDuration(value: number) {
-		this._statusDuration = value;
+	public setStatusDuration(value: number) {
+		this.statusDuration = value;
 	}
 }
