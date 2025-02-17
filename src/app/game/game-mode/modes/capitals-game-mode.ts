@@ -56,8 +56,6 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	onCitySelected(city: City, player: player): void {
-		debugPrint(`City selected`);
-
 		if (!this.capitalPickPhase) return;
 		if (city.getOwner() === player) return;
 
@@ -166,7 +164,9 @@ export class CapitalsGameMode extends BaseGameMode {
 						city?.reset();
 					});
 
-					super.onStartMatch();
+					Wait.forSeconds(2).finally(() => {
+						super.onStartMatch();
+					});
 				}
 				duration--;
 			});
@@ -196,6 +196,15 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		// Use the capital distribution service to also get the randomly assigned player capital cities
 		this.capitals = new Map(capitalDistroService.playerCapitalCities);
+
+		// Set the country spawn multiplier to 2 for all countries with capitals
+		this.capitals.forEach((city, _) => {
+			CityToCountry.get(city).getSpawn().setMultiplier(2);
+		});
+
+		this.capitals.forEach((city, player) => {
+			PingMinimapLocForPlayer(player, city.barrack.location, 20);
+		});
 
 		debugPrint('Upgrading cities to capitals');
 		this.capitals.forEach((city, player) => {

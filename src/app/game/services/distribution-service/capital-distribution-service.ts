@@ -6,7 +6,6 @@ import { debugPrint } from 'src/app/utils/debug-print';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { LocalMessage } from 'src/app/utils/messages';
 import { StandardDistributionService } from './standard-distribution-service';
-import { PlayerManager } from 'src/app/player/player-manager';
 
 /**
  * Handles the distribution of cities among active players.
@@ -17,7 +16,7 @@ export class CapitalDistributionService extends StandardDistributionService {
 	/**
 	 * Initializes city pool and player list.
 	 */
-	constructor(playerCapitalCities: Map<player, City>) {
+	constructor(playerCapitalCities: Map<player, City> = new Map<player, City>()) {
 		super();
 		this.playerCapitalCities = playerCapitalCities;
 	}
@@ -42,9 +41,6 @@ export class CapitalDistributionService extends StandardDistributionService {
 
 				city.setOwner(player);
 				SetUnitOwner(city.guard.unit, player, true);
-
-				// Set the country spawn multiplier to 2
-				CityToCountry.get(city).getSpawn().setMultiplier(2);
 
 				return;
 			}
@@ -72,9 +68,6 @@ export class CapitalDistributionService extends StandardDistributionService {
 				// this.changeCityOwner(capital, PlayerManager.getInstance().players.get(player));
 				capital.setOwner(player);
 				SetUnitOwner(capital.guard.unit, player, true);
-
-				// Set the country spawn multiplier to 2
-				CityToCountry.get(capital).getSpawn().setMultiplier(2);
 
 				this.playerCapitalCities.set(player, capital);
 

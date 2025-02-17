@@ -120,7 +120,7 @@ export class StandardDistributionService {
 	 * @param country - The country where the city is located.
 	 * @returns A boolean indicating if the city is valid for the player.
 	 */
-	protected isCityValidForPlayer(player: ActivePlayer, country: Country) {
+	protected isCityValidForPlayer(player: ActivePlayer, country: Country): boolean {
 		if (!player.trackedData.countries.has(country)) {
 			player.trackedData.countries.set(country, 0);
 		}
