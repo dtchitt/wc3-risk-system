@@ -16,15 +16,10 @@ export class City implements Resetable, Ownable {
 
 	constructor(barrack: Barrack, guardFactory: GuardFactory, cop: unit, behavior: ICityBehavior) {
 		this.owner = NEUTRAL_HOSTILE;
-		print('debug7');
 		this.barrack = barrack;
-		print('debug8');
 		this.guard = guardFactory(this);
-		print('debug9');
 		this.cop = cop;
-		print('debug10');
 		this.behavior = behavior;
-		print('debug11');
 	}
 
 	public isValidGuard(unit: unit): boolean {
