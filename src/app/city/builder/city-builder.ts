@@ -30,39 +30,29 @@ export class CityBuilder implements ICityBuilder, Resetable {
 	}
 
 	public build(): City {
-		try {
-			const barrackUnit = CreateUnit(NEUTRAL_HOSTILE, DefaultBarrackType, this.x, this.y, 270);
-			const barrack = new Barrack(barrackUnit);
-			const offsetX = this.x - CityGuardXOffSet;
-			const offsetY = this.y - CityGuardYOffSet;
-			const cop = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.CONTROL_POINT, offsetX, offsetY, 270);
+		const barrackUnit = CreateUnit(NEUTRAL_HOSTILE, DefaultBarrackType, this.x, this.y, 270);
+		const barrack = new Barrack(barrackUnit);
+		const offsetX = this.x - CityGuardXOffSet;
+		const offsetY = this.y - CityGuardYOffSet;
+		const cop = CreateUnit(NEUTRAL_HOSTILE, UNIT_ID.CONTROL_POINT, offsetX, offsetY, 270);
 
-			SetUnitInvulnerable(cop, true);
+		SetUnitInvulnerable(cop, true);
 
-			const behavior = CityBehaviorRegistry.getBehavior(this.cityType);
-			const guardType = this.guardType;
+		const behavior = CityBehaviorRegistry.getBehavior(this.cityType);
+		const guardType = this.guardType;
 
-			const guardFactory: GuardFactory = (city: City): Guard => {
-				return new Guard(guardType, offsetX, offsetY, city);
-			};
+		const guardFactory: GuardFactory = (city: City): Guard => {
+			return new Guard(guardType, offsetX, offsetY, city);
+		};
 
-			print(`debug6 `);
-			const city = new City(barrack, guardFactory, cop, behavior);
-			print(`debug7 `);
-			HandleToCity.set(barrack.getUnit(), city);
-			print(`debug8 `);
-			HandleToCity.set(city.getGuard().getUnit(), city);
-			print(`debug9 `);
-			this.setRegion(city);
-			print(`debug10 `);
-			TriggerRegisterUnitEvent(UnitTrainedTrigger, barrack.getUnit(), EVENT_UNIT_TRAIN_FINISH);
-			print(`debug11 `);
-			city.setOwner(NEUTRAL_HOSTILE);
-			print(`debug12 `);
-			return city;
-		} catch (error) {
-			print(`err in city build ${error}`);
-		}
+		const city = new City(barrack, guardFactory, cop, behavior);
+		HandleToCity.set(barrack.getUnit(), city);
+		HandleToCity.set(city.getGuard().getUnit(), city);
+		this.setRegion(city);
+		TriggerRegisterUnitEvent(UnitTrainedTrigger, barrack.getUnit(), EVENT_UNIT_TRAIN_FINISH);
+		city.setOwner(NEUTRAL_HOSTILE);
+
+		return city;
 	}
 
 	public reset(): void {

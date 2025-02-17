@@ -15,40 +15,36 @@ export class CountryBuilder implements ICountryBuilder {
 	private spawn: Spawner;
 
 	public setData(data: ICountryData, cityBuilder: CityBuilder, spawnBuilder: SpawnerBuilder) {
-		try {
-			this.name = data.name;
+		this.name = data.name;
 
-			data.cities.forEach((cityData) => {
-				cityBuilder.setData(cityData);
+		data.cities.forEach((cityData) => {
+			cityBuilder.setData(cityData);
 
-				const city = cityBuilder.build();
+			const city = cityBuilder.build();
 
-				this.cities.push(city);
-				cityBuilder.reset();
-			});
+			this.cities.push(city);
+			cityBuilder.reset();
+		});
 
-			const spawnsPerStep = Math.floor((this.cities.length + 1) / 2);
-			const spawnerData: ISpawnerData = {
-				spawnsPerStep: spawnsPerStep,
-				spawnsPerPlayer: spawnsPerStep * SpawnTurnLimit,
-				x: data.spawnerSettings.x,
-				y: data.spawnerSettings.y,
-				countryName: this.name,
-				spawnTypeID: data.spawnerSettings.spawnTypeID || DefaultSpawnType,
-			};
+		const spawnsPerStep = Math.floor((this.cities.length + 1) / 2);
+		const spawnerData: ISpawnerData = {
+			spawnsPerStep: spawnsPerStep,
+			spawnsPerPlayer: spawnsPerStep * SpawnTurnLimit,
+			x: data.spawnerSettings.x,
+			y: data.spawnerSettings.y,
+			countryName: this.name,
+			spawnTypeID: data.spawnerSettings.spawnTypeID || DefaultSpawnType,
+		};
 
-			spawnBuilder.setData(spawnerData);
-			this.spawn = spawnBuilder.build();
-			spawnBuilder.reset();
-		} catch (error) {
-			print(error);
-		}
+		spawnBuilder.setData(spawnerData);
+		this.spawn = spawnBuilder.build();
+		spawnBuilder.reset();
 	}
 
 	public build(): Country {
 		try {
 			if (!this.name || this.cities.length === 0 || !this.spawn) {
-				// print('Country builder is missing required components.');
+				throw new Error("Country builder is missing required components.'");
 			}
 
 			const country = new Country(this.name, this.cities, this.spawn);

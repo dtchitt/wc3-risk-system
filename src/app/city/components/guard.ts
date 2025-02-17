@@ -42,7 +42,10 @@ export class Guard implements Resetable {
 			this.remove();
 		}
 
-		HandleToCity.delete(this.unit);
+		if (this.unit && HandleToCity.has(this.unit)) {
+			HandleToCity.delete(this.unit);
+		}
+
 		this.unit = guard;
 		HandleToCity.set(this.unit, this.city);
 		UnitAddType(this.unit, UNIT_TYPE.GUARD);
