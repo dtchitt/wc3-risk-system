@@ -40,7 +40,7 @@ export class StandardDistributionService {
 	}
 
 	/**
-	 * Implements the distribution algorithm.
+	 * Implements the distribution algorithm. You may extend this class and override this method for custom behavior for your own game mode.
 	 */
 	protected distribute() {
 		try {

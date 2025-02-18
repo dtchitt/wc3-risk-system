@@ -13,6 +13,7 @@ import { CityToCountry } from 'src/app/country/country-map';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { Wait } from 'src/app/utils/wait';
 import { UNIT_ID } from 'src/configs/unit-id';
+import { CAPITALS_SELECTION_PHASE } from 'src/configs/game-settings';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
@@ -139,7 +140,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
-			let duration: number = 30;
+			let duration: number = CAPITALS_SELECTION_PHASE;
 			debugPrint('Starting capital pick countdown');
 
 			// Prepare the countdown message
@@ -160,7 +161,7 @@ export class CapitalsGameMode extends BaseGameMode {
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 					this.capitalPickPhase = false;
 
-					this.playerCapitalSelections.forEach((city, player) => {
+					this.playerCapitalSelections.forEach((city, _) => {
 						city?.reset();
 					});
 
@@ -195,7 +196,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		});
 
 		// Use the capital distribution service to also get the randomly assigned player capital cities
-		this.capitals = new Map(capitalDistroService.playerCapitalCities);
+		this.capitals = new Map(capitalDistroService.selectedPlayerCapitalCities);
 
 		// Set the country spawn multiplier to 2 for all countries with capitals
 		this.capitals.forEach((city, _) => {

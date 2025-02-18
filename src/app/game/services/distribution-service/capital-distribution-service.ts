@@ -6,19 +6,20 @@ import { debugPrint } from 'src/app/utils/debug-print';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { LocalMessage } from 'src/app/utils/messages';
 import { StandardDistributionService } from './standard-distribution-service';
+import { PlayerManager } from 'src/app/player/player-manager';
 
 /**
  * Handles the distribution of cities among active players.
  */
 export class CapitalDistributionService extends StandardDistributionService {
-	public playerCapitalCities: Map<player, City>;
+	public selectedPlayerCapitalCities: Map<player, City>;
 
 	/**
 	 * Initializes city pool and player list.
 	 */
 	constructor(playerCapitalCities: Map<player, City> = new Map<player, City>()) {
 		super();
-		this.playerCapitalCities = playerCapitalCities;
+		this.selectedPlayerCapitalCities = playerCapitalCities;
 	}
 
 	/**
@@ -30,55 +31,51 @@ export class CapitalDistributionService extends StandardDistributionService {
 		const countries = Array.from(CityToCountry.values());
 
 		const playerCountries = new Set(playerCapitalCountries.values());
-		let filteredCountries = countries.filter((country) => !playerCountries.has(country));
+		let filteredCountries = Array.from(countries).filter((country) => !playerCountries.has(country));
 
 		ShuffleArray(filteredCountries);
 
-		this.playerCapitalCities.forEach((city, player) => {
-			if (city != null) {
-				debugPrint('Player named ' + NameManager.getInstance().getDisplayName(player) + ' already has a capital');
-				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(city).getName()}.`, 'Sound\\Interface\\Error.flac');
+		PlayerManager.getInstance().players.forEach((activePlayer) => {
+			const selectedCapital = this.selectedPlayerCapitalCities.get(activePlayer.getPlayer());
+			const player = activePlayer.getPlayer();
 
-				city.setOwner(player);
-				SetUnitOwner(city.guard.unit, player, true);
+			// checks if a player has selected a starting capital
+			if (selectedCapital) {
+				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(selectedCapital).getName()}.`, 'Sound\\Interface\\Error.flac');
+				this.changeCityOwner(selectedCapital, activePlayer);
+				this.isCityValidForPlayer(activePlayer, CityToCountry.get(selectedCapital));
+			} else {
+				// if a player has not selected a starting capital
+				while (true) {
+					// get the first country that has not been picked yet - ensure this country has more than 1 city
+					// shuffle the cities and pick the first one
+					const country = filteredCountries.pop();
+					let cities = country.getCities();
+					if (cities.length <= 1) {
+						continue;
+					}
 
-				return;
-			}
+					cities = cities.filter((city) => !city.isPort());
 
-			debugPrint('Player named ' + NameManager.getInstance().getDisplayName(player) + ' does not have a capital');
+					// pop the first element from the remaining country list
+					// assign the first city to the player
+					ShuffleArray(cities);
 
-			while (true) {
-				debugPrint('Assigning capital to ' + NameManager.getInstance().getDisplayName(player));
+					const capital = cities[0];
 
-				// get the first country that has not been picked yet - ensure this country has more than 1 city
-				// shuffle the cities and pick the first one
-				const country = filteredCountries.pop();
-				let cities = country.getCities();
-				if (cities.length <= 1) {
-					continue;
+					this.changeCityOwner(capital, activePlayer);
+					this.selectedPlayerCapitalCities.set(player, capital);
+					this.isCityValidForPlayer(activePlayer, country);
+
+					// terminate the loop, a country has been found that can be assigned to the player
+					LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');
+
+					break;
 				}
-
-				cities = cities.filter((city) => !city.isPort());
-
-				// pop the first element from the remaining country list
-				// assign the first city to the player
-				ShuffleArray(cities);
-
-				const capital = cities[0];
-				// this.changeCityOwner(capital, PlayerManager.getInstance().players.get(player));
-				capital.setOwner(player);
-				SetUnitOwner(capital.guard.unit, player, true);
-
-				this.playerCapitalCities.set(player, capital);
-
-				// terminate the loop, a country has been found that can be assigned to the player
-				LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');
-
-				break;
 			}
 		});
 
-		const assignedCapitalCities = new Set(this.playerCapitalCities.values());
+		const assignedCapitalCities = new Set(this.selectedPlayerCapitalCities.values());
 		this.setCities(this.getCities().filter((city) => !assignedCapitalCities.has(city)));
 		super.distribute();
 	}
