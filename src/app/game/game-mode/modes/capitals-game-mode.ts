@@ -114,7 +114,7 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		// Initialize the player capital cities map with empty capitals
 		debugPrint('Resetting capitals');
-		this.capitals?.forEach((city, player) => {
+		this.capitals?.forEach((city, _) => {
 			if (city == null) return;
 
 			const unitTypeId = GetUnitTypeId(city.barrack.unit);
@@ -161,11 +161,10 @@ export class CapitalsGameMode extends BaseGameMode {
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 					this.capitalPickPhase = false;
 
-					this.playerCapitalSelections.forEach((city, _) => {
-						city?.reset();
-					});
-
 					Wait.forSeconds(2).finally(() => {
+						this.playerCapitalSelections.forEach((city, _) => {
+							city?.reset();
+						});
 						super.onStartMatch();
 					});
 				}

@@ -2,8 +2,6 @@ import { City } from 'src/app/city/city';
 import { Country } from 'src/app/country/country';
 import { CityToCountry } from 'src/app/country/country-map';
 import { ShuffleArray } from 'src/app/utils/utils';
-import { debugPrint } from 'src/app/utils/debug-print';
-import { NameManager } from 'src/app/managers/names/name-manager';
 import { LocalMessage } from 'src/app/utils/messages';
 import { StandardDistributionService } from './standard-distribution-service';
 import { PlayerManager } from 'src/app/player/player-manager';
@@ -41,7 +39,7 @@ export class CapitalDistributionService extends StandardDistributionService {
 
 			// checks if a player has selected a starting capital
 			if (selectedCapital) {
-				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(selectedCapital).getName()}.`, 'Sound\\Interface\\Error.flac');
+				LocalMessage(player, `Your chosen capital is in ${CityToCountry.get(selectedCapital).getName()}.`, '', 5);
 				this.changeCityOwner(selectedCapital, activePlayer);
 				this.isCityValidForPlayer(activePlayer, CityToCountry.get(selectedCapital));
 			} else {
@@ -68,7 +66,8 @@ export class CapitalDistributionService extends StandardDistributionService {
 					this.isCityValidForPlayer(activePlayer, country);
 
 					// terminate the loop, a country has been found that can be assigned to the player
-					LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, 'Sound\\Interface\\Error.flac');
+					LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, '', 5);
+					SetCameraPositionLocForPlayer(player, capital.barrack.location);
 
 					break;
 				}
