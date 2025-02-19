@@ -135,6 +135,8 @@ function tsMain() {
 			GameLoop.getInstance();
 			ModeSelection.getInstance();
 
+			Quests.AddShuffledPlayerListQuest();
+
 			await Wait.forSeconds(2);
 
 			EventEmitter.getInstance().emit(EVENT_MODE_SELECTION);

@@ -91,11 +91,6 @@ export class SettingsView {
 		this.colorizeGameTypeText(BlzFrameGetValue(BlzGetFrameByName('GameTypePopup', 0)));
 	}
 
-	private colorizeGameTypeText(value: number) {
-		BlzFrameSetText(BlzGetFrameByName('GameTypeOption', 0), `${GameTypeOptionsColorFormatted[value]}`);
-		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('GameTypePopup', 0), 2), `${GameTypeOptionsColorFormatted[value]}`);
-	}
-
 	private fogPopup() {
 		const t: trigger = CreateTrigger();
 
@@ -111,6 +106,11 @@ export class SettingsView {
 		);
 
 		this.colorizeFogText(BlzFrameGetValue(BlzGetFrameByName('FogPopup', 0)));
+	}
+
+	private colorizeGameTypeText(value: number) {
+		BlzFrameSetText(BlzGetFrameByName('GameTypeOption', 0), `${GameTypeOptionsColorFormatted[value]}`);
+		BlzFrameSetText(BlzFrameGetChild(BlzGetFrameByName('GameTypePopup', 0), 2), `${GameTypeOptionsColorFormatted[value]}`);
 	}
 
 	private colorizeFogText(value: number) {
@@ -171,16 +171,20 @@ export class SettingsView {
 		TriggerAddCondition(
 			t,
 			Condition(() => {
+				const gameTypeFrame: framehandle = BlzGetFrameByName('GameTypePopup', 0);
 				const fogFrame: framehandle = BlzGetFrameByName('FogPopup', 0);
 				const diploFrame: framehandle = BlzGetFrameByName('DiplomacyPopup', 0);
 				const overtimeFrame: framehandle = BlzGetFrameByName('OvertimePopup', 0);
 
 				if (BlzGetTriggerFrameEvent() == FRAMEEVENT_CHECKBOX_CHECKED) {
 					SettingsContext.getInstance().getSettings().Promode = 1;
+					SettingsContext.getInstance().getSettings().GameType = 0;
 					SettingsContext.getInstance().getSettings().Fog = 1;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 1;
 					SettingsContext.getInstance().getSettings().Overtime.option = 3;
 
+					BlzFrameSetValue(gameTypeFrame, 0);
+					BlzFrameSetEnable(gameTypeFrame, false);
 					BlzFrameSetValue(fogFrame, 1);
 					BlzFrameSetEnable(fogFrame, false);
 					BlzFrameSetValue(diploFrame, 1);
@@ -189,9 +193,12 @@ export class SettingsView {
 					BlzFrameSetEnable(overtimeFrame, false);
 				} else {
 					SettingsContext.getInstance().getSettings().Promode = 0;
+					SettingsContext.getInstance().getSettings().GameType = 0;
 					SettingsContext.getInstance().getSettings().Fog = 0;
 					SettingsContext.getInstance().getSettings().Diplomacy.option = 0;
 					SettingsContext.getInstance().getSettings().Overtime.option = 0;
+					BlzFrameSetValue(gameTypeFrame, 0);
+					BlzFrameSetEnable(gameTypeFrame, true);
 					BlzFrameSetValue(fogFrame, 0);
 					BlzFrameSetEnable(fogFrame, true);
 					BlzFrameSetValue(diploFrame, 0);
@@ -200,6 +207,7 @@ export class SettingsView {
 					BlzFrameSetEnable(overtimeFrame, true);
 				}
 
+				this.colorizeGameTypeText(BlzFrameGetValue(gameTypeFrame));
 				this.colorizeFogText(BlzFrameGetValue(fogFrame));
 				this.colorizeDiplomacyText(BlzFrameGetValue(diploFrame));
 				this.colorizeOvertimeText(BlzFrameGetValue(overtimeFrame));
