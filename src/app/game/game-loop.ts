@@ -26,10 +26,12 @@ import {
 	EVENT_ON_END_MATCH,
 	EVENT_ON_CITY_SELECTED,
 	EVENT_ON_CITY_DESELECTED,
+	EVENT_QUEST_UPDATE_PLAYER_STATUS,
 } from '../utils/events/event-constants';
 import { StandardGameMode } from './game-mode/modes/standard-game-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
 import { CapitalsGameMode } from './game-mode/modes/capitals-game-mode';
+import { Quests } from '../quests/quests';
 
 export class GameLoop {
 	private static instance: GameLoop;
@@ -76,6 +78,8 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_END_MATCH, () => this._gameMode.onEndMatch());
 
 		EventEmitter.getInstance().on(EVENT_START_GAME_LOOP, () => this.startGameLoop());
+
+		EventEmitter.getInstance().on(EVENT_QUEST_UPDATE_PLAYER_STATUS, () => Quests.getInstance().UpdateShuffledPlayerListQuest());
 	}
 
 	public applyGameMode(gameType: GameType) {

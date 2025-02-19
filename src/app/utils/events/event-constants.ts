@@ -23,3 +23,4 @@ export const EVENT_MODE_SELECTION: string = 'modeSelection';
 export const EVENT_ON_END_MATCH: string = 'onEndMatch';
 
 export const EVENT_START_GAME_LOOP: string = 'startGameLoop';
+export const EVENT_QUEST_UPDATE_PLAYER_STATUS: string = 'questUpdatePlayerStatus';

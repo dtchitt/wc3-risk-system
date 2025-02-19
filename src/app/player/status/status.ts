@@ -7,6 +7,9 @@ import { LeftStrategy } from './strategies/left-strategy';
 import { NomadStrategy } from './strategies/nomad-strategy';
 import { StatusStrategy } from './strategies/status-strategy';
 import { STFUStrategy } from './strategies/stfu-strategy';
+import { Quests } from 'src/app/quests/quests';
+import { EventEmitter } from 'src/app/utils/events/event-emitter';
+import { EVENT_QUEST_UPDATE_PLAYER_STATUS } from 'src/app/utils/events/event-constants';
 
 export class Status {
 	private player: ActivePlayer;
@@ -32,10 +35,20 @@ export class Status {
 		if (strategy) {
 			debugPrint('Setting player status:', status);
 			strategy.run(this.player);
+			EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 			debugPrint('Player status set:', status);
 		} else {
 			debugPrint('Unknown player status:', status);
 		}
+	}
+
+	// Checks if the player is still in the match.
+	public isActive(): boolean {
+		return this._status == PLAYER_STATUS.ALIVE || this._status == PLAYER_STATUS.NOMAD;
+	}
+
+	public isEliminated(): boolean {
+		return this._status == PLAYER_STATUS.DEAD || this._status == PLAYER_STATUS.LEFT || this._status == PLAYER_STATUS.STFU;
 	}
 
 	// Checks if the player is still in the match.

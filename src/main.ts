@@ -104,7 +104,7 @@ function tsMain() {
 		CityDeselectedEvent();
 
 		//Create Quests
-		Quests.Create();
+		Quests.getInstance().Create();
 
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
@@ -130,7 +130,7 @@ function tsMain() {
 			GameLoop.getInstance();
 			ModeSelection.getInstance();
 
-			Quests.AddShuffledPlayerListQuest();
+			Quests.getInstance().AddShuffledPlayerListQuest();
 
 			//Export statistics
 			if (ENABLE_EXPORT_SHUFFLED_PLAYER_LIST) {

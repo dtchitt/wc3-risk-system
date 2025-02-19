@@ -79,6 +79,6 @@ export class ModeSelection {
 
 	private setupSettingsQuest(): void {
 		const settings: SettingsContext = SettingsContext.getInstance();
-		Quests.AddSettingsQuest(settings);
+		Quests.getInstance().AddSettingsQuest(settings);
 	}
 }
