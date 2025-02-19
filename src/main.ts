@@ -106,11 +106,6 @@ function tsMain() {
 		//Create Quests
 		Quests.Create();
 
-		//Export statistics
-		if (ENABLE_EXPORT_SHUFFLED_PLAYER_LIST) {
-			ExportShuffledPlayerList.write();
-		}
-
 		//Set up actions on game load
 		const onLoadTimer: timer = CreateTimer();
 
@@ -136,6 +131,11 @@ function tsMain() {
 			ModeSelection.getInstance();
 
 			Quests.AddShuffledPlayerListQuest();
+
+			//Export statistics
+			if (ENABLE_EXPORT_SHUFFLED_PLAYER_LIST) {
+				ExportShuffledPlayerList.write();
+			}
 
 			await Wait.forSeconds(2);
 
