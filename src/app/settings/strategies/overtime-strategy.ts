@@ -56,7 +56,7 @@ export class OvertimeStrategy implements SettingsStrategy {
 	}
 
 	private handleOff(): void {
-		VictoryManager.OVERTIME_ACTIVE_AT_TURN = 0;
+		VictoryManager.OVERTIME_ACTIVE_AT_TURN = undefined;
 		VictoryManager.OVERTIME_MODE = false;
 	}
 }

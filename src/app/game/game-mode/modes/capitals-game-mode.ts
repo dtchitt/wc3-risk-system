@@ -25,7 +25,6 @@ export class CapitalsGameMode extends BaseGameMode {
 	}
 
 	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
-		debugPrint('City captured');
 		if (preOwner == owner) return;
 
 		if (this.capitals.get(preOwner.getPlayer()) === city) {
@@ -41,13 +40,9 @@ export class CapitalsGameMode extends BaseGameMode {
 			);
 			preOwner.status.set(PLAYER_STATUS.DEAD);
 
-			debugPrint('Downgrading capital to city');
-
 			if (GetUnitTypeId(city.barrack.unit) == UNIT_ID.CAPITAL) {
 				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CONQUERED_CAPITAL);
 			}
-
-			debugPrint('Downgraded capital to city');
 
 			// Reset the country spawn multiplier to 1
 			CityToCountry.get(city).getSpawn().setMultiplier(1);
@@ -61,14 +56,14 @@ export class CapitalsGameMode extends BaseGameMode {
 		if (city.getOwner() === player) return;
 
 		if (city.isPort()) {
-			LocalMessage(player, `Capital can not be a port!\nPlease choose another city for your capital.`, 'Sound\\Interface\\Error.flac');
+			LocalMessage(player, `Capital can not be a port!\nPlease choose another city as your capital.`, 'Sound\\Interface\\Error.flac');
 			return;
 		}
 
 		if (city.getOwner() != NEUTRAL_HOSTILE) {
 			LocalMessage(
 				player,
-				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
+				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city as your capital.`,
 				'Sound\\Interface\\Error.flac'
 			);
 			return;
@@ -79,7 +74,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		if (cities.length <= 1) {
 			LocalMessage(
 				player,
-				`Only countries with 2 or cities can be chosen.\nPlease choose another city for your capital.`,
+				`Only countries with 2 or cities can be chosen.\nPlease choose another city as your capital.`,
 				'Sound\\Interface\\Error.flac'
 			);
 			return;
@@ -88,7 +83,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		if (cities.find((x) => x.getOwner() != NEUTRAL_HOSTILE && x.getOwner() != player) !== undefined) {
 			LocalMessage(
 				player,
-				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city for your capital.`,
+				`${NameManager.getInstance().getDisplayName(city.getOwner())} has already selected this city!\nPlease choose another city as your capital.`,
 				'Sound\\Interface\\Error.flac'
 			);
 			return;
@@ -106,14 +101,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		super.onCitySelected(city, player);
 	}
 
-	async onStartMatch(): Promise<void> {
-		FogEnable(false);
-		BlzEnableSelections(true, false);
-
-		debugPrint('Starting Capitals Game Mode');
-
-		// Initialize the player capital cities map with empty capitals
-		debugPrint('Resetting capitals');
+	async onRematch(): Promise<void> {
 		this.capitals?.forEach((city, _) => {
 			if (city == null) return;
 
@@ -122,26 +110,26 @@ export class CapitalsGameMode extends BaseGameMode {
 				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CITY);
 			}
 		});
+	}
 
-		await Wait.forSeconds(2);
+	async onStartMatch(): Promise<void> {
+		FogEnable(false);
+		BlzEnableSelections(true, false);
 
-		// Populating the player capital selections map with null values
-		debugPrint('Populating player capital selections');
+		// Initialize the player capital cities map with empty capitals
 		this.playerCapitalSelections = new Map();
-		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-		players.forEach((player) => {
-			debugPrint('Setting player capital selection to null');
+
+		PlayerManager.getInstance().players.forEach((player) => {
 			this.playerCapitalSelections.set(player.getPlayer(), null);
 		});
 
-		debugPrint('Starting capital pick phase');
-		this.capitalPickPhase = true;
+		await Wait.forSeconds(2);
 
+		this.capitalPickPhase = true;
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = CAPITALS_SELECTION_PHASE;
-			debugPrint('Starting capital pick countdown');
 
 			// Prepare the countdown message
 			CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
@@ -171,7 +159,6 @@ export class CapitalsGameMode extends BaseGameMode {
 				duration--;
 			});
 		} catch (error) {
-			debugPrint('Error in Metagame ' + error);
 			print('Error in Metagame ' + error);
 		}
 	}
@@ -199,18 +186,21 @@ export class CapitalsGameMode extends BaseGameMode {
 
 		// Set the country spawn multiplier to 2 for all countries with capitals
 		this.capitals.forEach((city, _) => {
-			CityToCountry.get(city).getSpawn().setMultiplier(2);
+			if (city) {
+				CityToCountry.get(city).getSpawn().setMultiplier(2);
+			}
 		});
 
 		this.capitals.forEach((city, player) => {
-			PingMinimapLocForPlayer(player, city.barrack.location, 20);
+			if (city) {
+				PingMinimapLocForPlayer(player, city.barrack.location, 20);
+			}
 		});
 
-		debugPrint('Upgrading cities to capitals');
 		this.capitals.forEach((city, player) => {
-			debugPrint(`Upgrading city to capital for ${NameManager.getInstance().getDisplayName(player)}`);
-			IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CAPITAL);
+			if (city) {
+				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CAPITAL);
+			}
 		});
-		debugPrint('Finished upgrading cities to capitals');
 	}
 }

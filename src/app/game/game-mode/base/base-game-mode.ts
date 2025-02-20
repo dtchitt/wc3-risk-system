@@ -13,21 +13,10 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../../state/match-state';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import {
-	EVENT_ON_PLAYER_ALIVE,
-	EVENT_ON_PLAYER_DEAD,
-	EVENT_ON_PLAYER_FORFEIT,
-	EVENT_ON_PLAYER_LEFT,
-	EVENT_ON_PLAYER_NOMAD,
-	EVENT_ON_PLAYER_STFU,
-	EVENT_ON_CITY_CAPTURE,
 	EVENT_ON_START_GAME,
-	EVENT_ON_REMATCH,
-	EVENT_ON_PRE_MATCH,
-	EVENT_ON_IN_PROGRESS,
 	EVENT_ON_POST_MATCH,
 	EVENT_START_GAME_LOOP,
-	EVENT_ON_UNIT_KILLED,
-	EVENT_ON_END_MATCH,
+	EVENT_QUEST_UPDATE_PLAYER_STATUS,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from '../game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
@@ -40,7 +29,6 @@ import { resumingUnits } from './utillity/resuming-units';
 import { resetCountries } from './utillity/reset-countries';
 import { TreeManager } from '../../services/tree-service';
 import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
-import { debugPrint } from 'src/app/utils/debug-print';
 import { RegionToCity } from 'src/app/city/city-map';
 import { StandardDistributionService } from '../../services/distribution-service/standard-distribution-service';
 
@@ -53,17 +41,11 @@ export abstract class BaseGameMode implements GameMode {
 		this._scoreboardManager = ScoreboardManager.getInstance();
 	}
 
-	onPreMatch(): void {
-		debugPrint(EVENT_ON_PRE_MATCH);
-	}
+	onPreMatch(): void {}
 
-	onInProgress(): void {
-		debugPrint(EVENT_ON_IN_PROGRESS);
-	}
+	onInProgress(): void {}
 
 	onPostMatch(): void {
-		debugPrint(EVENT_ON_POST_MATCH);
-
 		MatchData.matchState = 'postMatch';
 
 		VictoryManager.getInstance().saveStats();
@@ -122,7 +104,6 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onEndMatch(): void {
-		debugPrint(EVENT_ON_END_MATCH);
 		MatchData.matchState = 'postMatch';
 		FogEnable(false);
 		BlzEnableSelections(false, false);
@@ -157,24 +138,21 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onPlayerAlive(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_ALIVE);
 		player.status.status = PLAYER_STATUS.ALIVE;
 		player.trackedData.income.income = STARTING_INCOME;
 
 		if (player.trackedData.income.max == 0) {
 			player.trackedData.income.max = STARTING_INCOME;
 		}
-		// MatchData.setPlayerStatus(player, PLAYER_STATUS.ALIVE);
 		this._scoreboardManager.updatePartial();
+
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onPlayerDead(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_DEAD);
-
 		player.status.status = PLAYER_STATUS.DEAD;
 		player.setEndData();
 		player.trackedData.income.income = 1;
-		// VictoryManager.getInstance().removePlayer(gamePlayer, PLAYER_STATUS.DEAD);
 
 		GlobalMessage(
 			`${NameManager.getInstance().getDisplayName(player.getPlayer())} has been defeated!`,
@@ -186,10 +164,11 @@ export abstract class BaseGameMode implements GameMode {
 			MatchData.matchState = 'postMatch';
 		}
 		this._scoreboardManager.updatePartial();
+
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onPlayerNomad(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_NOMAD);
 		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), PLAYER_STATUS.NOMAD);
 
 		if (player.trackedData.units.size <= 0) {
@@ -240,11 +219,11 @@ export abstract class BaseGameMode implements GameMode {
 		});
 
 		this._scoreboardManager.updatePartial();
+
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onPlayerLeft(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_LEFT);
-
 		if (player.status.isDead() || player.status.isSTFU()) {
 			player.status.status = PLAYER_STATUS.LEFT;
 			return;
@@ -258,13 +237,10 @@ export abstract class BaseGameMode implements GameMode {
 			'Sound\\Interface\\SecretFound.flac'
 		);
 
-		// let previousStatus = MatchData.getPlayerStatus(player);
-		// MatchData.setPlayerStatus(player, PLAYER_STATUS.LEFT);
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onPlayerSTFU(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_STFU);
-
 		const oldStatus = player.status.status;
 		player.status.status = PLAYER_STATUS.STFU;
 		SetPlayerState(player.getPlayer(), PLAYER_STATE_OBSERVER, 1);
@@ -288,27 +264,27 @@ export abstract class BaseGameMode implements GameMode {
 			player.status.statusDuration--;
 		});
 
-		// MatchData.setPlayerStatus(player, PLAYER_STATUS.STFU);
 		this._scoreboardManager.updatePartial();
+
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onPlayerForfeit(player: ActivePlayer): void {
-		debugPrint(EVENT_ON_PLAYER_FORFEIT);
 		const playerStatus = PlayerManager.getInstance().getPlayerStatus(GetTriggerPlayer());
 		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
 
 		PlayerManager.getInstance().setPlayerStatus(GetTriggerPlayer(), PLAYER_STATUS.DEAD);
 		this._scoreboardManager.updatePartial();
+
+		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
 	}
 
 	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {
-		debugPrint(EVENT_ON_CITY_CAPTURE);
 		this._scoreboardManager.updatePartial();
 		this._scoreboardManager.updateScoreboardTitle();
 	}
 
 	onUnitKilled(killingUnit: unit, dyingUnit: unit): void {
-		debugPrint(EVENT_ON_UNIT_KILLED);
 		this._scoreboardManager.updatePartial();
 	}
 
@@ -317,8 +293,6 @@ export abstract class BaseGameMode implements GameMode {
 	onCityDeselected(city: City, player: player): void {}
 
 	async prepareMatch(): Promise<void> {
-		debugPrint('Preparing match...');
-
 		FogEnable(false);
 		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
@@ -393,7 +367,6 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	async onRematch(): Promise<void> {
-		debugPrint(EVENT_ON_REMATCH);
 		FogEnable(false);
 		MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);

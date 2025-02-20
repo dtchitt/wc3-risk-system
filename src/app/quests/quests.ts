@@ -7,6 +7,7 @@ import { FogOptionsColorFormatted } from '../settings/strategies/fog-strategy';
 import { GameTypeOptionsColorFormatted } from '../settings/strategies/game-type-strategy';
 import { OvertimeStringsColorFormatted } from '../settings/strategies/overtime-strategy';
 import { PromodeOptionsColorFormatted } from '../settings/strategies/promode-strategy';
+import { HexColors } from '../utils/hex-colors';
 import { ShuffleArray } from '../utils/utils';
 
 /**
@@ -152,7 +153,7 @@ export class Quests {
 	}
 
 	public AddShuffledPlayerListQuest(): void {
-		let description: string = 'Player names:';
+		let description: string = `${HexColors.YELLOW}Initial Players|r`;
 		let nameList: ActivePlayer[] = [];
 		const playerManager = PlayerManager.getInstance();
 		const nameManager = NameManager.getInstance();
@@ -179,14 +180,14 @@ export class Quests {
 	public UpdateShuffledPlayerListQuest(): void {
 		if (!this.quests.has('QUEST_SHUFFLED_PLAYER_LIST')) this.AddShuffledPlayerListQuest();
 
-		let description: string = 'Active Players (status):';
+		let description: string = `${HexColors.YELLOW}Active Players|r`;
 
 		const activePlayers = this.shuffledPlayerList.filter((player) => (player.status ? player.status.isAlive() : false));
 		activePlayers.forEach((player) => {
 			description += `\n${NameManager.getInstance().getBtag(player.getPlayer())} (${player.status ? player.status.status : 'Unknown'})`;
 		});
 
-		description += '\n\nEliminated Players (status):';
+		description += `\n\n${HexColors.YELLOW}Eliminated Players|r`;
 		const eliminatedPlayers = this.shuffledPlayerList.filter((player) => (player.status ? player.status.isEliminated() : false));
 		eliminatedPlayers.forEach((player) => {
 			description += `\n${NameManager.getInstance().getBtag(player.getPlayer())} (${player.status ? player.status.status : 'Unknown'})`;

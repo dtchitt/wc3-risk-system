@@ -7,9 +7,6 @@ import { LeftStrategy } from './strategies/left-strategy';
 import { NomadStrategy } from './strategies/nomad-strategy';
 import { StatusStrategy } from './strategies/status-strategy';
 import { STFUStrategy } from './strategies/stfu-strategy';
-import { Quests } from 'src/app/quests/quests';
-import { EventEmitter } from 'src/app/utils/events/event-emitter';
-import { EVENT_QUEST_UPDATE_PLAYER_STATUS } from 'src/app/utils/events/event-constants';
 
 export class Status {
 	private player: ActivePlayer;
@@ -33,12 +30,9 @@ export class Status {
 		const strategy = Status.STRATEGY_MAP.get(status);
 
 		if (strategy) {
-			debugPrint('Setting player status:', status);
 			strategy.run(this.player);
-			EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
-			debugPrint('Player status set:', status);
 		} else {
-			debugPrint('Unknown player status:', status);
+			print('Unknown player status:', status);
 		}
 	}
 
