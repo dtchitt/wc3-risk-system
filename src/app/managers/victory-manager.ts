@@ -103,15 +103,11 @@ export class VictoryManager {
 	}
 
 	public checkKnockOutVictory(): boolean {
-		debugPrint('Checking knockout victory');
 		if (PlayerManager.getInstance().playersAliveOrNomad.size <= 1) {
-			debugPrint('Knockout victory');
 			MatchData.leader = Array.from(PlayerManager.getInstance().playersAliveOrNomad.values())[0];
 			this.saveStats();
-			debugPrint('saveStats, MatchData.leader: ' + MatchData.leader);
 			return true;
 		}
-		debugPrint('No knockout victory');
 		return false;
 	}
 

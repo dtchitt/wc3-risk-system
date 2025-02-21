@@ -149,12 +149,10 @@ export class CapitalsGameMode extends BaseGameMode {
 					PlayGlobalSound('Sound\\Interface\\Hint.flac');
 					this.capitalPickPhase = false;
 
-					Wait.forSeconds(2).finally(() => {
-						this.playerCapitalSelections.forEach((city, _) => {
-							city?.reset();
-						});
-						super.onStartMatch();
+					this.playerCapitalSelections.forEach((city, _) => {
+						city?.reset();
 					});
+					super.onStartMatch();
 				}
 				duration--;
 			});
@@ -165,7 +163,6 @@ export class CapitalsGameMode extends BaseGameMode {
 
 	// // Ensure that all players without capitals get assigned a random capital city.
 	override onDistributeBases(): void {
-		debugPrint('Distributing capitals');
 		const capitalDistroService = new CapitalDistributionService(this.playerCapitalSelections);
 		capitalDistroService.runDistro(() => {
 			RegionToCity.forEach((city) => {

@@ -67,7 +67,7 @@ export class CapitalDistributionService extends StandardDistributionService {
 
 					// terminate the loop, a country has been found that can be assigned to the player
 					LocalMessage(player, `You have been randomly assigned a capital in ${country.getName()}.`, '', 5);
-					SetCameraPositionLocForPlayer(player, capital.barrack.location);
+					PanCameraToTimedLocForPlayer(player, capital.barrack.location, 1);
 
 					break;
 				}

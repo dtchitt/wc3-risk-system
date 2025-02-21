@@ -77,7 +77,7 @@ export abstract class BaseGameMode implements GameMode {
 		await this.prepareMatch();
 		MatchData.matchState = 'preMatch';
 
-		await Wait.forSeconds(2);
+		await Wait.forSeconds(3);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
