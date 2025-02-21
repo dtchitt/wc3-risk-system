@@ -11,7 +11,6 @@ import { CapitalDistributionService } from '../../services/distribution-service/
 import { RegionToCity } from 'src/app/city/city-map';
 import { CityToCountry } from 'src/app/country/country-map';
 import { NameManager } from 'src/app/managers/names/name-manager';
-import { Wait } from 'src/app/utils/wait';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { CAPITALS_SELECTION_PHASE } from 'src/configs/game-settings';
 
@@ -103,13 +102,15 @@ export class CapitalsGameMode extends BaseGameMode {
 
 	async onRematch(): Promise<void> {
 		this.capitals?.forEach((city, _) => {
-			if (city == null) return;
-
-			const unitTypeId = GetUnitTypeId(city.barrack.unit);
-			if (unitTypeId == UNIT_ID.CAPITAL || unitTypeId == UNIT_ID.CONQUERED_CAPITAL) {
-				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CITY);
+			if (city) {
+				const unitTypeId = GetUnitTypeId(city.barrack.unit);
+				if (unitTypeId == UNIT_ID.CAPITAL || unitTypeId == UNIT_ID.CONQUERED_CAPITAL) {
+					IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CITY);
+				}
 			}
 		});
+
+		await super.onRematch();
 	}
 
 	async onStartMatch(): Promise<void> {
@@ -120,21 +121,24 @@ export class CapitalsGameMode extends BaseGameMode {
 		this.playerCapitalSelections = new Map();
 
 		PlayerManager.getInstance().players.forEach((player) => {
-			this.playerCapitalSelections.set(player.getPlayer(), null);
+			this.playerCapitalSelections.set(player.getPlayer(), undefined);
 		});
 
-		await Wait.forSeconds(2);
+		debugPrint('1. Starting Capitals Game Mode');
 
 		this.capitalPickPhase = true;
 		try {
+			debugPrint('2. Capital Pick Phase');
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');
 			const startDelayTimer: timer = CreateTimer();
 			let duration: number = CAPITALS_SELECTION_PHASE;
 
+			debugPrint('3. Capital Pick Phase Timer');
 			// Prepare the countdown message
 			CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 			BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
 
+			debugPrint('4. Capital Pick Phase Timer Start');
 			TimerStart(startDelayTimer, 1, true, () => {
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
