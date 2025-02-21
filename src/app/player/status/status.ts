@@ -1,4 +1,3 @@
-import { debugPrint } from 'src/app/utils/debug-print';
 import { ActivePlayer } from '../types/active-player';
 import { PLAYER_STATUS } from './status-enum';
 import { AliveStrategy } from './strategies/alive-strategy';

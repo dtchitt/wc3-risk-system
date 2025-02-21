@@ -167,6 +167,7 @@ export class CapitalsGameMode extends BaseGameMode {
 
 	// // Ensure that all players without capitals get assigned a random capital city.
 	override onDistributeBases(): void {
+		debugPrint('5. Distributing Capitals');
 		const capitalDistroService = new CapitalDistributionService(this.playerCapitalSelections);
 		capitalDistroService.runDistro(() => {
 			RegionToCity.forEach((city) => {
@@ -182,9 +183,11 @@ export class CapitalsGameMode extends BaseGameMode {
 			});
 		});
 
+		debugPrint('6. Capitals Distributed');
 		// Use the capital distribution service to also get the randomly assigned player capital cities
 		this.capitals = new Map(capitalDistroService.selectedPlayerCapitalCities);
 
+		debugPrint('7. Capitals Assigned');
 		// Set the country spawn multiplier to 2 for all countries with capitals
 		this.capitals.forEach((city, _) => {
 			if (city) {
@@ -192,16 +195,19 @@ export class CapitalsGameMode extends BaseGameMode {
 			}
 		});
 
+		debugPrint('8. Country Multipliers Set');
 		this.capitals.forEach((city, player) => {
 			if (city) {
 				PingMinimapLocForPlayer(player, city.barrack.location, 20);
 			}
 		});
 
+		debugPrint('9. Capitals Pinged');
 		this.capitals.forEach((city, player) => {
 			if (city) {
 				IssueImmediateOrderById(city.barrack.unit, UNIT_ID.CAPITAL);
 			}
 		});
+		debugPrint('10. Capitals Distributed');
 	}
 }

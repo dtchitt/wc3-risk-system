@@ -15,7 +15,7 @@ export class CapitalDistributionService extends StandardDistributionService {
 	/**
 	 * Initializes city pool and player list.
 	 */
-	constructor(playerCapitalCities: Map<player, City> = new Map<player, City>()) {
+	constructor(playerCapitalCities: Map<player, City>) {
 		super();
 		this.selectedPlayerCapitalCities = playerCapitalCities;
 	}

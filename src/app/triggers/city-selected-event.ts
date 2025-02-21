@@ -1,6 +1,5 @@
 import { City } from '../city/city';
 import { UnitToCity } from '../city/city-map';
-import { debugPrint } from '../utils/debug-print';
 import { EVENT_ON_CITY_SELECTED } from '../utils/events/event-constants';
 import { EventEmitter } from '../utils/events/event-emitter';
 import { UNIT_TYPE } from '../utils/unit-types';
