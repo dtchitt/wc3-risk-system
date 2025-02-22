@@ -4,8 +4,7 @@ import { ExportEndGameScore } from '../utils/export-statistics/export-end-game-s
 import { ComputeRatio } from '../utils/utils';
 import { StatisticsModel } from './statistics-model';
 import { StatisticsView } from './statistics-view';
-import { ActivePlayer } from '../player/types/active-player';
-import { PlayerManager } from '../player/player-manager';
+import { MatchData } from '../game/state/match-state';
 
 export class StatisticsController {
 	private static instance: StatisticsController;
@@ -26,9 +25,7 @@ export class StatisticsController {
 
 	// Should be called on match startup, ensures that future statistics are based on the current match players pool at the start of the match.
 	public useCurrentActivePlayers() {
-		const players = [...PlayerManager.getInstance().players.values()];
-
-		this.model = new StatisticsModel(players);
+		this.model = new StatisticsModel(MatchData.matchPlayers);
 		this.view = new StatisticsView(this.model);
 
 		this.view.setMinimizeButtonClickEvent(() => {

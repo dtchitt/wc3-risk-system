@@ -52,7 +52,7 @@ export abstract class BaseGameMode implements GameMode {
 
 		// Hide match scoreboard and show score screen
 		this._scoreboardManager.destroyBoards();
-		PlayerManager.getInstance().players.forEach((player) => {
+		MatchData.matchPlayers.forEach((player) => {
 			if (SettingsContext.getInstance().isPromode()) {
 				NameManager.getInstance().setName(player.getPlayer(), 'acct');
 			} else {
@@ -115,9 +115,11 @@ export abstract class BaseGameMode implements GameMode {
 	onStartTurn(turn: number): void {
 		this._scoreboardManager.updateFull();
 		this._scoreboardManager.updateScoreboardTitle();
-		PlayerManager.getInstance().playersAliveOrNomad.forEach((player) => {
-			player.giveGold();
-		});
+		MatchData.matchPlayers
+			.filter((x) => x.status.isActive())
+			.forEach((player) => {
+				player.giveGold();
+			});
 
 		StringToCountry.forEach((country) => {
 			country.getSpawn().step();
@@ -296,18 +298,19 @@ export abstract class BaseGameMode implements GameMode {
 
 	async prepareMatch(): Promise<void> {
 		FogEnable(false);
-		MatchData.prepareMatchData();
+		const players = [...PlayerManager.getInstance().players.values()];
+		MatchData.prepareMatchData(players);
 		this._statsController.setViewVisibility(false);
 
 		if (!SettingsContext.getInstance().isPromode()) {
-			PlayerManager.getInstance().players.forEach((val) => {
+			MatchData.matchPlayers.forEach((val) => {
 				NameManager.getInstance().setName(val.getPlayer(), 'color');
 				val.trackedData.reset();
 			});
 		}
 
 		// Remove irrelevant players from the game
-		PlayerManager.getInstance().players.forEach((val) => {
+		MatchData.matchPlayers.forEach((val) => {
 			val.trackedData.setKDMaps();
 			if (GetPlayerSlotState(val.getPlayer()) == PLAYER_SLOT_STATE_PLAYING) {
 				val.status.set(PLAYER_STATUS.ALIVE);
@@ -319,8 +322,7 @@ export abstract class BaseGameMode implements GameMode {
 		});
 
 		// Prepare stat tracking
-		const players: ActivePlayer[] = [...PlayerManager.getInstance().players.values()];
-		players.forEach((player) => {
+		MatchData.matchPlayers.forEach((player) => {
 			SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
 			player.status.set(PLAYER_STATUS.ALIVE);
 			player.trackedData.bonus.showForPlayer(player.getPlayer());
@@ -331,13 +333,13 @@ export abstract class BaseGameMode implements GameMode {
 			}
 		});
 
-		if (SettingsContext.getInstance().isFFA() || players.length <= 2) {
-			ScoreboardManager.getInstance().ffaSetup(players);
+		if (SettingsContext.getInstance().isFFA() || MatchData.matchPlayers.length <= 2) {
+			ScoreboardManager.getInstance().ffaSetup(MatchData.matchPlayers);
 		} else {
 			ScoreboardManager.getInstance().teamSetup();
 		}
 
-		ScoreboardManager.getInstance().obsSetup(players, [...PlayerManager.getInstance().observers.keys()]);
+		ScoreboardManager.getInstance().obsSetup(MatchData.matchPlayers, [...PlayerManager.getInstance().observers.keys()]);
 
 		VictoryManager.getInstance().updateAndGetGameState();
 		this._scoreboardManager.updateScoreboardTitle();
@@ -360,7 +362,7 @@ export abstract class BaseGameMode implements GameMode {
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					MatchData.matchPlayers.find((x) => x.getPlayer() == GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
 
 				SetUnitInvulnerable(city.guard.unit, false);
@@ -370,7 +372,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	async onRematch(): Promise<void> {
 		FogEnable(false);
-		MatchData.prepareMatchData();
+		// MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
 
 		if (MatchData.matchCount == 1) {

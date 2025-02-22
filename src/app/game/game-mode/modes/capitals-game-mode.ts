@@ -6,13 +6,13 @@ import { debugPrint } from 'src/app/utils/debug-print';
 import { CountdownMessage, LocalMessage } from 'src/app/utils/messages';
 import { LandCity } from 'src/app/city/land-city';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
-import { PlayerManager } from 'src/app/player/player-manager';
 import { CapitalDistributionService } from '../../services/distribution-service/capital-distribution-service';
 import { RegionToCity } from 'src/app/city/city-map';
 import { CityToCountry } from 'src/app/country/country-map';
 import { NameManager } from 'src/app/managers/names/name-manager';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { CAPITALS_SELECTION_PHASE } from 'src/configs/game-settings';
+import { MatchData } from '../../state/match-state';
 
 export class CapitalsGameMode extends BaseGameMode {
 	private capitalPickPhase: boolean = false;
@@ -120,7 +120,7 @@ export class CapitalsGameMode extends BaseGameMode {
 		// Initialize the player capital cities map with empty capitals
 		this.playerCapitalSelections = new Map();
 
-		PlayerManager.getInstance().players.forEach((player) => {
+		MatchData.matchPlayers.forEach((player) => {
 			this.playerCapitalSelections.set(player.getPlayer(), undefined);
 		});
 
@@ -176,7 +176,7 @@ export class CapitalsGameMode extends BaseGameMode {
 				IssueImmediateOrder(city.guard.unit, 'stop');
 
 				if (GetOwningPlayer(city.guard.unit) != NEUTRAL_HOSTILE) {
-					PlayerManager.getInstance().players.get(GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
+					MatchData.matchPlayers.find((x) => x.getPlayer() == GetOwningPlayer(city.guard.unit)).trackedData.units.add(city.guard.unit);
 				}
 
 				SetUnitInvulnerable(city.guard.unit, false);
@@ -209,5 +209,12 @@ export class CapitalsGameMode extends BaseGameMode {
 			}
 		});
 		debugPrint('10. Capitals Distributed');
+	}
+
+	// Remove player from the capital selection phase if they leave the game
+	onPlayerLeft(player: ActivePlayer): void {
+		if (!this.capitalPickPhase) return;
+
+		this.playerCapitalSelections.delete(player.getPlayer());
 	}
 }
