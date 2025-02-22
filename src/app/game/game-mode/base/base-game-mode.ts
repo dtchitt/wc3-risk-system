@@ -77,6 +77,8 @@ export abstract class BaseGameMode implements GameMode {
 		await this.prepareMatch();
 		MatchData.matchState = 'preMatch';
 
+		this._statsController.useCurrentActivePlayers();
+
 		await Wait.forSeconds(2);
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');

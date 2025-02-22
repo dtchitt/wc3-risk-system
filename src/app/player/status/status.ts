@@ -35,11 +35,12 @@ export class Status {
 		}
 	}
 
-	// Checks if the player is still in the match.
+	// Checks if the player is still in the match as either alive or nomad.
 	public isActive(): boolean {
 		return this._status == PLAYER_STATUS.ALIVE || this._status == PLAYER_STATUS.NOMAD;
 	}
 
+	// Checks if the player is eliminated from the match as either dead, left or stfu'ed.
 	public isEliminated(): boolean {
 		return this._status == PLAYER_STATUS.DEAD || this._status == PLAYER_STATUS.LEFT || this._status == PLAYER_STATUS.STFU;
 	}

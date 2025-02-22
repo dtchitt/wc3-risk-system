@@ -5,7 +5,6 @@ import { AddLeadingZero } from '../utils/utils';
 import { ColumnConfig, GetStatisticsColumns } from './statistics-column-config';
 import { MAP_VERSION } from '../utils/map-info';
 import { MatchData } from '../game/state/match-state';
-import { PlayerManager } from '../player/player-manager';
 
 export class StatisticsModel {
 	private timePlayed: string;
@@ -13,14 +12,19 @@ export class StatisticsModel {
 	private winner: ActivePlayer;
 	private columns: ColumnConfig[];
 
-	constructor() {
+	private matchPlayers: ActivePlayer[];
+
+	constructor(matchPlayers: ActivePlayer[]) {
+		this.matchPlayers = matchPlayers;
+
 		this.setData();
 	}
 
 	public setData() {
 		this.setGameTime();
 		this.winner = MatchData.leader;
-		this.ranks = [...PlayerManager.getInstance().players.values()];
+
+		this.ranks = Array.from([...this.matchPlayers]);
 		this.sortPlayersByRank(this.ranks, this.winner);
 		this.columns = GetStatisticsColumns(this);
 	}
@@ -45,16 +49,18 @@ export class StatisticsModel {
 		let rival: ActivePlayer | null = null;
 		let maxKills = 0;
 
-		PlayerManager.getInstance().playersAliveOrNomad.forEach((p) => {
-			if (p === player) return;
+		this.matchPlayers
+			.filter((x) => x.status.isActive)
+			.forEach((p) => {
+				if (p === player) return;
 
-			const killsOnPlayer = p.trackedData.killsDeaths.get(player.getPlayer()).kills;
+				const killsOnPlayer = p.trackedData.killsDeaths.get(player.getPlayer()).kills;
 
-			if (killsOnPlayer > maxKills) {
-				maxKills = killsOnPlayer;
-				rival = p;
-			}
-		});
+				if (killsOnPlayer > maxKills) {
+					maxKills = killsOnPlayer;
+					rival = p;
+				}
+			});
 
 		return rival;
 	}
