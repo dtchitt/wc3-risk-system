@@ -21,12 +21,13 @@ import {
 	EVENT_ON_POST_MATCH,
 	EVENT_ON_PRE_MATCH,
 	EVENT_SET_GAME_MODE,
-	EVENT_ON_START_GAME,
+	EVENT_ON_START_MATCH,
 	EVENT_START_GAME_LOOP,
 	EVENT_ON_END_MATCH,
 	EVENT_ON_CITY_SELECTED,
 	EVENT_ON_CITY_DESELECTED,
 	EVENT_QUEST_UPDATE_PLAYER_STATUS,
+	EVENT_ON_SETUP_MATCH,
 } from '../utils/events/event-constants';
 import { StandardGameMode } from './game-mode/modes/standard-game-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
@@ -68,7 +69,8 @@ export class GameLoop {
 		EventEmitter.getInstance().on(EVENT_ON_CITY_SELECTED, (city: City, player: player) => this._gameMode.onCitySelected(city, player));
 		EventEmitter.getInstance().on(EVENT_ON_CITY_DESELECTED, (city: City, player: player) => this._gameMode.onCityDeselected(city, player));
 
-		EventEmitter.getInstance().on(EVENT_ON_START_GAME, () => this._gameMode.onStartMatch());
+		EventEmitter.getInstance().on(EVENT_ON_SETUP_MATCH, () => this._gameMode.onSetupMatch());
+		EventEmitter.getInstance().on(EVENT_ON_START_MATCH, () => this._gameMode.onStartMatch());
 		EventEmitter.getInstance().on(EVENT_ON_REMATCH, () => this._gameMode.onRematch());
 		EventEmitter.getInstance().on(EVENT_SET_GAME_MODE, (gameType: GameType) => this.applyGameMode(gameType));
 

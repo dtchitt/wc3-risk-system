@@ -6,7 +6,7 @@ import { EventEmitter } from '../utils/events/event-emitter';
 
 export function ForfeitCommand(chatManager: ChatManager, playerManager: PlayerManager) {
 	chatManager.addCmd(['-ff', '-forfeit'], () => {
-		if (MatchData.matchState != 'inProgress') return;
+		if (MatchData.matchState === 'postMatch') return;
 		EventEmitter.getInstance().emit(EVENT_ON_PLAYER_FORFEIT, playerManager.players.get(GetTriggerPlayer()));
 	});
 }

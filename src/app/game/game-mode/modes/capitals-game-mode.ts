@@ -140,6 +140,9 @@ export class CapitalsGameMode extends BaseGameMode {
 
 			debugPrint('4. Capital Pick Phase Timer Start');
 			TimerStart(startDelayTimer, 1, true, () => {
+				// Clears capital selection and resets selected city if player is eliminated
+				this.resetCapitalsForEliminatedPlayers();
+
 				CountdownMessage(`Choose Your Capital\n\nSelection ends in:\n${duration}`);
 				if (duration == 3) {
 					BlzFrameSetVisible(BlzGetFrameByName('CountdownFrame', 0), true);
@@ -213,8 +216,34 @@ export class CapitalsGameMode extends BaseGameMode {
 
 	// Remove player from the capital selection phase if they leave the game
 	onPlayerLeft(player: ActivePlayer): void {
-		if (!this.capitalPickPhase) return;
+		debugPrint('Capitals Player left the game: ' + NameManager.getInstance().getDisplayName(player.getPlayer()));
+		if (this.capitalPickPhase) {
+			debugPrint('Player left during capital selection phase');
+			const city = this.playerCapitalSelections.get(player.getPlayer());
+			city?.reset();
 
-		this.playerCapitalSelections.delete(player.getPlayer());
+			debugPrint("Player's capital selection reset");
+			this.playerCapitalSelections.delete(player.getPlayer());
+			debugPrint("Player's capital selection removed");
+		}
+
+		super.onPlayerLeft(player);
+	}
+
+	resetCapitalsForEliminatedPlayers(): void {
+		debugPrint('Checking for eliminated players during capital selection phase');
+		debugPrint('Match Players: ' + MatchData.matchPlayers.length);
+		MatchData.matchPlayers.forEach((player) => {
+			debugPrint('Checking player: ' + NameManager.getInstance().getDisplayName(player.getPlayer()));
+			if (player.status.isEliminated()) {
+				debugPrint('Player left during capital selection phase');
+				const city = this.playerCapitalSelections.get(player.getPlayer());
+				city?.reset();
+
+				debugPrint("Player's capital selection reset");
+				this.playerCapitalSelections.delete(player.getPlayer());
+				debugPrint("Player's capital selection removed");
+			}
+		});
 	}
 }

@@ -1,4 +1,3 @@
-import { MatchData } from '../game/state/match-state';
 import { PlayerManager } from '../player/player-manager';
 import { PLAYER_STATUS } from '../player/status/status-enum';
 import { ActivePlayer } from '../player/types/active-player';
@@ -14,13 +13,9 @@ export function PlayerLeaveEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			if (MatchData.matchState != 'inProgress') return false;
-
 			const player: ActivePlayer = PlayerManager.getInstance().players.get(GetTriggerPlayer());
 
 			player.status.set(PLAYER_STATUS.LEFT);
-
-			// MatchGameLoop.getInstance().onPlayerLeft(player);
 		})
 	);
 }

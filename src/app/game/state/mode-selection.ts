@@ -5,7 +5,7 @@ import { Quests } from 'src/app/quests/quests';
 import { ExportGameSettings } from 'src/app/utils/export-statistics/export-game-settings';
 import { MatchData } from './match-state';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
-import { EVENT_MODE_SELECTION, EVENT_ON_START_GAME } from 'src/app/utils/events/event-constants';
+import { EVENT_MODE_SELECTION, EVENT_ON_SETUP_MATCH } from 'src/app/utils/events/event-constants';
 import { ENABLE_EXPORT_GAME_SETTINGS } from 'src/configs/game-settings';
 
 export class ModeSelection {
@@ -74,7 +74,7 @@ export class ModeSelection {
 		}
 
 		MatchData.gameMode = 'ffa';
-		this.eventEmitter.emit(EVENT_ON_START_GAME);
+		this.eventEmitter.emit(EVENT_ON_SETUP_MATCH);
 	}
 
 	private setupSettingsQuest(): void {

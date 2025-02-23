@@ -20,7 +20,7 @@ export function UnitDeathEvent() {
 	TriggerAddCondition(
 		t,
 		Condition(() => {
-			if (MatchData.matchState != 'inProgress') return false;
+			if (MatchData.matchState === 'postMatch') return false;
 
 			const dyingUnit: unit = GetTriggerUnit();
 			const killingUnit: unit = GetKillingUnit();

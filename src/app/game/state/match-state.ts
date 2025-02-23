@@ -1,4 +1,3 @@
-import { PlayerManager } from 'src/app/player/player-manager';
 import { ActivePlayer } from 'src/app/player/types/active-player';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 

@@ -14,7 +14,8 @@ export const EVENT_ON_PRE_MATCH: string = 'onPreMatch';
 export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';
 export const EVENT_ON_POST_MATCH: string = 'onPostMatch';
 
-export const EVENT_ON_START_GAME: string = 'startGame';
+export const EVENT_ON_SETUP_MATCH: string = 'onSetupMatch';
+export const EVENT_ON_START_MATCH: string = 'onStartMatch';
 export const EVENT_ON_REMATCH: string = 'gameRestart';
 export const EVENT_SET_GAME_MODE: string = 'setGameMode';
 

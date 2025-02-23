@@ -21,6 +21,7 @@ export interface GameMode {
 	onPostMatch: () => void;
 
 	isMatchOver: () => boolean;
+	onSetupMatch: () => void;
 	onStartMatch: () => Promise<void>;
 	onEndMatch: () => void;
 	onStartTurn: (turn: number) => void;

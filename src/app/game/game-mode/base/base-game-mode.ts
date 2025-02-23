@@ -13,10 +13,11 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { MatchData } from '../../state/match-state';
 import { PLAYER_STATUS } from 'src/app/player/status/status-enum';
 import {
-	EVENT_ON_START_GAME,
+	EVENT_ON_START_MATCH,
 	EVENT_ON_POST_MATCH,
 	EVENT_START_GAME_LOOP,
 	EVENT_QUEST_UPDATE_PLAYER_STATUS,
+	EVENT_ON_SETUP_MATCH,
 } from 'src/app/utils/events/event-constants';
 import { GameMode } from '../game-mode';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
@@ -31,6 +32,7 @@ import { TreeManager } from '../../services/tree-service';
 import { setProModeTempVision } from './utillity/pro-mode-temp-vision';
 import { RegionToCity } from 'src/app/city/city-map';
 import { StandardDistributionService } from '../../services/distribution-service/standard-distribution-service';
+import { debugPrint } from 'src/app/utils/debug-print';
 
 export abstract class BaseGameMode implements GameMode {
 	private _statsController: StatisticsController;
@@ -73,9 +75,21 @@ export abstract class BaseGameMode implements GameMode {
 		return MatchData.matchState == 'postMatch';
 	}
 
+	onSetupMatch(): void {
+		const players = [...PlayerManager.getInstance().players.values()];
+		MatchData.prepareMatchData(players);
+
+		MatchData.matchPlayers.forEach((player) => {
+			player.status.set(PLAYER_STATUS.ALIVE);
+		});
+
+		EventEmitter.getInstance().emit(EVENT_ON_START_MATCH);
+	}
+
 	async onStartMatch(): Promise<void> {
+		debugPrint('Starting Match');
 		await this.prepareMatch();
-		MatchData.matchState = 'preMatch';
+		debugPrint('Match Prepared');
 
 		this._statsController.useCurrentActivePlayers();
 
@@ -298,8 +312,7 @@ export abstract class BaseGameMode implements GameMode {
 
 	async prepareMatch(): Promise<void> {
 		FogEnable(false);
-		const players = [...PlayerManager.getInstance().players.values()];
-		MatchData.prepareMatchData(players);
+
 		this._statsController.setViewVisibility(false);
 
 		if (!SettingsContext.getInstance().isPromode()) {
@@ -375,27 +388,20 @@ export abstract class BaseGameMode implements GameMode {
 		// MatchData.prepareMatchData();
 		this._statsController.setViewVisibility(false);
 
-		if (MatchData.matchCount == 1) {
-		} else {
-			print('Removing units...');
-			removeUnits();
-			await Wait.forSeconds(1);
-			print('Resuming units...');
-			resumingUnits();
-			await Wait.forSeconds(1);
-			//TODO why shuffle player color and names? rematch should only happen in promode in which case we dont want this
-			//print('Shuffling player identities...');
-			//ShufflePlayerColorWithColoredName();
-			await Wait.forSeconds(1);
-			print('Resetting countries...');
-			resetCountries();
-			await Wait.forSeconds(1);
-			print('Resetting trees...');
-			TreeManager.getInstance().reset();
-			await Wait.forSeconds(1);
-		}
+		print('Removing units...');
+		removeUnits();
+		await Wait.forSeconds(1);
+		print('Resuming units...');
+		resumingUnits();
+		await Wait.forSeconds(1);
+		print('Resetting countries...');
+		resetCountries();
+		await Wait.forSeconds(1);
+		print('Resetting trees...');
+		TreeManager.getInstance().reset();
+		await Wait.forSeconds(1);
 
-		EventEmitter.getInstance().emit(EVENT_ON_START_GAME);
+		EventEmitter.getInstance().emit(EVENT_ON_SETUP_MATCH);
 	}
 
 	private messageGameState() {
