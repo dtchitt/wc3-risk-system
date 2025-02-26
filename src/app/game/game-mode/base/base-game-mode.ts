@@ -242,10 +242,8 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onPlayerLeft(player: ActivePlayer): void {
-		if (player.status.isDead() || player.status.isSTFU()) {
-			player.status.status = PLAYER_STATUS.LEFT;
-			return;
-		}
+		const playerStatus = PlayerManager.getInstance().getPlayerStatus(player.getPlayer());
+		if (playerStatus.isEliminated()) return;
 
 		player.status.status = PLAYER_STATUS.LEFT;
 		player.setEndData();
@@ -255,7 +253,15 @@ export abstract class BaseGameMode implements GameMode {
 			'Sound\\Interface\\SecretFound.flac'
 		);
 
+		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), PLAYER_STATUS.LEFT);
+		this._scoreboardManager.updatePartial();
+
 		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
+
+		if (player.status.isDead() || player.status.isSTFU()) {
+			player.status.status = PLAYER_STATUS.LEFT;
+			return;
+		}
 	}
 
 	onPlayerSTFU(player: ActivePlayer): void {
@@ -288,10 +294,10 @@ export abstract class BaseGameMode implements GameMode {
 	}
 
 	onPlayerForfeit(player: ActivePlayer): void {
-		const playerStatus = PlayerManager.getInstance().getPlayerStatus(GetTriggerPlayer());
-		if (playerStatus.isDead() || playerStatus.isLeft() || playerStatus.isSTFU()) return;
+		const playerStatus = PlayerManager.getInstance().getPlayerStatus(player.getPlayer());
+		if (playerStatus.isEliminated()) return;
 
-		PlayerManager.getInstance().setPlayerStatus(GetTriggerPlayer(), PLAYER_STATUS.DEAD);
+		PlayerManager.getInstance().setPlayerStatus(player.getPlayer(), PLAYER_STATUS.DEAD);
 		this._scoreboardManager.updatePartial();
 
 		EventEmitter.getInstance().emit(EVENT_QUEST_UPDATE_PLAYER_STATUS);
