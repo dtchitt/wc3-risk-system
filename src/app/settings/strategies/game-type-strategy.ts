@@ -2,8 +2,8 @@ import { HexColors } from 'src/app/utils/hex-colors';
 import { SettingsStrategy } from './settings-strategy';
 import { EventEmitter } from 'src/app/utils/events/event-emitter';
 import { EVENT_SET_GAME_MODE } from 'src/app/utils/events/event-constants';
-import { StandardGameMode } from 'src/app/game/game-mode/modes/standard-game-mode';
-import { CapitalsGameMode } from 'src/app/game/game-mode/modes/capitals-game-mode';
+import { StandardGameMode } from 'src/app/game/game-mode/game-mode/standard-game-mode';
+import { CapitalsGameMode } from 'src/app/game/game-mode/game-mode/capitals-game-mode';
 
 export type GameType = 'Standard' | 'Capitals';
 

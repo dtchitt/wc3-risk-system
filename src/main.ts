@@ -26,7 +26,7 @@ import { ExportShuffledPlayerList } from './app/utils/export-statistics/export-s
 import { ModeSelection } from './app/game/state/mode-selection';
 import { PlayerSetupService } from './app/game/services/player-setup-service';
 import { Wait } from './app/utils/wait';
-import { GameLoop } from './app/game/game-loop';
+import { EventCoordinator } from './app/game/event-coordinator';
 import { EventEmitter } from './app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 import { CitySelectedEvent } from './app/triggers/city-selected-event';
@@ -127,7 +127,7 @@ function tsMain() {
 			EnableDragSelect(false, false);
 			FogEnable(true);
 			EventEmitter.getInstance();
-			GameLoop.getInstance();
+			EventCoordinator.getInstance();
 			ModeSelection.getInstance();
 
 			Quests.getInstance().AddShuffledPlayerListQuest();

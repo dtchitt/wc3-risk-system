@@ -8,7 +8,6 @@ export const EVENT_ON_CITY_CAPTURE: string = 'onCityCapture';
 export const EVENT_ON_UNIT_KILLED: string = 'onUnitKilled';
 
 export const EVENT_ON_CITY_SELECTED: string = 'onCitySelected';
-export const EVENT_ON_CITY_DESELECTED: string = 'onCityDeselected';
 
 export const EVENT_ON_PRE_MATCH: string = 'onPreMatch';
 export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';
@@ -25,3 +24,5 @@ export const EVENT_ON_END_MATCH: string = 'onEndMatch';
 
 export const EVENT_START_GAME_LOOP: string = 'startGameLoop';
 export const EVENT_QUEST_UPDATE_PLAYER_STATUS: string = 'questUpdatePlayerStatus';
+
+export const EVENT_NEXT_STATE: string = 'nextState';

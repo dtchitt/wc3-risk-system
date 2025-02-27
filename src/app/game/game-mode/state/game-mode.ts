@@ -14,7 +14,6 @@ export interface GameMode {
 	onRematch: () => Promise<void>;
 
 	onCitySelected: (city: City, player: player) => void;
-	onCityDeselected: (city: City, player: player) => void;
 
 	onPreMatch: () => void;
 	onInProgress: () => void;

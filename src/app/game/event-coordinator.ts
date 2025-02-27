@@ -1,11 +1,6 @@
-import { GameMode } from './game-mode/game-mode';
+import { GameMode } from './game-mode/state/game-mode';
 import { City } from '../city/city';
 import { ActivePlayer } from '../player/types/active-player';
-import { PlayGlobalSound } from '../utils/utils';
-import { TURN_DURATION_IN_SECONDS, TICK_DURATION_IN_SECONDS } from 'src/configs/game-settings';
-import { File } from 'w3ts';
-import { HexColors } from '../utils/hex-colors';
-import { MatchData } from './state/match-state';
 import { EventEmitter } from '../utils/events/event-emitter';
 import {
 	EVENT_ON_REMATCH,
@@ -25,28 +20,26 @@ import {
 	EVENT_START_GAME_LOOP,
 	EVENT_ON_END_MATCH,
 	EVENT_ON_CITY_SELECTED,
-	EVENT_ON_CITY_DESELECTED,
 	EVENT_QUEST_UPDATE_PLAYER_STATUS,
 	EVENT_ON_SETUP_MATCH,
 } from '../utils/events/event-constants';
-import { StandardGameMode } from './game-mode/modes/standard-game-mode';
+import { StandardGameMode } from './game-mode/game-mode/standard-game-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
-import { CapitalsGameMode } from './game-mode/modes/capitals-game-mode';
+import { CapitalsGameMode } from './game-mode/game-mode/capitals-game-mode';
 import { Quests } from '../quests/quests';
 
-export class GameLoop {
-	private static instance: GameLoop;
+export class EventCoordinator {
+	private static instance: EventCoordinator;
 	private _gameMode: GameMode;
 	private _matchLoopTimer: timer;
 
 	private constructor() {
 		this.registerEvents();
-		this._matchLoopTimer = CreateTimer();
 	}
 
 	public static getInstance() {
 		if (this.instance == null) {
-			this.instance = new GameLoop();
+			this.instance = new EventCoordinator();
 		}
 
 		return this.instance;
@@ -67,7 +60,6 @@ export class GameLoop {
 		);
 
 		EventEmitter.getInstance().on(EVENT_ON_CITY_SELECTED, (city: City, player: player) => this._gameMode.onCitySelected(city, player));
-		EventEmitter.getInstance().on(EVENT_ON_CITY_DESELECTED, (city: City, player: player) => this._gameMode.onCityDeselected(city, player));
 
 		EventEmitter.getInstance().on(EVENT_ON_SETUP_MATCH, () => this._gameMode.onSetupMatch());
 		EventEmitter.getInstance().on(EVENT_ON_START_MATCH, () => this._gameMode.onStartMatch());
@@ -86,63 +78,5 @@ export class GameLoop {
 
 	public applyGameMode(gameType: GameType) {
 		this._gameMode = gameType === 'Standard' ? new StandardGameMode() : new CapitalsGameMode();
-	}
-
-	private startGameLoop() {
-		MatchData.matchState = 'inProgress';
-		this._gameMode.onStartTurn(MatchData.turnCount);
-		// Start a timer that executes the game loop every second
-		TimerStart(this._matchLoopTimer, TICK_DURATION_IN_SECONDS, true, () => {
-			try {
-				// Check if the match is over
-				if (this._gameMode.isMatchOver()) {
-					PauseTimer(this._matchLoopTimer);
-					EventEmitter.getInstance().emit(EVENT_ON_END_MATCH);
-					return;
-				}
-
-				// Check if a turn has ended
-				this._gameMode.onTick(MatchData.tickCounter);
-
-				if (MatchData.tickCounter <= 0) {
-					this._gameMode.onEndTurn(MatchData.turnCount);
-				}
-
-				// Stop game loop if match is over
-				if (this._gameMode.isMatchOver()) {
-					PauseTimer(this._matchLoopTimer);
-					EventEmitter.getInstance().emit(EVENT_ON_END_MATCH);
-					return;
-				}
-
-				MatchData.tickCounter--;
-
-				if (MatchData.tickCounter <= 0) {
-					this._gameMode.onEndTurn(MatchData.turnCount);
-					MatchData.tickCounter = TURN_DURATION_IN_SECONDS;
-					MatchData.turnCount++;
-					this._gameMode.onStartTurn(MatchData.turnCount);
-				}
-				this.updateUI();
-			} catch (error) {
-				File.write('errors', error as string);
-				print('Error in Timer ' + error);
-			}
-		});
-	}
-
-	/**
-	 * Update the UI elements related to the timer.
-	 */
-	private updateUI() {
-		let tick: string = `${MatchData.tickCounter}`;
-
-		if (MatchData.tickCounter <= 3) {
-			tick = `${HexColors.RED}${MatchData.tickCounter}|r`;
-			PlayGlobalSound('Sound\\Interface\\BattleNetTick.flac');
-		}
-
-		BlzFrameSetText(BlzGetFrameByName('ResourceBarUpkeepText', 0), tick);
-		BlzFrameSetText(BlzGetFrameByName('ResourceBarSupplyText', 0), `${MatchData.turnCount}`);
 	}
 }
