@@ -7,7 +7,7 @@ import { debugPrint } from 'src/app/utils/debug-print';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { CapitalDistributionService } from '../../services/distribution-service/capital-distribution-service';
 import { City } from 'src/app/city/city';
-import { CapitalsData } from '../game-mode/capitals-game-mode';
+import { CapitalsData } from '../mode/capitals-mode';
 
 export class CapitalsDistributeState extends BaseState<CapitalsData> {
 	private playerCapitalSelections: Map<player, City>;

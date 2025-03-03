@@ -9,7 +9,7 @@ import { NEUTRAL_HOSTILE, PlayGlobalSound } from 'src/app/utils/utils';
 import { City } from 'src/app/city/city';
 import { LandCity } from 'src/app/city/land-city';
 import { CityToCountry } from 'src/app/country/country-map';
-import { CapitalsData } from '../game-mode/capitals-game-mode';
+import { CapitalsData } from '../mode/capitals-mode';
 
 export class CapitalsSelectionState extends BaseState<CapitalsData> {
 	private playerCapitalSelections: Map<player, City>;

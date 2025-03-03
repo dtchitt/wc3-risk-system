@@ -1,25 +1,33 @@
-import { GameLoopState } from '../base-game-mode.ts/game-loop-state';
-import { GameOverState } from '../base-game-mode.ts/game-over-state';
-import { ResetState } from '../base-game-mode.ts/reset-state';
-import { SetPromodeTempVisionState } from '../base-game-mode.ts/set-promode-temp-vision-state';
-import { SetupState } from '../base-game-mode.ts/setup-state';
-import { CityDistributeState } from '../base-game-mode.ts/city-distribute-state';
-import { CountdownState } from '../base-game-mode.ts/countdown-state';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
+import { debugPrint } from 'src/app/utils/debug-print';
 
-export abstract class BaseGameMode {
+export class BaseData implements StateData {}
+
+export abstract class BaseGameMode<T extends StateData> {
+	private states: BaseState<T>[];
+	private currentState: BaseState<T>;
+	private initialData: T;
+
+	protected abstract setupStates(): BaseState<T>[];
+	protected abstract setupData(): T;
+
 	constructor() {
-		const gameMode: BaseState<StateData>[] = [
-			new SetupState(),
-			new CityDistributeState(),
-			new SetPromodeTempVisionState(),
-			new CountdownState(),
-			new GameLoopState(),
-			new GameOverState(),
-			new ResetState(),
-		];
+		this.states = this.setupStates();
+		this.initialData = this.setupData();
 	}
 
-	
+	nextState(stateData: T) {
+		debugPrint('BaseGameMode.nextState');
+		this.currentState = this.states.shift();
+		this.currentState.stateData = stateData;
+		debugPrint('BaseGameMode.nextState: ' + this.currentState.constructor.name);
+
+		this.currentState.onEnterState();
+	}
+
+	getCurrentState(): BaseState<T> {
+		debugPrint('BaseGameMode.getCurrentState');
+		return this.currentState;
+	}
 }

@@ -1,6 +1,7 @@
 import { NameManager } from '../managers/names/name-manager';
 import { TrackedData } from '../player/data/tracked-data';
 import { ActivePlayer } from '../player/types/active-player';
+import { debugPrint } from '../utils/debug-print';
 import { HexColors } from '../utils/hex-colors';
 import { ShuffleArray } from '../utils/utils';
 import { Scoreboard } from './scoreboard';
@@ -17,12 +18,14 @@ export class StandardBoard extends Scoreboard {
 	public constructor(players: ActivePlayer[]) {
 		super();
 
+		debugPrint('StandardBoard.constructor');
 		this.players = players;
 		this.size = this.players.length + 3;
 
 		ShuffleArray(this.players);
 		MultiboardSetColumnCount(this.board, 6);
 
+		debugPrint('StandardBoard.constructor: setting up columns');
 		for (let i = 1; i <= this.size; i++) {
 			MultiboardSetRowCount(this.board, MultiboardGetRowCount(this.board) + 1);
 			this.setItemWidth(8.0, i, this.PLAYER_COL);
@@ -33,6 +36,7 @@ export class StandardBoard extends Scoreboard {
 			this.setItemWidth(4.5, i, this.STATUS_COL);
 		}
 
+		debugPrint('StandardBoard.constructor: setting up headers');
 		this.setItemValue(`${HexColors.TANGERINE}Player|r`, 1, this.PLAYER_COL);
 		this.setItemValue(`${HexColors.TANGERINE}Inc|r`, 1, this.INCOME_COL);
 		this.setItemValue(`${HexColors.TANGERINE}C|r`, 1, this.CITIES_COL);
@@ -46,18 +50,23 @@ export class StandardBoard extends Scoreboard {
 		this.setItemWidth(0.0, this.size, this.DEATHS_COL);
 		this.setItemWidth(0.0, this.size, this.STATUS_COL);
 
+		debugPrint('StandardBoard.constructor: updating full');
 		this.updateFull();
 
+		debugPrint('StandardBoard.constructor: setting up board');
 		MultiboardSetItemsStyle(this.board, true, false);
 		MultiboardMinimize(this.board, true);
 		MultiboardMinimize(this.board, false);
 		this.setVisibility(true);
+
+		debugPrint('StandardBoard.constructor: done');
 	}
 
 	/**
 	 * Updates every column on the scoreboard.
 	 */
 	public updateFull(): void {
+		debugPrint('StandardBoard.updateFull');
 		this.players.sort((pA, pB) => {
 			const playerAIncome: number = pA.trackedData.income.income;
 			const playerBIncome: number = pB.trackedData.income.income;
@@ -70,21 +79,25 @@ export class StandardBoard extends Scoreboard {
 
 		let row: number = 2;
 
+		debugPrint('StandardBoard.updateFull: updating rows');
 		this.players.forEach((player) => {
 			const data: TrackedData = player.trackedData;
 
 			let textColor: string = GetLocalPlayer() == player.getPlayer() ? HexColors.TANGERINE : HexColors.WHITE;
 
+			debugPrint('StandardBoard.updateFull: updating row ' + row);
 			if (player.status.isAlive() || player.status.isNomad()) {
 				this.setItemValue(`${textColor}${data.income.income}`, row, this.INCOME_COL);
 			} else {
 				this.setItemValue(`${textColor}-`, row, 2);
 			}
-
+			debugPrint('StandardBoard.updateFull: updating row ' + row + ' income');
 			this.updatePlayerData(player, row, textColor, data);
-
+			debugPrint('StandardBoard.updateFull: updating row ' + row + ' player data');
 			row++;
 		});
+
+		debugPrint('StandardBoard.updateFull: done');
 	}
 
 	/**
@@ -125,15 +138,18 @@ export class StandardBoard extends Scoreboard {
 	 * @param {TrackedData} data - The tracked data for the player.
 	 */
 	private updatePlayerData(player: ActivePlayer, row: number, textColor: string, data: TrackedData) {
+		debugPrint('StandardBoard.updatePlayerData');
 		this.setItemValue(`${NameManager.getInstance().getDisplayName(player.getPlayer())}`, row, this.PLAYER_COL);
 		this.setItemValue(`${textColor}${data.cities.cities.length}`, row, this.CITIES_COL);
 		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).killValue}`, row, this.KILLS_COL);
 		this.setItemValue(`${textColor}${data.killsDeaths.get(player.getPlayer()).deathValue}`, row, this.DEATHS_COL);
 
+		debugPrint('StandardBoard.updatePlayerData: setting status');
 		if (player.status.isNomad() || player.status.isSTFU()) {
 			this.setItemValue(`${player.status.status} ${player.status.statusDuration}`, row, this.STATUS_COL);
 		} else {
 			this.setItemValue(`${player.status.status}`, row, this.STATUS_COL);
 		}
+		debugPrint('StandardBoard.updatePlayerData: done');
 	}
 }

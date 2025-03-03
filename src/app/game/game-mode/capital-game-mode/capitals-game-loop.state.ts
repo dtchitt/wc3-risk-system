@@ -6,8 +6,9 @@ import { ActivePlayer } from 'src/app/player/types/active-player';
 import { LocalMessage } from 'src/app/utils/messages';
 import { UNIT_ID } from 'src/configs/unit-id';
 import { GameLoopState } from '../base-game-mode.ts/game-loop-state';
+import { CapitalsData } from '../mode/capitals-mode';
 
-export class CapitalsGameLoopMode extends GameLoopState {
+export class CapitalsGameLoopMode extends GameLoopState<CapitalsData> {
 	private capitals: Map<player, City>;
 
 	override onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer): void {

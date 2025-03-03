@@ -7,7 +7,7 @@ import { BaseState } from '../state/base-state';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { StateData } from '../state/state-data';
 
-export class ResetState extends BaseState<StateData> {
+export class ResetState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
 		this.runAsync();
 	}

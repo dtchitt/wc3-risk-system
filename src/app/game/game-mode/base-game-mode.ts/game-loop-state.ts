@@ -21,7 +21,7 @@ import {
 } from '../base/utillity/on-player-status';
 import { StateData } from '../state/state-data';
 
-export class GameLoopState extends BaseState<StateData> {
+export class GameLoopState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
 		MatchData.matchState = 'inProgress';
 		this.onStartTurn(MatchData.turnCount);

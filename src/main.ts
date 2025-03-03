@@ -30,9 +30,9 @@ import { EventCoordinator } from './app/game/event-coordinator';
 import { EventEmitter } from './app/utils/events/event-emitter';
 import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 import { CitySelectedEvent } from './app/triggers/city-selected-event';
-import { CityDeselectedEvent } from './app/triggers/city-deselected-event';
 import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
 import { ENABLE_EXPORT_SHUFFLED_PLAYER_LIST } from './configs/game-settings';
+import { debugPrint } from './app/utils/debug-print';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -101,7 +101,6 @@ function tsMain() {
 		AntiSpam();
 		KeyEvents();
 		CitySelectedEvent();
-		CityDeselectedEvent();
 
 		//Create Quests
 		Quests.getInstance().Create();
@@ -126,6 +125,8 @@ function tsMain() {
 			EnableSelect(false, false);
 			EnableDragSelect(false, false);
 			FogEnable(true);
+
+			debugPrint('Game loaded');
 			EventEmitter.getInstance();
 			EventCoordinator.getInstance();
 			ModeSelection.getInstance();

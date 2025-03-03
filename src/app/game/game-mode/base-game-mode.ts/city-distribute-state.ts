@@ -5,7 +5,7 @@ import { MatchData } from '../../state/match-state';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
 
-export class CityDistributeState extends BaseState<StateData> {
+export class CityDistributeState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
 		new StandardDistributionService().runDistro(() => {
 			RegionToCity.forEach((city) => {

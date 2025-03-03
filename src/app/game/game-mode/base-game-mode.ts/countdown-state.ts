@@ -3,7 +3,7 @@ import { PlayGlobalSound } from 'src/app/utils/utils';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
 
-export class CountdownState extends BaseState<StateData> {
+export class CountdownState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
 		try {
 			PlayGlobalSound('Sound\\Interface\\ArrangedTeamInvitation.flac');

@@ -7,7 +7,7 @@ import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
 
-export class GameOverState extends BaseState<StateData> {
+export class GameOverState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
 		MatchData.matchState = 'postMatch';
 
