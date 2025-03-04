@@ -32,7 +32,6 @@ import { EVENT_MODE_SELECTION } from './app/utils/events/event-constants';
 import { CitySelectedEvent } from './app/triggers/city-selected-event';
 import { UnitUpgradeEvent } from './app/triggers/unit-upgrade-event';
 import { ENABLE_EXPORT_SHUFFLED_PLAYER_LIST } from './configs/game-settings';
-import { debugPrint } from './app/utils/debug-print';
 
 //const BUILD_DATE = compiletime(() => new Date().toUTCString());
 
@@ -126,7 +125,6 @@ function tsMain() {
 			EnableDragSelect(false, false);
 			FogEnable(true);
 
-			debugPrint('Game loaded');
 			EventEmitter.getInstance();
 			EventCoordinator.getInstance();
 			ModeSelection.getInstance();

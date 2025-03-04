@@ -2,7 +2,6 @@ import { MatchData } from '../game/state/match-state';
 import { NameManager } from '../managers/names/name-manager';
 import { VictoryManager } from '../managers/victory-manager';
 import { ActivePlayer } from '../player/types/active-player';
-import { debugPrint } from '../utils/debug-print';
 import { HexColors } from '../utils/hex-colors';
 import { ObserverBoard } from './observer-board';
 import { Scoreboard } from './scoreboard';
@@ -27,9 +26,7 @@ export class ScoreboardManager {
 	}
 
 	public ffaSetup(players: ActivePlayer[]) {
-		debugPrint('ScoreboardManager.ffaSetup');
 		this.scoreboards.standard = new StandardBoard(players);
-		debugPrint('ScoreboardManager.ffaSetup: done');
 	}
 
 	public teamSetup() {

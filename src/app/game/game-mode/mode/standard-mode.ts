@@ -1,4 +1,3 @@
-import { debugPrint } from 'src/app/utils/debug-print';
 import { CityDistributeState } from '../base-game-mode.ts/city-distribute-state';
 import { CountdownState } from '../base-game-mode.ts/countdown-state';
 import { GameLoopState } from '../base-game-mode.ts/game-loop-state';
@@ -14,7 +13,6 @@ export class StandardData implements StateData {}
 
 export class StandardGameMode extends BaseGameMode<StandardData> {
 	override setupStates() {
-		debugPrint('StandardGameMode.setupStates');
 		return [
 			new SetupState(),
 			new CityDistributeState(),
@@ -27,7 +25,6 @@ export class StandardGameMode extends BaseGameMode<StandardData> {
 	}
 
 	override setupData() {
-		debugPrint('StandardGameMode.setupData');
 		return new StandardData();
 	}
 }

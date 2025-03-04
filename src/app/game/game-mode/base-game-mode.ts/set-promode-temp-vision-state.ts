@@ -9,7 +9,6 @@ export class SetPromodeTempVisionState<T extends StateData> extends BaseState<T>
 
 	async runAsync(): Promise<void> {
 		await setProModeTempVision();
-
 		this.nextState(this.stateData);
 	}
 }

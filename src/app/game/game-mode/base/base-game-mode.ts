@@ -18,16 +18,12 @@ export abstract class BaseGameMode<T extends StateData> {
 	}
 
 	nextState(stateData: T) {
-		debugPrint('BaseGameMode.nextState');
 		this.currentState = this.states.shift();
 		this.currentState.stateData = stateData;
-		debugPrint('BaseGameMode.nextState: ' + this.currentState.constructor.name);
-
 		this.currentState.onEnterState();
 	}
 
 	getCurrentState(): BaseState<T> {
-		debugPrint('BaseGameMode.getCurrentState');
 		return this.currentState;
 	}
 }

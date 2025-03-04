@@ -9,7 +9,6 @@ import { GameOverState } from '../base-game-mode.ts/game-over-state';
 import { ResetState } from '../base-game-mode.ts/reset-state';
 import { SetPromodeTempVisionState } from '../base-game-mode.ts/set-promode-temp-vision-state';
 import { BaseState } from '../state/base-state';
-import { debugPrint } from 'src/app/utils/debug-print';
 
 export class CapitalsData implements StateData {
 	private playerCapitalSelections: Map<player, City>;
@@ -18,7 +17,6 @@ export class CapitalsData implements StateData {
 
 export class CapitalsMode extends BaseGameMode<CapitalsData> {
 	override setupStates() {
-		debugPrint('CapitalsMode.setupStates');
 		return [
 			new SetupState(),
 			new CityDistributeState(),
@@ -31,7 +29,6 @@ export class CapitalsMode extends BaseGameMode<CapitalsData> {
 	}
 
 	protected setupData(): CapitalsData {
-		debugPrint('CapitalsMode.setupData');
 		return new CapitalsData();
 	}
 }

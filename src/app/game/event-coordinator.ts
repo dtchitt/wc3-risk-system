@@ -20,7 +20,6 @@ import { GameType } from '../settings/strategies/game-type-strategy';
 import { Quests } from '../quests/quests';
 import { BaseGameMode } from './game-mode/base/base-game-mode';
 import { StateData } from './game-mode/state/state-data';
-import { debugPrint } from '../utils/debug-print';
 
 export class EventCoordinator {
 	private static instance: EventCoordinator;
@@ -76,10 +75,7 @@ export class EventCoordinator {
 	}
 
 	public applyGameMode(gameType: GameType) {
-		debugPrint('Applying game mode: ' + gameType);
 		this._currentMode = new StandardGameMode();
-		debugPrint('Game mode applied: ' + this._currentMode);
-
 		EventEmitter.getInstance().emit(EVENT_NEXT_STATE);
 	}
 }

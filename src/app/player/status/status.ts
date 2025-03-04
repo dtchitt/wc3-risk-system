@@ -47,7 +47,6 @@ export class Status {
 
 	// Checks if the player is still in the match.
 	public isAlive(): boolean {
-		print('isAlive', this._status);
 		return this._status == PLAYER_STATUS.ALIVE;
 	}
 
