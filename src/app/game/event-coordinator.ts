@@ -15,11 +15,12 @@ import {
 	EVENT_QUEST_UPDATE_PLAYER_STATUS,
 	EVENT_NEXT_STATE,
 } from '../utils/events/event-constants';
-import { StandardGameMode } from './game-mode/mode/standard-mode';
+import { StandardMode } from './game-mode/mode/standard-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
 import { Quests } from '../quests/quests';
 import { BaseGameMode } from './game-mode/mode/base-game-mode';
 import { StateData } from './game-mode/state/state-data';
+import { CapitalsMode } from './game-mode/mode/capitals-mode';
 
 export class EventCoordinator {
 	private static instance: EventCoordinator;
@@ -75,7 +76,7 @@ export class EventCoordinator {
 	}
 
 	public applyGameMode(gameType: GameType) {
-		this._currentMode = new StandardGameMode();
+		this._currentMode = gameType == 'Capitals' ? (this._currentMode = new CapitalsMode()) : new StandardMode();
 		EventEmitter.getInstance().emit(EVENT_NEXT_STATE);
 	}
 }

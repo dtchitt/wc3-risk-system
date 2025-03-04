@@ -11,7 +11,7 @@ import { StateData } from '../state/state-data';
 
 export class StandardData implements StateData {}
 
-export class StandardGameMode extends BaseGameMode<StandardData> {
+export class StandardMode extends BaseGameMode<StandardData> {
 	override setupStates() {
 		return [
 			new SetupState(),

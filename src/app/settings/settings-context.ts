@@ -103,4 +103,12 @@ export class SettingsContext {
 	public isCapitals(): boolean {
 		return this.settings.GameType == 1;
 	}
+
+	/**
+	 * Checks if the game setting for Overtime is on or off
+	 * @returns true if overtime is on
+	 */
+	public isOvertimeOn(): boolean {
+		return this.settings.Overtime.option != 3;
+	}
 }

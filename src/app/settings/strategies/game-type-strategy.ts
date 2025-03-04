@@ -1,9 +1,6 @@
 import { HexColors } from 'src/app/utils/hex-colors';
 import { SettingsStrategy } from './settings-strategy';
-import { EventEmitter } from 'src/app/utils/events/event-emitter';
-import { EVENT_SET_GAME_MODE } from 'src/app/utils/events/event-constants';
-import { StandardGameMode } from 'src/app/game/game-mode/mode/standard-mode';
-import { CapitalsMode } from 'src/app/game/game-mode/mode/capitals-mode';
+import { debugPrint } from 'src/app/utils/debug-print';
 
 export type GameType = 'Standard' | 'Capitals';
 
@@ -20,7 +17,7 @@ export const GameTypeOptionsColorFormatted: Record<number, string> = {
 export class GameTypeStrategy implements SettingsStrategy {
 	private readonly gameType: number;
 	private readonly strategyMap: Map<number, () => void> = new Map([
-		[0, this.handleConquest],
+		[0, this.handleStandard],
 		[1, this.handleCapitals],
 	]);
 
@@ -35,11 +32,7 @@ export class GameTypeStrategy implements SettingsStrategy {
 		}
 	}
 
-	private handleConquest(): void {
-		EventEmitter.getInstance().emit(EVENT_SET_GAME_MODE, 'Standard');
-	}
+	private handleStandard(): void {}
 
-	private handleCapitals(): void {
-		EventEmitter.getInstance().emit(EVENT_SET_GAME_MODE, 'Capitals');
-	}
+	private handleCapitals(): void {}
 }
