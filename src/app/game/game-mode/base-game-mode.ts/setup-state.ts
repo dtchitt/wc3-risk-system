@@ -19,6 +19,7 @@ export class SetupState<T extends StateData> extends BaseState<T> {
 
 		StatisticsController.getInstance().setViewVisibility(false);
 
+		// Assign player names as colors for non-promode games
 		if (!SettingsContext.getInstance().isPromode()) {
 			MatchData.matchPlayers.forEach((val) => {
 				NameManager.getInstance().setName(val.getPlayer(), 'color');
@@ -42,20 +43,13 @@ export class SetupState<T extends StateData> extends BaseState<T> {
 
 		MatchData.prepareMatchData(players);
 
-		MatchData.matchPlayers.forEach((player) => {
-			player.status.status = PLAYER_STATUS.ALIVE;
-		});
-
 		// Prepare stat tracking
 		MatchData.matchPlayers.forEach((player) => {
 			SetPlayerState(player.getPlayer(), PLAYER_STATE_RESOURCE_GOLD, 0);
 			player.status.set(PLAYER_STATUS.ALIVE);
+			player.status.status = PLAYER_STATUS.ALIVE;
 			player.trackedData.bonus.showForPlayer(player.getPlayer());
 			player.trackedData.bonus.repositon();
-
-			if (MatchData.leader == null) {
-				MatchData.leader = player;
-			}
 		});
 
 		if (SettingsContext.getInstance().isFFA() || MatchData.matchPlayers.length <= 2) {

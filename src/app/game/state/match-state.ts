@@ -37,6 +37,7 @@ export class MatchData {
 			matchState: 'preMatch',
 			matchCount: this.getInstance().data.matchCount + 1,
 			matchPlayers: players,
+			leader: players[0],
 		};
 	}
 
