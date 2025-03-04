@@ -6,6 +6,7 @@ import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
+import { ActivePlayer } from 'src/app/player/types/active-player';
 
 export class GameOverState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
@@ -30,7 +31,12 @@ export class GameOverState<T extends StateData> extends BaseState<T> {
 			StatisticsController.getInstance().setViewVisibility(true);
 			StatisticsController.getInstance().writeStatisticsData();
 		}
+	}
 
-		this.nextState(this.stateData);
+	onPlayerRestart(player: ActivePlayer) {
+		const playerIsParticipant = MatchData.matchPlayers.find((x) => x.getPlayer() == player.getPlayer());
+		if (playerIsParticipant) {
+			this.nextState(this.stateData);
+		}
 	}
 }

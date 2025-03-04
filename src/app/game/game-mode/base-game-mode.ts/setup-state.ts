@@ -17,6 +17,7 @@ import {
 	onPlayerSTFUHandle,
 	onPlayerForfeitHandle,
 } from '../utillity/on-player-status';
+import { Quests } from 'src/app/quests/quests';
 
 export class SetupState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
@@ -77,6 +78,8 @@ export class SetupState<T extends StateData> extends BaseState<T> {
 		FogEnable(true);
 
 		StatisticsController.getInstance().useCurrentActivePlayers();
+
+		Quests.getInstance().UpdateShuffledPlayerListQuest();
 
 		this.nextState(this.stateData);
 	}

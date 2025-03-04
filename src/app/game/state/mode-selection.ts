@@ -74,9 +74,9 @@ export class ModeSelection {
 			ExportGameSettings.write(settings);
 		}
 
-		const gameModeType: GameType = settings.isCapitals() ? 'Capitals' : 'Standard';
-		MatchData.gameMode = settings.isCapitals() ? 'capital' : 'ffa';
-		this.eventEmitter.emit(EVENT_SET_GAME_MODE, gameModeType);
+		const gameType: GameType = settings.isCapitals() ? 'Capitals' : 'Standard';
+		MatchData.gameMode = gameType;
+		this.eventEmitter.emit(EVENT_SET_GAME_MODE, gameType);
 	}
 
 	private setupSettingsQuest(): void {

@@ -4,6 +4,7 @@ export const EVENT_ON_PLAYER_NOMAD: string = 'onPlayerNomad';
 export const EVENT_ON_PLAYER_DEAD: string = 'onPlayerDead';
 export const EVENT_ON_PLAYER_STFU: string = 'onPlayerSTFU';
 export const EVENT_ON_PLAYER_FORFEIT: string = 'onPlayerForfeit';
+export const EVENT_ON_PLAYER_RESTART: string = 'onPlayerRestart';
 export const EVENT_ON_CITY_CAPTURE: string = 'onCityCapture';
 export const EVENT_ON_UNIT_KILLED: string = 'onUnitKilled';
 
@@ -14,7 +15,6 @@ export const EVENT_ON_IN_PROGRESS: string = 'onInProgress';
 export const EVENT_ON_POST_MATCH: string = 'onPostMatch';
 
 export const EVENT_ON_START_MATCH: string = 'onStartMatch';
-export const EVENT_ON_REMATCH: string = 'gameRestart';
 export const EVENT_SET_GAME_MODE: string = 'setGameMode';
 
 export const EVENT_MODE_SELECTION: string = 'modeSelection';

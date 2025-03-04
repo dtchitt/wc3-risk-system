@@ -14,6 +14,7 @@ import {
 	EVENT_ON_CITY_SELECTED,
 	EVENT_QUEST_UPDATE_PLAYER_STATUS,
 	EVENT_NEXT_STATE,
+	EVENT_ON_PLAYER_RESTART,
 } from '../utils/events/event-constants';
 import { StandardMode } from './game-mode/mode/standard-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
@@ -56,6 +57,9 @@ export class EventCoordinator {
 		);
 		EventEmitter.getInstance().on(EVENT_ON_PLAYER_FORFEIT, (player: ActivePlayer) =>
 			this._currentMode?.getCurrentState().onPlayerForfeit(player)
+		);
+		EventEmitter.getInstance().on(EVENT_ON_PLAYER_RESTART, (player: ActivePlayer) =>
+			this._currentMode?.getCurrentState().onPlayerRestart(player)
 		);
 		EventEmitter.getInstance().on(EVENT_ON_CITY_CAPTURE, (city: City, preOwner: ActivePlayer, owner: ActivePlayer) =>
 			this._currentMode?.getCurrentState().onCityCapture(city, preOwner, owner)

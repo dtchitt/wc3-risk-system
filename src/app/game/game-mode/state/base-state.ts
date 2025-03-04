@@ -16,6 +16,7 @@ export abstract class BaseState<T extends StateData> {
 	onPlayerLeft(player: ActivePlayer): void {}
 	onPlayerSTFU(player: ActivePlayer): void {}
 	onPlayerForfeit(player: ActivePlayer): void {}
+	onPlayerRestart(player: ActivePlayer): void {}
 
 	onCityCapture(city: City, preOwner: ActivePlayer, owner: ActivePlayer) {}
 	onUnitKilled(killingUnit: unit, dyingUnit: unit) {}

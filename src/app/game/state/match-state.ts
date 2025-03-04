@@ -1,7 +1,6 @@
 import { ActivePlayer } from 'src/app/player/types/active-player';
+import { GameType } from 'src/app/settings/strategies/game-type-strategy';
 import { TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
-
-export type GameModeType = 'ffa' | 'capital';
 
 export type MatchState = 'modeSelection' | 'preMatch' | 'inProgress' | 'postMatch';
 
@@ -10,7 +9,7 @@ export interface GameData {
 	ticks: number;
 	leader: ActivePlayer;
 	matchState: MatchState;
-	gameModeType?: GameModeType;
+	gameType?: GameType;
 	matchCount: number;
 	matchPlayers: ActivePlayer[];
 }
@@ -47,7 +46,7 @@ export class MatchData {
 			ticks: TURN_DURATION_IN_SECONDS,
 			leader: null,
 			matchState: 'modeSelection',
-			gameModeType: null,
+			gameType: null,
 			matchCount: 0,
 			matchPlayers: [],
 		};
@@ -85,11 +84,11 @@ export class MatchData {
 		this.getInstance().data.matchState = v;
 	}
 
-	public static get gameMode(): GameModeType {
-		return this.getInstance().data.gameModeType;
+	public static get gameMode(): GameType {
+		return this.getInstance().data.gameType;
 	}
-	public static set gameMode(v: GameModeType) {
-		this.getInstance().data.gameModeType = v;
+	public static set gameMode(v: GameType) {
+		this.getInstance().data.gameType = v;
 	}
 
 	public static get matchCount(): number {
