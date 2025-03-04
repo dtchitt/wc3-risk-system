@@ -23,6 +23,7 @@ export abstract class BaseState<T extends StateData> {
 	onCitySelected(city: City, player: player) {}
 
 	nextState(stateData: T) {
+		this.onExitState();
 		EventEmitter.getInstance().emit(EVENT_NEXT_STATE, this.stateData);
 	}
 }

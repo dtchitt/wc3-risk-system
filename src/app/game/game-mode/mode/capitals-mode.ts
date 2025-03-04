@@ -1,5 +1,5 @@
 import { City } from 'src/app/city/city';
-import { BaseGameMode } from '../base/base-game-mode';
+import { BaseGameMode } from './base-game-mode';
 import { StateData } from '../state/state-data';
 import { SetupState } from '../base-game-mode.ts/setup-state';
 import { CityDistributeState } from '../base-game-mode.ts/city-distribute-state';

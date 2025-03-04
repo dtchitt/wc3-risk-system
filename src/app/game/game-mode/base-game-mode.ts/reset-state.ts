@@ -1,8 +1,8 @@
 import { Wait } from 'src/app/utils/wait';
 import { TreeManager } from '../../services/tree-service';
-import { removeUnits } from '../base/utillity/remove-units';
-import { resetCountries } from '../base/utillity/reset-countries';
-import { resumingUnits } from '../base/utillity/resuming-units';
+import { removeUnits } from '../utillity/remove-units';
+import { resetCountries } from '../utillity/reset-countries';
+import { resumingUnits } from '../utillity/resuming-units';
 import { BaseState } from '../state/base-state';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { StateData } from '../state/state-data';

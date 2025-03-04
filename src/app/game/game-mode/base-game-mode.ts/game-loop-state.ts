@@ -3,7 +3,7 @@ import { VictoryManager, VictoryProgressState } from 'src/app/managers/victory-m
 import { CITIES_TO_WIN_WARNING_RATIO, TICK_DURATION_IN_SECONDS, TURN_DURATION_IN_SECONDS } from 'src/configs/game-settings';
 import { File } from 'w3ts';
 import { MatchData } from '../../state/match-state';
-import { updateTickUI } from '../base/utillity/update-ui';
+import { updateTickUI } from '../utillity/update-ui';
 import { BaseState } from '../state/base-state';
 import { ScoreboardManager } from 'src/app/scoreboard/scoreboard-manager';
 import { NameManager } from 'src/app/managers/names/name-manager';
@@ -18,7 +18,7 @@ import {
 	onPlayerLeftHandle,
 	onPlayerNomadHandle,
 	onPlayerSTFUHandle,
-} from '../base/utillity/on-player-status';
+} from '../utillity/on-player-status';
 import { StateData } from '../state/state-data';
 
 export class GameLoopState<T extends StateData> extends BaseState<T> {

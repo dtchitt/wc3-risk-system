@@ -5,7 +5,7 @@ import { GameOverState } from '../base-game-mode.ts/game-over-state';
 import { ResetState } from '../base-game-mode.ts/reset-state';
 import { SetPromodeTempVisionState } from '../base-game-mode.ts/set-promode-temp-vision-state';
 import { SetupState } from '../base-game-mode.ts/setup-state';
-import { BaseGameMode } from '../base/base-game-mode';
+import { BaseGameMode } from './base-game-mode';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
 

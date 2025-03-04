@@ -18,7 +18,7 @@ import {
 import { StandardGameMode } from './game-mode/mode/standard-mode';
 import { GameType } from '../settings/strategies/game-type-strategy';
 import { Quests } from '../quests/quests';
-import { BaseGameMode } from './game-mode/base/base-game-mode';
+import { BaseGameMode } from './game-mode/mode/base-game-mode';
 import { StateData } from './game-mode/state/state-data';
 
 export class EventCoordinator {

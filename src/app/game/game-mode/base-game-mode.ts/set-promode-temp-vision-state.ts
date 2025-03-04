@@ -1,4 +1,4 @@
-import { setProModeTempVision } from '../base/utillity/pro-mode-temp-vision';
+import { setProModeTempVision } from '../utillity/pro-mode-temp-vision';
 import { BaseState } from '../state/base-state';
 import { StateData } from '../state/state-data';
 
