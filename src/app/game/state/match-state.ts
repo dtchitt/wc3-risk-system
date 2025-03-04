@@ -43,7 +43,7 @@ export class MatchData {
 
 	private static initialGameData(): GameData {
 		return {
-			turn: 1,
+			turn: 0,
 			ticks: TURN_DURATION_IN_SECONDS,
 			leader: null,
 			matchState: 'modeSelection',

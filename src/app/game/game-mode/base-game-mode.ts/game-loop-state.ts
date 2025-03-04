@@ -80,6 +80,7 @@ export class GameLoopState<T extends StateData> extends BaseState<T> {
 	}
 
 	onStartTurn(turn: number): void {
+		VictoryManager.getInstance().updateRequiredCityCount();
 		ScoreboardManager.getInstance().updateFull();
 		ScoreboardManager.getInstance().updateScoreboardTitle();
 		MatchData.matchPlayers
