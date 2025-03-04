@@ -8,6 +8,15 @@ import { MatchData } from '../../state/match-state';
 import { BaseState } from '../state/base-state';
 import { StatisticsController } from 'src/app/statistics/statistics-controller';
 import { StateData } from '../state/state-data';
+import { ActivePlayer } from 'src/app/player/types/active-player';
+import {
+	onPlayerAliveHandle,
+	onPlayerDeadHandle,
+	onPlayerNomadHandle,
+	onPlayerLeftHandle,
+	onPlayerSTFUHandle,
+	onPlayerForfeitHandle,
+} from '../utillity/on-player-status';
 
 export class SetupState<T extends StateData> extends BaseState<T> {
 	onEnterState() {
@@ -70,5 +79,24 @@ export class SetupState<T extends StateData> extends BaseState<T> {
 		StatisticsController.getInstance().useCurrentActivePlayers();
 
 		this.nextState(this.stateData);
+	}
+
+	onPlayerAlive(player: ActivePlayer): void {
+		onPlayerAliveHandle(player);
+	}
+	onPlayerDead(player: ActivePlayer): void {
+		onPlayerDeadHandle(player);
+	}
+	onPlayerNomad(player: ActivePlayer): void {
+		onPlayerNomadHandle(player);
+	}
+	onPlayerLeft(player: ActivePlayer): void {
+		onPlayerLeftHandle(player);
+	}
+	onPlayerSTFU(player: ActivePlayer): void {
+		onPlayerSTFUHandle(player);
+	}
+	onPlayerForfeit(player: ActivePlayer): void {
+		onPlayerForfeitHandle(player);
 	}
 }
